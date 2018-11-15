@@ -7,9 +7,9 @@ export interface IFetchGraph {
 
 export type GraphExplorerAction = IFetchGraph;
 
-export function fetchgraph(): IFetchGraph {
+export function fetchGraph(): IFetchGraph {
   return {
     type: constants.ADD_GRAPH,
-    graph: null,
+    graph: 'test',
   };
 }

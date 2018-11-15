@@ -1,8 +1,22 @@
 import { GraphExplorerAction } from '../actions/graphExplorer';
-import { IStoreState, StoreState } from '../types';
+import { ADD_GRAPH } from '../constants/actions';
+import { StoreState } from '../types';
 
-function graphExplorer(state: StoreState, action: GraphExplorerAction): StoreState {
+const initialState = {
+  graph: 'test', // TODO
+  subGraph: 'test', // TODO
+};
+
+function graphExplorer(
+  state = initialState,
+  action: GraphExplorerAction,
+): StoreState {
   switch (action.type) {
+    case ADD_GRAPH:
+      return {
+        ...state,
+        graph: action.graph,
+      };
     default:
       return state;
   }
