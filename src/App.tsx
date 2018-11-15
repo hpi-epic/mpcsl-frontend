@@ -1,7 +1,7 @@
 import { Layout } from 'antd';
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import colors from './colors';
+import colors from './constants/colors';
 
 const { Header, Content, Footer }  = Layout;
 
