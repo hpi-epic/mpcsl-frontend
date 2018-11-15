@@ -1,14 +1,15 @@
 import { Layout } from 'antd';
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import colors from './colors';
 // import * as d3 from 'd3';
+import colors from './constants/colors';
 
 const { Header, Content, Footer }  = Layout;
 
 import './App.css';
-import DatasetManagement from './container/DatasetManagement';
-import ExperimentManagement from './container/ExperimentManagement';
+import DatasetManagement from './containers/DatasetManagement';
+import ExperimentManagement from './containers/ExperimentManagement';
+import GraphExplorer from './containers/GraphExplorer';
 
 class App extends Component {
   public render() {
@@ -21,6 +22,7 @@ class App extends Component {
           <Switch>
             <Route exact={true} path='/' component={DatasetManagement} />
             <Route path='/experiment-management' component={ExperimentManagement} />
+            <Route path='/graph-explorer' component={GraphExplorer} />
           </Switch>
         </Content>
         <Footer>
