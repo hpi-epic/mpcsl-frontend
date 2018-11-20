@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 // import * as d3 from 'd3';
 import colors from './constants/colors';
+// import * as d3 from 'd3';
 
 const { Header, Content, Footer }  = Layout;
 
