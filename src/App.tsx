@@ -5,7 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 import colors from './constants/colors';
 // import * as d3 from 'd3';
 
-const { Header, Content, Footer }  = Layout;
+const { Header, Content }  = Layout;
 
 import './App.css';
 import DatasetManagement from './containers/DatasetManagement';
@@ -18,7 +18,7 @@ class App extends Component {
     return (
       <Layout className='layout'>
         <Header className='header'>
-          hjlasd
+          TODO
         </Header>
         <Content style={{ background: colors.contentBackground }}>
           <Switch>
@@ -28,9 +28,6 @@ class App extends Component {
             <Route path='/runtime-manager' component={RuntimeManager} />
           </Switch>
         </Content>
-        <Footer>
-          Made by HPI
-        </Footer>
       </Layout>
     );
   }
