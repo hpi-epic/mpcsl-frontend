@@ -11,6 +11,7 @@ import './App.css';
 import DatasetManagement from './containers/DatasetManagement';
 import ExperimentManagement from './containers/ExperimentManagement';
 import GraphExplorer from './containers/GraphExplorer';
+import RuntimeManager from './containers/RuntimeManager';
 
 class App extends Component {
   public render() {
@@ -24,6 +25,7 @@ class App extends Component {
             <Route exact={true} path='/' component={DatasetManagement} />
             <Route path='/experiment-management' component={ExperimentManagement} />
             <Route path='/graph-explorer' component={GraphExplorer} />
+            <Route path='/runtime-manager' component={RuntimeManager} />
           </Switch>
         </Content>
         <Footer>
