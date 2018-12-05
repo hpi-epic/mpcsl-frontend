@@ -35,27 +35,24 @@ class ListElement extends React.Component<IPropsListElement, {}> {
 
   constructor(props: any) {
     super(props);
-}
+  }
 
   public render() {
     return (
-    <div>
-      <List.Item>
-        <Card
-          className='Card'
-          title={this.cardTitle}
-        >
-          <p className='Card-Content'>{this.props.content}</p>
-          <Dropdown overlay={this.menu} placement='bottomLeft'>
-            <Button className='List-Buttons' icon='ellipsis' />
-          </Dropdown>
-          <Button className='List-Buttons'>Run</Button>
-          <Button className='List-Buttons'>Explore</Button>
-        </Card>
-      </List.Item>
-    </div>
-  );
-}
+      <div>
+        <List.Item>
+          <Card className='Card' title={this.cardTitle}>
+            <p className='Card-Content'>{this.props.content}</p>
+            <Dropdown overlay={this.menu} placement='bottomLeft'>
+              <Button className='List-Buttons' icon='ellipsis' />
+            </Dropdown>
+            <Button className='List-Buttons'>Run</Button>
+            <Button className='List-Buttons'>Explore</Button>
+          </Card>
+        </List.Item>
+      </div>
+    );
+  }
 }
 
 export default ListElement;
