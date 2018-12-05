@@ -1,0 +1,26 @@
+@import '~antd/dist/antd.css';
+
+.Card {
+	width: 80%;
+	margin-left: 20px;
+	border-radius: 25px;
+}
+
+.List-Buttons {
+	float: right;
+	margin-right: 5px;
+}
+
+.Card-Title {
+	float: left;
+}
+
+.Card-Badge {
+	float: right;
+	margin-right: 5px;
+	margin-top: 5px;
+}
+
+.Card-Content {
+	float: left;
+}
