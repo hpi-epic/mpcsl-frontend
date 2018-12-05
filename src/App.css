@@ -9,3 +9,11 @@
 .header {
   color: white;
 }
+
+.home {
+  text-align: center;
+}
+
+.navSwitch {
+  text-align: right;
+}
