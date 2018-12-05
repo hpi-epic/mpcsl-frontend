@@ -8,19 +8,39 @@ interface IPropsListElementExperiment {
   status: BadgeProps['status'];
   statusText: string;
   content: string;
+  onEdit: (e: React.MouseEvent<HTMLElement>) => void;
+  onDuplicate: (e: React.MouseEvent<HTMLElement>) => void;
+  onDelete: (e: React.MouseEvent<HTMLElement>) => void;
+  onRunStart: (e: React.MouseEvent<HTMLElement>) => void;
+  onExplore: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 function ListElementExperiment(props: IPropsListElementExperiment) {
   const menu = (
     <Menu>
       <Menu.Item>
-        <a>Edit</a>
+        <Button
+          className='Dropdown-Button'
+          onClick={props.onEdit}
+        >
+        Edit
+        </Button>
       </Menu.Item>
       <Menu.Item>
-        <a>Delete</a>
+        <Button
+          className='Dropdown-Button'
+          onClick={props.onDelete}
+        >
+        Delete
+        </Button>
       </Menu.Item>
       <Menu.Item>
-        <a>Duplicate</a>
+        <Button
+          className='Dropdown-Button'
+          onClick={props.onDuplicate}
+        >
+        Duplicate
+        </Button>
       </Menu.Item>
     </Menu>
   );
@@ -40,8 +60,18 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
           <Dropdown overlay={menu} placement='bottomLeft'>
             <Button className='List-Buttons' icon='ellipsis' />
           </Dropdown>
-          <Button className='List-Buttons'>Run</Button>
-          <Button className='List-Buttons'>Explore</Button>
+          <Button
+            className='List-Buttons'
+            onClick={props.onRunStart}
+          >
+          Run
+          </Button>
+          <Button
+            className='List-Buttons'
+            onClick={props.onExplore}
+          >
+          Explore
+          </Button>
         </Card>
       </List.Item>
     </div>
