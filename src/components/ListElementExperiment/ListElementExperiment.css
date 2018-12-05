@@ -24,3 +24,7 @@
 .Card-Content {
 	float: left;
 }
+
+.Dropdown-Button {
+	border: none;
+}
