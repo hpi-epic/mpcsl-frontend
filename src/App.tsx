@@ -1,8 +1,6 @@
 import { Layout } from 'antd';
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-// import * as d3 from 'd3';
-import ListElement from './components/listElement/ListElement';
 import colors from './constants/colors';
 
 const { Header, Content }  = Layout;
@@ -27,7 +25,6 @@ class App extends Component {
             <Route path='/graph-explorer' component={GraphExplorer} />
             <Route path='/runtime-manager' component={RuntimeManager} />
           </Switch>
-          <ListElement title={'Experiement1'} status={'error'} statusText={'Failed'} content={'Show content'}/>
         </Content>
       </Layout>
     );
