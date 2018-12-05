@@ -9,12 +9,27 @@ export interface IPropsNewDatasetModal extends FormComponentProps {
   onClose: () => void;
 }
 
+interface IStateNewDatasetModal {
+  hasErrors: boolean;
+}
+
 interface IFormData {
   datasetName: string;
   query: string;
 }
 
-class NewDatasetModal extends React.Component<IPropsNewDatasetModal, {}> {
+class NewDatasetModal extends React.Component<
+  IPropsNewDatasetModal,
+  IStateNewDatasetModal
+> {
+  constructor(props: IPropsNewDatasetModal) {
+    super(props);
+
+    this.state = {
+      hasErrors: false,
+    };
+  }
+
   public render() {
     const { getFieldDecorator } = this.props.form;
     return (
@@ -25,7 +40,7 @@ class NewDatasetModal extends React.Component<IPropsNewDatasetModal, {}> {
         onClose={this.props.onClose}
         visible={this.props.visible}
       >
-        <Form layout="vertical" onSubmit={this.handleSubmit}>
+        <Form layout="vertical" onSubmit={this.handleSubmit} onChange={this.hasErrors}>
           <Row gutter={16}>
             <Form.Item label="Name">
               {getFieldDecorator('datasetName', {
@@ -38,7 +53,7 @@ class NewDatasetModal extends React.Component<IPropsNewDatasetModal, {}> {
               })(<Input.TextArea placeholder="Your Query" autosize={true} />)}
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" disabled={this.state.hasErrors}>
                 Submit
               </Button>
             </Form.Item>
@@ -59,6 +74,20 @@ class NewDatasetModal extends React.Component<IPropsNewDatasetModal, {}> {
     });
   };
 
+  private hasErrors = () => {
+    this.props.form.validateFields((err: Error, values: IFormData) => {
+      if(err) {
+        this.setState({
+          hasErrors: true,
+        })
+      } else {
+        this.setState({
+          hasErrors: false,
+        })
+      }
+    });
+  };
+
   private submitDataset = (values: IFormData) => {
     console.log(process.env.REACT_APP_API);
     axios
@@ -71,7 +100,7 @@ class NewDatasetModal extends React.Component<IPropsNewDatasetModal, {}> {
       })
       .catch((e: any) => {
         message.error('Failed to submit Dataset!');
-      })
+      });
   };
 }
 
