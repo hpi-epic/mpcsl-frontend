@@ -12,3 +12,13 @@ export enum Routes {
   projectManager = '/manager/',
   runtimeManager = '/runtime',
 }
+
+export enum Endpoints {
+  dataset = '/dataset',
+  allDatasets = '/datasets',
+  experiment = '/experiment',
+  allExperiments = '/experiments',
+  job = '/job',
+  allJobs = '/jobs',
+  results = '/rsults'
+}
