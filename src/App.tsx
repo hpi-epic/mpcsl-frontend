@@ -1,32 +1,22 @@
-import { Layout } from 'antd';
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import colors from './constants/colors';
 
-const { Header, Content }  = Layout;
-
 import './App.css';
-import DatasetManagement from './containers/DatasetManagement';
-import ExperimentManagement from './containers/ExperimentManagement';
 import GraphExplorer from './containers/GraphExplorer';
+import PipelineManager from './containers/PipelineManager';
 import RuntimeManager from './containers/RuntimeManager';
+import { Routes } from './types';
 
 class App extends Component {
   public render() {
     return (
-      <Layout className='layout'>
-        <Header className='header'>
-          TODO
-        </Header>
-        <Content style={{ background: colors.contentBackground }}>
-          <Switch>
-            <Route exact={true} path='/' component={DatasetManagement} />
-            <Route path='/experiment-management' component={ExperimentManagement} />
-            <Route path='/graph-explorer' component={GraphExplorer} />
-            <Route path='/runtime-manager' component={RuntimeManager} />
-          </Switch>
-        </Content>
-      </Layout>
+      <div style={{ background: colors.contentBackground }}>
+        <Route exact={true} path='/' component={PipelineManager} />
+        <Route path={Routes.manager} component={PipelineManager} />
+        <Route path={Routes.graphExplorer} component={GraphExplorer} />
+        <Route path={Routes.runtimeManager} component={RuntimeManager} />
+      </div>
     );
   }
 }

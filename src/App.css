@@ -2,10 +2,18 @@
   text-align: center;
 }
 
-.layout {
+.Layout {
   height: 100vh;
 }
 
-.header {
+.Header {
   color: white;
+}
+
+.Home {
+  text-align: center;
+}
+
+.Nav-Switch {
+  text-align: right;
 }

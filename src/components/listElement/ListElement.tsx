@@ -10,9 +10,8 @@ interface IPropsListElement {
   content: string;
 }
 
-class ListElement extends React.Component<IPropsListElement, {}> {
-
-  private menu = (
+function ListElement(props: IPropsListElement) {
+  const menu = (
     <Menu>
       <Menu.Item>
         <a>Edit</a>
@@ -26,33 +25,27 @@ class ListElement extends React.Component<IPropsListElement, {}> {
     </Menu>
   );
 
-  private cardTitle = (
+  const cardTitle = (
     <div>
-      <h2 className='Card-Title'>{this.props.title}</h2>
-      <Badge className='Card-Badge' status={this.props.status} text={this.props.statusText} />
+      <h2 className='Card-Title'>{props.title}</h2>
+      <Badge className='Card-Badge' status={props.status} text={props.statusText} />
     </div>
   );
 
-  constructor(props: any) {
-    super(props);
-  }
-
-  public render() {
-    return (
-      <div>
-        <List.Item>
-          <Card className='Card' title={this.cardTitle}>
-            <p className='Card-Content'>{this.props.content}</p>
-            <Dropdown overlay={this.menu} placement='bottomLeft'>
-              <Button className='List-Buttons' icon='ellipsis' />
-            </Dropdown>
-            <Button className='List-Buttons'>Run</Button>
-            <Button className='List-Buttons'>Explore</Button>
-          </Card>
-        </List.Item>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <List.Item>
+        <Card className='Card' title={cardTitle}>
+          <p className='Card-Content'>{props.content}</p>
+          <Dropdown overlay={menu} placement='bottomLeft'>
+            <Button className='List-Buttons' icon='ellipsis' />
+          </Dropdown>
+          <Button className='List-Buttons'>Run</Button>
+          <Button className='List-Buttons'>Explore</Button>
+        </Card>
+      </List.Item>
+    </div>
+  );
 }
 
 export default ListElement;
