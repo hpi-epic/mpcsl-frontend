@@ -1,7 +1,7 @@
 import { Button, Col, Layout, Row } from 'antd';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import React from 'react';
-import { Link, Route, RouteComponentProps } from 'react-router-dom';
+import { Route, RouteComponentProps } from 'react-router-dom';
 import ViewRadioNavigation from '../components/Navigation/ViewRadioNavigation';
 import colors from '../constants/colors';
 import { Routes } from '../types';

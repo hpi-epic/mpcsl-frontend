@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Router, Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import colors from './constants/colors';
 
 import './App.css';
