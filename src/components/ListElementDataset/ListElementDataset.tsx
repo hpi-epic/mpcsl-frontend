@@ -1,12 +1,12 @@
 import { Button, Card, List } from 'antd';
-import { AnchorButtonProps } from 'antd/lib/button/button';
 import React from 'react';
 import './ListElementDataset.css';
 
 interface IPropsListElementDataset {
   title: string;
   content: string;
-  onDelete: (e: React.MouseEventHandler<HTMLAnchorElement>) => void;
+  onDelete: (e: React.MouseEvent<HTMLElement>) => void;
+  onView: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 function ListElementDataset(props: IPropsListElementDataset) {
@@ -31,7 +31,12 @@ function ListElementDataset(props: IPropsListElementDataset) {
           >
           Delete
           </Button>
-          <Button className='List-Buttons'>View</Button>
+          <Button
+            className='List-Buttons'
+            onClick={props.onView}
+          >
+          View
+          </Button>
         </Card>
       </List.Item>
     </div>
