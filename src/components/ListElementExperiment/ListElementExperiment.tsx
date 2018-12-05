@@ -1,16 +1,16 @@
 import { Badge, Button, Card, Dropdown, List, Menu } from 'antd';
 import { BadgeProps } from 'antd/lib/badge';
 import React from 'react';
-import './ListElement.css';
+import './ListElementExperiment.css';
 
-interface IPropsListElement {
+interface IPropsListElementExperiment {
   title: string;
   status: BadgeProps['status'];
   statusText: string;
   content: string;
 }
 
-function ListElement(props: IPropsListElement) {
+function ListElementExperiment(props: IPropsListElementExperiment) {
   const menu = (
     <Menu>
       <Menu.Item>
@@ -48,4 +48,4 @@ function ListElement(props: IPropsListElement) {
   );
 }
 
-export default ListElement;
+export default ListElementExperiment;
