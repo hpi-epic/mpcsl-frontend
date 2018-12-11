@@ -23,6 +23,12 @@ export enum Endpoints {
   results = '/results'
 }
 
+export enum IndepenceTests {
+  gaussCI = 'gaussCI',
+  diCI = 'dicCI',
+  binCI = 'binCI'
+}
+
 export interface IDataset {
   id: number;
   load_query: string,
