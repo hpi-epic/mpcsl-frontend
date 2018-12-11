@@ -1,8 +1,7 @@
-import { Drawer, Form, Row, Input, Button, message } from 'antd';
+import { Drawer, Form, Row, Input, Button, message, Select, InputNumber } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import React from 'react';
-import axios, { AxiosResponse } from 'axios';
-import { Endpoints, IDataset } from '../../types';
+import { IDataset, IndepenceTests } from '../../types';
 import { getDatasets } from '../../actions/apiRequests';
 
 export interface IPropsNewExperimentModal extends FormComponentProps {
@@ -28,7 +27,7 @@ class NewExperimentModal extends React.Component<
     super(props);
 
     this.state = {
-      hasErrors: false,
+      hasErrors: true,
       datasets: [],
     };
   }
@@ -39,6 +38,24 @@ class NewExperimentModal extends React.Component<
 
   public render() {
     const { getFieldDecorator } = this.props.form;
+
+    const datasetSelect = (
+      <Select>
+        {this.state.datasets.map((dataset: IDataset) => (
+            <Select.Option value={dataset.id} key={String(dataset.id)}>{dataset.name}</Select.Option>
+          )
+        )}
+      </Select>
+    );
+
+    const independenceTestSelect = (
+      <Select>
+        {Object.keys(IndepenceTests).map((key: any) => (
+          <Select.Option value={IndepenceTests[key]} key={key}>{key}</Select.Option>
+        ))}
+      </Select>
+    )
+
     return (
       <Drawer
         title="Create new Experiment"
@@ -49,15 +66,25 @@ class NewExperimentModal extends React.Component<
       >
         <Form layout="vertical" onSubmit={this.handleSubmit} onChange={this.hasErrors}>
           <Row gutter={16}>
-            <Form.Item label="Name">
-              {getFieldDecorator('datasetName', {
-                rules: [{ required: true, message: 'Enter a dataset name' }]
-              })(<Input placeholder="Dataset Name" />)}
+            <Form.Item label="Experiment Name">
+              {getFieldDecorator('ExperimentName', {
+                rules: [{ required: true, message: 'Enter a Experiment Name' }],
+              })(<Input placeholder="Experiment Name" />)}
             </Form.Item>
-            <Form.Item label="Query">
-              {getFieldDecorator('query', {
-                rules: [{ required: true, message: 'Enter a query' }]
-              })(<Input.TextArea placeholder="Your Query" autosize={true} />)}
+            <Form.Item label="Dataset" hasFeedback={true}>
+              {getFieldDecorator('dataset', {
+                rules: [{ required: true, message: 'Select a Dataset' }]
+              })(datasetSelect)}
+            </Form.Item>
+            <Form.Item label="Alpha">
+              {getFieldDecorator('alphaParameter', {
+                rules: [{ required: true, message: 'Enter a Alpha value'}]
+              })(<InputNumber placeholder='0' />)}
+            </Form.Item>
+            <Form.Item label="Independence Test">
+              {getFieldDecorator('independenceTest', {
+                rules: [{ required: true, message: 'Enter a Independence Test value'}]
+              })(independenceTestSelect)}
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit" disabled={this.state.hasErrors}>
@@ -103,17 +130,7 @@ class NewExperimentModal extends React.Component<
   };
 
   private submitDataset = (values: IFormData) => {
-    axios
-      .post(`${Endpoints.allDatasets}`, {
-        load_query: values.query,
-        name: values.datasetName
-      })
-      .then((value: AxiosResponse<any>) => {
-        message.success('Experiment was sucessfully submitted!');
-      })
-      .catch((e: any) => {
-        message.error('Failed to submit Experiment!');
-      });
+    ;
   };
 }
 
