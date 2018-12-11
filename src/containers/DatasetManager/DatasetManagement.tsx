@@ -1,7 +1,7 @@
 import { Button, Row, Form, message } from 'antd';
 import React, {Fragment} from 'react';
 import axios, { AxiosResponse } from 'axios';
-import { Endpoints } from '../../types';
+import { Endpoints, IDataset } from '../../types';
 import NewDatasetModal, { IPropsNewDatasetModal } from './NewDatasetModal';
 import ListElementDataset from '../../components/ListElementDataset/ListElementDataset';
 import './style.css';
@@ -9,7 +9,7 @@ import { any } from 'prop-types';
 
 interface IStateDatasetManagement {
   newDatasetModalVisible: boolean;
-  datasets: any,
+  datasets: Array<IDataset>,
 }
 
 class DatasetManagement extends React.Component<{}, IStateDatasetManagement> {
@@ -24,7 +24,7 @@ class DatasetManagement extends React.Component<{}, IStateDatasetManagement> {
 
   public render() {
     const DatasetModal = Form.create<IPropsNewDatasetModal>()(NewDatasetModal);
-    const DatasetList: any = this.state.datasets.map((dataset: any) =>
+    const DatasetList: any = this.state.datasets.map((dataset: IDataset) =>
       (<ListElementDataset title={dataset.name} key={dataset.id} content={'description of dataset'} onDelete={this.onDatasetDelete} onView={this.onDatasetView} />));
     return (
       <div className='Content'>
@@ -61,7 +61,6 @@ class DatasetManagement extends React.Component<{}, IStateDatasetManagement> {
     axios
       .get(`${Endpoints.allDatasets}`)
       .then((response: AxiosResponse<any>) => {
-        console.log(response);
         this.setState({
           datasets: response.data,
         });
