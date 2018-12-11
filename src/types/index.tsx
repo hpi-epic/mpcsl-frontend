@@ -37,6 +37,7 @@ export interface IDataset {
 
 export interface IExperiment {
   dataset_id: number;
+  dataset?: number;
   name: string;
   parameters: {
     alpha: number;
