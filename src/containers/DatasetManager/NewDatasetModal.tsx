@@ -32,6 +32,7 @@ class NewDatasetModal extends React.Component<
 
   public render() {
     const { getFieldDecorator } = this.props.form;
+
     return (
       <Drawer
         title="Create new Dataset"

@@ -51,3 +51,20 @@ export function getExperiments(): Promise<Array<IExperiment>> {
       })
   })
 }
+
+export function deleteExperiment(experiment: IExperiment): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    axios.delete(`${Endpoints.experiment}/${experiment.id}`)
+      .then((esponse: AxiosResponse) => {
+        message.success(`Experiment ${experiment.name} deleted!`)
+        resolve();
+      })
+      .catch(error => {
+        message.error(`Failed to delete ${experiment.name}`)
+        reject({
+          status: error.response.status,
+          message: error.message,
+        })
+      })
+  })
+}

@@ -8,24 +8,16 @@ interface IPropsListElementExperiment {
   status: BadgeProps['status'];
   statusText: string;
   content: string;
-  onEdit: (e: React.MouseEvent<HTMLElement>) => void;
   onDuplicate: (e: React.MouseEvent<HTMLElement>) => void;
   onDelete: (e: React.MouseEvent<HTMLElement>) => void;
   onRunStart: (e: React.MouseEvent<HTMLElement>) => void;
   onExplore: (e: React.MouseEvent<HTMLElement>) => void;
+  onClick: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 function ListElementExperiment(props: IPropsListElementExperiment) {
   const menu = (
     <Menu>
-      <Menu.Item>
-        <Button
-          className='Dropdown-Button'
-          onClick={props.onEdit}
-        >
-        Edit
-        </Button>
-      </Menu.Item>
       <Menu.Item>
         <Button
           className='Dropdown-Button'
@@ -53,8 +45,8 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
   );
 
   return (
-    <div>
-      <List.Item>
+    <div onClick={props.onClick}>
+      <List.Item >
         <Card className='Card' title={cardTitle}>
           <p className='Card-Content'>{props.content}</p>
           <Dropdown overlay={menu} placement='bottomLeft'>
