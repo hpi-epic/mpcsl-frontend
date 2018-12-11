@@ -22,3 +22,9 @@ export enum Endpoints {
   allJobs = '/jobs',
   results = '/results'
 }
+
+export interface IDataset {
+  id: number;
+  load_query: string,
+  name: string
+}
