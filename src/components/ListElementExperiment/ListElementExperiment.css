@@ -3,8 +3,7 @@
 .Card {
 	width: 50%;
 	margin: 0 auto;
-	border-radius: 25px;
-	cursor: pointer;
+	border-radius: 8px;
 }
 
 .List-Buttons {
