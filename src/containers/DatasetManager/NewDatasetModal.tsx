@@ -26,6 +26,8 @@ class NewDatasetModal extends React.Component<
   constructor(props: IPropsNewDatasetModal) {
     super(props);
 
+    console.log(props);
+
     this.state = {
       hasErrors: false,
     };
@@ -33,6 +35,15 @@ class NewDatasetModal extends React.Component<
 
   public render() {
     const { getFieldDecorator } = this.props.form;
+    let disabled = false;
+    console.log(typeof this.props.dataset);
+    if ( typeof this.props.dataset !== 'undefined' ) {
+      const { datasetName, query } = this.props.dataset;
+      this.props.form.setFieldsValue({
+        datasetName: datasetName,
+      });
+      disabled = true;
+    }
     return (
       <Drawer
         title="Create new Dataset"
@@ -46,12 +57,12 @@ class NewDatasetModal extends React.Component<
             <Form.Item label="Name">
               {getFieldDecorator('datasetName', {
                 rules: [{ required: true, message: 'Enter a dataset name' }]
-              })(<Input placeholder="Dataset Name" />)}
+              })(<Input placeholder="Dataset Name" disabled={disabled} />)}
             </Form.Item>
             <Form.Item label="Query">
               {getFieldDecorator('query', {
                 rules: [{ required: true, message: 'Enter a query' }]
-              })(<Input.TextArea placeholder="Your Query" autosize={true} />)}
+              })(<Input.TextArea placeholder="Your Query" autosize={true} disabled={disabled} />)}
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit" disabled={this.state.hasErrors}>
