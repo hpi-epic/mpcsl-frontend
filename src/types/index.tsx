@@ -20,7 +20,7 @@ export enum Endpoints {
   allExperiments = '/experiments',
   job = '/job',
   allJobs = '/jobs',
-  results = '/results'
+  results = '/results',
 }
 
 export enum IndepenceTests {

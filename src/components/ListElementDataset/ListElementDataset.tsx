@@ -5,8 +5,8 @@ import './ListElementDataset.css';
 interface IPropsListElementDataset {
   title: string;
   content: string;
-  onDelete: (e: React.MouseEvent<HTMLElement>) => void;
-  onView: (e: React.MouseEvent<HTMLElement>) => void;
+  onDelete: void;
+  onView:  void;
 }
 
 function ListElementDataset(props: IPropsListElementDataset) {
@@ -27,13 +27,13 @@ function ListElementDataset(props: IPropsListElementDataset) {
           <p className='Card-Content'>{props.content}</p>
           <Button
             className='List-Buttons'
-            onClick={props.onDelete}
+            onClick={() => props.onDelete}
           >
           Delete
           </Button>
           <Button
             className='List-Buttons'
-            onClick={props.onView}
+            onClick={() => props.onView}
           >
           View
           </Button>

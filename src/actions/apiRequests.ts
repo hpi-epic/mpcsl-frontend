@@ -17,3 +17,20 @@ export function getDatasets(): Promise<Array<IDataset>> {
       })
   });
 }
+
+export function deleteDataset(datasetId: number): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    axios.delete(Endpoints.dataset + '/' + datasetId)
+      .then(() => {
+        resolve()
+        // message.success('Successfully deleted Dataset');
+      })
+      .catch((error) => {
+        message.error('Failed to delete Dataset');
+        reject({
+          status: error.response.status,
+          message: 'Failed to fetch Datasets',
+        })
+      })
+  })
+}

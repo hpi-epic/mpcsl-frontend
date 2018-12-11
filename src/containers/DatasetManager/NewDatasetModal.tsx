@@ -7,13 +7,14 @@ import { Endpoints } from '../../types';
 export interface IPropsNewDatasetModal extends FormComponentProps {
   visible: boolean;
   onClose: () => void;
+  dataset?: IFormDataset;
 }
 
 interface IStateNewDatasetModal {
   hasErrors: boolean;
 }
 
-interface IFormData {
+export interface IFormDataset {
   datasetName: string;
   query: string;
 }
@@ -65,7 +66,7 @@ class NewDatasetModal extends React.Component<
 
   private handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.form.validateFields((err: Error, values: IFormData) => {
+    this.props.form.validateFields((err: Error, values: IFormDataset) => {
       if (!err) {
         this.submitDataset(values);
       } else {
@@ -75,7 +76,7 @@ class NewDatasetModal extends React.Component<
   };
 
   private hasErrors = () => {
-    this.props.form.validateFields((err: Error, values: IFormData) => {
+    this.props.form.validateFields((err: Error, values: IFormDataset) => {
       if(err) {
         this.setState({
           hasErrors: true,
@@ -88,7 +89,7 @@ class NewDatasetModal extends React.Component<
     });
   };
 
-  private submitDataset = (values: IFormData) => {
+  private submitDataset = (values: IFormDataset) => {
     axios
       .post(`${Endpoints.allDatasets}`, {
         load_query: values.query,
