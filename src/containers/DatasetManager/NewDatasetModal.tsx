@@ -89,14 +89,13 @@ class NewDatasetModal extends React.Component<
   };
 
   private submitDataset = (values: IFormData) => {
-    console.log(process.env.REACT_APP_API);
     axios
       .post(`${Endpoints.allDatasets}`, {
         load_query: values.query,
         name: values.datasetName
       })
       .then((value: AxiosResponse<any>) => {
-        message.success('Submitted Dataset Sucessfully!');
+        message.success('Dataset was sucessfully submitted!');
       })
       .catch((e: any) => {
         message.error('Failed to submit Dataset!');
