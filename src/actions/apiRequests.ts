@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import axios from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 import { IDataset, IExperiment, Endpoints } from "../types";
 
 export function getDatasets(): Promise<Array<IDataset>> {
@@ -31,6 +31,21 @@ export function createExperiment(experiment: IExperiment): Promise<void> {
           status: error.response.status,
           message: error.message,
 
+        })
+      })
+  })
+}
+
+export function getExperiments(): Promise<Array<IExperiment>> {
+  return new Promise<Array<IExperiment>>((resolve, reject) => {
+    axios.get(Endpoints.allExperiments)
+      .then((response: AxiosResponse) => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject({
+          status: error.response.status,
+          message: error.message,
         })
       })
   })
