@@ -43,6 +43,7 @@ export function getExperiments(): Promise<Array<IExperiment>> {
         resolve(response.data);
       })
       .catch(error => {
+        message.error('Failed to fetch Experiments')
         reject({
           status: error.response.status,
           message: error.message,
