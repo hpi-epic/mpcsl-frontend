@@ -25,7 +25,7 @@ export enum Endpoints {
 
 export enum IndepenceTests {
   gaussCI = 'gaussCI',
-  diCI = 'dicCI',
+  disCI = 'disCI',
   binCI = 'binCI'
 }
 
@@ -33,4 +33,14 @@ export interface IDataset {
   id: number;
   load_query: string,
   name: string
+}
+
+export interface IExperiment {
+  dataset_id: number;
+  name: string;
+  parameters: {
+    alpha: number;
+    independence_test: string;
+    cores: number;
+  }
 }

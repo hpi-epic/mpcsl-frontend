@@ -1,6 +1,6 @@
 import { message } from 'antd';
 import axios from 'axios';
-import { IDataset, Endpoints } from "../types";
+import { IDataset, IExperiment, Endpoints } from "../types";
 
 export function getDatasets(): Promise<Array<IDataset>> {
   return new Promise<Array<IDataset>>((resolve, reject) => {
@@ -16,4 +16,22 @@ export function getDatasets(): Promise<Array<IDataset>> {
         })
       })
   });
+}
+
+export function createExperiment(experiment: IExperiment): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    axios.post(Endpoints.allExperiments, experiment)
+      .then(response => {
+        message.success(`Successfully created Experiment ${experiment.name}`)
+        resolve();
+      })
+      .catch(error => {
+        message.error('Failed to create Experiment');
+        reject({
+          status: error.response.status,
+          message: error.message,
+
+        })
+      })
+  })
 }
