@@ -7,7 +7,7 @@ import { Endpoints } from '../../types';
 export interface IPropsNewDatasetModal extends FormComponentProps {
   visible: boolean;
   onClose: () => void;
-  dataset?: IFormDataset;
+  dataset: undefined | IFormDataset;
 }
 
 interface IStateNewDatasetModal {
@@ -26,8 +26,6 @@ class NewDatasetModal extends React.Component<
   constructor(props: IPropsNewDatasetModal) {
     super(props);
 
-    console.log(props);
-
     this.state = {
       hasErrors: false,
     };
@@ -36,36 +34,48 @@ class NewDatasetModal extends React.Component<
   public render() {
     const { getFieldDecorator } = this.props.form;
     let disabled = false;
-    console.log(typeof this.props.dataset);
     if ( typeof this.props.dataset !== 'undefined' ) {
-      const { datasetName, query } = this.props.dataset;
-      this.props.form.setFieldsValue({
-        datasetName: datasetName,
-      });
       disabled = true;
     }
+
+    const datasetNameEl = getFieldDecorator('datasetName', {
+      initialValue: this.props.dataset ? this.props.dataset.datasetName : undefined,
+      rules: [{ required: true, message: 'Enter a dataset name' }]
+    })(<Input disabled={disabled} placeholder="Dataset Name" />);
+
+    const datasetQueryEl = getFieldDecorator('Query', {
+      initialValue: this.props.dataset ? this.props.dataset.query : undefined,
+      rules: [{ required: true, message: 'Enter a query' }]
+    })(<Input disabled={disabled} placeholder="Your Query" />);
+
+    const title = this.props.dataset ? `Dataset “${this.props.dataset.datasetName}“` : 'Create new Dataset';
+
     return (
       <Drawer
-        title="Create new Dataset"
+        title={title}
         width={720}
         placement="right"
         onClose={this.props.onClose}
         visible={this.props.visible}
       >
-        <Form layout="vertical" onSubmit={this.handleSubmit} onChange={this.hasErrors}>
+        <Form 
+          layout="vertical" 
+          onSubmit={this.handleSubmit} 
+          onChange={this.hasErrors}
+        >
           <Row gutter={16}>
             <Form.Item label="Name">
-              {getFieldDecorator('datasetName', {
-                rules: [{ required: true, message: 'Enter a dataset name' }]
-              })(<Input placeholder="Dataset Name" disabled={disabled} />)}
+              {datasetNameEl}
             </Form.Item>
             <Form.Item label="Query">
-              {getFieldDecorator('query', {
-                rules: [{ required: true, message: 'Enter a query' }]
-              })(<Input.TextArea placeholder="Your Query" autosize={true} disabled={disabled} />)}
+              {datasetQueryEl}
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit" disabled={this.state.hasErrors}>
+              <Button 
+                type="primary" 
+                htmlType="submit" 
+                disabled={this.props.dataset ? true : this.state.hasErrors}
+              >
                 Submit
               </Button>
             </Form.Item>
