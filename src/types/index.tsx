@@ -20,5 +20,5 @@ export enum Endpoints {
   allExperiments = '/experiments',
   job = '/job',
   allJobs = '/jobs',
-  results = '/rsults'
+  results = '/results'
 }
