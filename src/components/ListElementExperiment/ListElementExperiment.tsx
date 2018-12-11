@@ -45,13 +45,19 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
   );
 
   return (
-    <div onClick={props.onClick}>
+    <div>
       <List.Item >
         <Card className='Card' title={cardTitle}>
           <p className='Card-Content'>{props.content}</p>
           <Dropdown overlay={menu} placement='bottomLeft'>
             <Button className='List-Buttons' icon='ellipsis' />
           </Dropdown>
+          <Button
+            className='List-Buttons'
+            onClick={props.onClick}
+          >
+          View
+          </Button>
           <Button
             className='List-Buttons'
             onClick={props.onRunStart}

@@ -10,13 +10,14 @@ import {
 } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import React from 'react';
-import { IDataset, IndepenceTests, IExperiment } from '../../types';
+import { IDataset, IndepenceTests } from '../../types';
 import { getDatasets, createExperiment } from '../../actions/apiRequests';
 
 export interface IPropsNewExperimentModal extends FormComponentProps {
   visible: boolean;
   onClose: () => void;
   experiment: undefined | IFormExperiment;
+  editDisabled: boolean;
 }
 
 interface IStateNewExperimentModal {
@@ -36,6 +37,8 @@ class NewExperimentModal extends React.Component<
   IPropsNewExperimentModal,
   IStateNewExperimentModal
 > {
+  mounted = false;
+
   constructor(props: IPropsNewExperimentModal) {
     super(props);
 
@@ -46,19 +49,22 @@ class NewExperimentModal extends React.Component<
   }
 
   public componentDidMount = () => {
+    this.mounted = true;
     this.getData();
+    if(this.props.experiment && !this.props.editDisabled) {
+      this.hasErrors();
+    }
+  };
+
+  public componentWillUnmount = () => {
+    this.mounted = false;
   };
 
   public render() {
     const { getFieldDecorator } = this.props.form;
 
-    let disabled = false;
-    if (this.props.experiment) {
-      disabled = true;
-    }
-
     const datasetSelect = (
-      <Select disabled={disabled}>
+      <Select disabled={this.props.editDisabled} onChange={this.hasErrors}>
         {this.state.datasets.map((dataset: IDataset) => (
           <Select.Option value={dataset.id} key={String(dataset.id)}>
             {dataset.name}
@@ -68,7 +74,7 @@ class NewExperimentModal extends React.Component<
     );
 
     const independenceTestSelect = (
-      <Select disabled={disabled}>
+      <Select disabled={this.props.editDisabled} onChange={this.hasErrors}>
         {Object.keys(IndepenceTests).map((key: any) => (
           <Select.Option value={IndepenceTests[key]} key={IndepenceTests[key]}>
             {IndepenceTests[key]}
@@ -78,41 +84,43 @@ class NewExperimentModal extends React.Component<
     );
 
     const experimentNameEl = getFieldDecorator('name', {
-      initialValue: this.props.experiment ? this.props.experiment.name : undefined,
-      rules: [{ required: true, message: 'Enter a Experiment Name' }]
-    })(<Input disabled={disabled} placeholder="Experiment Name" />);
+      initialValue: this.props.experiment
+        ? this.props.experiment.name
+        : undefined,
+      rules: [{ required: true, message: 'Enter a Experiment Name'}]
+    })(<Input disabled={this.props.editDisabled} placeholder="Experiment Name" />);
 
     const datasetEl = getFieldDecorator('dataset_id', {
-      initialValue: this.props.experiment ? this.props.experiment.dataset_id : undefined,
+      initialValue: this.props.experiment
+        ? this.props.experiment.dataset_id
+        : undefined,
       rules: [{ required: true, message: 'Select a Dataset' }]
     })(datasetSelect);
 
     const alphaEl = getFieldDecorator('alpha', {
+      initialValue: this.props.experiment ? this.props.experiment.alpha : undefined,
       rules: [{ required: true, message: 'Enter an Alpha value' }]
-    })(<InputNumber disabled={disabled} placeholder="0" />);
+    })(<InputNumber disabled={this.props.editDisabled} onChange={this.hasErrors} placeholder="0" />);
 
     const independenceTestEl = getFieldDecorator('independence_test', {
-      initialValue: this.props.experiment ? this.props.experiment.independence_test : IndepenceTests.gaussCI,
+      initialValue: this.props.experiment
+        ? this.props.experiment.independence_test
+        : IndepenceTests.gaussCI,
       rules: [{ required: true, message: 'Select an Indepent Test' }]
     })(independenceTestSelect);
 
     const coresEl = getFieldDecorator('cores', {
       initialValue: this.props.experiment ? this.props.experiment.cores : 1,
-      rules: [
-        { required: true, message: 'Enter the Number of Cores' }
-      ]
-    })(
-      <InputNumber
-        disabled={disabled}
-        placeholder="0"
-        min={0}
-        step={1}
-      />
-    );
+      rules: [{ required: true, message: 'Enter the Number of Cores' }]
+    })(<InputNumber disabled={this.props.editDisabled} onChange={this.hasErrors} placeholder="0" min={0} step={1} />);
 
     return (
       <Drawer
-        title="Create new Experiment"
+        title={
+          this.props.experiment
+            ? `Experiment "${this.props.experiment.name}"`
+            : 'Create new Experiment'
+        }
         width={720}
         placement="right"
         onClose={this.props.onClose}
@@ -124,26 +132,20 @@ class NewExperimentModal extends React.Component<
           onChange={this.hasErrors}
         >
           <Row gutter={16}>
-            <Form.Item label="Experiment Name">
-              {experimentNameEl}
-            </Form.Item>
+            <Form.Item label="Experiment Name" hasFeedback={true}>{experimentNameEl}</Form.Item>
             <Form.Item label="Dataset" hasFeedback={true}>
               {datasetEl}
             </Form.Item>
-            <Form.Item label="Alpha">
-              {alphaEl}
-            </Form.Item>
+            <Form.Item label="Alpha" hasFeedback={true}>{alphaEl}</Form.Item>
             <Form.Item label="Independence Test" hasFeedback={true}>
               {independenceTestEl}
             </Form.Item>
-            <Form.Item label="Cores">
-              {coresEl}
-            </Form.Item>
+            <Form.Item label="Cores">{coresEl}</Form.Item>
             <Form.Item>
               <Button
                 type="primary"
                 htmlType="submit"
-                disabled={this.state.hasErrors}
+                disabled={this.props.editDisabled ? true : this.state.hasErrors}
               >
                 Submit
               </Button>
@@ -156,9 +158,11 @@ class NewExperimentModal extends React.Component<
 
   private async getData() {
     const datasets = await getDatasets();
-    this.setState({
-      datasets: datasets
-    });
+    if (this.mounted) {
+      this.setState({
+        datasets: datasets
+      });
+    }
   }
 
   private handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -174,6 +178,7 @@ class NewExperimentModal extends React.Component<
 
   private hasErrors = () => {
     this.props.form.validateFields((err: Error, values: IFormExperiment) => {
+      console.log('test');
       if (err) {
         this.setState({
           hasErrors: true

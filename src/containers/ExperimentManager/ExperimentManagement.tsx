@@ -9,29 +9,38 @@ import { IExperiment } from '../../types';
 import { getExperiments, deleteExperiment } from '../../actions/apiRequests';
 import ListElementExperiment from '../../components/ListElementExperiment/ListElementExperiment';
 
-interface IPropsExperimentManagement {
+interface IStateExperimentManagement {
   newExperimentModalVisible: boolean;
   experiments: Array<IExperiment>;
   clickedExperiment: IFormExperiment | undefined;
+  editExperiment: boolean;
 }
 
 class ExperimentManagement extends React.Component<
   {},
-  IPropsExperimentManagement
+  IStateExperimentManagement
 > {
+  mounted = false;
+
   constructor(props: {}) {
     super(props);
 
     this.state = {
+      editExperiment: true,
       newExperimentModalVisible: false,
       experiments: [],
-      clickedExperiment: undefined,
+      clickedExperiment: undefined
     };
   }
 
   public componentDidMount = () => {
+    this.mounted = true;
     this.getData();
   };
+
+  public componentWillUnmount = () => {
+    this.mounted = false;
+  }
 
   public render() {
     const ExperimentModal = Form.create<IPropsNewExperimentModal>()(
@@ -72,6 +81,7 @@ class ExperimentManagement extends React.Component<
           visible={this.state.newExperimentModalVisible}
           onClose={this.onClose}
           experiment={this.state.clickedExperiment}
+          editDisabled={!this.state.editExperiment}
         />
       </div>
     );
@@ -79,19 +89,23 @@ class ExperimentManagement extends React.Component<
 
   private async getData() {
     const experiments = await getExperiments();
-    this.setState({ experiments });
+    if (this.mounted) {
+      this.setState({ experiments });
+    }
   }
 
   private onNewExperiment = () => {
     this.setState({
-      newExperimentModalVisible: true
+      newExperimentModalVisible: true,
+      editExperiment: true
     });
   };
 
   private onClose = () => {
     this.setState({
       newExperimentModalVisible: false,
-      clickedExperiment: undefined
+      clickedExperiment: undefined,
+      editExperiment: true,
     });
     this.getData();
   };
@@ -106,6 +120,7 @@ class ExperimentManagement extends React.Component<
   private onExperimentClick = (experiment: IExperiment) => {
     this.setState({
       newExperimentModalVisible: true,
+      editExperiment: false,
       clickedExperiment: {
         name: experiment.name,
         alpha: experiment.parameters.alpha,
@@ -116,12 +131,21 @@ class ExperimentManagement extends React.Component<
     })
   }
 
-  private onRunExperiment = (experiment: IExperiment) => {
-    // TODO
-    ;
+  private onDuplicateExperiment = (experiment: IExperiment) => {
+    this.setState({
+      newExperimentModalVisible: true,
+      editExperiment: true,
+      clickedExperiment: {
+        name: `${experiment.name} - Copy`,
+        alpha: experiment.parameters.alpha,
+        independence_test: experiment.parameters.independence_test,
+        cores: experiment.parameters.cores,
+        dataset_id: experiment.dataset_id,
+      }
+    })
   }
 
-  private onDuplicateExperiment = (experiment: IExperiment) => {
+  private onRunExperiment = (experiment: IExperiment) => {
     // TODO
     ;
   }
