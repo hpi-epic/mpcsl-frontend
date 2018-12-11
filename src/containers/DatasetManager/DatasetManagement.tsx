@@ -24,9 +24,8 @@ class DatasetManagement extends React.Component<{}, IStateDatasetManagement> {
 
   public render() {
     const DatasetModal = Form.create<IPropsNewDatasetModal>()(NewDatasetModal);
-    const DatasetList: any = this.state.datasets.map((value: any) =>
-       (<ListElementDataset title="test" key={value.id} content={'testContent'} onDelete={this.onDatasetDelete} onView={this.onDatasetView} />));
-
+    const DatasetList: any = this.state.datasets.map((dataset: any) =>
+      (<ListElementDataset title={dataset.name} key={dataset.id} content={'description of dataset'} onDelete={this.onDatasetDelete} onView={this.onDatasetView} />));
     return (
       <div className='Content'>
         <Row>
