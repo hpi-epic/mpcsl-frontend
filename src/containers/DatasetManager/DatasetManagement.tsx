@@ -24,7 +24,9 @@ class DatasetManagement extends React.Component<{}, IStateDatasetManagement> {
 
   public render() {
     const DatasetModal = Form.create<IPropsNewDatasetModal>()(NewDatasetModal);
-    const DatasetList: any = <div>{this.createDatasetList()}</div>
+    const DatasetList: any = this.state.datasets.map((value: any) =>
+       (<ListElementDataset title="test" key={value.id} content={'testContent'} onDelete={this.onDatasetDelete} onView={this.onDatasetView} />));
+
     return (
       <div className='Content'>
         <Row>
@@ -32,7 +34,9 @@ class DatasetManagement extends React.Component<{}, IStateDatasetManagement> {
             <Button type='primary' onClick={this.onNewDataset}>+ New Dataset</Button>
           </div>
         </Row>
-        <DatasetList />
+        <Row>
+          {DatasetList}
+        </Row>
         <DatasetModal visible={this.state.newDatasetModalVisible} onClose={this.onClose}/>
       </div>
     );
@@ -67,12 +71,6 @@ class DatasetManagement extends React.Component<{}, IStateDatasetManagement> {
         message.error('Failed to load Datasets!');
       });
   };
-
-  private createDatasetList = (): Array<any> => {
-    return this.state.datasets.map((dataset: any) => {
-      return <ListElementDataset title={'test'} content={'testContent'} onDelete={this.onDatasetDelete} onView={this.onDatasetView} />
-    })
-  }
 
   private onDatasetDelete = () => {
     console.log('delete');
