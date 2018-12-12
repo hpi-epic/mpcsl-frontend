@@ -1,1 +1,18 @@
 @import '~antd/dist/antd.css';
+
+body {
+  background: #eff1ef;
+}
+
+
+.Modal-Form .ant-input-disabled  {
+    color: rgba(0, 0, 0, 0.98);
+}
+
+.Modal-Form .ant-select-disabled {
+  color: rgba(0, 0, 0, 0.98);
+}
+
+.Modal-Form .ant-input-number-disabled {
+  color: rgba(0, 0, 0, 0.98);
+}
