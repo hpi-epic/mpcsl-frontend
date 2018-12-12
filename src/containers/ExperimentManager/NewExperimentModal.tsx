@@ -130,6 +130,7 @@ class NewExperimentModal extends React.Component<
           layout="vertical"
           onSubmit={this.handleSubmit}
           onChange={this.hasErrors}
+          className="Modal-Form"
         >
           <Row gutter={16}>
             <Form.Item label="Experiment Name" hasFeedback={true}>{experimentNameEl}</Form.Item>
