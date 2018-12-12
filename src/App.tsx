@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect, Switch } from 'react-router-dom';
 import colors from './constants/colors';
 
 import './App.css';
@@ -12,10 +12,12 @@ class App extends Component {
   public render() {
     return (
       <div style={{ background: colors.contentBackground }}>
-        <Route exact={true} path='/' component={PipelineManager} />
-        <Route path={Routes.manager} component={PipelineManager} />
-        <Route path={Routes.graphExplorer} component={GraphExplorer} />
-        <Route path={Routes.runtimeManager} component={RuntimeManager} />
+        <Switch>
+          <Route path={Routes.manager} component={PipelineManager} />
+          <Route path={Routes.graphExplorer} component={GraphExplorer} />
+          <Route path={Routes.runtimeManager} component={RuntimeManager} />
+          <Redirect from="/" to={Routes.projectManager} />
+        </Switch>
       </div>
     );
   }

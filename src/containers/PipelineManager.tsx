@@ -5,8 +5,8 @@ import { Route, RouteComponentProps } from 'react-router-dom';
 import ViewRadioNavigation from '../components/Navigation/ViewRadioNavigation';
 import colors from '../constants/colors';
 import { Routes } from '../types';
-import DatasetManagement from './DatasetManagement';
-import ExperimentManagement from './ExperimentManagement';
+import DatasetManagement from './DatasetManager/DatasetManagement';
+import ExperimentManagement from './ExperimentManager/ExperimentManagement';
 
 const { Header, Content } = Layout;
 

@@ -1,9 +1,9 @@
 @import '~antd/dist/antd.css';
 
 .Card {
-	width: 80%;
-	margin-left: 20px;
-	border-radius: 25px;
+	width: 50%;
+	margin: 0 auto;
+	border-radius: 8px;
 }
 
 .List-Buttons {
