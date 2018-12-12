@@ -21,12 +21,30 @@ export function getDatasets(): Promise<Array<IDataset>> {
 export function createExperiment(experiment: IExperiment): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     axios.post(Endpoints.allExperiments, experiment)
-      .then(response => {
+      .then((response: AxiosResponse) => {
         message.success(`Successfully created Experiment ${experiment.name}`)
         resolve();
       })
       .catch(error => {
         message.error('Failed to create Experiment');
+        reject({
+          status: error.response.status,
+          message: error.message,
+
+        })
+      })
+  })
+}
+
+export function createDataset(dataset: IDataset): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    axios.post(Endpoints.allDatasets, dataset)
+      .then((response: AxiosResponse) => {
+        message.success(`Successfully created Dataset ${dataset.name}`)
+        resolve();
+      })
+      .catch(error => {
+        message.error('Failed to create Dataset');
         reject({
           status: error.response.status,
           message: error.message,
@@ -55,12 +73,12 @@ export function getExperiments(): Promise<Array<IExperiment>> {
 export function deleteExperiment(experiment: IExperiment): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     axios.delete(`${Endpoints.experiment}/${experiment.id}`)
-      .then((esponse: AxiosResponse) => {
-        message.success(`Experiment ${experiment.name} deleted!`)
+      .then((response: AxiosResponse) => {
+        message.success(`Successfully deleted Experiment ${experiment.name}!`)
         resolve();
       })
       .catch(error => {
-        message.error(`Failed to delete ${experiment.name}`)
+        message.error(`Failed to delete Experiment ${experiment.name}!`)
         reject({
           status: error.response.status,
           message: error.message,
@@ -69,15 +87,15 @@ export function deleteExperiment(experiment: IExperiment): Promise<void> {
   })
 }
 
-export function deleteDataset(datasetId: number): Promise<void> {
+export function deleteDataset(dataset: IDataset): Promise<void> {
   return new Promise<void>((resolve, reject) => {
-    axios.delete(`${Endpoints.dataset}/${datasetId}`)
-      .then(() => {
+    axios.delete(`${Endpoints.dataset}/${dataset.id}`)
+      .then((response: AxiosResponse) => {
         resolve()
-        message.success('Successfully deleted Dataset');
+        message.success(`Successfully deleted Dataset ${dataset.name}!`);
       })
-      .catch((error) => {
-        message.error('Failed to delete Dataset');
+      .catch(error => {
+        message.error(`Failed to delete Dataset ${dataset.name}!`);
         reject({
           status: error.response.status,
           message: error.message,

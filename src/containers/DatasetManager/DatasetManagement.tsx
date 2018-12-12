@@ -26,7 +26,7 @@ class DatasetManagement extends React.Component<{}, IStateDatasetManagement> {
   public render() {
     const DatasetModal = Form.create<IPropsNewDatasetModal>()(NewDatasetModal);
     const DatasetList: any = this.state.datasets.map((dataset: IDataset) =>
-      (<ListElementDataset title={dataset.name} key={dataset.id} content={'description of dataset'} onDelete={() => this.onDatasetDelete(dataset.id)} onView={() => this.onDatasetView(dataset)} />));
+      (<ListElementDataset title={dataset.name} key={dataset.id} content={'description of dataset'} onDelete={() => this.onDatasetDelete(dataset)} onView={() => this.onDatasetView(dataset)} />));
     return (
       <div className='Content'>
         <Row>
@@ -68,8 +68,8 @@ class DatasetManagement extends React.Component<{}, IStateDatasetManagement> {
     });
   };
 
-  private onDatasetDelete = (datasetID: number) => {
-    deleteDataset(datasetID)
+  private onDatasetDelete = (dataset: IDataset) => {
+    deleteDataset(dataset)
       .then(() => {
         this.getDatasets();
       })

@@ -30,7 +30,7 @@ export enum IndepenceTests {
 }
 
 export interface IDataset {
-  id: number;
+  id?: number;
   load_query: string,
   name: string
 }

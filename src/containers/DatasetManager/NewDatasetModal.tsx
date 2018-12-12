@@ -1,8 +1,8 @@
 import { Drawer, Form, Row, Input, Button, message } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import React from 'react';
-import axios, { AxiosResponse } from 'axios';
-import { Endpoints } from '../../types';
+import { createDataset } from '../../actions/apiRequests';
+
 
 export interface IPropsNewDatasetModal extends FormComponentProps {
   visible: boolean;
@@ -111,18 +111,11 @@ class NewDatasetModal extends React.Component<
   };
 
   private submitDataset = (values: IFormDataset) => {
-    axios
-      .post(`${Endpoints.allDatasets}`, {
-        load_query: values.query,
-        name: values.datasetName
-      })
-      .then((value: AxiosResponse<any>) => {
-        message.success('Dataset was sucessfully submitted!');
-        this.props.onClose();
-      })
-      .catch((e: any) => {
-        message.error('Failed to submit Dataset!');
-      });
+    createDataset({
+      load_query: values.query,
+      name: values.datasetName,
+    });
+    this.props.onClose();
   };
 }
 
