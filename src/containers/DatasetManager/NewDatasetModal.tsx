@@ -118,6 +118,7 @@ class NewDatasetModal extends React.Component<
       })
       .then((value: AxiosResponse<any>) => {
         message.success('Dataset was sucessfully submitted!');
+        this.props.onClose();
       })
       .catch((e: any) => {
         message.error('Failed to submit Dataset!');

@@ -71,10 +71,10 @@ export function deleteExperiment(experiment: IExperiment): Promise<void> {
 
 export function deleteDataset(datasetId: number): Promise<void> {
   return new Promise<void>((resolve, reject) => {
-    axios.delete(Endpoints.dataset + '/' + datasetId)
+    axios.delete(`${Endpoints.dataset}/${datasetId}`)
       .then(() => {
         resolve()
-        // message.success('Successfully deleted Dataset');
+        message.success('Successfully deleted Dataset');
       })
       .catch((error) => {
         message.error('Failed to delete Dataset');

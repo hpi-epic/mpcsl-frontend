@@ -58,6 +58,7 @@ class DatasetManagement extends React.Component<{}, IStateDatasetManagement> {
       viewDataset: undefined,
       datasetModalVisible: false,
     });
+    this.getDatasets();
   }
 
   private async getDatasets() {
@@ -67,8 +68,11 @@ class DatasetManagement extends React.Component<{}, IStateDatasetManagement> {
     });
   };
 
-  private onDatasetDelete(datasetID: number) {
-    deleteDataset(datasetID);
+  private onDatasetDelete = (datasetID: number) => {
+    deleteDataset(datasetID)
+      .then(() => {
+        this.getDatasets();
+      })
   }
 
   private onDatasetView = (dataset: IDataset) => {
