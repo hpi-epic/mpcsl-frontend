@@ -12,7 +12,7 @@ interface IPropsListElementExperiment {
   onDelete: (e: React.MouseEvent<HTMLElement>) => void;
   onRunStart: (e: React.MouseEvent<HTMLElement>) => void;
   onExplore: (e: React.MouseEvent<HTMLElement>) => void;
-  onClick: (e: React.MouseEvent<HTMLElement>) => void;
+  onView: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 function ListElementExperiment(props: IPropsListElementExperiment) {
@@ -54,7 +54,7 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
           </Dropdown>
           <Button
             className='List-Buttons'
-            onClick={props.onClick}
+            onClick={props.onView}
           >
           View
           </Button>

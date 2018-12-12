@@ -60,7 +60,7 @@ class ExperimentManagement extends React.Component<
           onDuplicate={() => this.onDuplicateExperiment(experiment)}
           onExplore={() => this.onExploreExperiment(experiment)}
           onRunStart={() => this.onRunExperiment(experiment)}
-          onClick={() => this.onExperimentClick(experiment)}
+          onView={() => this.onExperimentClick(experiment)}
         />
       )
     );
