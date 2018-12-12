@@ -179,7 +179,6 @@ class NewExperimentModal extends React.Component<
 
   private hasErrors = () => {
     this.props.form.validateFields((err: Error, values: IFormExperiment) => {
-      console.log('test');
       if (err) {
         this.setState({
           hasErrors: true
