@@ -43,7 +43,7 @@ class NewDatasetModal extends React.Component<
       rules: [{ required: true, message: 'Enter a dataset name' }]
     })(<Input disabled={disabled} placeholder="Dataset Name" />);
 
-    const datasetQueryEl = getFieldDecorator('Query', {
+    const datasetQueryEl = getFieldDecorator('query', {
       initialValue: this.props.dataset ? this.props.dataset.query : undefined,
       rules: [{ required: true, message: 'Enter a query' }]
     })(<Input disabled={disabled} placeholder="Your Query" />);
@@ -62,6 +62,7 @@ class NewDatasetModal extends React.Component<
           layout="vertical" 
           onSubmit={this.handleSubmit} 
           onChange={this.hasErrors}
+          className="Modal-Form"
         >
           <Row gutter={16}>
             <Form.Item label="Name">
