@@ -7,19 +7,20 @@ import colors from '../constants/colors';
 import { Routes } from '../types';
 import DatasetManagement from './DatasetManager/DatasetManagement';
 import ExperimentManagement from './ExperimentManager/ExperimentManagement';
+import { Location } from 'history';
 
 const { Header, Content } = Layout;
 
 interface IStatePipelineManager {
-  view: Routes;
+  view: any;
 }
 
 class PipelineManager extends React.Component<RouteComponentProps, IStatePipelineManager> {
   constructor(props: RouteComponentProps) {
     super(props);
-
+    console.log(this.props.location.pathname);
     this.state = {
-      view: Routes.projectManager,
+      view: this.props.history,
     };
   }
 

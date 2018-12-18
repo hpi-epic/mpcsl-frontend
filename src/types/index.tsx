@@ -1,6 +1,6 @@
 export interface IStoreState {
   graph: any;
-  subGraph: any;
+  selectedGraph: any;
 }
 
 export type StoreState = IStoreState | undefined;
@@ -8,9 +8,12 @@ export type StoreState = IStoreState | undefined;
 export enum Routes {
   manager = '/manager',
   graphExplorer = '/graph-explorer',
+  graphExplorerSelection = '/graph-explorer/selection',
+  graphExplorerAnnotate = '/graph-explorer/annotate',
+  graphExplorerCausalExploration = '/graph-explorer/causal-exploration',
   datasetManager = '/manager/dataset',
   projectManager = '/manager/projects',
-  runtimeManager = '/runtime',
+  runtimeManager = '/runtime'
 }
 
 export enum Endpoints {

@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import axios, { AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { IDataset, IExperiment, Endpoints } from "../types";
 
 export function getDatasets(): Promise<Array<IDataset>> {

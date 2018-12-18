@@ -1,10 +1,10 @@
 import { GraphExplorerAction } from '../actions/graphExplorer';
-import { ADD_GRAPH } from '../constants/actions';
+import { ADD_GRAPH, ADD_NODE } from '../constants/actions';
 import { StoreState } from '../types';
 
 const initialState = {
-  graph: 'test', // TODO
-  subGraph: 'test', // TODO
+  graph: null,
+  selectedGraph: null,
 };
 
 function graphExplorer(
@@ -15,8 +15,14 @@ function graphExplorer(
     case ADD_GRAPH:
       return {
         ...state,
-        graph: action.graph,
+        graph: action.graph
       };
+    case ADD_NODE:
+      // TODO
+      return {
+        ...state,
+        selectedGraph: state.graph,
+      }
     default:
       return state;
   }
