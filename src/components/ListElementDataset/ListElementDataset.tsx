@@ -5,8 +5,8 @@ import './ListElementDataset.css';
 interface IPropsListElementDataset {
   title: string;
   content: string;
-  onDelete: (e: React.MouseEvent<HTMLElement>) => void;
-  onView: (e: React.MouseEvent<HTMLElement>) => void;
+  onDelete: () => void;
+  onView:  () => void;
 }
 
 function ListElementDataset(props: IPropsListElementDataset) {

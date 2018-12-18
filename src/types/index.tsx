@@ -20,17 +20,17 @@ export enum Endpoints {
   allExperiments = '/experiments',
   job = '/job',
   allJobs = '/jobs',
-  results = '/results'
+  results = '/results',
 }
 
 export enum IndepenceTests {
   gaussCI = 'gaussCI',
-  disCI = 'disCI',
+  diCI = 'dicCI',
   binCI = 'binCI'
 }
 
 export interface IDataset {
-  id: number;
+  id?: number;
   load_query: string,
   name: string
 }
