@@ -5,7 +5,7 @@ import { Route, RouteComponentProps } from 'react-router-dom';
 import ViewRadioNavigation from '../components/Navigation/ViewRadioNavigation';
 import colors from '../constants/colors';
 import { Routes } from '../types';
-import DatasetManagement from './DatasetManager/DatasetManagement';
+import ObservationMatricesManagement from './ObservationMatricesManager/ObservationMatricesManagement';
 import ExperimentManagement from './ExperimentManager/ExperimentManagement';
 
 const { Header, Content } = Layout;
@@ -19,7 +19,7 @@ class PipelineManager extends React.Component<RouteComponentProps, IStatePipelin
     super(props);
 
     this.state = {
-      view: Routes.projectManager,
+      view: Routes.experimentManager,
     };
   }
 
@@ -38,8 +38,8 @@ class PipelineManager extends React.Component<RouteComponentProps, IStatePipelin
           </Row>
         </Header>
         <Content style={{ background: colors.contentBackground }}>
-          <Route exact={true} path={Routes.projectManager} component={ExperimentManagement} />
-          <Route path={Routes.datasetManager} component={DatasetManagement} />
+          <Route exact={true} path={Routes.experimentManager} component={ExperimentManagement} />
+          <Route path={Routes.observationMatricesManager} component={ObservationMatricesManagement} />
         </Content>
       </Layout>
     );
