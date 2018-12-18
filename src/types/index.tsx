@@ -8,14 +8,15 @@ export type StoreState = IStoreState | undefined;
 export enum Routes {
   manager = '/manager',
   graphExplorer = '/graph-explorer',
-  datasetManager = '/manager/dataset',
+  observationMatricesManager = '/manager/observationMatrices',
   projectManager = '/manager/projects',
+  experimentManager = '/manager/experiments',
   runtimeManager = '/runtime',
 }
 
 export enum Endpoints {
-  dataset = '/dataset',
-  allDatasets = '/datasets',
+  observationMatrix = '/dataset',
+  observationMatrices = '/datasets',
   experiment = '/experiment',
   allExperiments = '/experiments',
   job = '/job',
@@ -29,15 +30,15 @@ export enum IndepenceTests {
   binCI = 'binCI'
 }
 
-export interface IDataset {
+export interface IObservationMatrix {
   id?: number;
   load_query: string,
   name: string
 }
 
 export interface IExperiment {
-  dataset_id: number;
-  dataset?: number;
+  observationMatrix_id: number;
+  observationMatrix?: number;
   id?: number;
   name: string;
   parameters: {
