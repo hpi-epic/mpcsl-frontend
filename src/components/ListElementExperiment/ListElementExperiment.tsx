@@ -13,6 +13,7 @@ interface IPropsListElementExperiment {
   onRunStart: (e: React.MouseEvent<HTMLElement>) => void;
   onExplore: (e: React.MouseEvent<HTMLElement>) => void;
   onView: (e: React.MouseEvent<HTMLElement>) => void;
+  showAllJobs: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 function ListElementExperiment(props: IPropsListElementExperiment) {
@@ -69,6 +70,12 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
             onClick={props.onExplore}
           >
           Explore
+          </Button>
+          <Button
+            className='List-Buttons'
+            onClick={props.showAllJobs}
+          >
+            Jobs
           </Button>
         </Card>
       </List.Item>

@@ -1,3 +1,5 @@
+import { string } from "prop-types";
+
 export interface IStoreState {
   graph: any;
   subGraph: any;
@@ -21,7 +23,7 @@ export enum Endpoints {
   allExperiments = '/experiments',
   job = '/job',
   allJobs = '/jobs',
-  results = '/results',
+  results = '/results'
 }
 
 export enum IndepenceTests {
@@ -46,4 +48,12 @@ export interface IExperiment {
     independence_test: string;
     cores: number;
   }
+}
+
+export interface IJob {
+  job_id: number;
+  experiment_id: number,
+  startTime: string,
+  status: string,
+  pid?: number
 }
