@@ -8,19 +8,22 @@ export type StoreState = IStoreState | undefined;
 export enum Routes {
   manager = '/manager',
   graphExplorer = '/graph-explorer',
-  datasetManager = '/manager/dataset',
+  observationMatricesManager = '/manager/observationMatrices',
   projectManager = '/manager/projects',
+  experimentManager = '/manager/experiments',
   runtimeManager = '/runtime',
-};
+}
 
-export enum Endpoints {
-  dataset = '/api/dataset',
-  allDatasets = '/api/datasets',
-  experiment = '/api/experiment',
-  allExperiments = '/api/experiments',
-  job = '/api/job',
-  allJobs = '/api/jobs',
-  results = '/api/results',
+const baseApiUrl = '/api';
+
+export const Endpoints = {
+  observationMatrix: baseApiUrl + '/dataset',
+  observationMatrices: baseApiUrl + '/datasets',
+  experiment: baseApiUrl + '/experiment',
+  allExperiments: baseApiUrl + '/experiments',
+  job: baseApiUrl + '/job',
+  allJobs: baseApiUrl + '/jobs',
+  results: baseApiUrl + '/results',
 };
 
 export enum IndepenceTests {
@@ -29,15 +32,15 @@ export enum IndepenceTests {
   binCI = 'binCI'
 };
 
-export interface IDataset {
+export interface IObservationMatrix {
   id?: number;
   load_query: string,
   name: string
-};
+}
 
 export interface IExperiment {
-  dataset_id: number;
-  dataset?: number;
+  observationMatrix_id: number;
+  observationMatrix?: number;
   id?: number;
   name: string;
   parameters: {
@@ -45,4 +48,4 @@ export interface IExperiment {
     independence_test: string;
     cores: number;
   }
-};
+}
