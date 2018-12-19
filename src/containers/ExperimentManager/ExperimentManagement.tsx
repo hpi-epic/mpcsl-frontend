@@ -35,7 +35,7 @@ class ExperimentManagement extends React.Component<
 
   public componentDidMount = () => {
     this.mounted = true;
-    this.getData();
+    this.fetchExperiments();
   };
 
   public componentWillUnmount = () => {
@@ -87,7 +87,7 @@ class ExperimentManagement extends React.Component<
     );
   }
 
-  private async getData() {
+  private async fetchExperiments() {
     const experiments = await getExperiments();
     if (this.mounted) {
       this.setState({ experiments });
@@ -107,13 +107,13 @@ class ExperimentManagement extends React.Component<
       clickedExperiment: undefined,
       editExperiment: true,
     });
-    this.getData();
+    this.fetchExperiments();
   };
 
   private onDeleteExperiment = (experiment: IExperiment) => {
     deleteExperiment(experiment)
       .then(() => {
-        this.getData();;
+        this.fetchExperiments();;
       });
   };
 
@@ -126,7 +126,7 @@ class ExperimentManagement extends React.Component<
         alpha: experiment.parameters.alpha,
         independence_test: experiment.parameters.independence_test,
         cores: experiment.parameters.cores,
-        dataset_id: experiment.dataset_id,
+        observationMatrix_id: experiment.observationMatrix_id,
       }
     })
   }
@@ -140,7 +140,7 @@ class ExperimentManagement extends React.Component<
         alpha: experiment.parameters.alpha,
         independence_test: experiment.parameters.independence_test,
         cores: experiment.parameters.cores,
-        dataset_id: experiment.dataset_id,
+        observationMatrix_id: experiment.observationMatrix_id,
       }
     })
   }

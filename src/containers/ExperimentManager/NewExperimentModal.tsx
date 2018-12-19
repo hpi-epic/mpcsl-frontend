@@ -10,8 +10,8 @@ import {
 } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import React from 'react';
-import { IDataset, IndepenceTests } from '../../types';
-import { getDatasets, createExperiment } from '../../actions/apiRequests';
+import { IObservationMatrix, IndepenceTests } from '../../types';
+import { getObservationMatrices, createExperiment } from '../../actions/apiRequests';
 
 export interface IPropsNewExperimentModal extends FormComponentProps {
   visible: boolean;
@@ -22,7 +22,7 @@ export interface IPropsNewExperimentModal extends FormComponentProps {
 
 interface IStateNewExperimentModal {
   hasErrors: boolean;
-  datasets: Array<IDataset>;
+  observationMatrices: Array<IObservationMatrix>;
 }
 
 export interface IFormExperiment {
@@ -30,7 +30,7 @@ export interface IFormExperiment {
   alpha: number;
   independence_test: string;
   cores: number;
-  dataset_id: number;
+  observationMatrix_id: number;
 }
 
 class NewExperimentModal extends React.Component<
@@ -44,13 +44,13 @@ class NewExperimentModal extends React.Component<
 
     this.state = {
       hasErrors: true,
-      datasets: []
+      observationMatrices: []
     };
   }
 
   public componentDidMount = () => {
     this.mounted = true;
-    this.getData();
+    this.fetchObservationMatrices();
     if(this.props.experiment && !this.props.editDisabled) {
       this.hasErrors();
     }
@@ -63,11 +63,11 @@ class NewExperimentModal extends React.Component<
   public render() {
     const { getFieldDecorator } = this.props.form;
 
-    const datasetSelect = (
+    const observationMatrixSelect = (
       <Select disabled={this.props.editDisabled} onChange={this.hasErrors}>
-        {this.state.datasets.map((dataset: IDataset) => (
-          <Select.Option value={dataset.id} key={String(dataset.id)}>
-            {dataset.name}
+        {this.state.observationMatrices.map((observationMatrix: IObservationMatrix) => (
+          <Select.Option value={observationMatrix.id} key={String(observationMatrix.id)}>
+            {observationMatrix.name}
           </Select.Option>
         ))}
       </Select>
@@ -90,12 +90,12 @@ class NewExperimentModal extends React.Component<
       rules: [{ required: true, message: 'Enter a Experiment Name'}]
     })(<Input disabled={this.props.editDisabled} placeholder="Experiment Name" />);
 
-    const datasetEl = getFieldDecorator('dataset_id', {
+    const observationMatrixEl = getFieldDecorator('observationMatrix_id', {
       initialValue: this.props.experiment
-        ? this.props.experiment.dataset_id
+        ? this.props.experiment.observationMatrix_id
         : undefined,
-      rules: [{ required: true, message: 'Select a Dataset' }]
-    })(datasetSelect);
+      rules: [{ required: true, message: 'Select a Observation Matrix' }]
+    })(observationMatrixSelect);
 
     const alphaEl = getFieldDecorator('alpha', {
       initialValue: this.props.experiment ? this.props.experiment.alpha : undefined,
@@ -134,8 +134,8 @@ class NewExperimentModal extends React.Component<
         >
           <Row gutter={16}>
             <Form.Item label="Experiment Name" hasFeedback={true}>{experimentNameEl}</Form.Item>
-            <Form.Item label="Dataset" hasFeedback={true}>
-              {datasetEl}
+            <Form.Item label="Observation Matrix" hasFeedback={true}>
+              {observationMatrixEl}
             </Form.Item>
             <Form.Item label="Alpha" hasFeedback={true}>{alphaEl}</Form.Item>
             <Form.Item label="Independence Test" hasFeedback={true}>
@@ -157,11 +157,11 @@ class NewExperimentModal extends React.Component<
     );
   }
 
-  private async getData() {
-    const datasets = await getDatasets();
+  private async fetchObservationMatrices() {
+    const observationMatrices = await getObservationMatrices();
     if (this.mounted) {
       this.setState({
-        datasets: datasets
+        observationMatrices: observationMatrices
       });
     }
   }
@@ -193,7 +193,7 @@ class NewExperimentModal extends React.Component<
 
   private submitExperiment = (values: IFormExperiment) => {
     createExperiment({
-      dataset_id: values.dataset_id,
+      observationMatrix_id: values.observationMatrix_id,
       name: values.name,
       parameters: {
         alpha: values.alpha,
