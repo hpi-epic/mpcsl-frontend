@@ -99,10 +99,6 @@ class ExperimentManagement extends React.Component<
 
   private async fetchExperiments() {
     const experiments = await getExperiments();
-    experiments.forEach((experiment: any) => {
-      experiment['observationMatrix'] = experiment['dataset'];
-      experiment['observationMatrix_id'] = experiment['dataset_id'];
-    });
     if (this.mounted) {
       this.setState({ experiments });
     }
