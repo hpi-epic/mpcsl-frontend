@@ -14,21 +14,23 @@ export enum Routes {
   runtimeManager = '/runtime',
 }
 
-export enum Endpoints {
-  observationMatrix = '/dataset',
-  observationMatrices = '/datasets',
-  experiment = '/experiment',
-  allExperiments = '/experiments',
-  job = '/job',
-  allJobs = '/jobs',
-  results = '/results',
-}
+const baseApiUrl = '/api';
+
+export const Endpoints = {
+  observationMatrix: baseApiUrl + '/dataset',
+  observationMatrices: baseApiUrl + '/datasets',
+  experiment: baseApiUrl + '/experiment',
+  allExperiments: baseApiUrl + '/experiments',
+  job: baseApiUrl + '/job',
+  allJobs: baseApiUrl + '/jobs',
+  results: baseApiUrl + '/results',
+};
 
 export enum IndepenceTests {
   gaussCI = 'gaussCI',
   diCI = 'dicCI',
   binCI = 'binCI'
-}
+};
 
 export interface IObservationMatrix {
   id?: number;

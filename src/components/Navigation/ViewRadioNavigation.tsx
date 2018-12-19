@@ -23,7 +23,7 @@ function ViewRadioNavigation(props: IPropsRadioNavigation) {
         Observation Matrices Management
       </RadioButton>
       <RadioButton value={Routes.experimentManager}>
-        Experience Management
+        Experiment Management
       </RadioButton>
     </RadioGroup>
   );
