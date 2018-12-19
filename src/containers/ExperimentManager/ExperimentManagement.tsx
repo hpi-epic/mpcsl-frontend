@@ -63,9 +63,9 @@ class ExperimentManagement extends React.Component<
         <ListElementExperiment
           key={experiment.id}
           title={experiment.name}
-          status={experiment.last_job.status === undefined ? 'default' : this.jobBadgeMap[experiment.last_job.status]}
-          statusText={experiment.last_job.status === undefined ? 'Experiment was not started yet.' : experiment.last_job.status}
-          content="Last job"
+          status={experiment.last_job!.status === undefined ? 'default' : this.jobBadgeMap[experiment.last_job!.status]}
+          statusText={experiment.last_job!.status === undefined ? 'Experiment was not started yet.' : experiment.last_job!.status}
+          content='Experiment Description'
           onDelete={() => this.onDeleteExperiment(experiment)}
           onDuplicate={() => this.onDuplicateExperiment(experiment)}
           onExplore={() => this.onExploreExperiment(experiment)}
