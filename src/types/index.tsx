@@ -11,29 +11,29 @@ export enum Routes {
   datasetManager = '/manager/dataset',
   projectManager = '/manager/projects',
   runtimeManager = '/runtime',
-}
+};
 
 export enum Endpoints {
-  dataset = '/dataset',
-  allDatasets = '/datasets',
-  experiment = '/experiment',
-  allExperiments = '/experiments',
-  job = '/job',
-  allJobs = '/jobs',
-  results = '/results',
-}
+  dataset = '/api/dataset',
+  allDatasets = '/api/datasets',
+  experiment = '/api/experiment',
+  allExperiments = '/api/experiments',
+  job = '/api/job',
+  allJobs = '/api/jobs',
+  results = '/api/results',
+};
 
 export enum IndepenceTests {
   gaussCI = 'gaussCI',
   diCI = 'dicCI',
   binCI = 'binCI'
-}
+};
 
 export interface IDataset {
   id?: number;
   load_query: string,
   name: string
-}
+};
 
 export interface IExperiment {
   dataset_id: number;
@@ -45,4 +45,4 @@ export interface IExperiment {
     independence_test: string;
     cores: number;
   }
-}
+};
