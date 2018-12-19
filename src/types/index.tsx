@@ -48,6 +48,13 @@ export interface IExperiment {
     independence_test: string;
     cores: number;
   }
+  last_job?: {
+    id: number,
+    experiment_id: number,
+    start_time: string,
+    pid: number,
+    status: string
+  }
 }
 
 export interface IJob {

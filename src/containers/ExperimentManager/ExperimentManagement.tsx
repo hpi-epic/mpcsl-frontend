@@ -37,6 +37,13 @@ class ExperimentManagement extends React.Component<
     };
   }
 
+  private jobBadgeMap: any = {
+    'running': 'processing',
+    'done': 'success',
+    'error': 'error',
+    'cancelled': 'warning'
+  }
+
   public componentDidMount = () => {
     this.mounted = true;
     this.fetchExperiments();
@@ -50,14 +57,14 @@ class ExperimentManagement extends React.Component<
     const ExperimentModal = Form.create<IPropsNewExperimentModal>()(
       NewExperimentModal
     );
-
+    console.log(this.state.experiments);
     const ExperimentList = this.state.experiments.map(
       (experiment: IExperiment) => (
         <ListElementExperiment
           key={experiment.id}
           title={experiment.name}
-          status="success"
-          statusText="Test"
+          status={experiment.last_job.status === undefined ? 'default' : this.jobBadgeMap[experiment.last_job.status]}
+          statusText={experiment.last_job.status === undefined ? 'Experiment was not started yet.' : experiment.last_job.status}
           content="Last job"
           onDelete={() => this.onDeleteExperiment(experiment)}
           onDuplicate={() => this.onDuplicateExperiment(experiment)}
@@ -137,13 +144,6 @@ class ExperimentManagement extends React.Component<
   }
 
   private async onJobListView(experiment: IExperiment) {
-
-    const jobBadgeMap: any = {
-      'running': 'processing',
-      'done': 'success',
-      'error': 'error',
-      'cancelled': 'warning'
-    }
     // const jobs = await getJobsForExperiment(experiment);
     const jobs = [
       {
@@ -171,7 +171,7 @@ class ExperimentManagement extends React.Component<
           renderItem={(job: IJob) => (
             <List.Item actions={[<Button onClick={() => this.deleteJob(job)}>delete</Button>]}>
               <List.Item.Meta
-                title={<div> <Badge className='Job-Badge' status={jobBadgeMap[job.status]} text={job.status} /></div>}
+                title={<div> <Badge className='Job-Badge' status={this.jobBadgeMap[job.status]} text={job.status} /></div>}
                 description={<div>Starting Time: {job.startTime}</div>}
               />
             </List.Item>
