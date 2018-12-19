@@ -19,7 +19,8 @@ export interface IGraphRendererState {
 
 class GraphRenderer extends React.Component<IGraphRendererProps, IGraphRendererState> {
   force?: d3.Simulation<any, any>;
-  svg?: d3.Selection<any, any, any, any>;
+  svgElement?: SVGSVGElement | null;
+  svg?: d3.Selection<any, any, any, any> | null;
   link?: d3.Selection<any, any, any, any>;
   node?: d3.Selection<any, any, any, any>;
 
@@ -33,25 +34,30 @@ class GraphRenderer extends React.Component<IGraphRendererProps, IGraphRendererS
   }
 
   componentDidMount() {
+    this.setupD3Graph();
+  }
+
+  componentDidUpdate() {
+    this.setupD3Graph();
   }
 
   setupD3Graph = () => {
     this.force = d3
-    .forceSimulation()
-    .nodes(this.props.selectedGraph.nodes)
-    .force('charge', d3.forceManyBody().strength(-120))
-    .force('link',
-      d3.forceLink(this.props.selectedGraph.links)
-        .distance(50)
-        .id(function(d: any) {
-          return d.id
-        })
-    )
-    .force('center', d3.forceCenter(this.state.width / 2, this.state.height / 2))
-    .force('collision', d3.forceCollide().radius(15));
+      .forceSimulation()
+      .nodes(this.props.selectedGraph.nodes)
+      .force('charge', d3.forceManyBody().strength(-130))
+      .force('link',
+        d3.forceLink(this.props.selectedGraph.links)
+          .distance(50)
+          .id(function(d: any) {
+            return d.id
+          })
+      )
+      .force('center', d3.forceCenter(this.state.width / 2, this.state.height / 2))
+      .force('collision', d3.forceCollide().radius(15));
 
     this.svg = d3
-      .select('.graphContainer')
+      .select(this.svgElement!)
       .append('svg')
       .attr('width', this.state.width)
       .attr('height', this.state.height);
@@ -103,7 +109,7 @@ class GraphRenderer extends React.Component<IGraphRendererProps, IGraphRendererS
 
   render() {
     this.setupD3Graph();
-    return <div className="graphContainer" />;
+    return <svg ref={node => this.svgElement = node} width={this.state.width} height={this.state.height}/>;
   }
 }
 
