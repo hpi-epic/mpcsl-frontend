@@ -5,9 +5,9 @@ import './ListElementExperiment.css';
 
 interface IPropsListElementExperiment {
   title: string;
-  status?: BadgeProps['status'] | undefined;
-  statusText?: string | undefined;
-  content: string | undefined;
+  status?: BadgeProps['status'];
+  statusText?: string;
+  content: string;
   onDuplicate: (e: React.MouseEvent<HTMLElement>) => void;
   onDelete: (e: React.MouseEvent<HTMLElement>) => void;
   onRunStart: (e: React.MouseEvent<HTMLElement>) => void;
