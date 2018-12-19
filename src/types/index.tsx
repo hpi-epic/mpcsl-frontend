@@ -8,10 +8,13 @@ export type StoreState = IStoreState | undefined;
 
 export enum Routes {
   manager = '/manager',
-  graphExplorer = '/graph-explorer',
   observationMatricesManager = '/manager/observationMatrices',
   experimentManager = '/manager/experiments',
   runtimeManager = '/runtime',
+  graphExplorer = '/graph-explorer',
+  graphExplorerSelection = '/graph-explorer/selection',
+  graphExplorerAnnotate = '/graph-explorer/annotate',
+  graphExplorerCausalExploration = '/graph-explorer/causal-exploration',
 }
 
 const baseApiUrl = '/api';

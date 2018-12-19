@@ -105,7 +105,7 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
   };
 
   private onHomeClick = () => {
-    this.changeView(Routes.projectManager);
+    this.changeView(Routes.experimentManager);
   };
 
   private changeView = (newView: string) => {
