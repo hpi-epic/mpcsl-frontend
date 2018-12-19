@@ -1,11 +1,11 @@
 import { message } from 'antd';
 import axios, { AxiosResponse } from 'axios';
-import { IObservationMatrix, IExperiment, Endpoints } from '../types';
+import { IObservationMatrix, IExperiment, Endpoints, IJob } from '../types';
 
 export function getObservationMatrices(): Promise<Array<IObservationMatrix>> {
   return new Promise<Array<IObservationMatrix>>((resolve, reject) => {
     axios.get(Endpoints.observationMatrices)
-      .then(response => {
+      .then((response: AxiosResponse) => {
         resolve(response.data);
       })
       .catch(error => {
@@ -96,6 +96,39 @@ export function deleteObservationMatrix(observationMatrix: IObservationMatrix): 
       })
       .catch(error => {
         message.error(`Failed to delete Observation Matrix ${observationMatrix.name}!`);
+        reject({
+          status: error.response.status,
+          message: error.message,
+        })
+      })
+  })
+}
+
+export function getJobsForExperiment(experiment: IExperiment): Promise<Array<IJob>> {
+  return new Promise<Array<IJob>>((resolve, reject) => {
+    axios.get(`${Endpoints.experiment}/${experiment.id}${Endpoints.allJobs}`)
+      .then((response: AxiosResponse) => {
+        resolve(response.data)
+      })
+      .catch(error => {
+        message.error('Failed to fetch Jobs')
+        reject({
+          status: error.response.status,
+          message: error.message,
+        })
+      })
+  })
+}
+
+export function deleteJob(job: IJob): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    axios.delete(`${Endpoints.job}/${job.job_id}`)
+      .then((response: AxiosResponse) => {
+        resolve();
+        message.success('Successfully deleted Job');
+      })
+      .catch(error => {
+        message.error('Failed to delete Job')
         reject({
           status: error.response.status,
           message: error.message,

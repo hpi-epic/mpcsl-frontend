@@ -21,7 +21,7 @@ export const Endpoints = {
   experiment: baseApiUrl + '/experiment',
   allExperiments: baseApiUrl + '/experiments',
   job: baseApiUrl + '/job',
-  allJobs: baseApiUrl + '/jobs',
+  allJobs: '/jobs',
   results: baseApiUrl + '/results',
 };
 
@@ -47,4 +47,19 @@ export interface IExperiment {
     independence_test: string;
     cores: number;
   }
+  last_job?: {
+    id: number,
+    experiment_id: number,
+    start_time: string,
+    pid: number,
+    status: string
+  }
+}
+
+export interface IJob {
+  job_id: number;
+  experiment_id: number,
+  startTime: string,
+  status: string,
+  pid?: number
 }
