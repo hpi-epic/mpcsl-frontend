@@ -1,12 +1,12 @@
 import React from 'react';
-import { Row, Button, Form } from 'antd';
+import { Row, Button, Form, Modal, List, Badge } from 'antd';
 
 import './style.css';
 import NewExperimentModal, {
   IPropsNewExperimentModal, IFormExperiment
 } from './NewExperimentModal';
-import { IExperiment } from '../../types';
-import { getExperiments, deleteExperiment } from '../../actions/apiRequests';
+import { IExperiment, IJob } from '../../types';
+import { getExperiments, deleteExperiment, getJobsForExperiment, deleteJob } from '../../actions/apiRequests';
 import ListElementExperiment from '../../components/ListElementExperiment/ListElementExperiment';
 
 interface IStateExperimentManagement {
@@ -14,12 +14,14 @@ interface IStateExperimentManagement {
   experiments: Array<IExperiment>;
   clickedExperiment: IFormExperiment | undefined;
   editExperiment: boolean;
+  jobListVisible: boolean;
+  jobList: Array<IJob>;
 }
 
 class ExperimentManagement extends React.Component<
   {},
   IStateExperimentManagement
-> {
+  > {
   mounted = false;
 
   constructor(props: {}) {
@@ -29,13 +31,22 @@ class ExperimentManagement extends React.Component<
       editExperiment: true,
       newExperimentModalVisible: false,
       experiments: [],
-      clickedExperiment: undefined
+      clickedExperiment: undefined,
+      jobListVisible: false,
+      jobList: [],
     };
+  }
+
+  private jobBadgeMap: any = {
+    'running': 'processing',
+    'done': 'success',
+    'error': 'error',
+    'cancelled': 'warning'
   }
 
   public componentDidMount = () => {
     this.mounted = true;
-    this.getData();
+    this.fetchExperiments();
   };
 
   public componentWillUnmount = () => {
@@ -46,21 +57,20 @@ class ExperimentManagement extends React.Component<
     const ExperimentModal = Form.create<IPropsNewExperimentModal>()(
       NewExperimentModal
     );
-
-    // TODO if jobs for experiment endpoint is implemented
     const ExperimentList = this.state.experiments.map(
       (experiment: IExperiment) => (
         <ListElementExperiment
           key={experiment.id}
           title={experiment.name}
-          status="success"
-          statusText="Test"
-          content="Last job"
+          status={experiment.last_job! === null ? 'default' : this.jobBadgeMap[experiment.last_job!.status]}
+          statusText={experiment.last_job! === null ? 'Experiment was not started yet.' : experiment.last_job!.status}
+          content='Experiment Description'
           onDelete={() => this.onDeleteExperiment(experiment)}
           onDuplicate={() => this.onDuplicateExperiment(experiment)}
           onExplore={() => this.onExploreExperiment(experiment)}
           onRunStart={() => this.onRunExperiment(experiment)}
           onView={() => this.onExperimentClick(experiment)}
+          showAllJobs={() => this.onJobListView(experiment)}
         />
       )
     );
@@ -87,7 +97,7 @@ class ExperimentManagement extends React.Component<
     );
   }
 
-  private async getData() {
+  private async fetchExperiments() {
     const experiments = await getExperiments();
     if (this.mounted) {
       this.setState({ experiments });
@@ -106,14 +116,15 @@ class ExperimentManagement extends React.Component<
       newExperimentModalVisible: false,
       clickedExperiment: undefined,
       editExperiment: true,
+      jobListVisible: false,
     });
-    this.getData();
+    this.fetchExperiments();
   };
 
   private onDeleteExperiment = (experiment: IExperiment) => {
     deleteExperiment(experiment)
       .then(() => {
-        this.getData();;
+        this.fetchExperiments();;
       });
   };
 
@@ -126,9 +137,37 @@ class ExperimentManagement extends React.Component<
         alpha: experiment.parameters.alpha,
         independence_test: experiment.parameters.independence_test,
         cores: experiment.parameters.cores,
-        dataset_id: experiment.dataset_id,
+        observationMatrix_id: experiment.dataset_id,
       }
     })
+  }
+
+  private async onJobListView(experiment: IExperiment) {
+    const jobs = await getJobsForExperiment(experiment);
+
+    Modal.info({
+      title: `Job List for Experiment ${experiment.name}`,
+      content: (
+        <List
+          itemLayout="horizontal"
+          className="Job-List"
+          dataSource={jobs}
+          renderItem={(job: IJob) => (
+            <List.Item actions={[<Button onClick={() => this.deleteJob(job)}>delete</Button>]}>
+              <List.Item.Meta
+                title={<div> <Badge className='Job-Badge' status={this.jobBadgeMap[job.status]} text={job.status} /></div>}
+                description={<div>Starting Time: {job.startTime}</div>}
+              />
+            </List.Item>
+          )}
+        />
+      ),
+      onOk() { },
+    });
+  }
+
+  private async deleteJob(job: IJob) {
+    await deleteJob(job);
   }
 
   private onDuplicateExperiment = (experiment: IExperiment) => {
@@ -140,7 +179,7 @@ class ExperimentManagement extends React.Component<
         alpha: experiment.parameters.alpha,
         independence_test: experiment.parameters.independence_test,
         cores: experiment.parameters.cores,
-        dataset_id: experiment.dataset_id,
+        observationMatrix_id: experiment.dataset_id,
       }
     })
   }

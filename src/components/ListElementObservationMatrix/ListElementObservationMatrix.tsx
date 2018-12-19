@@ -1,15 +1,15 @@
 import { Button, Card, List } from 'antd';
 import React from 'react';
-import './ListElementDataset.css';
+import './ListElementObservationMatrix.css';
 
-interface IPropsListElementDataset {
+interface IPropsListElementObservationMatrix {
   title: string;
   content: string;
   onDelete: () => void;
   onView:  () => void;
 }
 
-function ListElementDataset(props: IPropsListElementDataset) {
+function ListElementObservationMatrix(props: IPropsListElementObservationMatrix) {
 
   const cardTitle = (
     <div>
@@ -43,4 +43,4 @@ function ListElementDataset(props: IPropsListElementDataset) {
   );
 }
 
-export default ListElementDataset;
+export default ListElementObservationMatrix;

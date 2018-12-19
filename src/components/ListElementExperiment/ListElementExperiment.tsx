@@ -5,14 +5,15 @@ import './ListElementExperiment.css';
 
 interface IPropsListElementExperiment {
   title: string;
-  status: BadgeProps['status'];
-  statusText: string;
+  status?: BadgeProps['status'];
+  statusText?: string;
   content: string;
   onDuplicate: (e: React.MouseEvent<HTMLElement>) => void;
   onDelete: (e: React.MouseEvent<HTMLElement>) => void;
   onRunStart: (e: React.MouseEvent<HTMLElement>) => void;
   onExplore: (e: React.MouseEvent<HTMLElement>) => void;
   onView: (e: React.MouseEvent<HTMLElement>) => void;
+  showAllJobs: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 function ListElementExperiment(props: IPropsListElementExperiment) {
@@ -33,6 +34,14 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
         >
         Duplicate
         </Button>
+      </Menu.Item>
+      <Menu.Item>
+        <Button
+          className='Dropdown-Button'
+          onClick={props.showAllJobs}
+        >
+          Jobs
+          </Button>
       </Menu.Item>
     </Menu>
   );

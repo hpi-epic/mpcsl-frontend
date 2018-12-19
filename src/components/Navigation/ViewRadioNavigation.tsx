@@ -7,7 +7,7 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
 interface IPropsRadioNavigation {
-  value: Routes;
+  value: Routes | string;
   onChange: (e: RadioChangeEvent) => void;
 }
 
@@ -19,11 +19,11 @@ function ViewRadioNavigation(props: IPropsRadioNavigation) {
       onChange={props.onChange}
       size='small'
     >
-      <RadioButton value={Routes.datasetManager}>
-        Dataset Management
+      <RadioButton value={Routes.observationMatricesManager}>
+        Observation Matrices Management
       </RadioButton>
-      <RadioButton value={Routes.projectManager}>
-        Project Management
+      <RadioButton value={Routes.experimentManager}>
+        Experiment Management
       </RadioButton>
     </RadioGroup>
   );

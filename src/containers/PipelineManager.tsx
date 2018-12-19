@@ -5,13 +5,13 @@ import { Route, RouteComponentProps } from 'react-router-dom';
 import ViewRadioNavigation from '../components/Navigation/ViewRadioNavigation';
 import colors from '../constants/colors';
 import { Routes } from '../types';
-import DatasetManagement from './DatasetManager/DatasetManagement';
+import ObservationMatricesManagement from './ObservationMatricesManager/ObservationMatricesManagement';
 import ExperimentManagement from './ExperimentManager/ExperimentManagement';
 
 const { Header, Content } = Layout;
 
 interface IStatePipelineManager {
-  view: any;
+  view: Routes | string;
 }
 
 class PipelineManager extends React.Component<RouteComponentProps, IStatePipelineManager> {
@@ -19,7 +19,7 @@ class PipelineManager extends React.Component<RouteComponentProps, IStatePipelin
     super(props);
     console.log(this.props.location.pathname);
     this.state = {
-      view: this.props.history,
+      view: this.props.location.pathname,
     };
   }
 
@@ -38,8 +38,8 @@ class PipelineManager extends React.Component<RouteComponentProps, IStatePipelin
           </Row>
         </Header>
         <Content style={{ background: colors.contentBackground }}>
-          <Route exact={true} path={Routes.projectManager} component={ExperimentManagement} />
-          <Route path={Routes.datasetManager} component={DatasetManagement} />
+          <Route exact={true} path={Routes.experimentManager} component={ExperimentManagement} />
+          <Route path={Routes.observationMatricesManager} component={ObservationMatricesManagement} />
         </Content>
       </Layout>
     );
@@ -50,7 +50,7 @@ class PipelineManager extends React.Component<RouteComponentProps, IStatePipelin
   }
 
   private onHomeClick = () => {
-    this.changeView(Routes.projectManager);
+    this.changeView(Routes.experimentManager);
   }
 
   private changeView = (newView: Routes) => {
