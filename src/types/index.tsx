@@ -56,6 +56,16 @@ export interface IExperiment {
   }
 }
 
+export interface ICreateExperiment {
+  dataset_id: number;
+  name: string;
+  parameters: {
+    alpha: number;
+    independence_test: string;
+    cores: number;
+  }
+}
+
 export interface IJob {
   job_id: number;
   experiment_id: number,

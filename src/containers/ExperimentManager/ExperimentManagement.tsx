@@ -6,7 +6,7 @@ import NewExperimentModal, {
   IPropsNewExperimentModal, IFormExperiment
 } from './NewExperimentModal';
 import { IExperiment, IJob } from '../../types';
-import { getExperiments, deleteExperiment, getJobsForExperiment, deleteJob } from '../../actions/apiRequests';
+import { getExperiments, deleteExperiment, getJobsForExperiment, deleteJob, runExperiment } from '../../actions/apiRequests';
 import ListElementExperiment from '../../components/ListElementExperiment/ListElementExperiment';
 
 interface IStateExperimentManagement {
@@ -99,6 +99,10 @@ class ExperimentManagement extends React.Component<
 
   private async fetchExperiments() {
     const experiments = await getExperiments();
+    experiments.forEach((experiment: any) => {
+      experiment['observationMatrix'] = experiment['dataset'];
+      experiment['observationMatrix_id'] = experiment['dataset_id'];
+    });
     if (this.mounted) {
       this.setState({ experiments });
     }
@@ -184,9 +188,9 @@ class ExperimentManagement extends React.Component<
     })
   }
 
-  private onRunExperiment = (experiment: IExperiment) => {
-    // TODO
-    ;
+  private async onRunExperiment(experiment: IExperiment) {
+    await runExperiment(experiment);
+    this.fetchExperiments();
   }
 
   private onExploreExperiment = (experiment: IExperiment) => {
