@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions/graphExplorer';
 import { IStoreState } from '../../types';
 import { Dispatch } from 'redux';
-import { D3Graph } from '../../types/graph';
+import { D3Graph, D3GraphNode } from '../../types/graph';
 
 
 export interface IGraphRendererProps {
@@ -12,76 +12,97 @@ export interface IGraphRendererProps {
   selectedGraph: D3Graph;
 }
 
-class GraphRenderer extends React.Component<IGraphRendererProps, {}> {
+export interface IGraphRendererState {
+  width: number;
+  height: number;
+}
+
+class GraphRenderer extends React.Component<IGraphRendererProps, IGraphRendererState> {
+  force?: d3.Simulation<any, any>;
+  svg?: d3.Selection<any, any, any, any>;
+  link?: d3.Selection<any, any, any, any>;
+  node?: d3.Selection<any, any, any, any>;
+
+
   constructor(props: IGraphRendererProps) {
     super(props);
+    this.state = {
+      width: window.innerWidth,
+      height: window.innerHeight
+    }
   }
 
-  setupGraph = () => {
-    const width = 600;
-    const height = 600;
-    if (this.props.selectedGraph) {
-      const force = d3
-        .forceSimulation()
-        .nodes(this.props.selectedGraph.nodes)
-        .force('charge', d3.forceManyBody().strength(-120))
-        .force('link', d3.forceLink(this.props.selectedGraph.links).distance(50))
-        .force('center', d3.forceCenter(width / 2, height / 2))
-        .force('collision', d3.forceCollide().radius(15));;
+  componentDidMount() {
+  }
 
-      const svg = d3
-        .select('.graphContainer')
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height);
+  setupD3Graph = () => {
+    this.force = d3
+    .forceSimulation()
+    .nodes(this.props.selectedGraph.nodes)
+    .force('charge', d3.forceManyBody().strength(-120))
+    .force('link',
+      d3.forceLink(this.props.selectedGraph.links)
+        .distance(50)
+        .id(function(d: any) {
+          return d.id
+        })
+    )
+    .force('center', d3.forceCenter(this.state.width / 2, this.state.height / 2))
+    .force('collision', d3.forceCollide().radius(15));
 
-      svg
-        .append('defs')
-        .append('marker')
-        .attr('id', 'arrow')
-        .attr('viewBox', '0 -5 10 10')
-        .attr('refX', 20)
-        .attr('markerWidth', 10)
-        .attr('markerHeight', 10)
-        .attr('orient', 'auto')
-        .append('svg:path')
-        .attr('d', 'M0,-5L10,0L0,5');
+    this.svg = d3
+      .select('.graphContainer')
+      .append('svg')
+      .attr('width', this.state.width)
+      .attr('height', this.state.height);
 
-      const link = svg
-        .append('g')
-        .attr('class', 'links')
-        .selectAll('line')
-        .data(this.props.selectedGraph.links)
-        .enter()
-        .append('line')
-        .attr('stroke', '#999999')
-        .attr('marker-end', 'url(#arrow)');
+    this.svg
+      .append('defs')
+      .append('marker')
+      .attr('id', 'arrow')
+      .attr('viewBox', '0 -5 10 10')
+      .attr('refX', 20)
+      .attr('markerWidth', 10)
+      .attr('markerHeight', 10)
+      .attr('orient', 'auto')
+      .append('svg:path')
+      .attr('d', 'M0,-5L10,0L0,5');
 
-      const node = svg
-        .selectAll('circle')
-        .data(this.props.selectedGraph.nodes)
-        .enter()
-        .append<SVGCircleElement>('circle')
-        .attr('r', 10)
-        .style('stroke-width', 1.5);
+    this.link = this.svg
+      .append('g')
+      .attr('class', 'links')
+      .selectAll('line')
+      .data(this.props.selectedGraph.links)
+      .enter()
+      .append<SVGLineElement>('line')
+      .attr('stroke', '#999999')
+      .attr('marker-end', 'url(#arrow)');
 
-      this.props.selectedGraph.nodes[4].fx = width / 2;
-      this.props.selectedGraph.nodes[4].fy = height / 2;
+    this.node = this.svg
+      .selectAll('circle')
+      .data(this.props.selectedGraph.nodes)
+      .enter()
+      .append<SVGCircleElement>('circle')
+      .attr('r', 10)
+      .style('stroke-width', 1.5);
 
-      force.on('tick', () => {
-        link
+    if (this.props.selectedGraph.nodes.length > 0) {
+      this.force!.on('tick', () => {
+        this.link!
           .attr('x1', (d: any) => d.source.x)
           .attr('y1', (d: any) => d.source.y)
           .attr('x2', (d: any) => d.target.x)
           .attr('y2', (d: any) => d.target.y);
 
-        node.attr('cx', (d: any) => d.x).attr('cy', (d: any) => d.y);
+        this.node!
+          .attr('cx', (d: any) => d.x)
+          .attr('cy', (d: any) => d.y);
       });
     }
-  };
+  }
 
   render() {
-    this.setupGraph();
+    this.setupD3Graph();
     return <div className="graphContainer" />;
   }
 }
