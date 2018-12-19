@@ -35,6 +35,14 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
         Duplicate
         </Button>
       </Menu.Item>
+      <Menu.Item>
+        <Button
+          className='Dropdown-Button'
+          onClick={props.showAllJobs}
+        >
+          Jobs
+          </Button>
+      </Menu.Item>
     </Menu>
   );
 
@@ -70,12 +78,6 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
             onClick={props.onExplore}
           >
           Explore
-          </Button>
-          <Button
-            className='List-Buttons'
-            onClick={props.showAllJobs}
-          >
-            Jobs
           </Button>
         </Card>
       </List.Item>
