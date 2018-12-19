@@ -7,7 +7,7 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
 interface IPropsRadioNavigation {
-  value: Routes;
+  value: Routes | string;
   onChange: (e: RadioChangeEvent) => void;
 }
 

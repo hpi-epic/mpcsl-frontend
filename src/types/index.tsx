@@ -9,7 +9,6 @@ export enum Routes {
   manager = '/manager',
   graphExplorer = '/graph-explorer',
   observationMatricesManager = '/manager/observationMatrices',
-  projectManager = '/manager/projects',
   experimentManager = '/manager/experiments',
   runtimeManager = '/runtime',
 }
