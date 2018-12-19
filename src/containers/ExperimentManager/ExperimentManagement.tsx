@@ -57,7 +57,6 @@ class ExperimentManagement extends React.Component<
     const ExperimentModal = Form.create<IPropsNewExperimentModal>()(
       NewExperimentModal
     );
-    console.log(this.state.experiments);
     const ExperimentList = this.state.experiments.map(
       (experiment: IExperiment) => (
         <ListElementExperiment
@@ -161,7 +160,7 @@ class ExperimentManagement extends React.Component<
     //     "status": "done"
     //   }
     // ] // for testing only
-    
+
     Modal.info({
       title: `Job List for Experiment ${experiment.name}`,
       content: (
