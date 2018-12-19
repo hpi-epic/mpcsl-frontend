@@ -1,17 +1,17 @@
 import React from 'react';
-import { Routes, IStoreState } from '../types';
+import { Routes, IStoreState } from '../../types';
 import { Layout, Row, Col, Button, Select } from 'antd';
-import * as actions from '../actions/graphExplorer';
+import * as actions from '../../actions/graphExplorer';
 import { connect } from 'react-redux';
 import { Route, RouteComponentProps, Switch, Redirect } from 'react-router';
-import colors from '../constants/colors';
-import GraphSelection from './GraphExplorer/GraphSelection';
-import GraphViewRadioNavigation from '../components/GraphExplorerNavigation/GraphViewRadioNavigation';
+import colors from '../../constants/colors';
+import GraphSelection from './GraphSelection';
+import GraphViewRadioNavigation from '../../components/GraphExplorerNavigation/GraphViewRadioNavigation';
 import { RadioChangeEvent } from 'antd/lib/radio';
-import GraphAnnotate from './GraphExplorer/GraphAnntotate';
-import GraphCausalExplorer from './GraphExplorer/GraphCausalExplorer';
+import GraphAnnotate from './GraphAnntotate';
+import GraphCausalExplorer from './GraphCausalExplorer';
 import { Dispatch } from 'redux';
-import CIGraph from '../utils/graph';
+import CIGraph from '../../utils/graph';
 
 const { Header, Content } = Layout;
 

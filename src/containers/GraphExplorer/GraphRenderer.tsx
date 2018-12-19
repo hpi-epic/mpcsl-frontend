@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions/graphExplorer';
 import { IStoreState } from '../../types';
 import { Dispatch } from 'redux';
-import { D3Graph, D3GraphNode } from '../../types/graph';
+import { D3Graph } from '../../types/graph';
 
 
 export interface IGraphRendererProps {
@@ -42,6 +42,11 @@ class GraphRenderer extends React.Component<IGraphRendererProps, IGraphRendererS
   }
 
   setupD3Graph = () => {
+    if(this.force){
+      this.force!.restart();
+      this.node!.remove();
+      this.link!.remove();
+    }
     this.force = d3
       .forceSimulation()
       .nodes(this.props.selectedGraph.nodes)
@@ -108,7 +113,6 @@ class GraphRenderer extends React.Component<IGraphRendererProps, IGraphRendererS
   }
 
   render() {
-    this.setupD3Graph();
     return <svg ref={node => this.svgElement = node} width={this.state.width} height={this.state.height}/>;
   }
 }
