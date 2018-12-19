@@ -137,7 +137,7 @@ class ExperimentManagement extends React.Component<
         alpha: experiment.parameters.alpha,
         independence_test: experiment.parameters.independence_test,
         cores: experiment.parameters.cores,
-        observationMatrix_id: experiment.observationMatrix_id,
+        observationMatrix_id: experiment.dataset_id,
       }
     })
   }
@@ -179,7 +179,7 @@ class ExperimentManagement extends React.Component<
         alpha: experiment.parameters.alpha,
         independence_test: experiment.parameters.independence_test,
         cores: experiment.parameters.cores,
-        observationMatrix_id: experiment.observationMatrix_id,
+        observationMatrix_id: experiment.dataset_id,
       }
     })
   }
