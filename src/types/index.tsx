@@ -38,8 +38,8 @@ export interface IObservationMatrix {
 }
 
 export interface IExperiment {
-  observationMatrix_id: number;
-  observationMatrix?: number;
+  dataset_id: number;
+  dataset?: number;
   id?: number;
   name: string;
   parameters: {

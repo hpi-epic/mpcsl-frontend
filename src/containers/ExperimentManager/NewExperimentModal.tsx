@@ -193,7 +193,7 @@ class NewExperimentModal extends React.Component<
 
   private submitExperiment = (values: IFormExperiment) => {
     createExperiment({
-      observationMatrix_id: values.observationMatrix_id,
+      dataset_id: values.observationMatrix_id,
       name: values.name,
       parameters: {
         alpha: values.alpha,
