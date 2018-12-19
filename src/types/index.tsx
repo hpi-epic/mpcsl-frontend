@@ -21,7 +21,7 @@ export const Endpoints = {
   experiment: baseApiUrl + '/experiment',
   allExperiments: baseApiUrl + '/experiments',
   job: baseApiUrl + '/job',
-  allJobs: baseApiUrl + '/jobs',
+  allJobs: '/jobs',
   results: baseApiUrl + '/results',
 };
 

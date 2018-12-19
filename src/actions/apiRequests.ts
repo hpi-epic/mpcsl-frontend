@@ -106,7 +106,7 @@ export function deleteObservationMatrix(observationMatrix: IObservationMatrix): 
 
 export function getJobsForExperiment(experiment: IExperiment): Promise<Array<IJob>> {
   return new Promise<Array<IJob>>((resolve, reject) => {
-    axios.get(`${Endpoints.experiment}/${experiment.id}/${Endpoints.allJobs}`)
+    axios.get(`${Endpoints.experiment}/${experiment.id}${Endpoints.allJobs}`)
       .then((response: AxiosResponse) => {
         resolve(response.data)
       })
