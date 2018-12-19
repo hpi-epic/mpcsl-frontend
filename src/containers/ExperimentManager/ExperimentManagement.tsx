@@ -144,23 +144,24 @@ class ExperimentManagement extends React.Component<
   }
 
   private async onJobListView(experiment: IExperiment) {
-    // const jobs = await getJobsForExperiment(experiment);
-    const jobs = [
-      {
-        "job_id": 0,
-        "experiment_id": 0,
-        "startTime": "2018-12-18T13:22:53.938Z",
-        "pid": 0,
-        "status": "running"
-      },
-      {
-        "job_id": 1,
-        "experiment_id": 0,
-        "startTime": "2018-12-18T13:22:53.938Z",
-        "pid": 0,
-        "status": "done"
-      }
-    ]
+    const jobs = await getJobsForExperiment(experiment);
+    // const jobs = [
+    //   {
+    //     "job_id": 0,
+    //     "experiment_id": 0,
+    //     "startTime": "2018-12-18T13:22:53.938Z",
+    //     "pid": 0,
+    //     "status": "running"
+    //   },
+    //   {
+    //     "job_id": 1,
+    //     "experiment_id": 0,
+    //     "startTime": "2018-12-18T13:22:53.938Z",
+    //     "pid": 0,
+    //     "status": "done"
+    //   }
+    // ] // for testing only
+    
     Modal.info({
       title: `Job List for Experiment ${experiment.name}`,
       content: (
