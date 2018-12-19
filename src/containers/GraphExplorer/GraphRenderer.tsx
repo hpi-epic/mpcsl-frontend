@@ -113,6 +113,7 @@ class GraphRenderer extends React.Component<IGraphRendererProps, IGraphRendererS
   }
 
   render() {
+    this.setupD3Graph();
     return <svg ref={node => this.svgElement = node} width={this.state.width} height={this.state.height}/>;
   }
 }

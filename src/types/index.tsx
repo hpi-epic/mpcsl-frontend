@@ -1,6 +1,7 @@
 export interface IStoreState {
   graph: any;
   selectedGraph: any;
+  nodes: string[];
 }
 
 export type StoreState = IStoreState | undefined;

@@ -7,7 +7,6 @@ import colors from '../constants/colors';
 import { Routes } from '../types';
 import DatasetManagement from './DatasetManager/DatasetManagement';
 import ExperimentManagement from './ExperimentManager/ExperimentManagement';
-import { Location } from 'history';
 
 const { Header, Content } = Layout;
 

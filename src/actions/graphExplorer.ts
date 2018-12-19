@@ -9,10 +9,8 @@ export interface IFetchGraph {
 }
 
 export function fetchGraph(): IFetchGraph {
-  // TODO fetch from backend
   let ciGraph = new CIGraph();
   ciGraph.fromD3Graph(graph);
-
   return {
     type: constants.ADD_GRAPH,
     graph: ciGraph,
@@ -21,7 +19,8 @@ export function fetchGraph(): IFetchGraph {
 
 export interface IAddNode {
   type: constants.ADD_NODE,
-  subgraph: D3Graph
+  subgraph: D3Graph,
+  node: string
 }
 
 export function addNode(graph: CIGraph, node: string): IAddNode {
@@ -29,7 +28,8 @@ export function addNode(graph: CIGraph, node: string): IAddNode {
   subgraph.nodes.push({ id: node });
   return {
     type: constants.ADD_NODE,
-    subgraph: subgraph
+    subgraph: subgraph,
+    node: node
   }
 }
 
