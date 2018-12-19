@@ -1,5 +1,3 @@
-import { string } from "prop-types";
-
 export interface IStoreState {
   graph: any;
   subGraph: any;
@@ -11,26 +9,27 @@ export enum Routes {
   manager = '/manager',
   graphExplorer = '/graph-explorer',
   observationMatricesManager = '/manager/observationMatrices',
-  projectManager = '/manager/projects',
   experimentManager = '/manager/experiments',
   runtimeManager = '/runtime',
 }
 
-export enum Endpoints {
-  observationMatrix = '/dataset',
-  observationMatrices = '/datasets',
-  experiment = '/experiment',
-  allExperiments = '/experiments',
-  job = '/job',
-  allJobs = '/jobs',
-  results = '/results'
-}
+const baseApiUrl = '/api';
+
+export const Endpoints = {
+  observationMatrix: baseApiUrl + '/dataset',
+  observationMatrices: baseApiUrl + '/datasets',
+  experiment: baseApiUrl + '/experiment',
+  allExperiments: baseApiUrl + '/experiments',
+  job: baseApiUrl + '/job',
+  allJobs: baseApiUrl + '/jobs',
+  results: baseApiUrl + '/results',
+};
 
 export enum IndepenceTests {
   gaussCI = 'gaussCI',
   diCI = 'dicCI',
   binCI = 'binCI'
-}
+};
 
 export interface IObservationMatrix {
   id?: number;

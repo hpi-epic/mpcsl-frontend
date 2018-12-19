@@ -11,7 +11,7 @@ import ExperimentManagement from './ExperimentManager/ExperimentManagement';
 const { Header, Content } = Layout;
 
 interface IStatePipelineManager {
-  view: Routes;
+  view: Routes | string;
 }
 
 class PipelineManager extends React.Component<RouteComponentProps, IStatePipelineManager> {
@@ -19,7 +19,7 @@ class PipelineManager extends React.Component<RouteComponentProps, IStatePipelin
     super(props);
 
     this.state = {
-      view: Routes.experimentManager,
+      view: this.props.location.pathname,
     };
   }
 
@@ -50,7 +50,7 @@ class PipelineManager extends React.Component<RouteComponentProps, IStatePipelin
   }
 
   private onHomeClick = () => {
-    this.changeView(Routes.projectManager);
+    this.changeView(Routes.experimentManager);
   }
 
   private changeView = (newView: Routes) => {
