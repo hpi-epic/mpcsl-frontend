@@ -18,8 +18,9 @@ export interface IGraphRendererState {
 }
 
 const graphSettings = {
-  nodeColor: '#191919',
+  nodeColor: '#001529',
   nodeRadius: 13,
+  nodeColission: 20,
   strokeWidth: 1,
   linkColor: 'black',
   linkOpacity: 0.3,
@@ -52,7 +53,7 @@ class GraphRenderer extends React.Component<
       )
       .force(
         'collision',
-        d3.forceCollide().radius(graphSettings.nodeRadius + 10)
+        d3.forceCollide().radius(graphSettings.nodeColission)
       );
   }
 
@@ -60,34 +61,12 @@ class GraphRenderer extends React.Component<
     this.force.on('tick', () => {
       this.graph.call(this.updateGraph);
     });
+    this.onReLayout();
   }
 
   shouldComponentUpdate(nextProps: IGraphRendererProps) {
-    var nodes = this.graph
-      .selectAll('.node')
-      .data(nextProps.selectedGraph.nodes, (node: D3GraphNode) => node.id);
-
-    nodes.exit().remove();
-    nodes.call(this.updateNode);
-    nodes
-      .enter()
-      .append('g')
-      .call(this.enterNode);
-
-    var links = this.graph
-      .selectAll('.link')
-      .data(nextProps.selectedGraph.links);
-    links.enter().append('line', '.node').call(this.enterLink);
-    links.exit().remove();
-    links.call(this.updateLink);
-
-
-    this.force
-      .nodes(nextProps.selectedGraph.nodes)
-      .force('links', d3.forceLink(nextProps.selectedGraph.links).distance(graphSettings.forceLinkDistance).id((d: any) => d.id));
-
-    this.force.alpha(1).restart();
-
+    console.log('test');
+    this.enterGraphChanges(nextProps);
     return false;
   }
 
@@ -124,14 +103,45 @@ class GraphRenderer extends React.Component<
     this.shouldComponentUpdate(this.props);
   }
 
+  enterGraphChanges = (props: IGraphRendererProps) => {
+    this.enterGraph(props);
+    this.force.alpha(1).restart();
+  }
+
+  enterGraph = (props: IGraphRendererProps) => {
+    const nodes = this.graph
+    .selectAll('.node')
+    .data(props.selectedGraph.nodes, (node: D3GraphNode) => node.id);
+
+    nodes.exit().remove();
+    nodes.call(this.updateNode);
+    nodes
+      .enter()
+      .append('g')
+      .call(this.enterNode);
+
+    const links = this.graph
+      .selectAll('.link')
+      .data(props.selectedGraph.links);
+    links.enter().append('line', '.node').call(this.enterLink);
+    links.exit().remove();
+    links.call(this.updateLink);
+
+    this.force
+      .nodes(props.selectedGraph.nodes)
+      .force('links', d3.forceLink(props.selectedGraph.links).distance(graphSettings.forceLinkDistance).id((d: any) => d.id));
+
+  }
+
   enterNode = (selection: d3.Selection<any, any, any, any>) => {
     selection.classed('node', true);
-
-    selection.append('circle').attr('r', graphSettings.nodeRadius);
-
+    selection.append('circle')
+      .attr('r', graphSettings.nodeRadius)
+      .attr('fill', graphSettings.nodeColor);
     selection
       .append('text')
-      .attr('x', graphSettings.nodeRadius + graphSettings.labelDistance)
+      .attr('x', graphSettings.labelDirection * (graphSettings.nodeRadius + graphSettings.labelDistance))
+      .attr('y', graphSettings.nodeRadius / 2)
       .text(d => d.id);
   };
 
