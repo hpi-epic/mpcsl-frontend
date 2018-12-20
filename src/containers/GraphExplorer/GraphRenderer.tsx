@@ -6,7 +6,6 @@ import { IStoreState } from '../../types';
 import { Dispatch } from 'redux';
 import { D3Graph } from '../../types/graph';
 
-
 export interface IGraphRendererProps {
   onFetchGraph: () => void;
   selectedGraph: D3Graph;
@@ -17,20 +16,28 @@ export interface IGraphRendererState {
   height: number;
 }
 
-class GraphRenderer extends React.Component<IGraphRendererProps, IGraphRendererState> {
+const graphSettings = {
+  nodeRadius: 10
+};
+
+class GraphRenderer extends React.Component<
+  IGraphRendererProps,
+  IGraphRendererState
+> {
   force?: d3.Simulation<any, any>;
   svgElement?: SVGSVGElement | null;
   svg?: d3.Selection<any, any, any, any> | null;
   link?: d3.Selection<any, any, any, any>;
   node?: d3.Selection<any, any, any, any>;
-
+  lables?: d3.Selection<any, any, any, any>;
+  circles?: d3.Selection<any, any, any, any>;
 
   constructor(props: IGraphRendererProps) {
     super(props);
     this.state = {
       width: window.innerWidth,
       height: window.innerHeight
-    }
+    };
   }
 
   componentDidMount() {
@@ -42,7 +49,7 @@ class GraphRenderer extends React.Component<IGraphRendererProps, IGraphRendererS
   }
 
   setupD3Graph = () => {
-    if(this.force){
+    if (this.force) {
       this.force!.restart();
       this.node!.remove();
       this.link!.remove();
@@ -51,14 +58,19 @@ class GraphRenderer extends React.Component<IGraphRendererProps, IGraphRendererS
       .forceSimulation()
       .nodes(this.props.selectedGraph.nodes)
       .force('charge', d3.forceManyBody().strength(-130))
-      .force('link',
-        d3.forceLink(this.props.selectedGraph.links)
+      .force(
+        'link',
+        d3
+          .forceLink(this.props.selectedGraph.links)
           .distance(50)
           .id(function(d: any) {
-            return d.id
+            return d.id;
           })
       )
-      .force('center', d3.forceCenter(this.state.width / 2, this.state.height / 2))
+      .force(
+        'center',
+        d3.forceCenter(this.state.width / 2, this.state.height / 2)
+      )
       .force('collision', d3.forceCollide().radius(15));
 
     this.svg = d3
@@ -90,31 +102,47 @@ class GraphRenderer extends React.Component<IGraphRendererProps, IGraphRendererS
       .attr('marker-end', 'url(#arrow)');
 
     this.node = this.svg
-      .selectAll('circle')
+      .append('g')
+      .attr('class', 'nodes')
+      .selectAll('g')
       .data(this.props.selectedGraph.nodes)
       .enter()
+      .append('g');
+
+    this.circles = this.node
       .append<SVGCircleElement>('circle')
-      .attr('r', 10)
-      .style('stroke-width', 1.5);
+      .attr('r', graphSettings.nodeRadius);
 
-    if (this.props.selectedGraph.nodes.length > 0) {
-      this.force!.on('tick', () => {
-        this.link!
-          .attr('x1', (d: any) => d.source.x)
-          .attr('y1', (d: any) => d.source.y)
-          .attr('x2', (d: any) => d.target.x)
-          .attr('y2', (d: any) => d.target.y);
+    this.lables = this.node
+      .append('text')
+      .text(d => d.id)
+      .attr('x', graphSettings.nodeRadius)
+      .attr('y', 0);
 
-        this.node!
-          .attr('cx', (d: any) => d.x)
-          .attr('cy', (d: any) => d.y);
-      });
-    }
-  }
+    this.node
+      .append('title')
+      .text(d => d.id);
+
+    this.force!.on('tick', () => {
+      this.link!.attr('x1', (d: any) => d.source.x)
+        .attr('y1', (d: any) => d.source.y)
+        .attr('x2', (d: any) => d.target.x)
+        .attr('y2', (d: any) => d.target.y);
+
+      this.node!
+        .attr('transform', (d: any) => `translate(${d.x},${d.y})`);
+    });
+  };
 
   render() {
     this.setupD3Graph();
-    return <svg ref={node => this.svgElement = node} width={this.state.width} height={this.state.height}/>;
+    return (
+      <svg
+        ref={node => (this.svgElement = node)}
+        width={this.state.width}
+        height={this.state.height}
+      />
+    );
   }
 }
 
