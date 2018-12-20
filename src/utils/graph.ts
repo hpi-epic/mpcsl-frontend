@@ -1,7 +1,7 @@
 import { D3Graph, D3GraphNode, D3GraphLink } from './../types/graph';
 import { Graph } from 'graphlib';
 
-class CIGraph extends Graph {
+export class CIGraph extends Graph {
   constructor() {
     super();
   }
@@ -29,4 +29,35 @@ class CIGraph extends Graph {
   }
 }
 
-export default CIGraph;
+export function addUniqueLinks(links: any, addLinks: D3GraphLink[]): D3GraphLink[] {
+  addLinks.forEach(link => {
+    if(links.find((existingLink: any) => existingLink.source.id === link.source && existingLink.target.id === link.target) === undefined){
+      links.push(link)
+    }
+  })
+  return links as D3GraphLink[];
+}
+
+export function addUniqueNodes(nodes: D3GraphNode[], addNodes: D3GraphNode[]): D3GraphNode[] {
+  nodes.forEach(node => {
+    node.fx = node.x;
+    node.fy = node.y;
+
+  })
+  addNodes.forEach(node => {
+    if(nodes.find(exisitingNode => exisitingNode.id === node.id) === undefined){
+      nodes.push(node)
+    }
+  })
+  return nodes;
+}
+
+export function resetLayout(graph: D3Graph): D3Graph {
+  graph.nodes.forEach(node => {
+    delete node.fx;
+    delete node.fy;
+    delete node.x;
+    delete node.y;
+  })
+  return graph;
+}

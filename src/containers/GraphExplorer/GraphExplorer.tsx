@@ -11,7 +11,7 @@ import { RadioChangeEvent } from 'antd/lib/radio';
 import GraphAnnotate from './GraphAnntotate';
 import GraphCausalExplorer from './GraphCausalExplorer';
 import { Dispatch } from 'redux';
-import CIGraph from '../../utils/graph';
+import { CIGraph } from '../../utils/graph';
 
 const { Header, Content } = Layout;
 

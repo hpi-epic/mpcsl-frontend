@@ -1,7 +1,8 @@
 import { GraphExplorerAction } from '../actions/graphExplorer';
-import { ADD_GRAPH, ADD_NODE } from '../constants/actions';
+import { ADD_GRAPH, ADD_NODE, NEW_GRAPH_LAYOUT } from '../constants/actions';
 import { StoreState } from '../types';
 import { D3GraphLink, D3GraphNode } from '../types/graph';
+import { addUniqueLinks, addUniqueNodes, resetLayout } from '../utils/graph';
 
 const initialState = {
   graph: null,
@@ -26,18 +27,8 @@ function graphExplorer(
         return {
           ...state,
           selectedGraph: {
-            links: [
-              ...new Set([
-                ...state.selectedGraph.links,
-                ...action.subgraph.links
-              ])
-            ],
-            nodes: [
-              ...new Set([
-                ...state.selectedGraph.nodes,
-                ...action.subgraph.nodes
-              ])
-            ]
+            links: addUniqueLinks(state.selectedGraph.links, action.subgraph.links),
+            nodes: addUniqueNodes(state.selectedGraph.nodes, action.subgraph.nodes)
           },
           nodes: [...state.nodes, action.node]
         };
@@ -47,6 +38,11 @@ function graphExplorer(
           selectedGraph: action.subgraph,
           nodes: [ action.node ]
         };
+      }
+    case NEW_GRAPH_LAYOUT:
+      return {
+        ...state,
+        selectedGraph: resetLayout(state.selectedGraph),
       }
     default:
       return state;

@@ -7,7 +7,7 @@ import { Dispatch } from 'redux';
 import { D3Graph, D3GraphLink } from '../../types/graph';
 
 export interface IGraphRendererProps {
-  onFetchGraph: () => void;
+  resetLayout: () => void;
   selectedGraph: D3Graph;
 }
 
@@ -48,7 +48,7 @@ class GraphRenderer extends React.Component<
         'center',
         d3.forceCenter(this.state.width / 2, this.state.height / 2)
       )
-      .force('collision', d3.forceCollide().radius(15));
+      .force('collision', d3.forceCollide().radius(graphSettings.nodeRadius + 10));
   }
 
   componentDidMount() {
@@ -68,17 +68,6 @@ class GraphRenderer extends React.Component<
         })
     );
     this.force.restart();
-  }
-
-  shouldComponentUpdate(
-    nextProps: IGraphRendererProps,
-    nextState: IGraphRendererState
-  ) {
-    if (nextProps.selectedGraph) {
-      console.log(nextProps);
-      return true;
-    }
-    return false;
   }
 
   render() {
@@ -131,11 +120,13 @@ class GraphRenderer extends React.Component<
       )
     );
     return (
-      <svg width={this.state.width} height={this.state.height}>
-        {defs}
-        {links}
-        {nodes}
-      </svg>
+      <React.Fragment>
+        <svg width={this.state.width} height={this.state.height}>
+          {defs}
+          {links}
+          {nodes}
+        </svg>
+      </React.Fragment>
     );
   }
 }
@@ -150,7 +141,7 @@ export function mapDispatchToProps(
   dispatch: Dispatch<actions.GraphExplorerAction>
 ) {
   return {
-    onFetchGraph: () => dispatch(actions.fetchGraph())
+    resetLayout: () => dispatch(actions.newLayout())
   };
 }
 
