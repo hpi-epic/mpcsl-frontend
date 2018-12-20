@@ -17,10 +17,15 @@ export interface IGraphRendererState {
 }
 
 const graphSettings = {
-  nodeRadius: 10,
+  nodeColor: '#191919',
+  nodeRadius: 13,
   strokeWidth: 1,
   linkColor: 'black',
-  arrowColor: 'black'
+  linkOpacity: 0.3,
+  forceLinkDistance: 50,
+  labelColor: 'black',
+  labelDistance: 2,
+  labelDirection: 1 // negative for left, positive for right
 };
 
 class GraphRenderer extends React.Component<
@@ -57,7 +62,7 @@ class GraphRenderer extends React.Component<
       'link',
       d3
         .forceLink(nextProps.selectedGraph.links)
-        .distance(50)
+        .distance(graphSettings.forceLinkDistance)
         .id(function(d: any) {
           return d.id;
         })
@@ -87,9 +92,9 @@ class GraphRenderer extends React.Component<
           orient="auto"
           markerWidth="13"
           markerHeight="13"
-          //xoverflow="visible"
+          opacity={graphSettings.linkOpacity}
         >
-          <path d="M 0,-5 L 10 ,0 L 0,5" fill={graphSettings.arrowColor} style={{stroke: 'none'}} />
+          <path d="M 0,-5 L 10 ,0 L 0,5" fill={graphSettings.linkColor} style={{stroke: 'none'}} />
         </marker>
       </defs>
     );
@@ -97,8 +102,8 @@ class GraphRenderer extends React.Component<
       const transform = `translate(${node.x},${node.y})`;
       return (
         <g className="node" key={node.id} transform={transform}>
-          <circle r={graphSettings.nodeRadius} />
-          <text x={10} y={0}>
+          <circle r={graphSettings.nodeRadius} fill={graphSettings.nodeColor}/>
+          <text x={graphSettings.labelDirection * (graphSettings.nodeRadius + graphSettings.labelDistance)} y={graphSettings.nodeRadius / 2} color={graphSettings.labelColor}>
             {node.id}
           </text>
         </g>
@@ -121,6 +126,7 @@ class GraphRenderer extends React.Component<
           // @ts-ignore
           y2={link.target.y}
           markerEnd="url(#arrow)"
+          opacity={graphSettings.linkOpacity}
         />
       )
     );
