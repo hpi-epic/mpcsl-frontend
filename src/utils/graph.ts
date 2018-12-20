@@ -56,8 +56,8 @@ export function resetLayout(graph: D3Graph): D3Graph {
   graph.nodes.forEach(node => {
     delete node.fx;
     delete node.fy;
-    delete node.x;
-    delete node.y;
+    node.vx = 0;
+    node.vy = 0;
   })
   return graph;
 }

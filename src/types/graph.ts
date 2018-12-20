@@ -11,6 +11,8 @@ export interface D3GraphNode {
   y?: number;
   fx?: number;
   fy?: number;
+  vx?: number;
+  vy?: number;
 }
 
 export interface D3GraphLink {

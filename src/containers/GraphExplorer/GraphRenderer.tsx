@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { ReactDOM } from 'react';
 import * as d3 from 'd3';
 import { connect } from 'react-redux';
 import * as actions from '../../actions/graphExplorer';
 import { IStoreState } from '../../types';
 import { Dispatch } from 'redux';
-import { D3Graph, D3GraphLink } from '../../types/graph';
+import { D3Graph, D3GraphNode } from '../../types/graph';
+import { Button } from 'antd';
 
 export interface IGraphRendererProps {
   resetLayout: () => void;
@@ -33,6 +34,7 @@ class GraphRenderer extends React.Component<
   IGraphRendererState
 > {
   force: d3.Simulation<any, any>;
+  graph?: any;
 
   constructor(props: IGraphRendererProps) {
     super(props);
@@ -43,31 +45,50 @@ class GraphRenderer extends React.Component<
 
     this.force = d3
       .forceSimulation()
-      .force('charge', d3.forceManyBody().strength(-130))
+      .force('charge', d3.forceManyBody().strength(-300))
       .force(
         'center',
         d3.forceCenter(this.state.width / 2, this.state.height / 2)
       )
-      .force('collision', d3.forceCollide().radius(graphSettings.nodeRadius + 10));
+      .force(
+        'collision',
+        d3.forceCollide().radius(graphSettings.nodeRadius + 10)
+      );
   }
 
   componentDidMount() {
     this.force.on('tick', () => {
-      this.forceUpdate();
+      this.graph.call(this.updateGraph);
     });
   }
 
-  componentWillReceiveProps(nextProps: IGraphRendererProps) {
-    this.force.nodes(nextProps.selectedGraph.nodes).force(
-      'link',
-      d3
-        .forceLink(nextProps.selectedGraph.links)
-        .distance(graphSettings.forceLinkDistance)
-        .id(function(d: any) {
-          return d.id;
-        })
-    );
-    this.force.restart();
+  shouldComponentUpdate(nextProps: IGraphRendererProps) {
+    var nodes = this.graph
+      .selectAll('.node')
+      .data(nextProps.selectedGraph.nodes, (node: D3GraphNode) => node.id);
+
+    nodes.exit().remove();
+    nodes.call(this.updateNode);
+    nodes
+      .enter()
+      .append('g')
+      .call(this.enterNode);
+
+    var links = this.graph
+      .selectAll('.link')
+      .data(nextProps.selectedGraph.links);
+    links.enter().append('line', '.node').call(this.enterLink);
+    links.exit().remove();
+    links.call(this.updateLink);
+
+
+    this.force
+      .nodes(nextProps.selectedGraph.nodes)
+      .force('links', d3.forceLink(nextProps.selectedGraph.links).distance(graphSettings.forceLinkDistance).id((d: any) => d.id));
+
+    this.force.alpha(1).restart();
+
+    return false;
   }
 
   render() {
@@ -87,48 +108,59 @@ class GraphRenderer extends React.Component<
         </marker>
       </defs>
     );
-    const nodes = this.props.selectedGraph.nodes.map(node => {
-      const transform = `translate(${node.x},${node.y})`;
-      return (
-        <g className="node" key={node.id} transform={transform}>
-          <circle r={graphSettings.nodeRadius} fill={graphSettings.nodeColor}/>
-          <text x={graphSettings.labelDirection * (graphSettings.nodeRadius + graphSettings.labelDistance)} y={graphSettings.nodeRadius / 2} color={graphSettings.labelColor}>
-            {node.id}
-          </text>
-        </g>
-      );
-    });
-
-    const links = this.props.selectedGraph.links.map(
-      (link: D3GraphLink, id: number) => (
-        <line
-          className="link"
-          key={id}
-          strokeWidth={graphSettings.strokeWidth}
-          stroke={graphSettings.linkColor}
-          // @ts-ignore
-          x1={link.source.x}
-          // @ts-ignore
-          x2={link.target.x}
-          // @ts-ignore
-          y1={link.source.y}
-          // @ts-ignore
-          y2={link.target.y}
-          markerEnd="url(#arrow)"
-          opacity={graphSettings.linkOpacity}
-        />
-      )
-    );
     return (
       <React.Fragment>
+        <Button onClick={this.onReLayout}>Re-Layout</Button>
         <svg width={this.state.width} height={this.state.height}>
           {defs}
-          {links}
-          {nodes}
+          <g ref={graph => (this.graph = d3.select(graph))} />
         </svg>
       </React.Fragment>
     );
   }
+
+  onReLayout = () => {
+    this.props.resetLayout();
+    this.shouldComponentUpdate(this.props);
+  }
+
+  enterNode = (selection: d3.Selection<any, any, any, any>) => {
+    selection.classed('node', true);
+
+    selection.append('circle').attr('r', graphSettings.nodeRadius);
+
+    selection
+      .append('text')
+      .attr('x', graphSettings.nodeRadius + graphSettings.labelDistance)
+      .text(d => d.id);
+  };
+
+  updateNode = (selection: d3.Selection<any, any, any, any>) => {
+    selection.attr('transform', d => `translate(${d.x ? d.x : 0},${d.y ? d.y : 0})`);
+  };
+
+  enterLink = (selection: d3.Selection<any, any, any, any>) => {
+    selection
+      .classed('link', true)
+      .attr('stroke-width', d => d.size)
+      .attr('stroke', graphSettings.linkColor)
+      .attr('stroke-width', graphSettings.strokeWidth)
+      .attr('opacity', graphSettings.linkOpacity)
+      .attr('marker-end', 'url(#arrow)');
+  };
+
+  updateLink = (selection: d3.Selection<any, any, any, any>) => {
+    selection
+      .attr('x1', d => d.source.x)
+      .attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x)
+      .attr('y2', d => d.target.y);
+  };
+
+  updateGraph = (selection: d3.Selection<any, any, any, any>) => {
+    selection.selectAll('.node').call(this.updateNode);
+    selection.selectAll('.link').call(this.updateLink);
+  };
 }
 
 export function mapStateToProps({ selectedGraph }: IStoreState) {
