@@ -23,6 +23,7 @@ export interface IGraphExplorerProps extends RouteComponentProps {
   onFetchGraph: () => void;
   onAddNode: (graph: CIGraph, node: string) => void;
   graph: CIGraph;
+  nodes: string[];
 }
 
 class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
@@ -45,13 +46,14 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
         style={{ width: 200 }}
         placeholder="Add a node"
         optionFilterProp="children"
-        onSelect={value => this.props.onAddNode(this.props.graph, value.toString())}
-      >
+        onSelect={value => this.props.onAddNode(this.props.graph, value.toString())}>
         {
           this.props.graph ?
-          this.props.graph.nodes().map(node => (
-            <Select.Option key={node} value={node}>{node}</Select.Option>
-          ))
+          this.props.graph.nodes().map(node => {
+            if(this.props.nodes.indexOf(node) <= -1) {
+              return <Select.Option key={node} value={node}>{node}</Select.Option>
+            }
+          })
           : null
         }
       </Select>
@@ -116,9 +118,10 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
   };
 }
 
-export function mapStateToProps({ graph }: IStoreState) {
+export function mapStateToProps({ graph, nodes }: IStoreState) {
   return {
-    graph
+    graph,
+    nodes
   };
 }
 
