@@ -13,6 +13,7 @@ export interface D3GraphNode {
   fy?: number;
   vx?: number;
   vy?: number;
+  isContext?: boolean;
 }
 
 export interface D3GraphLink {

@@ -1,10 +1,10 @@
-import React, { ReactDOM } from 'react';
+import React from 'react';
 import * as d3 from 'd3';
 import { connect } from 'react-redux';
 import * as actions from '../../actions/graphExplorer';
 import { IStoreState } from '../../types';
 import { Dispatch } from 'redux';
-import { D3Graph, D3GraphNode } from '../../types/graph';
+import { D3Graph, D3GraphNode } from '../../utils/graph';
 import { Button } from 'antd';
 
 export interface IGraphRendererProps {
@@ -18,16 +18,20 @@ export interface IGraphRendererState {
 }
 
 const graphSettings = {
-  nodeColor: '#001529',
   nodeRadius: 13,
+  nodeStrokeWidth: 1,
+  nodeStroke: '#001529',
   nodeColission: 20,
-  strokeWidth: 1,
+  focusNodeColor: '#001529',
+  contextNodeColor: '#eff1ef',
+  contextNodeStrokeDashArray: '5, 5',
+  linkStrokeWidth: 1,
   linkColor: 'black',
   linkOpacity: 0.3,
   forceLinkDistance: 50,
   labelColor: 'black',
   labelDistance: 2,
-  labelDirection: 1 // negative for left, positive for right
+  labelDirection: 1
 };
 
 class GraphRenderer extends React.Component<
@@ -65,7 +69,6 @@ class GraphRenderer extends React.Component<
   }
 
   shouldComponentUpdate(nextProps: IGraphRendererProps) {
-    console.log('test');
     this.enterGraphChanges(nextProps);
     return false;
   }
@@ -83,7 +86,11 @@ class GraphRenderer extends React.Component<
           markerHeight="13"
           opacity={graphSettings.linkOpacity}
         >
-          <path d="M 0,-5 L 10 ,0 L 0,5" fill={graphSettings.linkColor} style={{stroke: 'none'}} />
+          <path
+            d="M 0,-5 L 10 ,0 L 0,5"
+            fill={graphSettings.linkColor}
+            style={{ stroke: 'none' }}
+          />
         </marker>
       </defs>
     );
@@ -101,17 +108,17 @@ class GraphRenderer extends React.Component<
   onReLayout = () => {
     this.props.resetLayout();
     this.shouldComponentUpdate(this.props);
-  }
+  };
 
   enterGraphChanges = (props: IGraphRendererProps) => {
     this.enterGraph(props);
     this.force.alpha(1).restart();
-  }
+  };
 
   enterGraph = (props: IGraphRendererProps) => {
     const nodes = this.graph
-    .selectAll('.node')
-    .data(props.selectedGraph.nodes, (node: D3GraphNode) => node.id);
+      .selectAll('.node')
+      .data(props.selectedGraph.nodes, (node: D3GraphNode) => node.id);
 
     nodes.exit().remove();
     nodes.call(this.updateNode);
@@ -120,33 +127,79 @@ class GraphRenderer extends React.Component<
       .append('g')
       .call(this.enterNode);
 
-    const links = this.graph
-      .selectAll('.link')
-      .data(props.selectedGraph.links);
-    links.enter().append('line', '.node').call(this.enterLink);
+    const links = this.graph.selectAll('.link').data(props.selectedGraph.links);
+    links
+      .enter()
+      .append('line', '.node')
+      .call(this.enterLink);
     links.exit().remove();
     links.call(this.updateLink);
 
-    this.force
-      .nodes(props.selectedGraph.nodes)
-      .force('links', d3.forceLink(props.selectedGraph.links).distance(graphSettings.forceLinkDistance).id((d: any) => d.id));
-
-  }
+    this.force.nodes(props.selectedGraph.nodes).force(
+      'links',
+      d3
+        .forceLink(props.selectedGraph.links)
+        .distance(graphSettings.forceLinkDistance)
+        .id((d: any) => d.id)
+    );
+  };
 
   enterNode = (selection: d3.Selection<any, any, any, any>) => {
     selection.classed('node', true);
-    selection.append('circle')
+    selection
+      .append('circle')
       .attr('r', graphSettings.nodeRadius)
-      .attr('fill', graphSettings.nodeColor);
+      .attr(
+        'fill',
+        (d: D3GraphNode): string => {
+          return d.isContext
+            ? graphSettings.contextNodeColor
+            : graphSettings.focusNodeColor;
+        }
+      )
+      .attr('stroke-width', graphSettings.nodeStrokeWidth)
+      .attr('stroke', graphSettings.nodeStroke)
+      .attr(
+        'stroke-dasharray',
+        (d: D3GraphNode): string => {
+          return d.isContext
+            ? graphSettings.contextNodeStrokeDashArray
+            : 'none';
+        }
+      );
     selection
       .append('text')
-      .attr('x', graphSettings.labelDirection * (graphSettings.nodeRadius + graphSettings.labelDistance))
+      .attr(
+        'x',
+        graphSettings.labelDirection *
+          (graphSettings.nodeRadius + graphSettings.labelDistance)
+      )
       .attr('y', graphSettings.nodeRadius / 2)
       .text(d => d.id);
   };
 
   updateNode = (selection: d3.Selection<any, any, any, any>) => {
-    selection.attr('transform', d => `translate(${d.x ? d.x : 0},${d.y ? d.y : 0})`);
+    selection
+      .attr('transform', d => `translate(${d.x ? d.x : 0},${d.y ? d.y : 0})`)
+      .select('circle')
+      .attr(
+        'fill',
+        (d: D3GraphNode): string => {
+          return d.isContext
+            ? graphSettings.contextNodeColor
+            : graphSettings.focusNodeColor;
+        }
+      )
+      .attr('stroke', graphSettings.nodeStroke)
+      .attr('stroke-width', graphSettings.nodeStrokeWidth)
+      .attr(
+        'stroke-dasharray',
+        (d: D3GraphNode): string => {
+          return d.isContext
+            ? graphSettings.contextNodeStrokeDashArray
+            : 'none';
+        }
+      );
   };
 
   enterLink = (selection: d3.Selection<any, any, any, any>) => {
@@ -154,7 +207,7 @@ class GraphRenderer extends React.Component<
       .classed('link', true)
       .attr('stroke-width', d => d.size)
       .attr('stroke', graphSettings.linkColor)
-      .attr('stroke-width', graphSettings.strokeWidth)
+      .attr('stroke-width', graphSettings.linkStrokeWidth)
       .attr('opacity', graphSettings.linkOpacity)
       .attr('marker-end', 'url(#arrow)');
   };

@@ -1,5 +1,27 @@
-import { D3Graph, D3GraphNode, D3GraphLink } from './../types/graph';
 import { Graph } from 'graphlib';
+
+type NodeID = string | number;
+
+export interface D3Graph {
+  nodes: Array<D3GraphNode>;
+  links: Array<D3GraphLink>;
+}
+
+export interface D3GraphNode {
+  id: NodeID;
+  x?: number;
+  y?: number;
+  fx?: number;
+  fy?: number;
+  vx?: number;
+  vy?: number;
+  isContext?: boolean;
+}
+
+export interface D3GraphLink {
+  source: NodeID;
+  target: NodeID;
+}
 
 export class CIGraph extends Graph {
   constructor() {
@@ -38,15 +60,27 @@ export function addUniqueLinks(links: any, addLinks: D3GraphLink[]): D3GraphLink
   return links as D3GraphLink[];
 }
 
-export function addUniqueNodes(nodes: D3GraphNode[], addNodes: D3GraphNode[]): D3GraphNode[] {
-  nodes.forEach(node => {
-    node.fx = node.x;
-    node.fy = node.y;
+export function addUniqueNodes(nodes: D3GraphNode[], addToFocusNodeID: string, addNodes: D3GraphNode[]): D3GraphNode[] {
+  let isAlreadyIn = false;
 
+  nodes.forEach(existingNode => {
+    existingNode.fx = existingNode.x;
+    existingNode.fy = existingNode.y;
+
+    if(existingNode.id === addToFocusNodeID) {
+      existingNode.isContext = false;
+      isAlreadyIn = true;
+    }
   })
-  addNodes.forEach(node => {
-    if(nodes.find(exisitingNode => exisitingNode.id === node.id) === undefined){
-      nodes.push(node)
+
+  if(!isAlreadyIn) {
+    nodes.push({ id: addToFocusNodeID, isContext: false });
+  }
+
+  addNodes.forEach(addNode => {
+    if(nodes.find(n => n.id === addNode.id) === undefined){
+      addNode.isContext = true;
+      nodes.push(addNode)
     }
   })
   return nodes;

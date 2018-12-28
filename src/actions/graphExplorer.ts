@@ -1,5 +1,5 @@
 import { graph } from './../constants/testdata';
-import { D3Graph } from './../types/graph';
+import { D3Graph } from '../types/graphTypes';
 import * as constants from '../constants/actions';
 import { CIGraph } from '../utils/graph';
 
@@ -19,17 +19,16 @@ export function fetchGraph(): IFetchGraph {
 
 export interface IAddNode {
   type: constants.ADD_NODE,
-  subgraph: D3Graph,
-  node: string
+  context: D3Graph,
+  nodeID: string
 }
 
 export function addNode(graph: CIGraph, node: string): IAddNode {
-  const subgraph = graph.getContext(node)
-  subgraph.nodes.push({ id: node });
+  const contextGraph = graph.getContext(node);
   return {
     type: constants.ADD_NODE,
-    subgraph: subgraph,
-    node: node
+    context: contextGraph,
+    nodeID: node
   }
 }
 
