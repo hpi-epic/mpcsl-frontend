@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "CI Pipeline",
+  "name": "Causal Inference Pipeline",
   "icons": [
     {
       "src": "favicon.ico",
