@@ -4,12 +4,14 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions/graphExplorer';
 import { IStoreState } from '../../types';
 import { Dispatch } from 'redux';
-import { D3Graph, D3GraphNode } from '../../utils/graph';
+import { D3Graph, D3GraphNode, CIGraph } from '../../utils/graph';
 import { Button } from 'antd';
 
 export interface IGraphRendererProps {
   resetLayout: () => void;
   selectedGraph: D3Graph;
+  onAddNode: (graph: CIGraph, node: string) => void;
+  graph: CIGraph;
 }
 
 export interface IGraphRendererState {
@@ -18,6 +20,7 @@ export interface IGraphRendererState {
 }
 
 const graphSettings = {
+  nodeMouseOverCursor: 'pointer',
   nodeRadius: 13,
   nodeStrokeWidth: 1,
   nodeStroke: '#001529',
@@ -148,6 +151,12 @@ class GraphRenderer extends React.Component<
     selection.classed('node', true);
     selection
       .append('circle')
+      .on('click', (d: D3GraphNode) => {
+        if(d.isContext) {
+          this.props.onAddNode(this.props.graph, d.id.toString())
+        }
+      })
+      .style('cursor', graphSettings.nodeMouseOverCursor)
       .attr('r', graphSettings.nodeRadius)
       .attr(
         'fill',
@@ -226,17 +235,21 @@ class GraphRenderer extends React.Component<
   };
 }
 
-export function mapStateToProps({ selectedGraph }: IStoreState) {
+export function mapStateToProps({ selectedGraph, graph }: IStoreState) {
   return {
-    selectedGraph
+    selectedGraph,
+    graph
   };
 }
+
+
 
 export function mapDispatchToProps(
   dispatch: Dispatch<actions.GraphExplorerAction>
 ) {
   return {
-    resetLayout: () => dispatch(actions.newLayout())
+    resetLayout: () => dispatch(actions.newLayout()),
+    onAddNode: (graph: CIGraph, node: string) => dispatch(actions.addNode(graph, node))
   };
 }
 
