@@ -37,9 +37,17 @@ export class CIGraph extends Graph {
   }
 
   public getContext(node: string): D3Graph {
+    const neighbors = this.neighbors(node);
+    const newLinks = this.nodeEdges(node);
+    if (neighbors && newLinks) {
+      return {
+        nodes: neighbors.map(n => ({ id: n })),
+        links: newLinks.map(link => ({ source: link.v, target: link.w }))
+      }
+    }
     return {
-      nodes: this.neighbors(node)!.map(n => ({ id: n })),
-      links: this.nodeEdges(node)!.map(link => ({ source: link.v, target: link.w }))
+      nodes: [],
+      links: []
     }
   }
 
