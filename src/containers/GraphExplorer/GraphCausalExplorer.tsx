@@ -1,10 +1,8 @@
 import React from 'react';
 
 class GraphCausalExplorer extends React.Component {
-  render() {
-    return (
-      <div>GraphCausalExplorer</div>
-    )
+  public render() {
+    return <div>GraphCausalExplorer</div>;
   }
 }
 
