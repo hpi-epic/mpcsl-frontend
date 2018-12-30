@@ -6,15 +6,14 @@ import { connect } from 'react-redux';
 import { IStoreState } from '../../types';
 import './GraphSelection.css';
 
-
 interface IPropsGraphSelection {
-  nodes: string[]
+  nodes: string[];
 }
 
 function GraphSelection(props: IPropsGraphSelection) {
   return (
     <Layout>
-      <Layout.Sider className="graphSelectionSider">
+      <Layout.Sider className='graphSelectionSider'>
         <GraphNodeList nodes={props.nodes} />
       </Layout.Sider>
       <GraphRenderer />
@@ -24,7 +23,7 @@ function GraphSelection(props: IPropsGraphSelection) {
 
 export function mapStateToProps({ nodes }: IStoreState) {
   return {
-    nodes
+    nodes,
   };
 }
 

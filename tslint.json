@@ -1,11 +1,14 @@
 {
   "defaultSeverity": "error",
   "extends": ["tslint:latest", "tslint-react"],
-  "jsRules": {},
+  "jsRules": {
+    "jsx-no-multiline-js": true,
+  },
   "rules": {
     "quotemark": [true, "single"],
     "no-submodule-imports": false,
-    "jsx-no-multiline-js": false,
+    "object-literal-sort-keys": false,
+    "semicolon": true,
   },
   "rulesDirectory": []
 }

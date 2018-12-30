@@ -30,11 +30,11 @@ export class CIGraph extends Graph {
   public fromD3Graph = (graph: D3Graph) => {
     graph.nodes.map((node: D3GraphNode) => {
       this.setNode(node.id.toString(), node.id);
-    })
+    });
     graph.links.map((link: D3GraphLink) => {
-      this.setEdge(link.source.toString(), link.target.toString())
-    })
-  }
+      this.setEdge(link.source.toString(), link.target.toString());
+    });
+  };
 
   public getContext(node: string): D3Graph {
     const neighbors = this.neighbors(node);
@@ -42,55 +42,68 @@ export class CIGraph extends Graph {
     if (neighbors && newLinks) {
       return {
         nodes: neighbors.map(n => ({ id: n })),
-        links: newLinks.map(link => ({ source: link.v, target: link.w }))
-      }
+        links: newLinks.map(link => ({ source: link.v, target: link.w })),
+      };
     }
     return {
       nodes: [],
-      links: []
-    }
+      links: [],
+    };
   }
 
   public toD3Graph = (): D3Graph => {
-    return ({
-      nodes: this.nodes().map((n => ({ id: n }))),
-      links: this.edges().map(link => ({ source: link.v, target: link.w}))
-    })
-  }
+    return {
+      nodes: this.nodes().map(n => ({ id: n })),
+      links: this.edges().map(link => ({ source: link.v, target: link.w })),
+    };
+  };
 }
 
-export function addUniqueLinks(links: any, addLinks: D3GraphLink[]): D3GraphLink[] {
+export function addUniqueLinks(
+  links: any,
+  addLinks: D3GraphLink[],
+): D3GraphLink[] {
   addLinks.forEach(link => {
-    if(links.find((existingLink: any) => existingLink.source.id === link.source && existingLink.target.id === link.target) === undefined){
-      links.push(link)
+    if (
+      links.find(
+        (existingLink: any) =>
+          existingLink.source.id === link.source &&
+          existingLink.target.id === link.target,
+      ) === undefined
+    ) {
+      links.push(link);
     }
-  })
+  });
   return links as D3GraphLink[];
 }
 
-export function addUniqueNodes(nodes: D3GraphNode[], addToFocusNodeID: string, addNodes: D3GraphNode[]): D3GraphNode[] {
+export function addUniqueNodes(
+  nodes: D3GraphNode[],
+  addToFocusNodeID: string,
+  addNodes: D3GraphNode[],
+): D3GraphNode[] {
   let isAlreadyIn = false;
 
   nodes.forEach(existingNode => {
     existingNode.fx = existingNode.x;
     existingNode.fy = existingNode.y;
 
-    if(existingNode.id === addToFocusNodeID) {
+    if (existingNode.id === addToFocusNodeID) {
       existingNode.isContext = false;
       isAlreadyIn = true;
     }
-  })
+  });
 
-  if(!isAlreadyIn) {
+  if (!isAlreadyIn) {
     nodes.push({ id: addToFocusNodeID, isContext: false });
   }
 
   addNodes.forEach(addNode => {
-    if(nodes.find(n => n.id === addNode.id) === undefined){
+    if (nodes.find(n => n.id === addNode.id) === undefined) {
       addNode.isContext = true;
-      nodes.push(addNode)
+      nodes.push(addNode);
     }
-  })
+  });
   return nodes;
 }
 
@@ -100,6 +113,6 @@ export function resetLayout(graph: D3Graph): D3Graph {
     delete node.fy;
     node.vx = 0;
     node.vy = 0;
-  })
+  });
   return graph;
 }
