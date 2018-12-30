@@ -3,7 +3,6 @@ import { FormComponentProps } from 'antd/lib/form';
 import React from 'react';
 import { createObservationMatrix } from '../../actions/apiRequests';
 
-
 export interface IPropsNewObservationMatrixModal extends FormComponentProps {
   visible: boolean;
   onClose: () => void;
@@ -34,48 +33,54 @@ class NewObservationMatrixModal extends React.Component<
   public render() {
     const { getFieldDecorator } = this.props.form;
     let disabled = false;
-    if (typeof this.props.observationMatrix !== 'undefined' ) {
+    if (typeof this.props.observationMatrix !== 'undefined') {
       disabled = true;
     }
 
     const observationMatrixNameEl = getFieldDecorator('observationMatrixName', {
-      initialValue: this.props.observationMatrix ? this.props.observationMatrix.observationMatrixName : undefined,
-      rules: [{ required: true, message: 'Enter a Observation Matrix name' }]
-    })(<Input disabled={disabled} placeholder="Observation Matrix Name" />);
+      initialValue: this.props.observationMatrix
+        ? this.props.observationMatrix.observationMatrixName
+        : undefined,
+      rules: [{ required: true, message: 'Enter a Observation Matrix name' }],
+    })(<Input disabled={disabled} placeholder='Observation Matrix Name' />);
 
     const observationMatrixQueryEl = getFieldDecorator('query', {
-      initialValue: this.props.observationMatrix ? this.props.observationMatrix.query : undefined,
-      rules: [{ required: true, message: 'Enter a query' }]
-    })(<Input disabled={disabled} placeholder="Your Query" />);
+      initialValue: this.props.observationMatrix
+        ? this.props.observationMatrix.query
+        : undefined,
+      rules: [{ required: true, message: 'Enter a query' }],
+    })(<Input disabled={disabled} placeholder='Your Query' />);
 
-    const title = this.props.observationMatrix ? `Observation Matrix “${this.props.observationMatrix.observationMatrixName}“` : 'Create new Observation Matrix';
+    const title = this.props.observationMatrix
+      ? `Observation Matrix “${
+          this.props.observationMatrix.observationMatrixName
+        }“`
+      : 'Create new Observation Matrix';
 
     return (
       <Drawer
         title={title}
         width={720}
-        placement="right"
+        placement='right'
         onClose={this.props.onClose}
         visible={this.props.visible}
       >
-        <Form 
-          layout="vertical" 
-          onSubmit={this.handleSubmit} 
+        <Form
+          layout='vertical'
+          onSubmit={this.handleSubmit}
           onChange={this.hasErrors}
-          className="Modal-Form"
+          className='Modal-Form'
         >
           <Row gutter={16}>
-            <Form.Item label="Name">
-              {observationMatrixNameEl}
-            </Form.Item>
-            <Form.Item label="Query">
-              {observationMatrixQueryEl}
-            </Form.Item>
+            <Form.Item label='Name'>{observationMatrixNameEl}</Form.Item>
+            <Form.Item label='Query'>{observationMatrixQueryEl}</Form.Item>
             <Form.Item>
-              <Button 
-                type="primary" 
-                htmlType="submit" 
-                disabled={this.props.observationMatrix ? true : this.state.hasErrors}
+              <Button
+                type='primary'
+                htmlType='submit'
+                disabled={
+                  this.props.observationMatrix ? true : this.state.hasErrors
+                }
               >
                 Submit
               </Button>
@@ -88,28 +93,32 @@ class NewObservationMatrixModal extends React.Component<
 
   private handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.form.validateFields((err: Error, values: IFormObservationMatrix) => {
-      if (!err) {
-        this.submitObservationMatrix(values);
-      } else {
-        message.error('Set a Observation Matrix Name and Query!');
-      }
-    });
-  };
+    this.props.form.validateFields(
+      (err: Error, values: IFormObservationMatrix) => {
+        if (!err) {
+          this.submitObservationMatrix(values);
+        } else {
+          message.error('Set a Observation Matrix Name and Query!');
+        }
+      },
+    );
+  }
 
   private hasErrors = () => {
-    this.props.form.validateFields((err: Error, values: IFormObservationMatrix) => {
-      if(err) {
-        this.setState({
-          hasErrors: true,
-        })
-      } else {
-        this.setState({
-          hasErrors: false,
-        })
-      }
-    });
-  };
+    this.props.form.validateFields(
+      (err: Error, values: IFormObservationMatrix) => {
+        if (err) {
+          this.setState({
+            hasErrors: true,
+          });
+        } else {
+          this.setState({
+            hasErrors: false,
+          });
+        }
+      },
+    );
+  }
 
   private submitObservationMatrix = (values: IFormObservationMatrix) => {
     createObservationMatrix({
@@ -117,7 +126,7 @@ class NewObservationMatrixModal extends React.Component<
       name: values.observationMatrixName,
     });
     this.props.onClose();
-  };
+  }
 }
 
 export default NewObservationMatrixModal;

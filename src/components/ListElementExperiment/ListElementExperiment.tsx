@@ -20,28 +20,19 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
   const menu = (
     <Menu>
       <Menu.Item>
-        <Button
-          className='Dropdown-Button'
-          onClick={props.onDelete}
-        >
-        Delete
+        <Button className='Dropdown-Button' onClick={props.onDelete}>
+          Delete
         </Button>
       </Menu.Item>
       <Menu.Item>
-        <Button
-          className='Dropdown-Button'
-          onClick={props.onDuplicate}
-        >
-        Duplicate
+        <Button className='Dropdown-Button' onClick={props.onDuplicate}>
+          Duplicate
         </Button>
       </Menu.Item>
       <Menu.Item>
-        <Button
-          className='Dropdown-Button'
-          onClick={props.showAllJobs}
-        >
+        <Button className='Dropdown-Button' onClick={props.showAllJobs}>
           Jobs
-          </Button>
+        </Button>
       </Menu.Item>
     </Menu>
   );
@@ -49,35 +40,30 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
   const cardTitle = (
     <div>
       <h2 className='Card-Title'>{props.title}</h2>
-      <Badge className='Card-Badge' status={props.status} text={props.statusText} />
+      <Badge
+        className='Card-Badge'
+        status={props.status}
+        text={props.statusText}
+      />
     </div>
   );
 
   return (
     <div>
-      <List.Item >
+      <List.Item>
         <Card className='Card' title={cardTitle}>
           <p className='Card-Content'>{props.content}</p>
           <Dropdown overlay={menu} placement='bottomLeft'>
             <Button className='List-Buttons' icon='ellipsis' />
           </Dropdown>
-          <Button
-            className='List-Buttons'
-            onClick={props.onView}
-          >
-          View
+          <Button className='List-Buttons' onClick={props.onView}>
+            View
           </Button>
-          <Button
-            className='List-Buttons'
-            onClick={props.onRunStart}
-          >
-          Run
+          <Button className='List-Buttons' onClick={props.onRunStart}>
+            Run
           </Button>
-          <Button
-            className='List-Buttons'
-            onClick={props.onExplore}
-          >
-          Explore
+          <Button className='List-Buttons' onClick={props.onExplore}>
+            Explore
           </Button>
         </Card>
       </List.Item>
