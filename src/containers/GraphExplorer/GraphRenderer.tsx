@@ -41,8 +41,9 @@ class GraphRenderer extends React.Component<
   IGraphRendererProps,
   IGraphRendererState
 > {
-  public force: d3.Simulation<any, any>;
-  public graph?: any;
+  private force: d3.Simulation<any, any>;
+  private graph?: any;
+  private svg?: any;
 
   constructor(props: IGraphRendererProps) {
     super(props);
@@ -100,7 +101,11 @@ class GraphRenderer extends React.Component<
     return (
       <React.Fragment>
         <Button onClick={this.onReLayout}>Re-Layout</Button>
-        <svg width={this.state.width} height={this.state.height}>
+        <svg
+          ref={(svg) => (this.svg = d3.select(svg))}
+          width={this.state.width}
+          height={this.state.height}
+        >
           {defs}
           <g ref={(graph) => (this.graph = d3.select(graph))} />
         </svg>
@@ -145,6 +150,9 @@ class GraphRenderer extends React.Component<
         .distance(graphSettings.forceLinkDistance)
         .id((d: any) => d.id),
     );
+
+    const zoomHandler = d3.zoom().on('zoom', this.zoomActions);
+    zoomHandler(this.svg);
   }
 
   public enterNode = (selection: d3.Selection<any, any, any, any>) => {
@@ -215,6 +223,10 @@ class GraphRenderer extends React.Component<
   public updateGraph = (selection: d3.Selection<any, any, any, any>) => {
     selection.selectAll('.node').call(this.updateNode);
     selection.selectAll('.link').call(this.updateLink);
+  }
+
+  private zoomActions = () => {
+    this.graph.attr('transform', d3.event.transform);
   }
 }
 
