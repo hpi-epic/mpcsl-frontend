@@ -9,7 +9,7 @@ export const graph = {
     { id: 6 },
     { id: 7 },
     { id: 8 },
-    { id: 9 }
+    { id: 9 },
   ],
   links: [
     { source: 1, target: 2 },
@@ -21,6 +21,6 @@ export const graph = {
     { source: 3, target: 8 },
     { source: 4, target: 5 },
     { source: 5, target: 8 },
-    { source: 7, target: 8 }
-  ]
+    { source: 7, target: 8 },
+  ],
 };

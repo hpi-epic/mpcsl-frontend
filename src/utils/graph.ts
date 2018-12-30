@@ -2,12 +2,12 @@ import { Graph } from 'graphlib';
 
 type NodeID = string | number;
 
-export interface D3Graph {
-  nodes: Array<D3GraphNode>;
-  links: Array<D3GraphLink>;
+export interface ID3Graph {
+  nodes: ID3GraphNode[];
+  links: ID3GraphLink[];
 }
 
-export interface D3GraphNode {
+export interface ID3GraphNode {
   id: NodeID;
   x?: number;
   y?: number;
@@ -18,7 +18,7 @@ export interface D3GraphNode {
   isContext?: boolean;
 }
 
-export interface D3GraphLink {
+export interface ID3GraphLink {
   source: NodeID;
   target: NodeID;
 }
@@ -27,22 +27,22 @@ export class CIGraph extends Graph {
   constructor() {
     super();
   }
-  public fromD3Graph = (graph: D3Graph) => {
-    graph.nodes.map((node: D3GraphNode) => {
+  public fromD3Graph = (graph: ID3Graph) => {
+    graph.nodes.map((node: ID3GraphNode) => {
       this.setNode(node.id.toString(), node.id);
     });
-    graph.links.map((link: D3GraphLink) => {
+    graph.links.map((link: ID3GraphLink) => {
       this.setEdge(link.source.toString(), link.target.toString());
     });
-  };
+  }
 
-  public getContext(node: string): D3Graph {
+  public getContext(node: string): ID3Graph {
     const neighbors = this.neighbors(node);
     const newLinks = this.nodeEdges(node);
     if (neighbors && newLinks) {
       return {
-        nodes: neighbors.map(n => ({ id: n })),
-        links: newLinks.map(link => ({ source: link.v, target: link.w })),
+        nodes: neighbors.map((n) => ({ id: n })),
+        links: newLinks.map((link) => ({ source: link.v, target: link.w })),
       };
     }
     return {
@@ -51,19 +51,19 @@ export class CIGraph extends Graph {
     };
   }
 
-  public toD3Graph = (): D3Graph => {
+  public toD3Graph = (): ID3Graph => {
     return {
-      nodes: this.nodes().map(n => ({ id: n })),
-      links: this.edges().map(link => ({ source: link.v, target: link.w })),
+      nodes: this.nodes().map((n) => ({ id: n })),
+      links: this.edges().map((link) => ({ source: link.v, target: link.w })),
     };
-  };
+  }
 }
 
 export function addUniqueLinks(
   links: any,
-  addLinks: D3GraphLink[],
-): D3GraphLink[] {
-  addLinks.forEach(link => {
+  addLinks: ID3GraphLink[],
+): ID3GraphLink[] {
+  addLinks.forEach((link) => {
     if (
       links.find(
         (existingLink: any) =>
@@ -74,17 +74,17 @@ export function addUniqueLinks(
       links.push(link);
     }
   });
-  return links as D3GraphLink[];
+  return links as ID3GraphLink[];
 }
 
 export function addUniqueNodes(
-  nodes: D3GraphNode[],
+  nodes: ID3GraphNode[],
   addToFocusNodeID: string,
-  addNodes: D3GraphNode[],
-): D3GraphNode[] {
+  addNodes: ID3GraphNode[],
+): ID3GraphNode[] {
   let isAlreadyIn = false;
 
-  nodes.forEach(existingNode => {
+  nodes.forEach((existingNode) => {
     existingNode.fx = existingNode.x;
     existingNode.fy = existingNode.y;
 
@@ -98,8 +98,8 @@ export function addUniqueNodes(
     nodes.push({ id: addToFocusNodeID, isContext: false });
   }
 
-  addNodes.forEach(addNode => {
-    if (nodes.find(n => n.id === addNode.id) === undefined) {
+  addNodes.forEach((addNode) => {
+    if (nodes.find((n) => n.id === addNode.id) === undefined) {
       addNode.isContext = true;
       nodes.push(addNode);
     }
@@ -107,8 +107,8 @@ export function addUniqueNodes(
   return nodes;
 }
 
-export function resetLayout(graph: D3Graph): D3Graph {
-  graph.nodes.forEach(node => {
+export function resetLayout(graph: ID3Graph): ID3Graph {
+  graph.nodes.forEach((node) => {
     delete node.fx;
     delete node.fy;
     node.vx = 0;

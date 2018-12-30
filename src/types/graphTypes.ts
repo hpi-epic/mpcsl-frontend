@@ -1,11 +1,11 @@
 type NodeID = string | number;
 
-export interface D3Graph {
-  nodes: Array<D3GraphNode>;
-  links: Array<D3GraphLink>;
+export interface ID3Graph {
+  nodes: ID3GraphNode[];
+  links: ID3GraphLink[];
 }
 
-export interface D3GraphNode {
+export interface ID3GraphNode {
   id: NodeID;
   x?: number;
   y?: number;
@@ -16,7 +16,7 @@ export interface D3GraphNode {
   isContext?: boolean;
 }
 
-export interface D3GraphLink {
+export interface ID3GraphLink {
   source: NodeID;
   target: NodeID;
 }

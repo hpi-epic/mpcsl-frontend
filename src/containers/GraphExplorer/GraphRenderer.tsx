@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions/graphExplorer';
 import { IStoreState } from '../../types';
 import { Dispatch } from 'redux';
-import { D3Graph, D3GraphNode, CIGraph } from '../../utils/graph';
+import { ID3Graph, ID3GraphNode, CIGraph } from '../../utils/graph';
 import { Button } from 'antd';
 
 export interface IGraphRendererProps {
   resetLayout: () => void;
-  selectedGraph: D3Graph;
+  selectedGraph: ID3Graph;
   onAddNode: (graph: CIGraph, node: string) => void;
   graph: CIGraph;
 }
@@ -121,7 +121,7 @@ class GraphRenderer extends React.Component<
   public enterGraph = (props: IGraphRendererProps) => {
     const nodes = this.graph
       .selectAll('.node')
-      .data(props.selectedGraph.nodes, (node: D3GraphNode) => node.id);
+      .data(props.selectedGraph.nodes, (node: ID3GraphNode) => node.id);
 
     nodes.exit().remove();
     nodes.call(this.updateNode);
@@ -151,7 +151,7 @@ class GraphRenderer extends React.Component<
     selection.classed('node', true);
     selection
       .append('circle')
-      .on('click', (d: D3GraphNode) => {
+      .on('click', (d: ID3GraphNode) => {
         if (d.isContext) {
           this.props.onAddNode(this.props.graph, d.id.toString());
         }
@@ -160,7 +160,7 @@ class GraphRenderer extends React.Component<
       .attr('r', graphSettings.nodeRadius)
       .attr(
         'fill',
-        (d: D3GraphNode): string => {
+        (d: ID3GraphNode): string => {
           return d.isContext
             ? graphSettings.contextNodeColor
             : graphSettings.focusNodeColor;
@@ -170,7 +170,7 @@ class GraphRenderer extends React.Component<
       .attr('stroke', graphSettings.nodeStroke)
       .attr(
         'stroke-dasharray',
-        (d: D3GraphNode): string => {
+        (d: ID3GraphNode): string => {
           return d.isContext
             ? graphSettings.contextNodeStrokeDashArray
             : 'none';
@@ -193,7 +193,7 @@ class GraphRenderer extends React.Component<
       .select('circle')
       .attr(
         'fill',
-        (d: D3GraphNode): string => {
+        (d: ID3GraphNode): string => {
           return d.isContext
             ? graphSettings.contextNodeColor
             : graphSettings.focusNodeColor;
@@ -203,7 +203,7 @@ class GraphRenderer extends React.Component<
       .attr('stroke-width', graphSettings.nodeStrokeWidth)
       .attr(
         'stroke-dasharray',
-        (d: D3GraphNode): string => {
+        (d: ID3GraphNode): string => {
           return d.isContext
             ? graphSettings.contextNodeStrokeDashArray
             : 'none';
