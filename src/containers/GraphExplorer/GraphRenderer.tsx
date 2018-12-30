@@ -157,25 +157,8 @@ class GraphRenderer extends React.Component<
         }
       })
       .style('cursor', graphSettings.nodeMouseOverCursor)
-      .attr('r', graphSettings.nodeRadius)
-      .attr(
-        'fill',
-        (d: ID3GraphNode): string => {
-          return d.isContext
-            ? graphSettings.contextNodeColor
-            : graphSettings.focusNodeColor;
-        },
-      )
-      .attr('stroke-width', graphSettings.nodeStrokeWidth)
-      .attr('stroke', graphSettings.nodeStroke)
-      .attr(
-        'stroke-dasharray',
-        (d: ID3GraphNode): string => {
-          return d.isContext
-            ? graphSettings.contextNodeStrokeDashArray
-            : 'none';
-        },
-      );
+      .attr('r', graphSettings.nodeRadius);
+
     selection
       .append('text')
       .attr(
