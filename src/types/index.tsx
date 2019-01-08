@@ -1,16 +1,22 @@
+import { IAPIGraphNode, IAPIGraphEdges } from './graphTypes';
+
 export interface IStoreState {
   graph: any;
-  subGraph: any;
+  selectedGraph: any;
+  nodes: string[];
 }
 
 export type StoreState = IStoreState | undefined;
 
 export enum Routes {
   manager = '/manager',
-  graphExplorer = '/graph-explorer',
   observationMatricesManager = '/manager/observationMatrices',
   experimentManager = '/manager/experiments',
   runtimeManager = '/runtime',
+  graphExplorer = '/graph-explorer',
+  graphExplorerSelection = '/graph-explorer/selection',
+  graphExplorerAnnotate = '/graph-explorer/annotate',
+  graphExplorerCausalExploration = '/graph-explorer/causal-exploration',
 }
 
 const baseApiUrl = '/api';
@@ -22,7 +28,8 @@ export const Endpoints = {
   allExperiments: baseApiUrl + '/experiments',
   job: baseApiUrl + '/job',
   allJobs: '/jobs',
-  results: baseApiUrl + '/results',
+  allResults: baseApiUrl + '/results',
+  result: baseApiUrl + '/result',
 };
 
 export enum IndepenceTests {
@@ -75,4 +82,35 @@ export interface IJob {
   start_time: string;
   status: string;
   pid?: number;
+}
+
+export interface IAPIMetaResults {
+  alhpha: number;
+  api_host: string;
+  cores: number;
+  dataset_id: string;
+  fixed_edges: 'FALSE' | 'TRUE';
+  fixed_graps: 'FALSE' | 'TRUE';
+  help: boolean;
+  independence_test: IndepenceTests;
+  job_id: string;
+}
+
+export interface IAPIResult {
+  nodes: IAPIGraphNode[];
+  edges: IAPIGraphEdges[];
+  meta_results: IAPIMetaResults;
+  sepset: any[];
+}
+
+export interface IAPIMetaResults {
+  alhpha: number;
+  api_host: string;
+  cores: number;
+  dataset_id: string;
+  fixed_edges: 'FALSE' | 'TRUE';
+  fixed_graps: 'FALSE' | 'TRUE';
+  help: boolean;
+  independence_test: IndepenceTests;
+  job_id: string;
 }

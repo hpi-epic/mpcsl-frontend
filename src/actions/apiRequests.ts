@@ -1,6 +1,13 @@
 import { message } from 'antd';
 import axios, { AxiosResponse } from 'axios';
-import { IObservationMatrix, IExperiment, Endpoints, IJob, ICreateExperiment } from '../types';
+import {
+  IObservationMatrix,
+  IExperiment,
+  Endpoints,
+  IJob,
+  IAPIResult,
+  ICreateExperiment,
+} from '../types';
 
 export function getObservationMatrices(): Promise<IObservationMatrix[]> {
   return new Promise<IObservationMatrix[]>((resolve, reject) => {
@@ -118,9 +125,7 @@ export function deleteObservationMatrix(
   });
 }
 
-export function getJobsForExperiment(
-  experiment: IExperiment,
-): Promise<IJob[]> {
+export function getJobsForExperiment(experiment: IExperiment): Promise<IJob[]> {
   return new Promise<IJob[]>((resolve, reject) => {
     axios
       .get(`${Endpoints.experiment}/${experiment.id}${Endpoints.allJobs}`)
@@ -139,13 +144,31 @@ export function getJobsForExperiment(
 
 export function runExperiment(experiment: IExperiment): Promise<void> {
   return new Promise<void>((resolve, reject) => {
-    axios.post(`${Endpoints.experiment}/${experiment.id}/start`)
+    axios
+      .post(`${Endpoints.experiment}/${experiment.id}/start`)
       .then((response: AxiosResponse) => {
         resolve();
         message.success('Successfully started Experiment Run!');
       })
       .catch((error) => {
         message.error('Failed to start Experiment Run!');
+        reject({
+          status: error.response.status,
+          message: error.message,
+        });
+      });
+  });
+}
+
+export function getResult(jobID: number): Promise<void> {
+  return new Promise<any>((resolve, reject) => {
+    axios
+      .get(`${Endpoints.result}/${jobID}`)
+      .then((response: AxiosResponse) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        message.error(`Failed to fetch Results for Job with ID: ${jobID}`);
         reject({
           status: error.response.status,
           message: error.message,

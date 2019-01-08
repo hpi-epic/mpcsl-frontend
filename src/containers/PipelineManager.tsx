@@ -17,7 +17,6 @@ interface IStatePipelineManager {
 class PipelineManager extends React.Component<RouteComponentProps, IStatePipelineManager> {
   constructor(props: RouteComponentProps) {
     super(props);
-
     this.state = {
       view: this.props.location.pathname,
     };
