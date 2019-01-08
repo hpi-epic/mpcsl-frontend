@@ -6,11 +6,12 @@ interface IPropsListElementObservationMatrix {
   title: string;
   content: string;
   onDelete: () => void;
-  onView:  () => void;
+  onView: () => void;
 }
 
-function ListElementObservationMatrix(props: IPropsListElementObservationMatrix) {
-
+function ListElementObservationMatrix(
+  props: IPropsListElementObservationMatrix,
+) {
   const cardTitle = (
     <div>
       <h2 className='Card-Title'>{props.title}</h2>
@@ -20,22 +21,13 @@ function ListElementObservationMatrix(props: IPropsListElementObservationMatrix)
   return (
     <div>
       <List.Item>
-        <Card
-          className='Card'
-          title={cardTitle}
-        >
+        <Card className='Card' title={cardTitle}>
           <p className='Card-Content'>{props.content}</p>
-          <Button
-            className='List-Buttons'
-            onClick={props.onDelete}
-          >
-          Delete
+          <Button className='List-Buttons' onClick={props.onDelete}>
+            Delete
           </Button>
-          <Button
-            className='List-Buttons'
-            onClick={props.onView}
-          >
-          View
+          <Button className='List-Buttons' onClick={props.onView}>
+            View
           </Button>
         </Card>
       </List.Item>

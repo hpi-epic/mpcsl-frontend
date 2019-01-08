@@ -6,12 +6,15 @@ import {
   Button,
   message,
   Select,
-  InputNumber
+  InputNumber,
 } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import React from 'react';
 import { IObservationMatrix, IndepenceTests } from '../../types';
-import { getObservationMatrices, createExperiment } from '../../actions/apiRequests';
+import {
+  getObservationMatrices,
+  createExperiment,
+} from '../../actions/apiRequests';
 
 export interface IPropsNewExperimentModal extends FormComponentProps {
   visible: boolean;
@@ -22,7 +25,7 @@ export interface IPropsNewExperimentModal extends FormComponentProps {
 
 interface IStateNewExperimentModal {
   hasErrors: boolean;
-  observationMatrices: Array<IObservationMatrix>;
+  observationMatrices: IObservationMatrix[];
 }
 
 export interface IFormExperiment {
@@ -37,39 +40,44 @@ class NewExperimentModal extends React.Component<
   IPropsNewExperimentModal,
   IStateNewExperimentModal
 > {
-  mounted = false;
+  public mounted = false;
 
   constructor(props: IPropsNewExperimentModal) {
     super(props);
 
     this.state = {
       hasErrors: true,
-      observationMatrices: []
+      observationMatrices: [],
     };
   }
 
   public componentDidMount = () => {
     this.mounted = true;
     this.fetchObservationMatrices();
-    if(this.props.experiment && !this.props.editDisabled) {
+    if (this.props.experiment && !this.props.editDisabled) {
       this.hasErrors();
     }
-  };
+  }
 
   public componentWillUnmount = () => {
     this.mounted = false;
-  };
+  }
 
   public render() {
     const { getFieldDecorator } = this.props.form;
 
     const observationMatrixSelect = (
       <Select disabled={this.props.editDisabled} onChange={this.hasErrors}>
-        {this.state.observationMatrices.map((observationMatrix: IObservationMatrix) => (
-          <Select.Option value={observationMatrix.id} key={String(observationMatrix.id)}>
-            {observationMatrix.name}
-          </Select.Option>
-        ))}
+        {this.state.observationMatrices.map(
+          (observationMatrix: IObservationMatrix) => (
+            <Select.Option
+              value={observationMatrix.id}
+              key={String(observationMatrix.id)}
+            >
+              {observationMatrix.name}
+            </Select.Option>
+          ),
+        )}
       </Select>
     );
 
@@ -87,32 +95,50 @@ class NewExperimentModal extends React.Component<
       initialValue: this.props.experiment
         ? this.props.experiment.name
         : undefined,
-      rules: [{ required: true, message: 'Enter a Experiment Name'}]
-    })(<Input disabled={this.props.editDisabled} placeholder="Experiment Name" />);
+      rules: [{ required: true, message: 'Enter a Experiment Name' }],
+    })(
+      <Input disabled={this.props.editDisabled} placeholder='Experiment Name' />,
+    );
 
     const observationMatrixEl = getFieldDecorator('observationMatrix_id', {
       initialValue: this.props.experiment
         ? this.props.experiment.observationMatrix_id
         : undefined,
-      rules: [{ required: true, message: 'Select a Observation Matrix' }]
+      rules: [{ required: true, message: 'Select a Observation Matrix' }],
     })(observationMatrixSelect);
 
     const alphaEl = getFieldDecorator('alpha', {
-      initialValue: this.props.experiment ? this.props.experiment.alpha : undefined,
-      rules: [{ required: true, message: 'Enter an Alpha value' }]
-    })(<InputNumber disabled={this.props.editDisabled} onChange={this.hasErrors} placeholder="0" />);
+      initialValue: this.props.experiment
+        ? this.props.experiment.alpha
+        : undefined,
+      rules: [{ required: true, message: 'Enter an Alpha value' }],
+    })(
+      <InputNumber
+        disabled={this.props.editDisabled}
+        onChange={this.hasErrors}
+        placeholder='0'
+      />,
+    );
 
     const independenceTestEl = getFieldDecorator('independence_test', {
       initialValue: this.props.experiment
         ? this.props.experiment.independence_test
         : IndepenceTests.gaussCI,
-      rules: [{ required: true, message: 'Select an Indepent Test' }]
+      rules: [{ required: true, message: 'Select an Indepent Test' }],
     })(independenceTestSelect);
 
     const coresEl = getFieldDecorator('cores', {
       initialValue: this.props.experiment ? this.props.experiment.cores : 1,
-      rules: [{ required: true, message: 'Enter the Number of Cores' }]
-    })(<InputNumber disabled={this.props.editDisabled} onChange={this.hasErrors} placeholder="0" min={0} step={1} />);
+      rules: [{ required: true, message: 'Enter the Number of Cores' }],
+    })(
+      <InputNumber
+        disabled={this.props.editDisabled}
+        onChange={this.hasErrors}
+        placeholder='0'
+        min={0}
+        step={1}
+      />,
+    );
 
     return (
       <Drawer
@@ -122,30 +148,34 @@ class NewExperimentModal extends React.Component<
             : 'Create new Experiment'
         }
         width={720}
-        placement="right"
+        placement='right'
         onClose={this.props.onClose}
         visible={this.props.visible}
       >
         <Form
-          layout="vertical"
+          layout='vertical'
           onSubmit={this.handleSubmit}
           onChange={this.hasErrors}
-          className="Modal-Form"
+          className='Modal-Form'
         >
           <Row gutter={16}>
-            <Form.Item label="Experiment Name" hasFeedback={true}>{experimentNameEl}</Form.Item>
-            <Form.Item label="Observation Matrix" hasFeedback={true}>
+            <Form.Item label='Experiment Name' hasFeedback={true}>
+              {experimentNameEl}
+            </Form.Item>
+            <Form.Item label='Observation Matrix' hasFeedback={true}>
               {observationMatrixEl}
             </Form.Item>
-            <Form.Item label="Alpha" hasFeedback={true}>{alphaEl}</Form.Item>
-            <Form.Item label="Independence Test" hasFeedback={true}>
+            <Form.Item label='Alpha' hasFeedback={true}>
+              {alphaEl}
+            </Form.Item>
+            <Form.Item label='Independence Test' hasFeedback={true}>
               {independenceTestEl}
             </Form.Item>
-            <Form.Item label="Cores">{coresEl}</Form.Item>
+            <Form.Item label='Cores'>{coresEl}</Form.Item>
             <Form.Item>
               <Button
-                type="primary"
-                htmlType="submit"
+                type='primary'
+                htmlType='submit'
                 disabled={this.props.editDisabled ? true : this.state.hasErrors}
               >
                 Submit
@@ -161,7 +191,7 @@ class NewExperimentModal extends React.Component<
     const observationMatrices = await getObservationMatrices();
     if (this.mounted) {
       this.setState({
-        observationMatrices: observationMatrices
+        observationMatrices,
       });
     }
   }
@@ -175,21 +205,21 @@ class NewExperimentModal extends React.Component<
         message.error('Set a required Values!');
       }
     });
-  };
+  }
 
   private hasErrors = () => {
     this.props.form.validateFields((err: Error, values: IFormExperiment) => {
       if (err) {
         this.setState({
-          hasErrors: true
+          hasErrors: true,
         });
       } else {
         this.setState({
-          hasErrors: false
+          hasErrors: false,
         });
       }
     });
-  };
+  }
 
   private submitExperiment = (values: IFormExperiment) => {
     createExperiment({
@@ -198,11 +228,11 @@ class NewExperimentModal extends React.Component<
       parameters: {
         alpha: values.alpha,
         independence_test: values.independence_test,
-        cores: values.cores
-      }
+        cores: values.cores,
+      },
     });
     this.props.onClose();
-  };
+  }
 }
 
 export default NewExperimentModal;

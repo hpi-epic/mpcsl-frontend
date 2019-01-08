@@ -16,7 +16,7 @@ class App extends Component {
           <Route path={Routes.manager} component={PipelineManager} />
           <Route path={Routes.graphExplorer} component={GraphExplorer} />
           <Route path={Routes.runtimeManager} component={RuntimeManager} />
-          <Redirect from="/" to={Routes.experimentManager} />
+          <Redirect from='/' to={Routes.experimentManager} />
         </Switch>
       </div>
     );
