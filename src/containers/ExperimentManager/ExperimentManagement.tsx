@@ -175,7 +175,7 @@ class ExperimentManagement extends React.Component<
     const jobs = await getJobsForExperiment(experiment);
 
     Modal.info({
-      title: `Job List for Experiment ${experiment.name}`,
+      title: `Job List for Experiment: ${experiment.name}`,
       content: (
         <List
           itemLayout='horizontal'
@@ -184,7 +184,10 @@ class ExperimentManagement extends React.Component<
           renderItem={(job: IJob) => (
             <List.Item
               actions={[
-                <Button key={1} onClick={() => this.deleteJob(job)}>
+                <Button key={1}>
+                  explore
+                </Button>,
+                <Button key={2} onClick={() => this.deleteJob(job)}>
                   delete
                 </Button>,
               ]}
@@ -200,7 +203,11 @@ class ExperimentManagement extends React.Component<
                     />
                   </div>
                 }
-                description={<div>Starting Time: {moment(job.start_time).format('dddd, MMMM Do YYYY, h:mm:ss a')}</div>}
+                description={
+                  <div>
+                    <i> Starting Time: {moment(job.start_time).format('dddd, MMMM Do YYYY, h:mm:ss a')}</i>
+                  </div>
+                }
               />
             </List.Item>
           )}

@@ -20,8 +20,13 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
   const menu = (
     <Menu>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.onDelete}>
-          Delete
+        <Button className='Dropdown-Button' onClick={props.onView}>
+          View Settings
+        </Button>
+      </Menu.Item>
+      <Menu.Item>
+        <Button className='Dropdown-Button' onClick={props.showAllJobs}>
+          View Jobs
         </Button>
       </Menu.Item>
       <Menu.Item>
@@ -30,8 +35,8 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
         </Button>
       </Menu.Item>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.showAllJobs}>
-          Jobs
+        <Button className='Dropdown-Button' onClick={props.onDelete}>
+          Delete
         </Button>
       </Menu.Item>
     </Menu>
@@ -56,14 +61,11 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
           <Dropdown overlay={menu} placement='bottomLeft'>
             <Button className='List-Buttons' icon='ellipsis' />
           </Dropdown>
-          <Button className='List-Buttons' onClick={props.onView}>
-            View
+          <Button className='List-Buttons' onClick={props.onExplore}>
+            Explore
           </Button>
           <Button className='List-Buttons' onClick={props.onRunStart}>
             Run
-          </Button>
-          <Button className='List-Buttons' onClick={props.onExplore}>
-            Explore
           </Button>
         </Card>
       </List.Item>
