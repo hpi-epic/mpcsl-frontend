@@ -23,10 +23,10 @@ function ListElementObservationMatrix(
       <List.Item>
         <Card className='Card' title={cardTitle}>
           <p className='Card-Content'>{props.content}</p>
-          <Button className='List-Buttons' onClick={props.onDelete}>
+          <Button className='List-Buttons' onClick={props.onDelete} type='danger' ghost={true}>
             Delete
           </Button>
-          <Button className='List-Buttons' onClick={props.onView}>
+          <Button className='List-Buttons' onClick={props.onView} type='primary' ghost={true}>
             View
           </Button>
         </Card>
