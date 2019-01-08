@@ -35,7 +35,7 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
         </Button>
       </Menu.Item>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.onDelete}>
+        <Button className='Dropdown-Button' onClick={props.onDelete} type='danger' ghost={true}>
           Delete
         </Button>
       </Menu.Item>
@@ -61,10 +61,10 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
           <Dropdown overlay={menu} placement='bottomLeft'>
             <Button className='List-Buttons' icon='ellipsis' />
           </Dropdown>
-          <Button className='List-Buttons' onClick={props.onExplore}>
+          <Button className='List-Buttons' onClick={props.onExplore} type='primary' ghost={true}>
             Explore
           </Button>
-          <Button className='List-Buttons' onClick={props.onRunStart}>
+          <Button className='List-Buttons' onClick={props.onRunStart} type='primary' ghost={true}>
             Run
           </Button>
         </Card>

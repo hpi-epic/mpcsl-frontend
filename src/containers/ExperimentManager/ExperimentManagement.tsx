@@ -184,10 +184,10 @@ class ExperimentManagement extends React.Component<
           renderItem={(job: IJob) => (
             <List.Item
               actions={[
-                <Button key={1}>
+                <Button key={1} type='primary' ghost={true}>
                   explore
                 </Button>,
-                <Button key={2} onClick={() => this.deleteJob(job)}>
+                <Button key={2} onClick={() => this.deleteJob(job)} type='danger' ghost={true}>
                   delete
                 </Button>,
               ]}
