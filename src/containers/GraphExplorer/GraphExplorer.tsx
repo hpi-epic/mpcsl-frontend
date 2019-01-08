@@ -12,6 +12,7 @@ import GraphAnnotate from './GraphAnntotate';
 import GraphCausalExplorer from './GraphCausalExplorer';
 import { Dispatch } from 'redux';
 import { CIGraph } from '../../utils/graph';
+import { IState } from '../../store';
 
 const { Header, Content } = Layout;
 
@@ -20,7 +21,6 @@ export interface IGraphExplorerState {
 }
 
 export interface IGraphExplorerProps extends RouteComponentProps {
-  onFetchGraph: () => void;
   onAddNode: (graph: CIGraph, node: string) => void;
   graph: CIGraph;
   nodes: string[];
@@ -33,10 +33,6 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
     this.state = {
       view: this.props.location.pathname,
     };
-  }
-
-  public componentDidMount() {
-    this.props.onFetchGraph();
   }
 
   public render() {
@@ -83,7 +79,7 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
         <Content style={{ background: colors.contentBackground }}>
           <Switch>
             <Route
-              path={Routes.graphExplorerSelection}
+              path={`${Routes.graphExplorerSelection}/:job_id`}
               component={GraphSelection}
             />
             <Route
@@ -121,10 +117,10 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
   }
 }
 
-export function mapStateToProps({ graph, nodes }: IStoreState) {
+export function mapStateToProps(state: IState) {
   return {
-    graph,
-    nodes,
+    graph: state.graphExplorer!.graph,
+    nodes: state.graphExplorer!.nodes,
   };
 }
 
@@ -132,7 +128,6 @@ export function mapDispatchToProps(
   dispatch: Dispatch<actions.GraphExplorerAction>,
 ) {
   return {
-    onFetchGraph: () => dispatch(actions.fetchGraph()),
     onAddNode: (graph: CIGraph, node: string) =>
       dispatch(actions.addNode(graph, node)),
   };

@@ -1,4 +1,6 @@
 import { Graph } from 'graphlib';
+import { IAPIResult } from '../types';
+import { IAPIGraphEdges, IAPIGraphNode } from '../types/graphTypes';
 
 type NodeID = string | number;
 
@@ -33,6 +35,15 @@ export class CIGraph extends Graph {
     });
     graph.links.map((link: ID3GraphLink) => {
       this.setEdge(link.source.toString(), link.target.toString());
+    });
+  }
+
+  public fromAPIGraph = (results: IAPIResult) => {
+    results.nodes.map((node: IAPIGraphNode) => {
+      this.setNode(node.id.toString(), node.id);
+    });
+    results.edges.map((link: IAPIGraphEdges) => {
+      this.setEdge(link.from_node.toString(), link.to_node.toString());
     });
   }
 

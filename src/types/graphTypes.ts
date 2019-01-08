@@ -1,3 +1,4 @@
+import { IndepenceTests } from './index';
 type NodeID = string | number;
 
 export interface ID3Graph {
@@ -19,4 +20,22 @@ export interface ID3GraphNode {
 export interface ID3GraphLink {
   source: NodeID;
   target: NodeID;
+}
+
+export interface IAPIGraphNode {
+  id: number;
+  name: string;
+  result: number;
+  result_id: number;
+}
+
+export interface IAPIGraphEdges {
+  id: number;
+  result: number;
+  result_id: number;
+  from_node_id: number;
+  from_node: number;
+  to_node_id: number;
+  to_node: number;
+  start_time: string;
 }

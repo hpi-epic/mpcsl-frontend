@@ -1,3 +1,5 @@
+import { IAPIGraphNode, IAPIGraphEdges } from './graphTypes';
+
 export interface IStoreState {
   graph: any;
   selectedGraph: any;
@@ -26,7 +28,8 @@ export const Endpoints = {
   allExperiments: baseApiUrl + '/experiments',
   job: baseApiUrl + '/job',
   allJobs: '/jobs',
-  results: baseApiUrl + '/results',
+  allResults: baseApiUrl + '/results',
+  result: baseApiUrl + '/result',
 };
 
 export enum IndepenceTests {
@@ -66,4 +69,35 @@ export interface IJob {
   startTime: string;
   status: string;
   pid?: number;
+}
+
+export interface IAPIMetaResults {
+  alhpha: number;
+  api_host: string;
+  cores: number;
+  dataset_id: string;
+  fixed_edges: 'FALSE' | 'TRUE';
+  fixed_graps: 'FALSE' | 'TRUE';
+  help: boolean;
+  independence_test: IndepenceTests;
+  job_id: string;
+}
+
+export interface IAPIResult {
+  nodes: IAPIGraphNode[];
+  edges: IAPIGraphEdges[];
+  meta_results: IAPIMetaResults;
+  sepset: any[];
+}
+
+export interface IAPIMetaResults {
+  alhpha: number;
+  api_host: string;
+  cores: number;
+  dataset_id: string;
+  fixed_edges: 'FALSE' | 'TRUE';
+  fixed_graps: 'FALSE' | 'TRUE';
+  help: boolean;
+  independence_test: IndepenceTests;
+  job_id: string;
 }

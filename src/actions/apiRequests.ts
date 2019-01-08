@@ -1,6 +1,12 @@
 import { message } from 'antd';
 import axios, { AxiosResponse } from 'axios';
-import { IObservationMatrix, IExperiment, Endpoints, IJob } from '../types';
+import {
+  IObservationMatrix,
+  IExperiment,
+  Endpoints,
+  IJob,
+  IAPIResult,
+} from '../types';
 
 export function getObservationMatrices(): Promise<IObservationMatrix[]> {
   return new Promise<IObservationMatrix[]>((resolve, reject) => {
@@ -118,9 +124,7 @@ export function deleteObservationMatrix(
   });
 }
 
-export function getJobsForExperiment(
-  experiment: IExperiment,
-): Promise<IJob[]> {
+export function getJobsForExperiment(experiment: IExperiment): Promise<IJob[]> {
   return new Promise<IJob[]>((resolve, reject) => {
     axios
       .get(`${Endpoints.experiment}/${experiment.id}${Endpoints.allJobs}`)
@@ -147,6 +151,23 @@ export function deleteJob(job: IJob): Promise<void> {
       })
       .catch((error) => {
         message.error('Failed to delete Job');
+        reject({
+          status: error.response.status,
+          message: error.message,
+        });
+      });
+  });
+}
+
+export function getResult(jobID: number): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .get(`${Endpoints.result}/${jobID}`)
+      .then((response: AxiosResponse) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        message.error(`Failed to fetch Results for Job with ID: ${jobID}`);
         reject({
           status: error.response.status,
           message: error.message,

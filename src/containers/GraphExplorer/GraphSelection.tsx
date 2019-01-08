@@ -1,30 +1,62 @@
 import React from 'react';
-import GraphRenderer from './GraphRenderer';
 import { Layout } from 'antd';
-import GraphNodeList from '../../components/GraphNodeList';
 import { connect } from 'react-redux';
-import { IStoreState } from '../../types';
-import './GraphSelection.css';
+import { RouteComponentProps } from 'react-router-dom';
+import { Dispatch } from 'redux';
 
-interface IPropsGraphSelection {
+import GraphRenderer from './GraphRenderer';
+import GraphNodeList from '../../components/GraphNodeList';
+import { IStoreState } from '../../types';
+import * as actions from '../../actions/graphExplorer';
+
+import './GraphSelection.css';
+import { IState } from '../../store';
+
+interface IMatchParams {
+  job_id: string;
+}
+
+interface IGraphSelectionProps extends RouteComponentProps<IMatchParams> {
+  fetchGraph: (jobID: number) => void;
   nodes: string[];
 }
 
-function GraphSelection(props: IPropsGraphSelection) {
-  return (
-    <Layout>
-      <Layout.Sider className='graphSelectionSider'>
-        <GraphNodeList nodes={props.nodes} />
-      </Layout.Sider>
-      <GraphRenderer />
-    </Layout>
-  );
+class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
+  constructor(props: IGraphSelectionProps) {
+    super(props);
+  }
+
+  public componentDidMount() {
+    this.props.fetchGraph(Number(this.props.match.params.job_id));
+  }
+
+  public render() {
+    return (
+      <Layout>
+        <Layout.Sider className='graphSelectionSider'>
+          <GraphNodeList nodes={this.props.nodes} />
+        </Layout.Sider>
+        <GraphRenderer />
+      </Layout>
+    );
+  }
 }
 
-export function mapStateToProps({ nodes }: IStoreState) {
+export function mapStateToProps(state: IState) {
   return {
-    nodes,
+    nodes: state.graphExplorer!.nodes,
   };
 }
 
-export default connect(mapStateToProps)(GraphSelection);
+export function mapDispatchToProps(
+  dispatch: Dispatch<actions.GraphExplorerAction>,
+) {
+  return {
+    fetchGraph: (jobID: number) => dispatch(actions.fetchGraph(jobID)),
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(GraphSelection);

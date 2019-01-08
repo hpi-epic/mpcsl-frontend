@@ -6,6 +6,7 @@ import { IStoreState } from '../../types';
 import { Dispatch } from 'redux';
 import { ID3Graph, ID3GraphNode, CIGraph } from '../../utils/graph';
 import { Button } from 'antd';
+import { IState } from '../../store';
 
 export interface IGraphRendererProps {
   resetLayout: () => void;
@@ -230,10 +231,10 @@ class GraphRenderer extends React.Component<
   }
 }
 
-export function mapStateToProps({ selectedGraph, graph }: IStoreState) {
+export function mapStateToProps(state: IState) {
   return {
-    selectedGraph,
-    graph,
+    selectedGraph: state.graphExplorer!.selectedGraph,
+    graph: state.graphExplorer!.graph,
   };
 }
 

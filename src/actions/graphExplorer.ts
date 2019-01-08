@@ -2,13 +2,14 @@ import { graph } from './../constants/testdata';
 import { ID3Graph } from '../types/graphTypes';
 import * as constants from '../constants/actions';
 import { CIGraph } from '../utils/graph';
+import { getResult } from './apiRequests';
 
 export interface IFetchGraph {
   type: constants.ADD_GRAPH;
   graph: CIGraph;
 }
 
-export function fetchGraph(): IFetchGraph {
+export function fetchGraph(jobID: number): IFetchGraph {
   const ciGraph = new CIGraph();
   ciGraph.fromD3Graph(graph);
   return {

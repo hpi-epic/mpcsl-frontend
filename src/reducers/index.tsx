@@ -1,8 +1,10 @@
 import { GraphExplorerAction } from '../actions/graphExplorer';
 import { ADD_GRAPH, ADD_NODE, NEW_GRAPH_LAYOUT } from '../constants/actions';
-import { StoreState } from '../types';
+import { StoreState, IStoreState } from '../types';
 import { ID3GraphLink, ID3GraphNode } from '../types/graphTypes';
 import { addUniqueLinks, addUniqueNodes, resetLayout } from '../utils/graph';
+import { combineReducers } from 'redux';
+import { IState } from '../store';
 
 const initialState = {
   graph: null,
@@ -64,4 +66,4 @@ function graphExplorer(
   }
 }
 
-export default graphExplorer;
+export default combineReducers<IState>({ graphExplorer });
