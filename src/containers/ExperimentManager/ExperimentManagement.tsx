@@ -19,6 +19,8 @@ import {
 
 import ListElementExperiment from '../../components/ListElementExperiment/ListElementExperiment';
 
+import moment from 'moment';
+
 interface IStateExperimentManagement {
   newExperimentModalVisible: boolean;
   experiments: IExperiment[];
@@ -198,7 +200,7 @@ class ExperimentManagement extends React.Component<
                     />
                   </div>
                 }
-                description={<div>Starting Time: {job.startTime}</div>}
+                description={<div>Starting Time: {moment(job.start_time).format('dddd, MMMM Do YYYY, h:mm:ss a')}</div>}
               />
             </List.Item>
           )}

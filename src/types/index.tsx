@@ -63,13 +63,13 @@ export interface ICreateExperiment {
     alpha: number;
     independence_test: string;
     cores: number;
-  }
+  };
 }
 
 export interface IJob {
   job_id: number;
   experiment_id: number;
-  startTime: string;
+  start_time: string;
   status: string;
   pid?: number;
 }
