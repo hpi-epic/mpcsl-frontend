@@ -28,11 +28,11 @@ class PipelineManager extends React.Component<RouteComponentProps, IStatePipelin
       <Layout className='Layout'>
         <Header className='Header'>
           <Row>
-            <Col span={10} />
-            <Col span={4} className='Home'>
+            <Col span={11} />
+            <Col span={2} className='Home'>
               <Button onClick={this.onHomeClick} icon='home' ghost={true}/>
             </Col>
-            <Col span={10} className='Nav-Switch'>
+            <Col span={11} className='Nav-Switch'>
               <ViewRadioNavigation value={this.state.view} onChange={this.onViewChange} />
             </Col>
           </Row>

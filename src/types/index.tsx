@@ -35,6 +35,7 @@ export interface IObservationMatrix {
   id?: number;
   load_query: string;
   name: string;
+  description?: string;
 }
 
 export interface IExperiment {
@@ -42,6 +43,7 @@ export interface IExperiment {
   dataset?: number;
   id?: number;
   name: string;
+  description?: string;
   parameters: {
     alpha: number;
     independence_test: string;
@@ -56,10 +58,21 @@ export interface IExperiment {
   };
 }
 
+export interface ICreateExperiment {
+  dataset_id: number;
+  name: string;
+  description: string;
+  parameters: {
+    alpha: number;
+    independence_test: string;
+    cores: number;
+  };
+}
+
 export interface IJob {
-  job_id: number;
+  id: number;
   experiment_id: number;
-  startTime: string;
+  start_time: string;
   status: string;
   pid?: number;
 }

@@ -1,6 +1,6 @@
 import { message } from 'antd';
 import axios, { AxiosResponse } from 'axios';
-import { IObservationMatrix, IExperiment, Endpoints, IJob } from '../types';
+import { IObservationMatrix, IExperiment, Endpoints, IJob, ICreateExperiment } from '../types';
 
 export function getObservationMatrices(): Promise<IObservationMatrix[]> {
   return new Promise<IObservationMatrix[]>((resolve, reject) => {
@@ -19,7 +19,7 @@ export function getObservationMatrices(): Promise<IObservationMatrix[]> {
   });
 }
 
-export function createExperiment(experiment: IExperiment): Promise<void> {
+export function createExperiment(experiment: ICreateExperiment): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     axios
       .post(Endpoints.allExperiments, experiment)
@@ -137,16 +137,15 @@ export function getJobsForExperiment(
   });
 }
 
-export function deleteJob(job: IJob): Promise<void> {
+export function runExperiment(experiment: IExperiment): Promise<void> {
   return new Promise<void>((resolve, reject) => {
-    axios
-      .delete(`${Endpoints.job}/${job.job_id}`)
+    axios.post(`${Endpoints.experiment}/${experiment.id}/start`)
       .then((response: AxiosResponse) => {
         resolve();
-        message.success('Successfully deleted Job');
+        message.success('Successfully started Experiment Run!');
       })
       .catch((error) => {
-        message.error('Failed to delete Job');
+        message.error('Failed to start Experiment Run!');
         reject({
           status: error.response.status,
           message: error.message,

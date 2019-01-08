@@ -15,6 +15,7 @@ interface IStateNewObservationMatrixModal {
 
 export interface IFormObservationMatrix {
   observationMatrixName: string;
+  observationMatrixDescription: string;
   query: string;
 }
 
@@ -43,6 +44,13 @@ class NewObservationMatrixModal extends React.Component<
         : undefined,
       rules: [{ required: true, message: 'Enter a Observation Matrix name' }],
     })(<Input disabled={disabled} placeholder='Observation Matrix Name' />);
+
+    const observationMatrixDescEl = getFieldDecorator('observationMatrixDescription', {
+      initialValue: this.props.observationMatrix
+        ? this.props.observationMatrix.observationMatrixDescription
+        : undefined,
+      rules: [{ required: false, message: 'Enter a Observation Matrix Description' }],
+    })(<Input disabled={disabled} placeholder='Observation Matrix Description' />);
 
     const observationMatrixQueryEl = getFieldDecorator('query', {
       initialValue: this.props.observationMatrix
@@ -73,6 +81,7 @@ class NewObservationMatrixModal extends React.Component<
         >
           <Row gutter={16}>
             <Form.Item label='Name'>{observationMatrixNameEl}</Form.Item>
+            <Form.Item label='Description'>{observationMatrixDescEl}</Form.Item>
             <Form.Item label='Query'>{observationMatrixQueryEl}</Form.Item>
             <Form.Item>
               <Button
@@ -124,6 +133,7 @@ class NewObservationMatrixModal extends React.Component<
     createObservationMatrix({
       load_query: values.query,
       name: values.observationMatrixName,
+      description: values.observationMatrixDescription,
     });
     this.props.onClose();
   }

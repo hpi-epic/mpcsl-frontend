@@ -27,4 +27,10 @@
 
 .Dropdown-Button {
 	border: none;
+	background-color: transparent;
+}
+
+.Dropdown-Button:hover {
+	border: none;
+	background-color: transparent;
 }

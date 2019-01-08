@@ -20,18 +20,23 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
   const menu = (
     <Menu>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.onDelete}>
-          Delete
+        <Button className='Dropdown-Button' onClick={props.onView} key='1'>
+          View Settings
         </Button>
       </Menu.Item>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.onDuplicate}>
+        <Button className='Dropdown-Button' onClick={props.showAllJobs} key='2'>
+          View Jobs
+        </Button>
+      </Menu.Item>
+      <Menu.Item>
+        <Button className='Dropdown-Button' onClick={props.onDuplicate} key='3'>
           Duplicate
         </Button>
       </Menu.Item>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.showAllJobs}>
-          Jobs
+        <Button className='Dropdown-Button' onClick={props.onDelete} type='danger' ghost={true} key='4'>
+          Delete
         </Button>
       </Menu.Item>
     </Menu>
@@ -56,14 +61,11 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
           <Dropdown overlay={menu} placement='bottomLeft'>
             <Button className='List-Buttons' icon='ellipsis' />
           </Dropdown>
-          <Button className='List-Buttons' onClick={props.onView}>
-            View
-          </Button>
-          <Button className='List-Buttons' onClick={props.onRunStart}>
-            Run
-          </Button>
-          <Button className='List-Buttons' onClick={props.onExplore}>
+          <Button className='List-Buttons' onClick={props.onExplore} type='primary' ghost={true}>
             Explore
+          </Button>
+          <Button className='List-Buttons' onClick={props.onRunStart} type='primary' ghost={true}>
+            Run
           </Button>
         </Card>
       </List.Item>

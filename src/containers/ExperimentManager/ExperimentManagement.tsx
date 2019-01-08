@@ -7,13 +7,18 @@ import NewExperimentModal, {
   IFormExperiment,
 } from './NewExperimentModal';
 import { IExperiment, IJob } from '../../types';
+
 import {
   getExperiments,
   deleteExperiment,
   getJobsForExperiment,
-  deleteJob,
+  runExperiment,
+  getObservationMatrices,
 } from '../../actions/apiRequests';
+
 import ListElementExperiment from '../../components/ListElementExperiment/ListElementExperiment';
+
+import moment from 'moment';
 
 interface IStateExperimentManagement {
   newExperimentModalVisible: boolean;
@@ -21,6 +26,7 @@ interface IStateExperimentManagement {
   clickedExperiment: IFormExperiment | undefined;
   editExperiment: boolean;
   jobListVisible: boolean;
+  noObservationMatricePresent: boolean;
   jobList: IJob[];
 }
 
@@ -46,6 +52,7 @@ class ExperimentManagement extends React.Component<
       experiments: [],
       clickedExperiment: undefined,
       jobListVisible: false,
+      noObservationMatricePresent: true,
       jobList: [],
     };
   }
@@ -53,6 +60,7 @@ class ExperimentManagement extends React.Component<
   public componentDidMount = () => {
     this.mounted = true;
     this.fetchExperiments();
+    this.fetchObservationMatrices();
   }
 
   public componentWillUnmount = () => {
@@ -78,7 +86,7 @@ class ExperimentManagement extends React.Component<
               ? 'Experiment was not started yet.'
               : experiment.last_job!.status
           }
-          content='Experiment Description'
+          content={experiment.description || ''}
           onDelete={() => this.onDeleteExperiment(experiment)}
           onDuplicate={() => this.onDuplicateExperiment(experiment)}
           onExplore={() => this.onExploreExperiment(experiment)}
@@ -93,7 +101,7 @@ class ExperimentManagement extends React.Component<
       <div className='Content'>
         <Row>
           <div className='Experiment-Controls'>
-            <Button type='primary' onClick={this.onNewExperiment}>
+            <Button type='primary' onClick={this.onNewExperiment} disabled={this.state.noObservationMatricePresent}>
               + New Experiment
             </Button>
           </div>
@@ -113,6 +121,15 @@ class ExperimentManagement extends React.Component<
     const experiments = await getExperiments();
     if (this.mounted) {
       this.setState({ experiments });
+    }
+  }
+
+  private async fetchObservationMatrices() {
+    const observationMatrices = await getObservationMatrices();
+    if (observationMatrices.length > 0) {
+      this.setState({
+        noObservationMatricePresent: false,
+      });
     }
   }
 
@@ -145,6 +162,7 @@ class ExperimentManagement extends React.Component<
       editExperiment: false,
       clickedExperiment: {
         name: experiment.name,
+        description: experiment.description || '',
         alpha: experiment.parameters.alpha,
         independence_test: experiment.parameters.independence_test,
         cores: experiment.parameters.cores,
@@ -155,9 +173,8 @@ class ExperimentManagement extends React.Component<
 
   private async onJobListView(experiment: IExperiment) {
     const jobs = await getJobsForExperiment(experiment);
-
     Modal.info({
-      title: `Job List for Experiment ${experiment.name}`,
+      title: `Job List for Experiment: ${experiment.name}`,
       content: (
         <List
           itemLayout='horizontal'
@@ -166,15 +183,15 @@ class ExperimentManagement extends React.Component<
           renderItem={(job: IJob) => (
             <List.Item
               actions={[
-                <Button key={1} onClick={() => this.deleteJob(job)}>
-                  delete
+                <Button key={1} type='primary' ghost={true} disabled={job.status === 'done' ? false : true}>
+                  explore
                 </Button>,
               ]}
             >
               <List.Item.Meta
                 title={
                   <div>
-                    {' '}
+                    {<h3> Job #{job.id}</h3>}
                     <Badge
                       className='Job-Badge'
                       status={this.jobBadgeMap[job.status]}
@@ -182,7 +199,11 @@ class ExperimentManagement extends React.Component<
                     />
                   </div>
                 }
-                description={<div>Starting Time: {job.startTime}</div>}
+                description={
+                  <div>
+                    <i> Starting Time: {moment(job.start_time).format('dddd, MMMM Do YYYY, h:mm:ss a')}</i>
+                  </div>
+                }
               />
             </List.Item>
           )}
@@ -192,16 +213,13 @@ class ExperimentManagement extends React.Component<
     });
   }
 
-  private async deleteJob(job: IJob) {
-    await deleteJob(job);
-  }
-
   private onDuplicateExperiment = (experiment: IExperiment) => {
     this.setState({
       newExperimentModalVisible: true,
       editExperiment: true,
       clickedExperiment: {
         name: `${experiment.name} - Copy`,
+        description: experiment.description || '',
         alpha: experiment.parameters.alpha,
         independence_test: experiment.parameters.independence_test,
         cores: experiment.parameters.cores,
@@ -210,8 +228,9 @@ class ExperimentManagement extends React.Component<
     });
   }
 
-  private onRunExperiment = (experiment: IExperiment) => {
-    // TODO
+  private async onRunExperiment(experiment: IExperiment) {
+    await runExperiment(experiment);
+    this.fetchExperiments();
   }
 
   private onExploreExperiment = (experiment: IExperiment) => {
