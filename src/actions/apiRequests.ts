@@ -137,24 +137,6 @@ export function getJobsForExperiment(
   });
 }
 
-export function deleteJob(job: IJob): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
-    axios
-      .delete(`${Endpoints.job}/${job.id}`)
-      .then((response: AxiosResponse) => {
-        resolve();
-        message.success('Successfully deleted Job');
-      })
-      .catch((error) => {
-        message.error('Failed to delete Job');
-        reject({
-          status: error.response.status,
-          message: error.message,
-        });
-      });
-  });
-}
-
 export function runExperiment(experiment: IExperiment): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     axios.post(`${Endpoints.experiment}/${experiment.id}/start`)

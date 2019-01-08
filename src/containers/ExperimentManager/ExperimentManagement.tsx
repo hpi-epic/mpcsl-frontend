@@ -12,7 +12,6 @@ import {
   getExperiments,
   deleteExperiment,
   getJobsForExperiment,
-  deleteJob,
   runExperiment,
   getObservationMatrices,
 } from '../../actions/apiRequests';
@@ -211,10 +210,6 @@ class ExperimentManagement extends React.Component<
       ),
       onOk() {},
     });
-  }
-
-  private async deleteJob(job: IJob) {
-    await deleteJob(job);
   }
 
   private onDuplicateExperiment = (experiment: IExperiment) => {
