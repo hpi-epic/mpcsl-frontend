@@ -140,7 +140,7 @@ export function getJobsForExperiment(
 export function deleteJob(job: IJob): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     axios
-      .delete(`${Endpoints.job}/${job.job_id}`)
+      .delete(`${Endpoints.job}/${job.id}`)
       .then((response: AxiosResponse) => {
         resolve();
         message.success('Successfully deleted Job');

@@ -67,7 +67,7 @@ export interface ICreateExperiment {
 }
 
 export interface IJob {
-  job_id: number;
+  id: number;
   experiment_id: number;
   start_time: string;
   status: string;

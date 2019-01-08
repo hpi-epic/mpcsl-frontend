@@ -173,7 +173,6 @@ class ExperimentManagement extends React.Component<
 
   private async onJobListView(experiment: IExperiment) {
     const jobs = await getJobsForExperiment(experiment);
-
     Modal.info({
       title: `Job List for Experiment: ${experiment.name}`,
       content: (
@@ -184,11 +183,8 @@ class ExperimentManagement extends React.Component<
           renderItem={(job: IJob) => (
             <List.Item
               actions={[
-                <Button key={1} type='primary' ghost={true}>
+                <Button key={1} type='primary' ghost={true} disabled={job.status === 'done' ? false : true}>
                   explore
-                </Button>,
-                <Button key={2} onClick={() => this.deleteJob(job)} type='danger' ghost={true}>
-                  delete
                 </Button>,
               ]}
             >
