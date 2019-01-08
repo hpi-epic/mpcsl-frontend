@@ -160,7 +160,7 @@ export function deleteJob(job: IJob): Promise<void> {
 }
 
 export function getResult(jobID: number): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
+  return new Promise<any>((resolve, reject) => {
     axios
       .get(`${Endpoints.result}/${jobID}`)
       .then((response: AxiosResponse) => {

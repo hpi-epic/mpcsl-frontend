@@ -2,15 +2,14 @@ import React from 'react';
 import { Layout } from 'antd';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
-import { Dispatch } from 'redux';
 
 import GraphRenderer from './GraphRenderer';
 import GraphNodeList from '../../components/GraphNodeList';
-import { IStoreState } from '../../types';
 import * as actions from '../../actions/graphExplorer';
 
 import './GraphSelection.css';
 import { IState } from '../../store';
+import { ThunkDispatch } from 'redux-thunk';
 
 interface IMatchParams {
   job_id: string;
@@ -49,7 +48,7 @@ export function mapStateToProps(state: IState) {
 }
 
 export function mapDispatchToProps(
-  dispatch: Dispatch<actions.GraphExplorerAction>,
+  dispatch: ThunkDispatch<IState, void, actions.GraphExplorerAction>,
 ) {
   return {
     fetchGraph: (jobID: number) => dispatch(actions.fetchGraph(jobID)),
