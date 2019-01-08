@@ -27,7 +27,7 @@ export const Endpoints = {
 
 export enum IndepenceTests {
   gaussCI = 'gaussCI',
-  diCI = 'dicCI',
+  disCI = 'disCI',
   binCI = 'binCI',
 }
 
