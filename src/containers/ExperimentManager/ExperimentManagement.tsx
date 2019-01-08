@@ -25,6 +25,7 @@ interface IStateExperimentManagement {
   clickedExperiment: IFormExperiment | undefined;
   editExperiment: boolean;
   jobListVisible: boolean;
+  noObservationMatricePresent: boolean;
   jobList: IJob[];
 }
 
@@ -41,10 +42,6 @@ class ExperimentManagement extends React.Component<
     cancelled: 'warning',
   };
 
-  private noObservationMatricePresent = true;
-
-  private observationMatrices = [];
-
   constructor(props: {}) {
     super(props);
 
@@ -54,6 +51,7 @@ class ExperimentManagement extends React.Component<
       experiments: [],
       clickedExperiment: undefined,
       jobListVisible: false,
+      noObservationMatricePresent: true,
       jobList: [],
     };
   }
@@ -102,7 +100,7 @@ class ExperimentManagement extends React.Component<
       <div className='Content'>
         <Row>
           <div className='Experiment-Controls'>
-            <Button type='primary' onClick={this.onNewExperiment} disabled={this.noObservationMatricePresent}>
+            <Button type='primary' onClick={this.onNewExperiment} disabled={this.state.noObservationMatricePresent}>
               + New Experiment
             </Button>
           </div>
@@ -128,7 +126,9 @@ class ExperimentManagement extends React.Component<
   private async fetchObservationMatrices() {
     const observationMatrices = await getObservationMatrices();
     if (observationMatrices.length > 0) {
-      this.noObservationMatricePresent = false;
+      this.setState({
+        noObservationMatricePresent: false,
+      });
     }
   }
 
