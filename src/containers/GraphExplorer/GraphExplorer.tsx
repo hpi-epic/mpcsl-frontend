@@ -20,7 +20,11 @@ export interface IGraphExplorerState {
   view: typeof Routes;
 }
 
-export interface IGraphExplorerProps extends RouteComponentProps {
+interface IMatchParams {
+  job_id: string;
+}
+
+export interface IGraphExplorerProps extends RouteComponentProps<IMatchParams> {
   onAddNode: (graph: CIGraph, node: string) => void;
   graph: CIGraph;
   nodes: string[];
@@ -83,11 +87,11 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
               component={GraphSelection}
             />
             <Route
-              path={Routes.graphExplorerAnnotate}
+              path={`${Routes.graphExplorerAnnotate}/:job_id`}
               component={GraphAnnotate}
             />
             <Route
-              path={Routes.graphExplorerCausalExploration}
+              path={`${Routes.graphExplorerCausalExploration}/:job_id`}
               component={GraphCausalExplorer}
             />
             <Redirect
@@ -102,18 +106,19 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
   }
 
   private onViewChange = (e: RadioChangeEvent) => {
-    this.changeView(e.target.value);
+    const jobID = window.location.href.match(new RegExp('\\/\\d*$'));
+    this.changeView(e.target.value, jobID ? jobID[0] : '');
   }
 
   private onHomeClick = () => {
-    this.changeView(Routes.experimentManager);
+    this.changeView(Routes.experimentManager, '');
   }
 
-  private changeView = (newView: string) => {
+  private changeView = (newView: string, jobID: string | null) => {
     this.setState({
       view: newView,
     });
-    this.props.history.push(newView);
+    this.props.history.push(newView + jobID);
   }
 }
 
