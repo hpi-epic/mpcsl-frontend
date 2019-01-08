@@ -20,22 +20,22 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
   const menu = (
     <Menu>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.onView}>
+        <Button className='Dropdown-Button' onClick={props.onView} key='1'>
           View Settings
         </Button>
       </Menu.Item>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.showAllJobs}>
+        <Button className='Dropdown-Button' onClick={props.showAllJobs} key='2'>
           View Jobs
         </Button>
       </Menu.Item>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.onDuplicate}>
+        <Button className='Dropdown-Button' onClick={props.onDuplicate} key='3'>
           Duplicate
         </Button>
       </Menu.Item>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.onDelete} type='danger' ghost={true}>
+        <Button className='Dropdown-Button' onClick={props.onDelete} type='danger' ghost={true} key='4'>
           Delete
         </Button>
       </Menu.Item>

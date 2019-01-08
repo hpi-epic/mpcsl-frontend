@@ -191,7 +191,7 @@ class ExperimentManagement extends React.Component<
               <List.Item.Meta
                 title={
                   <div>
-                    {' '}
+                    {<h3> Job #{job.id}</h3>}
                     <Badge
                       className='Job-Badge'
                       status={this.jobBadgeMap[job.status]}
