@@ -86,7 +86,7 @@ class ExperimentManagement extends React.Component<
               ? 'Experiment was not started yet.'
               : experiment.last_job!.status
           }
-          content='Experiment Description'
+          content={experiment.description || ''}
           onDelete={() => this.onDeleteExperiment(experiment)}
           onDuplicate={() => this.onDuplicateExperiment(experiment)}
           onExplore={() => this.onExploreExperiment(experiment)}
@@ -162,6 +162,7 @@ class ExperimentManagement extends React.Component<
       editExperiment: false,
       clickedExperiment: {
         name: experiment.name,
+        description: experiment.description || '',
         alpha: experiment.parameters.alpha,
         independence_test: experiment.parameters.independence_test,
         cores: experiment.parameters.cores,
@@ -218,6 +219,7 @@ class ExperimentManagement extends React.Component<
       editExperiment: true,
       clickedExperiment: {
         name: `${experiment.name} - Copy`,
+        description: experiment.description || '',
         alpha: experiment.parameters.alpha,
         independence_test: experiment.parameters.independence_test,
         cores: experiment.parameters.cores,
