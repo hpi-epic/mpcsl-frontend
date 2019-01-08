@@ -14,6 +14,7 @@ import {
   getJobsForExperiment,
   deleteJob,
   runExperiment,
+  getObservationMatrices,
 } from '../../actions/apiRequests';
 
 import ListElementExperiment from '../../components/ListElementExperiment/ListElementExperiment';
@@ -40,6 +41,10 @@ class ExperimentManagement extends React.Component<
     cancelled: 'warning',
   };
 
+  private noObservationMatricePresent = true;
+
+  private observationMatrices = [];
+
   constructor(props: {}) {
     super(props);
 
@@ -56,6 +61,7 @@ class ExperimentManagement extends React.Component<
   public componentDidMount = () => {
     this.mounted = true;
     this.fetchExperiments();
+    this.fetchObservationMatrices();
   }
 
   public componentWillUnmount = () => {
@@ -96,7 +102,7 @@ class ExperimentManagement extends React.Component<
       <div className='Content'>
         <Row>
           <div className='Experiment-Controls'>
-            <Button type='primary' onClick={this.onNewExperiment}>
+            <Button type='primary' onClick={this.onNewExperiment} disabled={this.noObservationMatricePresent}>
               + New Experiment
             </Button>
           </div>
@@ -116,6 +122,13 @@ class ExperimentManagement extends React.Component<
     const experiments = await getExperiments();
     if (this.mounted) {
       this.setState({ experiments });
+    }
+  }
+
+  private async fetchObservationMatrices() {
+    const observationMatrices = await getObservationMatrices();
+    if (observationMatrices.length > 0) {
+      this.noObservationMatricePresent = false;
     }
   }
 
