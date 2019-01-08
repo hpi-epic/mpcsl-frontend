@@ -30,6 +30,7 @@ interface IStateNewExperimentModal {
 
 export interface IFormExperiment {
   name: string;
+  description: string;
   alpha: number;
   independence_test: string;
   cores: number;
@@ -100,6 +101,15 @@ class NewExperimentModal extends React.Component<
       <Input disabled={this.props.editDisabled} placeholder='Experiment Name' />,
     );
 
+    const experimentDescEl = getFieldDecorator('description', {
+      initialValue: this.props.experiment
+        ? this.props.experiment.description
+        : undefined,
+      rules: [{ required: false, message: 'Enter a Experiment Description' }],
+    })(
+      <Input disabled={this.props.editDisabled} placeholder='Experiment Description' />,
+    );
+
     const observationMatrixEl = getFieldDecorator('observationMatrix_id', {
       initialValue: this.props.experiment
         ? this.props.experiment.observationMatrix_id
@@ -161,6 +171,9 @@ class NewExperimentModal extends React.Component<
           <Row gutter={16}>
             <Form.Item label='Experiment Name' hasFeedback={true}>
               {experimentNameEl}
+            </Form.Item>
+            <Form.Item label='Experiment Description' hasFeedback={true}>
+              {experimentDescEl}
             </Form.Item>
             <Form.Item label='Observation Matrix' hasFeedback={true}>
               {observationMatrixEl}
@@ -225,6 +238,7 @@ class NewExperimentModal extends React.Component<
     createExperiment({
       dataset_id: values.observationMatrix_id,
       name: values.name,
+      description: values.description,
       parameters: {
         alpha: values.alpha,
         independence_test: values.independence_test,
