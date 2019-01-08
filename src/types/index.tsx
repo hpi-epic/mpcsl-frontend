@@ -28,13 +28,13 @@ export const Endpoints = {
 export enum IndepenceTests {
   gaussCI = 'gaussCI',
   diCI = 'dicCI',
-  binCI = 'binCI'
-};
+  binCI = 'binCI',
+}
 
 export interface IObservationMatrix {
   id?: number;
-  load_query: string,
-  name: string
+  load_query: string;
+  name: string;
 }
 
 export interface IExperiment {
@@ -46,20 +46,20 @@ export interface IExperiment {
     alpha: number;
     independence_test: string;
     cores: number;
-  }
+  };
   last_job?: {
-    id: number,
-    experiment_id: number,
-    start_time: string,
-    pid: number,
-    status: string
-  }
+    id: number;
+    experiment_id: number;
+    start_time: string;
+    pid: number;
+    status: string;
+  };
 }
 
 export interface IJob {
   job_id: number;
-  experiment_id: number,
-  startTime: string,
-  status: string,
-  pid?: number
+  experiment_id: number;
+  startTime: string;
+  status: string;
+  pid?: number;
 }

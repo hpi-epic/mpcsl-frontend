@@ -3,26 +3,39 @@ import { Row, Button, Form, Modal, List, Badge } from 'antd';
 
 import './style.css';
 import NewExperimentModal, {
-  IPropsNewExperimentModal, IFormExperiment
+  IPropsNewExperimentModal,
+  IFormExperiment,
 } from './NewExperimentModal';
 import { IExperiment, IJob } from '../../types';
-import { getExperiments, deleteExperiment, getJobsForExperiment, deleteJob } from '../../actions/apiRequests';
+import {
+  getExperiments,
+  deleteExperiment,
+  getJobsForExperiment,
+  deleteJob,
+} from '../../actions/apiRequests';
 import ListElementExperiment from '../../components/ListElementExperiment/ListElementExperiment';
 
 interface IStateExperimentManagement {
   newExperimentModalVisible: boolean;
-  experiments: Array<IExperiment>;
+  experiments: IExperiment[];
   clickedExperiment: IFormExperiment | undefined;
   editExperiment: boolean;
   jobListVisible: boolean;
-  jobList: Array<IJob>;
+  jobList: IJob[];
 }
 
 class ExperimentManagement extends React.Component<
   {},
   IStateExperimentManagement
-  > {
-  mounted = false;
+> {
+  public mounted = false;
+
+  private jobBadgeMap: any = {
+    running: 'processing',
+    done: 'success',
+    error: 'error',
+    cancelled: 'warning',
+  };
 
   constructor(props: {}) {
     super(props);
@@ -37,17 +50,10 @@ class ExperimentManagement extends React.Component<
     };
   }
 
-  private jobBadgeMap: any = {
-    'running': 'processing',
-    'done': 'success',
-    'error': 'error',
-    'cancelled': 'warning'
-  }
-
   public componentDidMount = () => {
     this.mounted = true;
     this.fetchExperiments();
-  };
+  }
 
   public componentWillUnmount = () => {
     this.mounted = false;
@@ -55,15 +61,23 @@ class ExperimentManagement extends React.Component<
 
   public render() {
     const ExperimentModal = Form.create<IPropsNewExperimentModal>()(
-      NewExperimentModal
+      NewExperimentModal,
     );
     const ExperimentList = this.state.experiments.map(
       (experiment: IExperiment) => (
         <ListElementExperiment
           key={experiment.id}
           title={experiment.name}
-          status={experiment.last_job! === null ? 'default' : this.jobBadgeMap[experiment.last_job!.status]}
-          statusText={experiment.last_job! === null ? 'Experiment was not started yet.' : experiment.last_job!.status}
+          status={
+            experiment.last_job! === null
+              ? 'default'
+              : this.jobBadgeMap[experiment.last_job!.status]
+          }
+          statusText={
+            experiment.last_job! === null
+              ? 'Experiment was not started yet.'
+              : experiment.last_job!.status
+          }
           content='Experiment Description'
           onDelete={() => this.onDeleteExperiment(experiment)}
           onDuplicate={() => this.onDuplicateExperiment(experiment)}
@@ -72,21 +86,19 @@ class ExperimentManagement extends React.Component<
           onView={() => this.onExperimentClick(experiment)}
           showAllJobs={() => this.onJobListView(experiment)}
         />
-      )
+      ),
     );
 
     return (
-      <div className="Content">
+      <div className='Content'>
         <Row>
-          <div className="Experiment-Controls">
-            <Button type="primary" onClick={this.onNewExperiment}>
+          <div className='Experiment-Controls'>
+            <Button type='primary' onClick={this.onNewExperiment}>
               + New Experiment
             </Button>
           </div>
         </Row>
-        <Row>
-          {ExperimentList}
-        </Row>
+        <Row>{ExperimentList}</Row>
         <ExperimentModal
           visible={this.state.newExperimentModalVisible}
           onClose={this.onClose}
@@ -107,9 +119,9 @@ class ExperimentManagement extends React.Component<
   private onNewExperiment = () => {
     this.setState({
       newExperimentModalVisible: true,
-      editExperiment: true
+      editExperiment: true,
     });
-  };
+  }
 
   private onClose = () => {
     this.setState({
@@ -119,14 +131,13 @@ class ExperimentManagement extends React.Component<
       jobListVisible: false,
     });
     this.fetchExperiments();
-  };
+  }
 
   private onDeleteExperiment = (experiment: IExperiment) => {
-    deleteExperiment(experiment)
-      .then(() => {
-        this.fetchExperiments();;
-      });
-  };
+    deleteExperiment(experiment).then(() => {
+      this.fetchExperiments();
+    });
+  }
 
   private onExperimentClick = (experiment: IExperiment) => {
     this.setState({
@@ -138,8 +149,8 @@ class ExperimentManagement extends React.Component<
         independence_test: experiment.parameters.independence_test,
         cores: experiment.parameters.cores,
         observationMatrix_id: experiment.dataset_id,
-      }
-    })
+      },
+    });
   }
 
   private async onJobListView(experiment: IExperiment) {
@@ -149,20 +160,35 @@ class ExperimentManagement extends React.Component<
       title: `Job List for Experiment ${experiment.name}`,
       content: (
         <List
-          itemLayout="horizontal"
-          className="Job-List"
+          itemLayout='horizontal'
+          className='Job-List'
           dataSource={jobs}
           renderItem={(job: IJob) => (
-            <List.Item actions={[<Button onClick={() => this.deleteJob(job)}>delete</Button>]}>
+            <List.Item
+              actions={[
+                <Button key={1} onClick={() => this.deleteJob(job)}>
+                  delete
+                </Button>,
+              ]}
+            >
               <List.Item.Meta
-                title={<div> <Badge className='Job-Badge' status={this.jobBadgeMap[job.status]} text={job.status} /></div>}
+                title={
+                  <div>
+                    {' '}
+                    <Badge
+                      className='Job-Badge'
+                      status={this.jobBadgeMap[job.status]}
+                      text={job.status}
+                    />
+                  </div>
+                }
                 description={<div>Starting Time: {job.startTime}</div>}
               />
             </List.Item>
           )}
         />
       ),
-      onOk() { },
+      onOk() {},
     });
   }
 
@@ -180,18 +206,16 @@ class ExperimentManagement extends React.Component<
         independence_test: experiment.parameters.independence_test,
         cores: experiment.parameters.cores,
         observationMatrix_id: experiment.dataset_id,
-      }
-    })
+      },
+    });
   }
 
   private onRunExperiment = (experiment: IExperiment) => {
     // TODO
-    ;
   }
 
   private onExploreExperiment = (experiment: IExperiment) => {
     // TODO
-    ;
   }
 }
 
