@@ -2,7 +2,6 @@ import React from 'react';
 import * as d3 from 'd3';
 import { connect } from 'react-redux';
 import * as actions from '../../actions/graphExplorer';
-import { IStoreState } from '../../types';
 import { Dispatch } from 'redux';
 import { ID3Graph, ID3GraphNode, CIGraph } from '../../utils/graph';
 import { Button } from 'antd';

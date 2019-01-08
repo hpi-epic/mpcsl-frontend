@@ -27,13 +27,13 @@ export const fetchGraph: ActionCreator<
         graph: ciGraph,
       });
     } catch (e) {
+      // return fallback graph
       const ciGraph = new CIGraph();
       ciGraph.fromD3Graph(graph);
       return dispatch({
         type: constants.ADD_GRAPH as constants.ADD_GRAPH,
         graph: ciGraph,
       });
-      throw e;
     }
   };
 };

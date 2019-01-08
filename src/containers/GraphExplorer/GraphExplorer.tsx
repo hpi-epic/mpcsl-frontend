@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, IStoreState } from '../../types';
+import { Routes } from '../../types';
 import { Layout, Row, Col, Button, Select } from 'antd';
 import * as actions from '../../actions/graphExplorer';
 import { connect } from 'react-redux';
