@@ -62,6 +62,13 @@ export interface IExperiment {
     start_time: string;
     pid: number;
     status: string;
+    result?: {
+      id: number;
+      job_id: number;
+      start_time: string;
+      end_time: string;
+      meta_results: any;
+    }
   };
 }
 

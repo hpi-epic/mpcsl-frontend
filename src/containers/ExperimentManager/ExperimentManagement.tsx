@@ -20,6 +20,8 @@ import ListElementExperiment from '../../components/ListElementExperiment/ListEl
 
 import moment from 'moment';
 
+import { RouteComponentProps } from 'react-router-dom';
+
 interface IStateExperimentManagement {
   newExperimentModalVisible: boolean;
   experiments: IExperiment[];
@@ -31,7 +33,7 @@ interface IStateExperimentManagement {
 }
 
 class ExperimentManagement extends React.Component<
-  {},
+  RouteComponentProps,
   IStateExperimentManagement
 > {
   public mounted = false;
@@ -43,7 +45,7 @@ class ExperimentManagement extends React.Component<
     cancelled: 'warning',
   };
 
-  constructor(props: {}) {
+  constructor(props: RouteComponentProps) {
     super(props);
 
     this.state = {
@@ -89,7 +91,7 @@ class ExperimentManagement extends React.Component<
           content={experiment.description || ''}
           onDelete={() => this.onDeleteExperiment(experiment)}
           onDuplicate={() => this.onDuplicateExperiment(experiment)}
-          onExplore={() => this.onExploreExperiment(experiment)}
+          onExplore={() => this.onExploreExperiment(experiment.last_job!.result!.id)}
           onRunStart={() => this.onRunExperiment(experiment)}
           onView={() => this.onExperimentClick(experiment)}
           showAllJobs={() => this.onJobListView(experiment)}
@@ -175,6 +177,7 @@ class ExperimentManagement extends React.Component<
     const jobs = await getJobsForExperiment(experiment);
     Modal.info({
       title: `Job List for Experiment: ${experiment.name}`,
+      visible: this.state.jobListVisible,
       content: (
         <List
           itemLayout='horizontal'
@@ -183,7 +186,13 @@ class ExperimentManagement extends React.Component<
           renderItem={(job: IJob) => (
             <List.Item
               actions={[
-                <Button key={1} type='primary' ghost={true} disabled={job.status === 'done' ? false : true}>
+                <Button
+                  key={1}
+                  type='primary'
+                  ghost={true}
+                  // disabled={job.status === 'done' ? false : true}
+                  onClick={() => this.onExploreJob(job.id)}
+                >
                   explore
                 </Button>,
               ]}
@@ -233,8 +242,19 @@ class ExperimentManagement extends React.Component<
     this.fetchExperiments();
   }
 
-  private onExploreExperiment = (experiment: IExperiment) => {
-    // TODO
+  private onExploreExperiment = (resultId: number) => {
+    // this.setState({
+    //   jobListVisible: false,
+    // });
+    // console.log(this.state.jobListVisible);
+    this.props.history.push(`/graph-explorer/selection/${resultId}`);
+  }
+
+  private onExploreJob = (resultId: number) => {
+    this.setState({
+      jobListVisible: false,
+    });
+    this.onExploreExperiment(resultId);
   }
 }
 

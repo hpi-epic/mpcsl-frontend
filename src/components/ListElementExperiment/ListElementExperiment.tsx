@@ -61,7 +61,13 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
           <Dropdown overlay={menu} placement='bottomLeft'>
             <Button className='List-Buttons' icon='ellipsis' />
           </Dropdown>
-          <Button className='List-Buttons' onClick={props.onExplore} type='primary' ghost={true}>
+          <Button
+            className='List-Buttons'
+            onClick={props.onExplore}
+            type='primary'
+            ghost={true}
+            disabled={props.status === 'success' ? false : true}
+          >
             Explore
           </Button>
           <Button className='List-Buttons' onClick={props.onRunStart} type='primary' ghost={true}>
