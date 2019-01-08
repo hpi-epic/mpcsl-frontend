@@ -31,7 +31,7 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
     super(props);
 
     this.state = {
-      view: this.props.location.pathname,
+      view: this.props.location.pathname.replace(new RegExp('\\/\\d*$'), ''),
     };
   }
 
