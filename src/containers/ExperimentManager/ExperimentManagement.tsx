@@ -213,7 +213,6 @@ class ExperimentManagement extends React.Component<
     });
   }
 
-
   private async onRunExperiment(experiment: IExperiment) {
     await runExperiment(experiment);
     this.fetchExperiments();

@@ -162,12 +162,12 @@ export function runExperiment(experiment: IExperiment): Promise<void> {
         resolve();
         message.success('Successfully started Experiment Run!');
       })
-      .catch(error => {
-        message.error('Failed to start Experiment Run!')
+      .catch((error) => {
+        message.error('Failed to start Experiment Run!');
         reject({
           status: error.response.status,
           message: error.message,
-        })
-      })
-  })
+        });
+      });
+  });
 }
