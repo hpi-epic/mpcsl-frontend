@@ -3,11 +3,10 @@ import axios, { AxiosResponse } from 'axios';
 import {
   IObservationMatrix,
   IExperiment,
-  Endpoints,
   IJob,
-  IAPIResult,
   ICreateExperiment,
 } from '../types';
+import Endpoints from '../constants/api';
 
 export function getObservationMatrices(): Promise<IObservationMatrix[]> {
   return new Promise<IObservationMatrix[]>((resolve, reject) => {

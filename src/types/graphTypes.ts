@@ -1,4 +1,3 @@
-import { IndepenceTests } from './index';
 type NodeID = string | number;
 
 export interface ID3Graph {

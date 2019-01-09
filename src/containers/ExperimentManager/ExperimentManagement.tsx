@@ -101,7 +101,11 @@ class ExperimentManagement extends React.Component<
       <div className='Content'>
         <Row>
           <div className='Experiment-Controls'>
-            <Button type='primary' onClick={this.onNewExperiment} disabled={this.state.noObservationMatricePresent}>
+            <Button
+              type='primary'
+              onClick={this.onNewExperiment}
+              disabled={this.state.noObservationMatricePresent}
+            >
               + New Experiment
             </Button>
           </div>
@@ -183,7 +187,12 @@ class ExperimentManagement extends React.Component<
           renderItem={(job: IJob) => (
             <List.Item
               actions={[
-                <Button key={1} type='primary' ghost={true} disabled={job.status === 'done' ? false : true}>
+                <Button
+                  key={1}
+                  type='primary'
+                  ghost={true}
+                  disabled={job.status === 'done' ? false : true}
+                >
                   explore
                 </Button>,
               ]}
@@ -201,7 +210,13 @@ class ExperimentManagement extends React.Component<
                 }
                 description={
                   <div>
-                    <i> Starting Time: {moment(job.start_time).format('dddd, MMMM Do YYYY, h:mm:ss a')}</i>
+                    <i>
+                      {' '}
+                      Starting Time:{' '}
+                      {moment(job.start_time).format(
+                        'dddd, MMMM Do YYYY, h:mm:ss a',
+                      )}
+                    </i>
                   </div>
                 }
               />

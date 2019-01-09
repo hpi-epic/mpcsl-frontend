@@ -6,7 +6,7 @@ import './App.css';
 import GraphExplorer from './containers/GraphExplorer/GraphExplorer';
 import PipelineManager from './containers/PipelineManager';
 import RuntimeManager from './containers/RuntimeManager';
-import { Routes } from './types';
+import { Routes } from './constants/routes';
 
 class App extends Component {
   public render() {
