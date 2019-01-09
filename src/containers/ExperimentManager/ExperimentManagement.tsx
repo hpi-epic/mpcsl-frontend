@@ -94,7 +94,7 @@ class ExperimentManagement extends React.Component<
           onExplore={() => this.onExploreExperiment(experiment.last_job!.result!.id)}
           onRunStart={() => this.onRunExperiment(experiment)}
           onView={() => this.onExperimentClick(experiment)}
-          showAllJobs={() => this.onJobListView(experiment)}
+          showAllJobs={() => { this.setState({ jobListVisible: true }, () => this.onJobListView(experiment)); }}
         />
       ),
     );
@@ -178,6 +178,7 @@ class ExperimentManagement extends React.Component<
     Modal.info({
       title: `Job List for Experiment: ${experiment.name}`,
       visible: this.state.jobListVisible,
+      className: 'JobListModal',
       content: (
         <List
           itemLayout='horizontal'
@@ -191,7 +192,9 @@ class ExperimentManagement extends React.Component<
                   type='primary'
                   ghost={true}
                   // disabled={job.status === 'done' ? false : true}
-                  onClick={() => this.onExploreJob(job.id)}
+                  // onClick={() => { this.setState({jobListVisible: false}); 
+                  //   console.log(this.state.jobListVisible); this.onExploreJob(job.id); }}
+                  onClick={() => this.setModalVisibility(false)}
                 >
                   explore
                 </Button>,
@@ -246,15 +249,22 @@ class ExperimentManagement extends React.Component<
     // this.setState({
     //   jobListVisible: false,
     // });
-    // console.log(this.state.jobListVisible);
+    console.log(this.state.jobListVisible);
     this.props.history.push(`/graph-explorer/selection/${resultId}`);
   }
 
   private onExploreJob = (resultId: number) => {
-    this.setState({
-      jobListVisible: false,
-    });
+    // this.setState({
+    //   jobListVisible: false,
+    // });
+
     this.onExploreExperiment(resultId);
+  }
+
+  private setModalVisibility(jobListVisible: any) {
+    console.log(jobListVisible);
+    this.setState({ jobListVisible }, () => console.log(this.state.jobListVisible));
+    // console.log(this.state.jobListVisible);
   }
 }
 
