@@ -12,6 +12,7 @@ export enum Routes {
   manager = '/manager',
   observationMatricesManager = '/manager/observationMatrices',
   experimentManager = '/manager/experiments',
+  experimentDetails = '/manager/experimentDetails',
   runtimeManager = '/runtime',
   graphExplorer = '/graph-explorer',
   graphExplorerSelection = '/graph-explorer/selection',
@@ -68,7 +69,7 @@ export interface IExperiment {
       start_time: string;
       end_time: string;
       meta_results: any;
-    }
+    };
   };
 }
 

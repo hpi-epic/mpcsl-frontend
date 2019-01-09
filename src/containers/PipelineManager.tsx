@@ -7,6 +7,7 @@ import colors from '../constants/colors';
 import { Routes } from '../types';
 import ObservationMatricesManagement from './ObservationMatricesManager/ObservationMatricesManagement';
 import ExperimentsManager from './ExperimentsManager/ExperimentsManager';
+import ExperimentDetails from './ExperimentDetails/ExperimentDetails';
 
 const { Header, Content } = Layout;
 
@@ -47,6 +48,10 @@ class PipelineManager extends React.Component<
             exact={true}
             path={Routes.experimentManager}
             component={ExperimentsManager}
+          />
+          <Route
+            path={`${Routes.experimentDetails}/:experiment_id`}
+            component={ExperimentDetails}
           />
           <Route
             path={Routes.observationMatricesManager}
