@@ -44,7 +44,6 @@ class ExperimentDetails extends React.Component<
 
   public componentDidMount = () => {
     this.fetchExperiment(Number(this.props.match.params.experiment_id));
-    this.fetchJobs(this.state.experiment!);
   }
 
   public render() {
@@ -57,6 +56,7 @@ class ExperimentDetails extends React.Component<
           <List
             itemLayout='horizontal'
             className='Job-List'
+            header={<h3>Job List</h3>}
             dataSource={this.state.jobList}
             renderItem={(job: IJob) => (
               <List.Item
@@ -107,11 +107,13 @@ class ExperimentDetails extends React.Component<
   private async fetchJobs(experiment: IExperiment) {
     const jobList = await getJobsForExperiment(experiment);
     this.setState({ jobList });
+    console.log(jobList);
   }
 
   private async fetchExperiment(experimentId: number) {
     const experiment = await getExperiment(experimentId);
-    this.setState({ experiment });
+    this.setState({experiment});
+    this.fetchJobs(this.state.experiment!);
   }
 
   private onExploreExperiment = (resultId: number) => {

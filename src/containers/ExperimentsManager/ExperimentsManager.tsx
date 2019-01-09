@@ -70,7 +70,6 @@ class ExperimentsManager extends React.Component<
     const ExperimentModal = Form.create<IPropsNewExperimentModal>()(
       NewExperimentModal,
     );
-    console.log(this.state.experiments);
     const ExperimentList = this.state.experiments.map(
       (experiment: IExperiment) => (
         <ListElementExperiment
