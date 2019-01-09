@@ -1,4 +1,5 @@
 import { IAPIGraphNode, IAPIGraphEdges } from './graphTypes';
+import { IndepenceTests } from '../constants/experiment';
 
 export interface IStoreState {
   graph: any;
@@ -8,36 +9,6 @@ export interface IStoreState {
 }
 
 export type StoreState = IStoreState | undefined;
-
-export enum Routes {
-  manager = '/manager',
-  observationMatricesManager = '/manager/observationMatrices',
-  experimentManager = '/manager/experiments',
-  runtimeManager = '/runtime',
-  graphExplorer = '/graph-explorer',
-  graphExplorerSelection = '/graph-explorer/selection',
-  graphExplorerAnnotate = '/graph-explorer/annotate',
-  graphExplorerCausalExploration = '/graph-explorer/causal-exploration',
-}
-
-const baseApiUrl = '/api';
-
-export const Endpoints = {
-  observationMatrix: baseApiUrl + '/dataset',
-  observationMatrices: baseApiUrl + '/datasets',
-  experiment: baseApiUrl + '/experiment',
-  allExperiments: baseApiUrl + '/experiments',
-  job: baseApiUrl + '/job',
-  allJobs: '/jobs',
-  allResults: baseApiUrl + '/results',
-  result: baseApiUrl + '/result',
-};
-
-export enum IndepenceTests {
-  gaussCI = 'gaussCI',
-  disCI = 'disCI',
-  binCI = 'binCI',
-}
 
 export interface IObservationMatrix {
   id?: number;

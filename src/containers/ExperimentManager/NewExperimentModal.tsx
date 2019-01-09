@@ -10,11 +10,12 @@ import {
 } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import React from 'react';
-import { IObservationMatrix, IndepenceTests } from '../../types';
+import { IObservationMatrix } from '../../types';
 import {
   getObservationMatrices,
   createExperiment,
 } from '../../actions/apiRequests';
+import { IndepenceTests } from '../../constants/experiment';
 
 export interface IPropsNewExperimentModal extends FormComponentProps {
   visible: boolean;
@@ -107,7 +108,10 @@ class NewExperimentModal extends React.Component<
         : undefined,
       rules: [{ required: false, message: 'Enter a Experiment Description' }],
     })(
-      <Input disabled={this.props.editDisabled} placeholder='Experiment Description' />,
+      <Input
+        disabled={this.props.editDisabled}
+        placeholder='Experiment Description'
+      />,
     );
 
     const observationMatrixEl = getFieldDecorator('observationMatrix_id', {

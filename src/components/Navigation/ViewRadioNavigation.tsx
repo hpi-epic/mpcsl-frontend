@@ -1,7 +1,7 @@
 import { Radio } from 'antd';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import React from 'react';
-import { Routes } from '../../types';
+import { Routes } from '../../constants/routes';
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
