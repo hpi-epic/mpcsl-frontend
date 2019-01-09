@@ -5,10 +5,7 @@ import './style.css';
 
 import { IExperiment, IJob } from '../../types';
 
-import {
-  deleteExperiment,
-  getJobsForExperiment,
-} from '../../actions/apiRequests';
+import { getJobsForExperiment } from '../../actions/apiRequests';
 
 import moment from 'moment';
 
@@ -71,6 +68,7 @@ class ExperimentDetails extends React.Component<
 
     return (
     <div className='Content'>
+      <h2>Experiment Details for Experiment: {this.exampleExperiment.name}</h2>
       <List
         itemLayout='horizontal'
         className='Job-List'

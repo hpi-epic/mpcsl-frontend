@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Button, Form, Modal, List, Badge } from 'antd';
+import { Row, Button, Form} from 'antd';
 
 import './style.css';
 import NewExperimentModal, {
@@ -11,14 +11,11 @@ import { IExperiment, IJob } from '../../types';
 import {
   getExperiments,
   deleteExperiment,
-  getJobsForExperiment,
   runExperiment,
   getObservationMatrices,
 } from '../../actions/apiRequests';
 
 import ListElementExperiment from '../../components/ListElementExperiment/ListElementExperiment';
-
-import moment from 'moment';
 
 import { RouteComponentProps } from 'react-router-dom';
 
