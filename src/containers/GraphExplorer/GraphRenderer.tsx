@@ -4,14 +4,16 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions/graphExplorer';
 import { Dispatch } from 'redux';
 import { ID3Graph, ID3GraphNode, CIGraph } from '../../utils/graph';
-import { Button } from 'antd';
+import { Button, Layout, Row, Checkbox } from 'antd';
 import { IState } from '../../store';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 export interface IGraphRendererProps {
   resetLayout: () => void;
   selectedGraph: ID3Graph;
   onAddNode: (graph: CIGraph, node: string) => void;
   graph: CIGraph;
+  toggleFreezeLayout: () => void;
 }
 
 export interface IGraphRendererState {
@@ -100,7 +102,12 @@ class GraphRenderer extends React.Component<
     );
     return (
       <React.Fragment>
-        <Button onClick={this.onReLayout}>Re-Layout</Button>
+        <Row>
+          <Button onClick={this.onReLayout}>Re-Layout</Button>
+          <Checkbox defaultChecked={true} onChange={this.onFreezeChange}>
+            Freeze Layout
+          </Checkbox>
+        </Row>
         <svg
           ref={(svg) => (this.svg = d3.select(svg))}
           width={this.state.width}
@@ -111,11 +118,6 @@ class GraphRenderer extends React.Component<
         </svg>
       </React.Fragment>
     );
-  }
-
-  public onReLayout = () => {
-    this.props.resetLayout();
-    this.shouldComponentUpdate(this.props);
   }
 
   public enterGraphChanges = (props: IGraphRendererProps) => {
@@ -228,6 +230,15 @@ class GraphRenderer extends React.Component<
   private zoomActions = () => {
     this.graph.attr('transform', d3.event.transform);
   }
+
+  private onReLayout = () => {
+    this.props.resetLayout();
+    this.shouldComponentUpdate(this.props);
+  }
+
+  private onFreezeChange = (e: CheckboxChangeEvent) => {
+    this.props.toggleFreezeLayout();
+  }
 }
 
 export function mapStateToProps(state: IState) {
@@ -244,6 +255,7 @@ export function mapDispatchToProps(
     resetLayout: () => dispatch(actions.newLayout()),
     onAddNode: (graph: CIGraph, node: string) =>
       dispatch(actions.addNode(graph, node)),
+    toggleFreezeLayout: () => dispatch(actions.toggleFreezeLayout()),
   };
 }
 

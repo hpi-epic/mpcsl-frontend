@@ -1,5 +1,10 @@
 import { GraphExplorerAction } from '../actions/graphExplorer';
-import { ADD_GRAPH, ADD_NODE, NEW_GRAPH_LAYOUT } from '../constants/actions';
+import {
+  ADD_GRAPH,
+  ADD_NODE,
+  NEW_GRAPH_LAYOUT,
+  TOGGLE_FREEZE_LAYOUT,
+} from '../constants/actions';
 import { StoreState, IStoreState } from '../types';
 import { ID3GraphLink, ID3GraphNode } from '../types/graphTypes';
 import { addUniqueLinks, addUniqueNodes, resetLayout } from '../utils/graph';
@@ -10,6 +15,7 @@ const initialState = {
   graph: null,
   selectedGraph: { nodes: [] as ID3GraphNode[], links: [] as ID3GraphLink[] },
   nodes: [] as string[],
+  doFreeze: true,
 };
 
 function graphExplorer(
@@ -36,6 +42,7 @@ function graphExplorer(
               state.selectedGraph.nodes,
               action.nodeID,
               action.context.nodes,
+              state.doFreeze,
             ),
           },
           nodes: [...state.nodes, action.nodeID],
@@ -60,6 +67,11 @@ function graphExplorer(
       return {
         ...state,
         selectedGraph: resetLayout(state.selectedGraph),
+      };
+    case TOGGLE_FREEZE_LAYOUT:
+      return {
+        ...state,
+        doFreeze: !state.doFreeze,
       };
     default:
       return state;

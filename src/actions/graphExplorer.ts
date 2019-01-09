@@ -63,4 +63,18 @@ export function newLayout(): INewLayout {
   };
 }
 
-export type GraphExplorerAction = IFetchGraph | IAddNode | INewLayout;
+export interface IToggleFreezeLayout {
+  type: constants.TOGGLE_FREEZE_LAYOUT;
+}
+
+export function toggleFreezeLayout(): IToggleFreezeLayout {
+  return {
+    type: constants.TOGGLE_FREEZE_LAYOUT,
+  };
+}
+
+export type GraphExplorerAction =
+  | IFetchGraph
+  | IAddNode
+  | INewLayout
+  | IToggleFreezeLayout;
