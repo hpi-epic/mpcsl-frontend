@@ -160,15 +160,15 @@ export function runExperiment(experiment: IExperiment): Promise<void> {
   });
 }
 
-export function getResult(jobID: number): Promise<void> {
+export function getResult(resultID: number): Promise<void> {
   return new Promise<any>((resolve, reject) => {
     axios
-      .get(`${Endpoints.result}/${jobID}`)
+      .get(`${Endpoints.result}/${resultID}`)
       .then((response: AxiosResponse) => {
         resolve(response.data);
       })
       .catch((error) => {
-        message.error(`Failed to fetch Results for Job with ID: ${jobID}`);
+        message.error(`Failed to fetch Results for Job with ID: ${resultID}`);
         reject({
           status: error.response.status,
           message: error.message,

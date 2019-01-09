@@ -15,10 +15,10 @@ export interface IFetchGraph {
 
 export const fetchGraph: ActionCreator<
   ThunkAction<Promise<Action>, IState, void, Action>
-> = (jobID: number) => {
+> = (resultID: number) => {
   return async (dispatch: Dispatch<Action>): Promise<IFetchGraph> => {
     try {
-      const result = await getResult(jobID);
+      const result = await getResult(resultID);
       const ciGraph = new CIGraph();
       ciGraph.fromAPIGraph((result as unknown) as IAPIResult);
 
