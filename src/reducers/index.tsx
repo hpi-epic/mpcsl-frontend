@@ -5,7 +5,7 @@ import {
   NEW_GRAPH_LAYOUT,
   TOGGLE_FREEZE_LAYOUT,
 } from '../constants/actions';
-import { StoreState, IStoreState } from '../types';
+import { StoreState } from '../types';
 import { ID3GraphLink, ID3GraphNode } from '../types/graphTypes';
 import { addUniqueLinks, addUniqueNodes, resetLayout } from '../utils/graph';
 import { combineReducers } from 'redux';
