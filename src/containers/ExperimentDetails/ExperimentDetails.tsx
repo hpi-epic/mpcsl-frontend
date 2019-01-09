@@ -5,7 +5,7 @@ import './style.css';
 
 import { IExperiment, IJob } from '../../types';
 
-import { getJobsForExperiment } from '../../actions/apiRequests';
+import { getJobsForExperiment, getExperiment } from '../../actions/apiRequests';
 
 import moment from 'moment';
 
@@ -13,32 +13,14 @@ import { RouteComponentProps } from 'react-router-dom';
 
 interface IStateJobsManagement {
   jobList: IJob[];
+  experiment: IExperiment | undefined;
 }
 
 class ExperimentDetails extends React.Component<
   RouteComponentProps,
   IStateJobsManagement
   > {
-  public mounted = false;
-  public exampleExperiment = {
-    dataset: 2,
-    dataset_id: 2,
-    id: 1,
-    last_job: {
-      experiment: 1,
-      experiment_id: 1,
-      id: 2,
-      pid: 272,
-      start_time: '2019-01-08T09:57:07.134169+00:00',
-      status: 'cancelled',
-    },
-    name: 'Theresa Zobel',
-    parameters: {
-      alpha: 1,
-      cores: 1,
-      independence_test: 'gaussCI',
-    },
-  }; // TODO: Get Experiment ID from URL
+  public exampleExperimentId = 2;
 
   private jobBadgeMap: any = {
     running: 'processing',
@@ -52,23 +34,20 @@ class ExperimentDetails extends React.Component<
 
     this.state = {
       jobList: [],
+      experiment: undefined,
     };
   }
 
   public componentDidMount = () => {
-    this.mounted = true;
-    this.fetchJobs(this.exampleExperiment);
-  }
-
-  public componentWillUnmount = () => {
-    this.mounted = false;
+    this.fetchExperiment(this.exampleExperimentId);
+    this.fetchJobs(this.state.experiment!);
   }
 
   public render() {
 
     return (
     <div className='Content'>
-      <h2>Experiment Details for Experiment: {this.exampleExperiment.name}</h2>
+      <h2>Experiment Details for Experiment: {this.state.experiment!.name}</h2>
       <List
         itemLayout='horizontal'
         className='Job-List'
@@ -120,6 +99,11 @@ class ExperimentDetails extends React.Component<
   private async fetchJobs(experiment: IExperiment) {
     const jobList = await getJobsForExperiment(experiment);
     this.setState({ jobList });
+  }
+
+  private async fetchExperiment(experimentId: number) {
+    const experiment = await getExperiment(experimentId);
+    this.setState({ experiment });
   }
 
   private onExploreExperiment = (resultId: number) => {
