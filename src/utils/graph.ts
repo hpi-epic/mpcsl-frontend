@@ -92,12 +92,15 @@ export function addUniqueNodes(
   nodes: ID3GraphNode[],
   addToFocusNodeID: string,
   addNodes: ID3GraphNode[],
+  doFreeze: boolean,
 ): ID3GraphNode[] {
   let isAlreadyIn = false;
 
   nodes.forEach((existingNode) => {
-    existingNode.fx = existingNode.x;
-    existingNode.fy = existingNode.y;
+    if (doFreeze) {
+      existingNode.fx = existingNode.x;
+      existingNode.fy = existingNode.y;
+    }
 
     if (existingNode.id === addToFocusNodeID) {
       existingNode.isContext = false;

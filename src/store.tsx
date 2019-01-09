@@ -1,10 +1,4 @@
-import {
-  createStore,
-  applyMiddleware,
-  combineReducers,
-  compose,
-  Store,
-} from 'redux';
+import { createStore, applyMiddleware, compose, Store } from 'redux';
 import graphExplorer from './reducers';
 import thunkMiddleware from 'redux-thunk';
 import { StoreState } from './types/index';

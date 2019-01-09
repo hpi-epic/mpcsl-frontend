@@ -15,10 +15,10 @@ export interface IFetchGraph {
 
 export const fetchGraph: ActionCreator<
   ThunkAction<Promise<Action>, IState, void, Action>
-> = (jobID: number) => {
+> = (resultID: number) => {
   return async (dispatch: Dispatch<Action>): Promise<IFetchGraph> => {
     try {
-      const result = await getResult(jobID);
+      const result = await getResult(resultID);
       const ciGraph = new CIGraph();
       ciGraph.fromAPIGraph((result as unknown) as IAPIResult);
 
@@ -63,4 +63,18 @@ export function newLayout(): INewLayout {
   };
 }
 
-export type GraphExplorerAction = IFetchGraph | IAddNode | INewLayout;
+export interface IToggleFreezeLayout {
+  type: constants.TOGGLE_FREEZE_LAYOUT;
+}
+
+export function toggleFreezeLayout(): IToggleFreezeLayout {
+  return {
+    type: constants.TOGGLE_FREEZE_LAYOUT,
+  };
+}
+
+export type GraphExplorerAction =
+  | IFetchGraph
+  | IAddNode
+  | INewLayout
+  | IToggleFreezeLayout;
