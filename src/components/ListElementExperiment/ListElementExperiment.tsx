@@ -44,7 +44,7 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
 
   const cardTitle = (
     <div>
-      <h2 className='Card-Title'>{props.title}</h2>
+      <h2 id='clickable-cardtitle' className='Card-Title'>{props.title}</h2>
       <Badge
         className='Card-Badge'
         status={props.status}

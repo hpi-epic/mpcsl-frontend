@@ -1,15 +1,10 @@
 import React from 'react';
 import { Button, List, Badge } from 'antd';
-
-import './style.css';
-
 import { IExperiment, IJob } from '../../types';
-
 import { getJobsForExperiment, getExperiment } from '../../actions/apiRequests';
-
 import moment from 'moment';
-
 import { RouteComponentProps } from 'react-router-dom';
+import './style.css';
 
 interface IStateJobsManagement {
   jobList: IJob[];
@@ -25,7 +20,6 @@ class ExperimentDetails extends React.Component<
   IStateJobsManagement
 > {
   public exampleExperimentId = 2;
-
   private jobBadgeMap: any = {
     running: 'processing',
     done: 'success',
@@ -66,6 +60,7 @@ class ExperimentDetails extends React.Component<
                     type='primary'
                     ghost={true}
                     onClick={() => this.onExploreExperiment(job.result!.id)}
+                    disabled={job.status === 'done' ? false : true}
                   >
                     explore
                   </Button>,
@@ -107,7 +102,6 @@ class ExperimentDetails extends React.Component<
   private async fetchJobs(experiment: IExperiment) {
     const jobList = await getJobsForExperiment(experiment);
     this.setState({ jobList });
-    console.log(jobList);
   }
 
   private async fetchExperiment(experimentId: number) {
