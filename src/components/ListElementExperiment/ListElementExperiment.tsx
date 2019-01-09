@@ -13,7 +13,7 @@ interface IPropsListElementExperiment {
   onRunStart: (e: React.MouseEvent<HTMLElement>) => void;
   onExplore: (e: React.MouseEvent<HTMLElement>) => void;
   onView: (e: React.MouseEvent<HTMLElement>) => void;
-  showAllJobs: (e: React.MouseEvent<HTMLElement>) => void;
+  onShowDetails: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 function ListElementExperiment(props: IPropsListElementExperiment) {
@@ -22,11 +22,6 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
       <Menu.Item>
         <Button className='Dropdown-Button' onClick={props.onView} key='1'>
           View Settings
-        </Button>
-      </Menu.Item>
-      <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.showAllJobs} key='2'>
-          View Jobs
         </Button>
       </Menu.Item>
       <Menu.Item>
@@ -44,11 +39,11 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
 
   const cardTitle = (
     <div>
-      <h2 id='clickable-cardtitle' className='Card-Title'>{props.title}</h2>
+      <button className='Card-Title' onClick={props.onShowDetails}>{props.title}</button>
       <Badge
         className='Card-Badge'
-        status={props.status}
         text={props.statusText}
+        status={props.status}
       />
     </div>
   );

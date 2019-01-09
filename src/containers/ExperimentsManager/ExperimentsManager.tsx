@@ -93,11 +93,7 @@ class ExperimentsManager extends React.Component<
           }
           onRunStart={() => this.onRunExperiment(experiment)}
           onView={() => this.onExperimentClick(experiment)}
-          showAllJobs={() => {
-            this.setState({ jobListVisible: true }, () =>
-              this.onJobListView(experiment),
-            );
-          }}
+          onShowDetails={() => this.showDetails(experiment.id!)}
         />
       ),
     );
@@ -180,8 +176,8 @@ class ExperimentsManager extends React.Component<
     });
   }
 
-  private async onJobListView(experiment: IExperiment) {
-    // redirect to experiment detail view
+  private showDetails = (experimentId: number) => {
+    this.props.history.push(`/manager/experimentdetails/${experimentId}`);
   }
 
   private onDuplicateExperiment = (experiment: IExperiment) => {
