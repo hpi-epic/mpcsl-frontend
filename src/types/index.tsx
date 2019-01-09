@@ -4,6 +4,7 @@ export interface IStoreState {
   graph: any;
   selectedGraph: any;
   nodes: string[];
+  doFreeze: boolean;
 }
 
 export type StoreState = IStoreState | undefined;
