@@ -89,6 +89,13 @@ export interface IJob {
   start_time: string;
   status: string;
   pid?: number;
+  result?: {
+    id: number;
+    job_id: number;
+    start_time: string;
+    end_time: string,
+    meta_results: any;
+  };
 }
 
 export interface IAPIMetaResults {

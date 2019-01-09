@@ -73,6 +73,7 @@ class ExperimentsManager extends React.Component<
     const ExperimentModal = Form.create<IPropsNewExperimentModal>()(
       NewExperimentModal,
     );
+    console.log(this.state.experiments);
     const ExperimentList = this.state.experiments.map(
       (experiment: IExperiment) => (
         <ListElementExperiment
@@ -184,61 +185,7 @@ class ExperimentsManager extends React.Component<
   }
 
   private async onJobListView(experiment: IExperiment) {
-    const jobs = await getJobsForExperiment(experiment);
-    Modal.info({
-      title: `Job List for Experiment: ${experiment.name}`,
-      visible: this.state.jobListVisible,
-      className: 'JobListModal',
-      content: (
-        <List
-          itemLayout='horizontal'
-          className='Job-List'
-          dataSource={jobs}
-          renderItem={(job: IJob) => (
-            <List.Item
-              actions={[
-                <Button
-                  key={1}
-                  type='primary'
-                  ghost={true}
-                  // disabled={job.status === 'done' ? false : true}
-                  // onClick={() => { this.setState({jobListVisible: false});
-                  //   console.log(this.state.jobListVisible); this.onExploreJob(job.id); }}
-                  onClick={() => this.setModalVisibility(false)}
-                >
-                  explore
-                </Button>,
-              ]}
-            >
-              <List.Item.Meta
-                title={
-                  <div>
-                    {<h3> Job #{job.id}</h3>}
-                    <Badge
-                      className='Job-Badge'
-                      status={this.jobBadgeMap[job.status]}
-                      text={job.status}
-                    />
-                  </div>
-                }
-                description={
-                  <div>
-                    <i>
-                      {' '}
-                      Starting Time:{' '}
-                      {moment(job.start_time).format(
-                        'dddd, MMMM Do YYYY, h:mm:ss a',
-                      )}
-                    </i>
-                  </div>
-                }
-              />
-            </List.Item>
-          )}
-        />
-      ),
-      onOk() {},
-    });
+    // redirect to experiment detail view
   }
 
   private onDuplicateExperiment = (experiment: IExperiment) => {
@@ -262,27 +209,7 @@ class ExperimentsManager extends React.Component<
   }
 
   private onExploreExperiment = (resultId: number) => {
-    // this.setState({
-    //   jobListVisible: false,
-    // });
-    console.log(this.state.jobListVisible);
     this.props.history.push(`/graph-explorer/selection/${resultId}`);
-  }
-
-  private onExploreJob = (resultId: number) => {
-    // this.setState({
-    //   jobListVisible: false,
-    // });
-
-    this.onExploreExperiment(resultId);
-  }
-
-  private setModalVisibility(jobListVisible: any) {
-    console.log(jobListVisible);
-    this.setState({ jobListVisible }, () =>
-      console.log(this.state.jobListVisible),
-    );
-    // console.log(this.state.jobListVisible);
   }
 }
 
