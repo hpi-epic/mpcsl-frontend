@@ -21,10 +21,10 @@ interface IStateJobsManagement {
   jobList: IJob[];
 }
 
-class ExperimentManagement extends React.Component<
+class ExperimentDetails extends React.Component<
   RouteComponentProps,
   IStateJobsManagement
-  > {
+> {
   public mounted = false;
 
   constructor(props: RouteComponentProps) {
@@ -71,12 +71,7 @@ class ExperimentManagement extends React.Component<
     //   ),
     // );
 
-    return (
-      <div className='Content'>
-
-        {/* <Row>{ExperimentList}</Row> */}
-      </div>
-    );
+    return <div className='Content'>{/* <Row>{ExperimentList}</Row> */}</div>;
   }
 
   private async fetchJobs() {
@@ -85,7 +80,6 @@ class ExperimentManagement extends React.Component<
       // this.setState({ experiments });
     }
   }
-
 }
 
-export default ExperimentManagement;
+export default ExperimentDetails;

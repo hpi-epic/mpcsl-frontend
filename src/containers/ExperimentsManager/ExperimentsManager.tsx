@@ -32,7 +32,7 @@ interface IStateExperimentManagement {
   jobList: IJob[];
 }
 
-class ExperimentManagement extends React.Component<
+class ExperimentsManager extends React.Component<
   RouteComponentProps,
   IStateExperimentManagement
 > {
@@ -91,10 +91,16 @@ class ExperimentManagement extends React.Component<
           content={experiment.description || ''}
           onDelete={() => this.onDeleteExperiment(experiment)}
           onDuplicate={() => this.onDuplicateExperiment(experiment)}
-          onExplore={() => this.onExploreExperiment(experiment.last_job!.result!.id)}
+          onExplore={() =>
+            this.onExploreExperiment(experiment.last_job!.result!.id)
+          }
           onRunStart={() => this.onRunExperiment(experiment)}
           onView={() => this.onExperimentClick(experiment)}
-          showAllJobs={() => { this.setState({ jobListVisible: true }, () => this.onJobListView(experiment)); }}
+          showAllJobs={() => {
+            this.setState({ jobListVisible: true }, () =>
+              this.onJobListView(experiment),
+            );
+          }}
         />
       ),
     );
@@ -103,7 +109,11 @@ class ExperimentManagement extends React.Component<
       <div className='Content'>
         <Row>
           <div className='Experiment-Controls'>
-            <Button type='primary' onClick={this.onNewExperiment} disabled={this.state.noObservationMatricePresent}>
+            <Button
+              type='primary'
+              onClick={this.onNewExperiment}
+              disabled={this.state.noObservationMatricePresent}
+            >
               + New Experiment
             </Button>
           </div>
@@ -192,7 +202,7 @@ class ExperimentManagement extends React.Component<
                   type='primary'
                   ghost={true}
                   // disabled={job.status === 'done' ? false : true}
-                  // onClick={() => { this.setState({jobListVisible: false}); 
+                  // onClick={() => { this.setState({jobListVisible: false});
                   //   console.log(this.state.jobListVisible); this.onExploreJob(job.id); }}
                   onClick={() => this.setModalVisibility(false)}
                 >
@@ -213,7 +223,13 @@ class ExperimentManagement extends React.Component<
                 }
                 description={
                   <div>
-                    <i> Starting Time: {moment(job.start_time).format('dddd, MMMM Do YYYY, h:mm:ss a')}</i>
+                    <i>
+                      {' '}
+                      Starting Time:{' '}
+                      {moment(job.start_time).format(
+                        'dddd, MMMM Do YYYY, h:mm:ss a',
+                      )}
+                    </i>
                   </div>
                 }
               />
@@ -263,9 +279,11 @@ class ExperimentManagement extends React.Component<
 
   private setModalVisibility(jobListVisible: any) {
     console.log(jobListVisible);
-    this.setState({ jobListVisible }, () => console.log(this.state.jobListVisible));
+    this.setState({ jobListVisible }, () =>
+      console.log(this.state.jobListVisible),
+    );
     // console.log(this.state.jobListVisible);
   }
 }
 
-export default ExperimentManagement;
+export default ExperimentsManager;
