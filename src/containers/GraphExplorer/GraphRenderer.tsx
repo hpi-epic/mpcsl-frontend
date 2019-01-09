@@ -4,9 +4,11 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions/graphExplorer';
 import { Dispatch } from 'redux';
 import { ID3Graph, ID3GraphNode, CIGraph } from '../../utils/graph';
-import { Button, Layout, Row, Checkbox } from 'antd';
+import { Button, Row, Checkbox, Col } from 'antd';
 import { IState } from '../../store';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+
+import './GraphRenderer.css';
 
 export interface IGraphRendererProps {
   resetLayout: () => void;
@@ -101,12 +103,16 @@ class GraphRenderer extends React.Component<
       </defs>
     );
     return (
-      <React.Fragment>
-        <Row>
-          <Button onClick={this.onReLayout}>Re-Layout</Button>
-          <Checkbox defaultChecked={true} onChange={this.onFreezeChange}>
-            Freeze Layout
-          </Checkbox>
+      <div>
+        <Row type='flex' justify='start'>
+          <Col span={2}>
+            <Button onClick={this.onReLayout}>Re-Layout</Button>
+          </Col>
+          <Col span={4} className='GraphRenderer-Menu'>
+            <Checkbox defaultChecked={true} onChange={this.onFreezeChange}>
+              Freeze Layout
+            </Checkbox>
+          </Col>
         </Row>
         <svg
           ref={(svg) => (this.svg = d3.select(svg))}
@@ -116,7 +122,7 @@ class GraphRenderer extends React.Component<
           {defs}
           <g ref={(graph) => (this.graph = d3.select(graph))} />
         </svg>
-      </React.Fragment>
+      </div>
     );
   }
 
