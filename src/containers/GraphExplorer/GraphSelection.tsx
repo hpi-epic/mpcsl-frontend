@@ -12,11 +12,11 @@ import { IState } from '../../store';
 import { ThunkDispatch } from 'redux-thunk';
 
 interface IMatchParams {
-  job_id: string;
+  result_id: string;
 }
 
 interface IGraphSelectionProps extends RouteComponentProps<IMatchParams> {
-  fetchGraph: (jobID: number) => void;
+  fetchGraph: (resultID: number) => void;
   nodes: string[];
 }
 
@@ -26,7 +26,7 @@ class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
   }
 
   public componentDidMount() {
-    this.props.fetchGraph(Number(this.props.match.params.job_id));
+    this.props.fetchGraph(Number(this.props.match.params.result_id));
   }
 
   public render() {
@@ -51,7 +51,7 @@ export function mapDispatchToProps(
   dispatch: ThunkDispatch<IState, void, actions.GraphExplorerAction>,
 ) {
   return {
-    fetchGraph: (jobID: number) => dispatch(actions.fetchGraph(jobID)),
+    fetchGraph: (resultID: number) => dispatch(actions.fetchGraph(resultID)),
   };
 }
 

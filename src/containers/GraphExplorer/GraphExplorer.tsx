@@ -21,7 +21,7 @@ export interface IGraphExplorerState {
 }
 
 interface IMatchParams {
-  job_id: string;
+  result_id: string;
 }
 
 export interface IGraphExplorerProps extends RouteComponentProps<IMatchParams> {
@@ -83,15 +83,15 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
         <Content style={{ background: colors.contentBackground }}>
           <Switch>
             <Route
-              path={`${Routes.graphExplorerSelection}/:job_id`}
+              path={`${Routes.graphExplorerSelection}/:result_id`}
               component={GraphSelection}
             />
             <Route
-              path={`${Routes.graphExplorerAnnotate}/:job_id`}
+              path={`${Routes.graphExplorerAnnotate}/:result_id`}
               component={GraphAnnotate}
             />
             <Route
-              path={`${Routes.graphExplorerCausalExploration}/:job_id`}
+              path={`${Routes.graphExplorerCausalExploration}/:result_id`}
               component={GraphCausalExplorer}
             />
             <Redirect
@@ -106,19 +106,19 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
   }
 
   private onViewChange = (e: RadioChangeEvent) => {
-    const jobID = window.location.href.match(new RegExp('\\/\\d*$'));
-    this.changeView(e.target.value, jobID ? jobID[0] : '');
+    const resultID = window.location.href.match(new RegExp('\\/\\d*$'));
+    this.changeView(e.target.value, resultID ? resultID[0] : '');
   }
 
   private onHomeClick = () => {
     this.changeView(Routes.experimentManager, '');
   }
 
-  private changeView = (newView: string, jobID: string | null) => {
+  private changeView = (newView: string, resultID: string | null) => {
     this.setState({
       view: newView,
     });
-    this.props.history.push(newView + jobID);
+    this.props.history.push(newView + resultID);
   }
 }
 
