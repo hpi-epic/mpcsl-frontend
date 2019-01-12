@@ -57,7 +57,7 @@ export interface IJob {
 }
 
 export interface IAPIMetaResults {
-  alhpha: number;
+  alpha: number;
   api_host: string;
   cores: number;
   dataset_id: string;
@@ -73,16 +73,4 @@ export interface IAPIResult {
   edges: IAPIGraphEdges[];
   meta_results: IAPIMetaResults;
   sepset: any[];
-}
-
-export interface IAPIMetaResults {
-  alhpha: number;
-  api_host: string;
-  cores: number;
-  dataset_id: string;
-  fixed_edges: 'FALSE' | 'TRUE';
-  fixed_graps: 'FALSE' | 'TRUE';
-  help: boolean;
-  independence_test: IndepenceTests;
-  job_id: string;
 }
