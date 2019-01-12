@@ -3,12 +3,14 @@ import * as d3 from 'd3';
 import { connect } from 'react-redux';
 import * as actions from '../../actions/graphExplorer';
 import { Dispatch } from 'redux';
-import { ID3Graph, ID3GraphNode, CIGraph } from '../../utils/graph';
+import { CIGraph } from '../../utils/graph';
+
 import { Button, Row, Checkbox, Col } from 'antd';
 import { IState } from '../../store';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 import './GraphRenderer.css';
+import { ID3Graph, ID3GraphNode } from '../../types/graphTypes';
 
 export interface IGraphRendererProps {
   resetLayout: () => void;
