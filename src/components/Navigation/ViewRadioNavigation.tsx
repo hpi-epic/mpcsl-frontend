@@ -15,7 +15,12 @@ function ViewRadioNavigation(props: IPropsRadioNavigation) {
   return (
     <RadioGroup
       buttonStyle='solid'
-      value={props.value}
+      value={
+        props.value.replace(new RegExp('\\/\\d*$'), '') ===
+        Routes.experimentDetails
+          ? Routes.experimentManager
+          : props.value
+      }
       onChange={props.onChange}
       size='small'
     >
