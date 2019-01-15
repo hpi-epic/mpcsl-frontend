@@ -6,7 +6,8 @@ import ViewRadioNavigation from '../components/Navigation/ViewRadioNavigation';
 import colors from '../constants/colors';
 import { Routes } from '../constants/routes';
 import ObservationMatricesManagement from './ObservationMatricesManager/ObservationMatricesManagement';
-import ExperimentManagement from './ExperimentManager/ExperimentManagement';
+import ExperimentManagement from './ExperimentsManager/ExperimentsManager';
+import ExperimentDetails from './ExperimentDetails/ExperimentDetails';
 
 const { Header, Content } = Layout;
 
@@ -47,6 +48,10 @@ class PipelineManager extends React.Component<
             exact={true}
             path={Routes.experimentManager}
             component={ExperimentManagement}
+          />
+          <Route
+            path={`${Routes.experimentDetails}/:experiment_id`}
+            component={ExperimentDetails}
           />
           <Route
             path={Routes.observationMatricesManager}

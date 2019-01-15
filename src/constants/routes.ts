@@ -7,4 +7,5 @@ export enum Routes {
   graphExplorerSelection = '/graph-explorer/selection',
   graphExplorerAnnotate = '/graph-explorer/annotate',
   graphExplorerCausalExploration = '/graph-explorer/causal-exploration',
+  experimentDetails = '/manager/experimentDetails',
 }

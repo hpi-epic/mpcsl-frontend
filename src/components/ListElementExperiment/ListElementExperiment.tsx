@@ -13,20 +13,20 @@ interface IPropsListElementExperiment {
   onRunStart: (e: React.MouseEvent<HTMLElement>) => void;
   onExplore: (e: React.MouseEvent<HTMLElement>) => void;
   onView: (e: React.MouseEvent<HTMLElement>) => void;
-  showAllJobs: (e: React.MouseEvent<HTMLElement>) => void;
+  onShowDetails: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 function ListElementExperiment(props: IPropsListElementExperiment) {
   const menu = (
     <Menu>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.onView} key='1'>
-          View Settings
+        <Button className='Dropdown-Button' onClick={props.onShowDetails} key='1'>
+          View Jobs
         </Button>
       </Menu.Item>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.showAllJobs} key='2'>
-          View Jobs
+        <Button className='Dropdown-Button' onClick={props.onView} key='1'>
+          View Settings
         </Button>
       </Menu.Item>
       <Menu.Item>
@@ -44,11 +44,11 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
 
   const cardTitle = (
     <div>
-      <h2 className='Card-Title'>{props.title}</h2>
+      <button className='Card-Title' onClick={props.onShowDetails}>{props.title}</button>
       <Badge
         className='Card-Badge'
-        status={props.status}
         text={props.statusText}
+        status={props.status}
       />
     </div>
   );
@@ -61,7 +61,13 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
           <Dropdown overlay={menu} placement='bottomLeft'>
             <Button className='List-Buttons' icon='ellipsis' />
           </Dropdown>
-          <Button className='List-Buttons' onClick={props.onExplore} type='primary' ghost={true}>
+          <Button
+            className='List-Buttons'
+            onClick={props.onExplore}
+            type='primary'
+            ghost={true}
+            disabled={props.status === 'success' ? false : true}
+          >
             Explore
           </Button>
           <Button className='List-Buttons' onClick={props.onRunStart} type='primary' ghost={true}>

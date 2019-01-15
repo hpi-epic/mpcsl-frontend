@@ -82,6 +82,23 @@ export function getExperiments(): Promise<IExperiment[]> {
   });
 }
 
+export function getExperiment(experimentId: number): Promise<IExperiment> {
+  return new Promise<IExperiment>((resolve, reject) => {
+    axios
+      .get(`${Endpoints.experiment}/${experimentId}`)
+      .then((response: AxiosResponse) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        message.error(`Failed to fetch Experiment #${experimentId}`);
+        reject({
+          status: error.response.status,
+          message: error.message,
+        });
+      });
+  });
+}
+
 export function deleteExperiment(experiment: IExperiment): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     axios

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Button, Form, Modal, List, Badge } from 'antd';
+import { Row, Button, Form} from 'antd';
 
 import './style.css';
 import NewExperimentModal, {
@@ -11,14 +11,13 @@ import { IExperiment, IJob } from '../../types';
 import {
   getExperiments,
   deleteExperiment,
-  getJobsForExperiment,
   runExperiment,
   getObservationMatrices,
 } from '../../actions/apiRequests';
 
 import ListElementExperiment from '../../components/ListElementExperiment/ListElementExperiment';
 
-import moment from 'moment';
+import { RouteComponentProps } from 'react-router-dom';
 
 interface IStateExperimentManagement {
   newExperimentModalVisible: boolean;
@@ -30,8 +29,8 @@ interface IStateExperimentManagement {
   jobList: IJob[];
 }
 
-class ExperimentManagement extends React.Component<
-  {},
+class ExperimentsManager extends React.Component<
+  RouteComponentProps,
   IStateExperimentManagement
 > {
   public mounted = false;
@@ -43,7 +42,7 @@ class ExperimentManagement extends React.Component<
     cancelled: 'warning',
   };
 
-  constructor(props: {}) {
+  constructor(props: RouteComponentProps) {
     super(props);
 
     this.state = {
@@ -89,10 +88,12 @@ class ExperimentManagement extends React.Component<
           content={experiment.description || ''}
           onDelete={() => this.onDeleteExperiment(experiment)}
           onDuplicate={() => this.onDuplicateExperiment(experiment)}
-          onExplore={() => this.onExploreExperiment(experiment)}
+          onExplore={() =>
+            this.onExploreExperiment(experiment.last_job!.result!.id)
+          }
           onRunStart={() => this.onRunExperiment(experiment)}
           onView={() => this.onExperimentClick(experiment)}
-          showAllJobs={() => this.onJobListView(experiment)}
+          onShowDetails={() => this.showDetails(experiment.id!)}
         />
       ),
     );
@@ -175,57 +176,8 @@ class ExperimentManagement extends React.Component<
     });
   }
 
-  private async onJobListView(experiment: IExperiment) {
-    const jobs = await getJobsForExperiment(experiment);
-    Modal.info({
-      title: `Job List for Experiment: ${experiment.name}`,
-      content: (
-        <List
-          itemLayout='horizontal'
-          className='Job-List'
-          dataSource={jobs}
-          renderItem={(job: IJob) => (
-            <List.Item
-              actions={[
-                <Button
-                  key={1}
-                  type='primary'
-                  ghost={true}
-                  disabled={job.status === 'done' ? false : true}
-                >
-                  explore
-                </Button>,
-              ]}
-            >
-              <List.Item.Meta
-                title={
-                  <div>
-                    {<h3> Job #{job.id}</h3>}
-                    <Badge
-                      className='Job-Badge'
-                      status={this.jobBadgeMap[job.status]}
-                      text={job.status}
-                    />
-                  </div>
-                }
-                description={
-                  <div>
-                    <i>
-                      {' '}
-                      Starting Time:{' '}
-                      {moment(job.start_time).format(
-                        'dddd, MMMM Do YYYY, h:mm:ss a',
-                      )}
-                    </i>
-                  </div>
-                }
-              />
-            </List.Item>
-          )}
-        />
-      ),
-      onOk() {},
-    });
+  private showDetails = (experimentId: number) => {
+    this.props.history.push(`/manager/experimentdetails/${experimentId}`);
   }
 
   private onDuplicateExperiment = (experiment: IExperiment) => {
@@ -248,9 +200,9 @@ class ExperimentManagement extends React.Component<
     this.fetchExperiments();
   }
 
-  private onExploreExperiment = (experiment: IExperiment) => {
-    // TODO
+  private onExploreExperiment = (resultId: number) => {
+    this.props.history.push(`/graph-explorer/selection/${resultId}`);
   }
 }
 
-export default ExperimentManagement;
+export default ExperimentsManager;
