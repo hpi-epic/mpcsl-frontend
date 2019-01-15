@@ -3,12 +3,12 @@ import { Layout } from 'antd';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 
-import GraphRenderer from './GraphRenderer';
-import GraphNodeList from '../../components/GraphNodeList/GraphNodeList';
-import * as actions from '../../actions/graphExplorer';
+import GraphRenderer from '../GraphRenderer/GraphRenderer';
+import GraphNodeList from '../../../components/GraphNodeList/GraphNodeList';
+import * as actions from '../../../actions/graphExplorer';
 
 import './GraphSelection.css';
-import { IState } from '../../store';
+import { IState } from '../../../store';
 import { ThunkDispatch } from 'redux-thunk';
 
 interface IMatchParams {
