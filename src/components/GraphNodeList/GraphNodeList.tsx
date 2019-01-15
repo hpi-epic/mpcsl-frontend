@@ -1,8 +1,11 @@
 import React from 'react';
-import { List } from 'antd';
+import { List, Button } from 'antd';
+
+import './GraphNodeList.css';
 
 interface IPropsGraphNodeList {
   nodes: string[];
+  onRemoveNode: (nodeID: string) => void;
 }
 
 function GraphNodeList(props: IPropsGraphNodeList) {
@@ -13,9 +16,25 @@ function GraphNodeList(props: IPropsGraphNodeList) {
           Focused Nodes:
         </span>}
       size='small'
+      className='Node-List-Item'
       dataSource={props.nodes}
       renderItem={(item: string) => (
-        <List.Item style={{ padding: '14px' }}>{item}</List.Item>
+        <List.Item
+          style={{
+            paddingLeft: '14px',
+            paddingBottom: '4px',
+            paddingTop: '4px',
+          }}
+          actions={[
+            <Button
+              key={item}
+              onClick={() => props.onRemoveNode(item)}
+              icon='close'
+            />,
+          ]}
+        >
+          {item}
+        </List.Item>
       )}
     />
   );

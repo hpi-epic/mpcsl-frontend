@@ -17,6 +17,7 @@ interface IMatchParams {
 
 interface IGraphSelectionProps extends RouteComponentProps<IMatchParams> {
   fetchGraph: (resultID: number) => void;
+  onRemoveNode: (nodeID: string) => void;
   nodes: string[];
 }
 
@@ -33,7 +34,10 @@ class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
     return (
       <Layout>
         <Layout.Sider className='graphSelectionSider'>
-          <GraphNodeList nodes={this.props.nodes} />
+          <GraphNodeList
+            nodes={this.props.nodes}
+            onRemoveNode={this.props.onRemoveNode}
+          />
         </Layout.Sider>
         <GraphRenderer />
       </Layout>
@@ -52,6 +56,7 @@ export function mapDispatchToProps(
 ) {
   return {
     fetchGraph: (resultID: number) => dispatch(actions.fetchGraph(resultID)),
+    onRemoveNode: (nodeID: string) => dispatch(actions.removeNode(nodeID)),
   };
 }
 
