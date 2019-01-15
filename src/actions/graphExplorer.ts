@@ -44,12 +44,24 @@ export interface IAddNode {
   nodeID: string;
 }
 
-export function addNode(ciGraph: CIGraph, node: string): IAddNode {
-  const contextGraph = ciGraph.getContext(node);
+export function addNode(ciGraph: CIGraph, nodeID: string): IAddNode {
+  const contextGraph = ciGraph.getContext(nodeID);
   return {
     type: constants.ADD_NODE,
     context: contextGraph,
-    nodeID: node,
+    nodeID,
+  };
+}
+
+export interface IRemoveNode {
+  type: constants.REMOVE_NODE;
+  nodeID: string;
+}
+
+export function removeNode(nodeID: string): IRemoveNode {
+  return {
+    type: constants.REMOVE_NODE,
+    nodeID,
   };
 }
 
@@ -77,4 +89,5 @@ export type GraphExplorerAction =
   | IFetchGraph
   | IAddNode
   | INewLayout
+  | IRemoveNode
   | IToggleFreezeLayout;
