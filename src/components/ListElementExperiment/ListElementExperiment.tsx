@@ -20,6 +20,11 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
   const menu = (
     <Menu>
       <Menu.Item>
+        <Button className='Dropdown-Button' onClick={props.onShowDetails} key='1'>
+          View Jobs
+        </Button>
+      </Menu.Item>
+      <Menu.Item>
         <Button className='Dropdown-Button' onClick={props.onView} key='1'>
           View Settings
         </Button>
