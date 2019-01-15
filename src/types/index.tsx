@@ -15,6 +15,8 @@ export interface IObservationMatrix {
   load_query: string;
   name: string;
   description?: string;
+  remote_db?: string;
+  time_created?: string;
 }
 
 export interface IExperiment {

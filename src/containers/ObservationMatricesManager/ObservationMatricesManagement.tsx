@@ -106,6 +106,7 @@ class ObservationMatricesManagement extends React.Component<
         observationMatrixName: observationMatrix.name,
         observationMatrixDescription: observationMatrix.description || '-',
         query: observationMatrix.load_query,
+        remoteDB: observationMatrix.remote_db || '-',
       },
       observationMatrixModalVisible: true,
     });
