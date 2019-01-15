@@ -1,18 +1,18 @@
 import React from 'react';
-import { Routes } from '../../constants/routes';
+import { Routes } from '../../../constants/routes';
 import { Layout, Row, Col, Button, Select } from 'antd';
-import * as actions from '../../actions/graphExplorer';
+import * as actions from '../../../actions/graphExplorer';
 import { connect } from 'react-redux';
 import { Route, RouteComponentProps, Switch, Redirect } from 'react-router-dom';
-import colors from '../../constants/colors';
-import GraphSelection from './GraphSelection';
-import GraphViewRadioNavigation from '../../components/GraphExplorerNavigation/GraphViewRadioNavigation';
+import colors from '../../../constants/colors';
+import GraphSelection from '../GraphSelection/GraphSelection';
+import GraphViewRadioNavigation from '../../../components/GraphExplorerNavigation/GraphViewRadioNavigation';
 import { RadioChangeEvent } from 'antd/lib/radio';
-import GraphAnnotate from './GraphAnntotate';
-import GraphCausalExplorer from './GraphCausalExplorer';
+import GraphAnnotate from '../GraphAnnotate/GraphAnnotate';
+import GraphCausalExplorer from '../GraphCausalExplorer/GraphCausalExplorer';
 import { Dispatch } from 'redux';
-import { CIGraph } from '../../utils/graph';
-import { IState } from '../../store';
+import { CIGraph } from '../../../utils/graph';
+import { IState } from '../../../store';
 
 const { Header, Content } = Layout;
 
