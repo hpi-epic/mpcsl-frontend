@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, List, Badge } from 'antd';
+import { Button, List, Badge, Icon } from 'antd';
 import { IExperiment, IJob } from '../../types';
 import { getJobsForExperiment, getExperiment } from '../../actions/apiRequests';
 import moment from 'moment';
@@ -18,7 +18,7 @@ interface IMatchParams {
 class ExperimentDetails extends React.Component<
   RouteComponentProps<IMatchParams>,
   IStateJobsManagement
-> {
+  > {
   public exampleExperimentId = 2;
   private jobBadgeMap: any = {
     running: 'processing',
@@ -44,8 +44,11 @@ class ExperimentDetails extends React.Component<
     if (this.state.experiment) {
       return (
         <div className='Content'>
+          <Button className='Go-Back-Button' onClick={() => this.onGoBack()} type='primary' ghost={true}>
+            <Icon type='left' />
+          </Button>
           <h2>
-            Experiment Details for Experiment: {this.state.experiment.name}
+            Experiment: <i>{this.state.experiment.name}</i>
           </h2>
           <List
             itemLayout='horizontal'
@@ -106,12 +109,16 @@ class ExperimentDetails extends React.Component<
 
   private async fetchExperiment(experimentId: number) {
     const experiment = await getExperiment(experimentId);
-    this.setState({experiment});
+    this.setState({ experiment });
     this.fetchJobs(this.state.experiment!);
   }
 
   private onExploreExperiment = (resultId: number) => {
     this.props.history.push(`/graph-explorer/selection/${resultId}`);
+  }
+
+  private onGoBack = () => {
+    this.props.history.push('/manager/experiments');
   }
 }
 
