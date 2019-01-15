@@ -17,6 +17,7 @@ export interface IFormObservationMatrix {
   observationMatrixName: string;
   observationMatrixDescription: string;
   query: string;
+  remoteDB?: string;
 }
 
 class NewObservationMatrixModal extends React.Component<
@@ -59,6 +60,13 @@ class NewObservationMatrixModal extends React.Component<
       rules: [{ required: true, message: 'Enter a query' }],
     })(<Input disabled={disabled} placeholder='Your Query' />);
 
+    const observationMatrixRemoteDBEl = getFieldDecorator('remoteDB', {
+      initialValue: this.props.observationMatrix
+        ? this.props.observationMatrix.remoteDB
+        : null,
+      rules: [{ required: false, message: 'Select a remote DB' }],
+    })(<Input disabled={disabled} placeholder='Remote DB' />);
+
     const title = this.props.observationMatrix
       ? `Observation Matrix “${
           this.props.observationMatrix.observationMatrixName
@@ -82,6 +90,7 @@ class NewObservationMatrixModal extends React.Component<
           <Row gutter={16}>
             <Form.Item label='Name'>{observationMatrixNameEl}</Form.Item>
             <Form.Item label='Description'>{observationMatrixDescEl}</Form.Item>
+            <Form.Item label='Remote DB'>{observationMatrixRemoteDBEl}</Form.Item>
             <Form.Item label='Query'>{observationMatrixQueryEl}</Form.Item>
             <Form.Item>
               <Button
@@ -134,6 +143,7 @@ class NewObservationMatrixModal extends React.Component<
       load_query: values.query,
       name: values.observationMatrixName,
       description: values.observationMatrixDescription,
+      remote_db: values.remoteDB,
     });
     this.props.onClose();
   }

@@ -3,7 +3,7 @@ import { Route, Redirect, Switch, BrowserRouter } from 'react-router-dom';
 import colors from './constants/colors';
 
 import './App.css';
-import GraphExplorer from './containers/GraphExplorer/GraphExplorer';
+import GraphExplorer from './containers/GraphExplorer';
 import PipelineManager from './containers/PipelineManager';
 import RuntimeManager from './containers/RuntimeManager';
 import { Routes } from './constants/routes';
