@@ -41,7 +41,7 @@ class ObservationMatricesManagement extends React.Component<
         <ListElementObservationMatrix
           title={observationMatrix.name}
           key={observationMatrix.id}
-          content={observationMatrix.description || ''}
+          content={observationMatrix.description || '-'}
           onDelete={() => this.onObservationMatrixDelete(observationMatrix)}
           onView={() => this.onObservationMatrixView(observationMatrix)}
         />
@@ -104,7 +104,7 @@ class ObservationMatricesManagement extends React.Component<
     this.setState({
       currentObservationMatrix: {
         observationMatrixName: observationMatrix.name,
-        observationMatrixDescription: observationMatrix.description || '',
+        observationMatrixDescription: observationMatrix.description || '-',
         query: observationMatrix.load_query,
       },
       observationMatrixModalVisible: true,
