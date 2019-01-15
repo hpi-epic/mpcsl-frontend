@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 
 import GraphRenderer from './GraphRenderer';
-import GraphNodeList from '../../components/GraphNodeList';
+import GraphNodeList from '../../components/GraphNodeList/GraphNodeList';
 import * as actions from '../../actions/graphExplorer';
 
 import './GraphSelection.css';

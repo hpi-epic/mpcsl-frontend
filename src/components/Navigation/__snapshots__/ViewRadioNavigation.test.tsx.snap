@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ViewRadioNavigation /> renders correctly for route /manager/experiments 1`] = `
+<div
+  className="ant-radio-group ant-radio-group-solid ant-radio-group-small"
+>
+  <label
+    className="ant-radio-button-wrapper"
+  >
+    <span
+      className="ant-radio-button"
+      style={Object {}}
+    >
+      <input
+        checked={false}
+        className="ant-radio-button-input"
+        disabled={false}
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        type="radio"
+        value="/manager/observationMatrices"
+      />
+      <span
+        className="ant-radio-button-inner"
+      />
+    </span>
+    <span>
+      Observation Matrices Management
+    </span>
+  </label>
+  <label
+    className="ant-radio-button-wrapper ant-radio-button-wrapper-checked"
+  >
+    <span
+      className="ant-radio-button ant-radio-button-checked"
+      style={Object {}}
+    >
+      <input
+        checked={true}
+        className="ant-radio-button-input"
+        disabled={false}
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        type="radio"
+        value="/manager/experiments"
+      />
+      <span
+        className="ant-radio-button-inner"
+      />
+    </span>
+    <span>
+      Experiment Management
+    </span>
+  </label>
+</div>
+`;
+
+exports[`<ViewRadioNavigation /> renders correctly for route /manager/observationMatrices 1`] = `
+<div
+  className="ant-radio-group ant-radio-group-solid ant-radio-group-small"
+>
+  <label
+    className="ant-radio-button-wrapper ant-radio-button-wrapper-checked"
+  >
+    <span
+      className="ant-radio-button ant-radio-button-checked"
+      style={Object {}}
+    >
+      <input
+        checked={true}
+        className="ant-radio-button-input"
+        disabled={false}
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        type="radio"
+        value="/manager/observationMatrices"
+      />
+      <span
+        className="ant-radio-button-inner"
+      />
+    </span>
+    <span>
+      Observation Matrices Management
+    </span>
+  </label>
+  <label
+    className="ant-radio-button-wrapper"
+  >
+    <span
+      className="ant-radio-button"
+      style={Object {}}
+    >
+      <input
+        checked={false}
+        className="ant-radio-button-input"
+        disabled={false}
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        type="radio"
+        value="/manager/experiments"
+      />
+      <span
+        className="ant-radio-button-inner"
+      />
+    </span>
+    <span>
+      Experiment Management
+    </span>
+  </label>
+</div>
+`;

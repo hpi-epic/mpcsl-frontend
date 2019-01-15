@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<GraphNodeList /> renders correctly 1`] = `
+<div
+  className="ant-list ant-list-sm ant-list-split"
+>
+  <div
+    className="ant-list-header"
+  >
+    <span
+      style={
+        Object {
+          "fontWeight": "bold",
+          "padding": "14px",
+        }
+      }
+    >
+      Focused Nodes:
+    </span>
+  </div>
+  <div
+    className="ant-spin-nested-loading"
+    style={null}
+  >
+    <div
+      className="ant-spin-container"
+    >
+      <div
+        className="ant-list-item"
+        style={
+          Object {
+            "padding": "14px",
+          }
+        }
+      >
+        <div
+          className="ant-list-item-content ant-list-item-content-single"
+        >
+          node1
+        </div>
+      </div>
+      <div
+        className="ant-list-item"
+        style={
+          Object {
+            "padding": "14px",
+          }
+        }
+      >
+        <div
+          className="ant-list-item-content ant-list-item-content-single"
+        >
+          node2
+        </div>
+      </div>
+      <div
+        className="ant-list-item"
+        style={
+          Object {
+            "padding": "14px",
+          }
+        }
+      >
+        <div
+          className="ant-list-item-content ant-list-item-content-single"
+        >
+          node3
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

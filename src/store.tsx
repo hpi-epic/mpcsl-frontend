@@ -7,13 +7,12 @@ export interface IState {
   graphExplorer: StoreState;
 }
 
+// @ts-ignore
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 const store: Store<IState> = createStore(
   graphExplorer,
-  compose(
-    applyMiddleware(thunkMiddleware),
-    // @ts-ignore
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-  ),
+  composeEnhancers(applyMiddleware(thunkMiddleware)),
 );
 
 export default store;

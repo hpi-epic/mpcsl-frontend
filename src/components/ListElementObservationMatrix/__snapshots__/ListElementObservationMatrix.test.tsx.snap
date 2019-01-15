@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ListElementObservationMatrix /> renders correctly 1`] = `
+<div>
+  <div
+    className="ant-list-item"
+  >
+    <div
+      className="ant-list-item-content ant-list-item-content-single"
+    >
+      <div
+        className="ant-card Card ant-card-bordered"
+      >
+        <div
+          className="ant-card-head"
+          style={Object {}}
+        >
+          <div
+            className="ant-card-head-wrapper"
+          >
+            <div
+              className="ant-card-head-title"
+            >
+              <div>
+                <h2
+                  className="Card-Title"
+                >
+                  Test ObservationMatrix
+                </h2>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="ant-card-body"
+          style={Object {}}
+        >
+          <p
+            className="Card-Content"
+          >
+            A Test ObeservationMatrix
+          </p>
+          <button
+            className="ant-btn List-Buttons ant-btn-danger ant-btn-background-ghost"
+            onClick={[Function]}
+            type="button"
+          >
+            <span>
+              Delete
+            </span>
+          </button>
+          <button
+            className="ant-btn List-Buttons ant-btn-primary ant-btn-background-ghost"
+            onClick={[Function]}
+            type="button"
+          >
+            <span>
+              View
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
