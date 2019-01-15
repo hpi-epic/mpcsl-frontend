@@ -35,8 +35,8 @@ const graphSettings = {
   contextNodeColor: '#eff1ef',
   contextNodeStrokeDashArray: '5, 5',
   linkStrokeWidth: 1,
-  linkColor: 'black',
-  linkOpacity: 0.3,
+  linkColor: '#c8c8c8',
+  linkOpacity: 1,
   forceLinkDistance: 50,
   labelColor: 'black',
   labelDistance: 2,
@@ -89,7 +89,7 @@ class GraphRenderer extends React.Component<
         <marker
           id='arrow'
           viewBox='-0 -5 10 10'
-          refX={graphSettings.nodeRadius + 6}
+          refX={graphSettings.nodeRadius + 7}
           refY='0'
           orient='auto'
           markerWidth='13'
