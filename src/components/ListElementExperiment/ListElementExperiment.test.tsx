@@ -16,7 +16,7 @@ describe('<ListElementExperiment />', () => {
           onRunStart={() => undefined}
           onExplore={() => undefined}
           onView={() => undefined}
-          showAllJobs={() => undefined}
+          onShowDetails={() => undefined}
         />,
       )
       .toJSON();
