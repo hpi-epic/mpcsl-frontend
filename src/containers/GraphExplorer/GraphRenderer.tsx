@@ -138,13 +138,6 @@ class GraphRenderer extends React.Component<
       .selectAll('.node')
       .data(props.selectedGraph.nodes, (node: ID3GraphNode) => node.id);
 
-    nodes.exit().remove();
-    nodes.call(this.updateNode);
-    nodes
-      .enter()
-      .append('g')
-      .call(this.enterNode);
-
     const links = this.graph.selectAll('.link').data(props.selectedGraph.links);
     links
       .enter()
@@ -152,6 +145,13 @@ class GraphRenderer extends React.Component<
       .call(this.enterLink);
     links.exit().remove();
     links.call(this.updateLink);
+
+    nodes.exit().remove();
+    nodes.call(this.updateNode);
+    nodes
+      .enter()
+      .append('g')
+      .call(this.enterNode);
 
     this.force.nodes(props.selectedGraph.nodes).force(
       'links',
