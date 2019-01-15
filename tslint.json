@@ -13,5 +13,8 @@
     "no-empty": false,
     "no-console": false
   },
-  "rulesDirectory": []
+  "rulesDirectory": [],
+  "linterOptions": {
+    "exclude": ["src/serviceWorker.ts"]
+  }
 }
