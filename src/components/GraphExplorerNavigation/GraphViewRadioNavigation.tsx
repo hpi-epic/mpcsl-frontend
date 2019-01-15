@@ -20,9 +20,11 @@ function GraphViewRadioNavigation(props: IPropsRadioNavigation) {
       size='small'
     >
       <RadioButton value={Routes.graphExplorerSelection}>Selection</RadioButton>
-      <RadioButton value={Routes.graphExplorerAnnotate}>Annotate</RadioButton>
+      <RadioButton value={Routes.graphExplorerAnnotate}>
+        Expl. &#38; Valid.
+      </RadioButton>
       <RadioButton value={Routes.graphExplorerCausalExploration}>
-        Causal Exploration
+        Causal Inference
       </RadioButton>
     </RadioGroup>
   );
