@@ -44,12 +44,12 @@ export interface IAddNode {
   nodeID: string;
 }
 
-export function addNode(ciGraph: CIGraph, node: string): IAddNode {
-  const contextGraph = ciGraph.getContext(node);
+export function addNode(ciGraph: CIGraph, nodeID: string): IAddNode {
+  const contextGraph = ciGraph.getContext(nodeID);
   return {
     type: constants.ADD_NODE,
     context: contextGraph,
-    nodeID: node,
+    nodeID,
   };
 }
 

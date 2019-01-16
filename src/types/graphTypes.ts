@@ -7,6 +7,7 @@ export interface ID3Graph {
 
 export interface ID3GraphNode {
   id: NodeID;
+  label: string;
   x?: number;
   y?: number;
   fx?: number;

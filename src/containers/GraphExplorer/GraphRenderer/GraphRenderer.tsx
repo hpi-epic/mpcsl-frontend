@@ -28,16 +28,16 @@ export interface IGraphRendererState {
 const graphSettings = {
   nodeMouseOverCursor: 'pointer',
   nodeRadius: 13,
-  nodeStrokeWidth: 1,
+  nodeStrokeWidth: 2,
   nodeStroke: '#001529',
-  nodeColission: 20,
-  focusNodeColor: '#001529',
+  nodeColission: 25,
+  focusNodeColor: '#dcdcdc',
   contextNodeColor: '#eff1ef',
   contextNodeStrokeDashArray: '5, 5',
   linkStrokeWidth: 1,
   linkColor: '#c8c8c8',
   linkOpacity: 1,
-  forceLinkDistance: 50,
+  forceLinkDistance: 75,
   labelColor: 'black',
   labelDistance: 2,
   labelDirection: 1,
@@ -134,14 +134,15 @@ class GraphRenderer extends React.Component<
   }
 
   public enterGraph = (props: IGraphRendererProps) => {
+    const links = this.graph.selectAll('.link').data(props.selectedGraph.links);
+
     const nodes = this.graph
       .selectAll('.node')
       .data(props.selectedGraph.nodes, (node: ID3GraphNode) => node.id);
 
-    const links = this.graph.selectAll('.link').data(props.selectedGraph.links);
     links
       .enter()
-      .append('line', '.node')
+      .insert('line', '.node')
       .call(this.enterLink);
     links.exit().remove();
     links.call(this.updateLink);
@@ -185,7 +186,10 @@ class GraphRenderer extends React.Component<
           (graphSettings.nodeRadius + graphSettings.labelDistance),
       )
       .attr('y', graphSettings.nodeRadius / 2)
-      .text((d) => d.id);
+      .text((d: ID3GraphNode) => {
+        return d.label!.length > 20 ? d.label.slice(0, 20) + '...' : d.label;
+      })
+      .attr('class', 'Node-Label');
   }
 
   public updateNode = (selection: d3.Selection<any, any, any, any>) => {

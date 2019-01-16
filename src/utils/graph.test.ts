@@ -6,7 +6,7 @@ import { IndepenceTests } from '../constants/experiment';
 
 describe('CIGraph', () => {
   const testD3Graph: ID3Graph = {
-    nodes: [{ id: '1' }, { id: '2' }],
+    nodes: [{ id: '1', label: 'a' }, { id: '2', label: 'b' }],
     links: [{ source: '1', target: '2' }, { source: '2', target: '1' }],
   };
 
@@ -23,13 +23,13 @@ describe('CIGraph', () => {
       nodes: [
         {
           id: 1,
-          name: '1',
+          name: 'a',
           result: 1,
           result_id: 1,
         },
         {
           id: 2,
-          name: '2',
+          name: 'b',
           result: 2,
           result_id: 2,
         },
@@ -80,7 +80,7 @@ describe('CIGraph', () => {
     ciGraph.fromD3Graph(testD3Graph);
 
     const expectedGraph = {
-      nodes: [{ id: '2' }],
+      nodes: [{ id: '2', label: 'b' }],
       links: [{ source: '2', target: '1' }, { source: '1', target: '2' }],
     };
 
@@ -128,24 +128,35 @@ describe('addUniqueLinks()', () => {
 });
 
 describe('addUniqueNodes()', () => {
-  const addNodes: ID3GraphNode[] = [{ id: '3' }, { id: '1' }];
+  const addNodes: ID3GraphNode[] = [
+    { id: '3', label: 'c' },
+    { id: '1', label: 'a' },
+  ];
 
   it('adds unique Nodes and freezes correctly', () => {
     const nodes: ID3GraphNode[] = [
-      { id: '1', x: 1, y: 1, isContext: true },
-      { id: '2', x: 1, y: 1, isContext: true },
+      { id: '1', label: 'a', x: 1, y: 1, isContext: true },
+      { id: '2', label: 'b', x: 1, y: 1, isContext: true },
     ];
+
+    const ciGraph: CIGraph = new CIGraph();
+    ciGraph.fromD3Graph({
+      nodes: [...nodes, { id: '3', label: 'c' }],
+      links: [],
+    });
+
     const uniqueNodes: ID3GraphNode[] = addUniqueNodes(
       nodes,
+      ciGraph,
       '1',
       addNodes,
       true,
     );
 
     const expectedNodes: ID3GraphNode[] = [
-      { id: '1', x: 1, y: 1, fx: 1, fy: 1, isContext: false },
-      { id: '2', x: 1, y: 1, fx: 1, fy: 1, isContext: true },
-      { id: '3', isContext: true },
+      { id: '1', label: 'a', x: 1, y: 1, fx: 1, fy: 1, isContext: false },
+      { id: '2', label: 'b', x: 1, y: 1, fx: 1, fy: 1, isContext: true },
+      { id: '3', label: 'c', isContext: true },
     ];
 
     expect(uniqueNodes).toEqual(expectedNodes);
@@ -153,20 +164,28 @@ describe('addUniqueNodes()', () => {
 
   it('adds unique Nodes correctly without freezing', () => {
     const nodes: ID3GraphNode[] = [
-      { id: '1', x: 1, y: 1, isContext: true },
-      { id: '2', x: 1, y: 1, isContext: true },
+      { id: '1', label: 'a', x: 1, y: 1, isContext: true },
+      { id: '2', label: 'b', x: 1, y: 1, isContext: true },
     ];
+
+    const ciGraph: CIGraph = new CIGraph();
+    ciGraph.fromD3Graph({
+      nodes: [...nodes, { id: '3', label: 'c' }],
+      links: [],
+    });
+
     const uniqueNodes: ID3GraphNode[] = addUniqueNodes(
       nodes,
+      ciGraph,
       '1',
       addNodes,
       false,
     );
 
     const expectedNodes: ID3GraphNode[] = [
-      { id: '1', x: 1, y: 1, isContext: false },
-      { id: '2', x: 1, y: 1, isContext: true },
-      { id: '3', isContext: true },
+      { id: '1', label: 'a', x: 1, y: 1, isContext: false },
+      { id: '2', label: 'b', x: 1, y: 1, isContext: true },
+      { id: '3', label: 'c', isContext: true },
     ];
 
     expect(uniqueNodes).toEqual(expectedNodes);
@@ -176,12 +195,18 @@ describe('addUniqueNodes()', () => {
 describe('resetLayout()', () => {
   it('resets Layout correctly', () => {
     const testD3Graph: ID3Graph = {
-      nodes: [{ id: '1', fx: 1, fy: 1 }, { id: '2', fx: 1, fy: 1 }],
+      nodes: [
+        { id: '1', label: 'a', fx: 1, fy: 1 },
+        { id: '2', label: 'b', fx: 1, fy: 1 },
+      ],
       links: [{ source: '1', target: '2' }, { source: '2', target: '1' }],
     };
 
     const expectedGraph: ID3Graph = {
-      nodes: [{ id: '1', vx: 0, vy: 0 }, { id: '2', vx: 0, vy: 0 }],
+      nodes: [
+        { id: '1', label: 'a', vx: 0, vy: 0 },
+        { id: '2', label: 'b', vx: 0, vy: 0 },
+      ],
       links: [{ source: '1', target: '2' }, { source: '2', target: '1' }],
     };
 

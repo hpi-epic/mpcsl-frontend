@@ -10,6 +10,7 @@ import * as actions from '../../../actions/graphExplorer';
 import './GraphSelection.css';
 import { IState } from '../../../store';
 import { ThunkDispatch } from 'redux-thunk';
+import { ID3GraphNode } from '../../../types/graphTypes';
 
 interface IMatchParams {
   result_id: string;
@@ -17,7 +18,7 @@ interface IMatchParams {
 
 interface IGraphSelectionProps extends RouteComponentProps<IMatchParams> {
   fetchGraph: (resultID: number) => void;
-  nodes: string[];
+  nodes: ID3GraphNode[];
 }
 
 class GraphSelection extends React.Component<IGraphSelectionProps, {}> {

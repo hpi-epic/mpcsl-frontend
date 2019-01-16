@@ -13,6 +13,7 @@ import GraphCausalExplorer from './GraphCausalExplorer/GraphCausalExplorer';
 import { Dispatch } from 'redux';
 import { CIGraph } from '../../utils/graph';
 import { IState } from '../../store';
+import { ID3GraphNode } from '../../types/graphTypes';
 
 const { Header, Content } = Layout;
 
@@ -27,7 +28,7 @@ interface IMatchParams {
 export interface IGraphExplorerProps extends RouteComponentProps<IMatchParams> {
   onAddNode: (graph: CIGraph, node: string) => void;
   graph: CIGraph;
-  nodes: string[];
+  nodes: ID3GraphNode[];
 }
 
 class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
@@ -51,11 +52,14 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
         }
       >
         {this.props.graph
-          ? this.props.graph.nodes().map((node) => {
-              if (this.props.nodes.indexOf(node) <= -1) {
+          ? this.props.graph.nodes().map((node: string) => {
+              if (
+                this.props.nodes.find((n: ID3GraphNode) => node === n.id) ===
+                undefined
+              ) {
                 return (
                   <Select.Option key={node} value={node}>
-                    {node}
+                    {this.props.graph.node(node)}
                   </Select.Option>
                 );
               }
