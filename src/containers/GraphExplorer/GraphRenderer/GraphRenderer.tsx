@@ -185,7 +185,7 @@ class GraphRenderer extends React.Component<
           (graphSettings.nodeRadius + graphSettings.labelDistance),
       )
       .attr('y', graphSettings.nodeRadius / 2)
-      .text((d) => d.id);
+      .text((d) => d.label);
   }
 
   public updateNode = (selection: d3.Selection<any, any, any, any>) => {

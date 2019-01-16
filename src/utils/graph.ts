@@ -9,7 +9,7 @@ export class CIGraph extends Graph {
   }
   public fromD3Graph = (graph: ID3Graph) => {
     graph.nodes.map((node: ID3GraphNode) => {
-      this.setNode(node.id.toString(), node.id);
+      this.setNode(node.id.toString(), node.label);
     });
     graph.links.map((link: ID3GraphLink) => {
       this.setEdge(link.source.toString(), link.target.toString());
@@ -18,7 +18,7 @@ export class CIGraph extends Graph {
 
   public fromAPIGraph = (results: IAPIResult) => {
     results.nodes.map((node: IAPIGraphNode) => {
-      this.setNode(node.id.toString(), node.id);
+      this.setNode(node.id.toString(), node.name);
     });
     results.edges.map((link: IAPIGraphEdges) => {
       this.setEdge(link.from_node.toString(), link.to_node.toString());
@@ -30,7 +30,7 @@ export class CIGraph extends Graph {
     const newLinks = this.nodeEdges(node);
     if (neighbors && newLinks) {
       return {
-        nodes: neighbors.map((n) => ({ id: n })),
+        nodes: neighbors.map((n) => ({ id: n, label: this.node(n) })),
         links: newLinks.map((link) => ({ source: link.v, target: link.w })),
       };
     }
@@ -42,7 +42,7 @@ export class CIGraph extends Graph {
 
   public toD3Graph = (): ID3Graph => {
     return {
-      nodes: this.nodes().map((n) => ({ id: n })),
+      nodes: this.nodes().map((n) => ({ id: n, label: this.node(n) })),
       links: this.edges().map((link) => ({ source: link.v, target: link.w })),
     };
   }
@@ -68,6 +68,7 @@ export function addUniqueLinks(
 
 export function addUniqueNodes(
   nodes: ID3GraphNode[],
+  graph: CIGraph,
   addToFocusNodeID: string,
   addNodes: ID3GraphNode[],
   doFreeze: boolean,
@@ -87,7 +88,11 @@ export function addUniqueNodes(
   });
 
   if (!isAlreadyIn) {
-    nodes.push({ id: addToFocusNodeID, isContext: false });
+    nodes.push({
+      id: addToFocusNodeID,
+      isContext: false,
+      label: graph.node(addToFocusNodeID),
+    });
   }
 
   addNodes.forEach((addNode) => {

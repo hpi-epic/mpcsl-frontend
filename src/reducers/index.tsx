@@ -40,6 +40,7 @@ function graphExplorer(
             ),
             nodes: addUniqueNodes(
               state.selectedGraph.nodes,
+              state.graph!,
               action.nodeID,
               action.context.nodes,
               state.doFreeze,
