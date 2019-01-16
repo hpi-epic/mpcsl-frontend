@@ -11,6 +11,7 @@ import './GraphSelection.css';
 import { IState } from '../../../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { ID3GraphNode } from '../../../types/graphTypes';
+import { CIGraph } from '../../../utils/graph';
 
 interface IMatchParams {
   result_id: string;
@@ -19,6 +20,7 @@ interface IMatchParams {
 interface IGraphSelectionProps extends RouteComponentProps<IMatchParams> {
   fetchGraph: (resultID: number) => void;
   nodes: ID3GraphNode[];
+  graph: CIGraph;
 }
 
 class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
@@ -27,7 +29,9 @@ class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
   }
 
   public componentDidMount() {
-    this.props.fetchGraph(Number(this.props.match.params.result_id));
+    if (this.props.graph.nodeCount() <= 0) {
+      this.props.fetchGraph(Number(this.props.match.params.result_id));
+    }
   }
 
   public render() {
@@ -45,6 +49,7 @@ class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
 export function mapStateToProps(state: IState) {
   return {
     nodes: state.graphExplorer!.nodes,
+    graph: state.graphExplorer!.graph,
   };
 }
 
