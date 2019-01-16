@@ -134,14 +134,15 @@ class GraphRenderer extends React.Component<
   }
 
   public enterGraph = (props: IGraphRendererProps) => {
+    const links = this.graph.selectAll('.link').data(props.selectedGraph.links);
+
     const nodes = this.graph
       .selectAll('.node')
       .data(props.selectedGraph.nodes, (node: ID3GraphNode) => node.id);
 
-    const links = this.graph.selectAll('.link').data(props.selectedGraph.links);
     links
       .enter()
-      .append('line', '.node')
+      .insert('line', '.node')
       .call(this.enterLink);
     links.exit().remove();
     links.call(this.updateLink);
@@ -185,7 +186,9 @@ class GraphRenderer extends React.Component<
           (graphSettings.nodeRadius + graphSettings.labelDistance),
       )
       .attr('y', graphSettings.nodeRadius / 2)
-      .text((d) => (d.label.length > 20 ? d.label.slice(0, 20) + '...' : d.label))
+      .text((d: ID3GraphNode) => {
+        return d.label!.length > 20 ? d.label.slice(0, 20) + '...' : d.label;
+      })
       .attr('class', 'Node-Label');
   }
 
