@@ -1,4 +1,4 @@
-import { Button, Row, Form } from 'antd';
+import { Button, Row, Form, Col } from 'antd';
 import React from 'react';
 import { IObservationMatrix } from '../../types';
 import NewObservationMatrixModal, {
@@ -56,7 +56,7 @@ class ObservationMatricesManagement extends React.Component<
             </Button>
           </div>
         </Row>
-        <Row>{ObservationMatrixList}</Row>
+        <Row><Col>{ObservationMatrixList}</Col></Row>
         <ObservationMatrixModal
           visible={this.state.observationMatrixModalVisible}
           onClose={this.onClose}
