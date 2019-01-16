@@ -30,14 +30,14 @@ const graphSettings = {
   nodeRadius: 13,
   nodeStrokeWidth: 1,
   nodeStroke: '#001529',
-  nodeColission: 20,
+  nodeColission: 25,
   focusNodeColor: '#001529',
   contextNodeColor: '#eff1ef',
   contextNodeStrokeDashArray: '5, 5',
   linkStrokeWidth: 1,
   linkColor: '#c8c8c8',
   linkOpacity: 1,
-  forceLinkDistance: 50,
+  forceLinkDistance: 75,
   labelColor: 'black',
   labelDistance: 2,
   labelDirection: 1,
@@ -185,7 +185,8 @@ class GraphRenderer extends React.Component<
           (graphSettings.nodeRadius + graphSettings.labelDistance),
       )
       .attr('y', graphSettings.nodeRadius / 2)
-      .text((d) => d.label);
+      .text((d) => (d.label.length > 20 ? d.label.slice(0, 20) + '...' : d.label))
+      .attr('class', 'Node-Label');
   }
 
   public updateNode = (selection: d3.Selection<any, any, any, any>) => {
