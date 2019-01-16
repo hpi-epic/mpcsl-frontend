@@ -25,10 +25,10 @@ function ViewRadioNavigation(props: IPropsRadioNavigation) {
       size='small'
     >
       <RadioButton value={Routes.observationMatricesManager}>
-        Observation Matrices Management
+        Observation Matrices
       </RadioButton>
       <RadioButton value={Routes.experimentManager}>
-        Experiment Management
+        Experiments
       </RadioButton>
     </RadioGroup>
   );

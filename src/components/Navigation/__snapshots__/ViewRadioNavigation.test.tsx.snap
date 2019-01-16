@@ -26,7 +26,7 @@ exports[`<ViewRadioNavigation /> renders correctly for route /manager/experiment
       />
     </span>
     <span>
-      Observation Matrices Management
+      Observation Matrices
     </span>
   </label>
   <label
@@ -51,7 +51,7 @@ exports[`<ViewRadioNavigation /> renders correctly for route /manager/experiment
       />
     </span>
     <span>
-      Experiment Management
+      Experiments
     </span>
   </label>
 </div>
@@ -83,7 +83,7 @@ exports[`<ViewRadioNavigation /> renders correctly for route /manager/observatio
       />
     </span>
     <span>
-      Observation Matrices Management
+      Observation Matrices
     </span>
   </label>
   <label
@@ -108,7 +108,7 @@ exports[`<ViewRadioNavigation /> renders correctly for route /manager/observatio
       />
     </span>
     <span>
-      Experiment Management
+      Experiments
     </span>
   </label>
 </div>

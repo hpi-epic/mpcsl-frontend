@@ -161,7 +161,7 @@ class NewExperimentModal extends React.Component<
             ? `Experiment "${this.props.experiment.name}"`
             : 'Create new Experiment'
         }
-        width={720}
+        width={310}
         placement='right'
         onClose={this.props.onClose}
         visible={this.props.visible}

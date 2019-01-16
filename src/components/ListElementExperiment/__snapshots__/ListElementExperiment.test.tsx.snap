@@ -49,54 +49,56 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
           style={Object {}}
         >
           <p
-            className="Card-Content"
+            className="Card-Content Experiment-Content"
           >
             Test Content
           </p>
-          <button
-            className="ant-btn List-Buttons ant-dropdown-trigger ant-btn-icon-only"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-            onMouseLeave={[Function]}
-            type="button"
-          >
-            <i
-              className="anticon anticon-ellipsis"
+          <div>
+            <button
+              className="ant-btn List-Buttons ant-dropdown-trigger ant-btn-icon-only"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+              onMouseLeave={[Function]}
+              type="button"
             >
-              <svg
-                aria-hidden="true"
-                className=""
-                data-icon="ellipsis"
-                fill="currentColor"
-                height="1em"
-                viewBox="64 64 896 896"
-                width="1em"
+              <i
+                className="anticon anticon-ellipsis"
               >
-                <path
-                  d="M176 511a56 56 0 1 0 112 0 56 56 0 1 0-112 0zm280 0a56 56 0 1 0 112 0 56 56 0 1 0-112 0zm280 0a56 56 0 1 0 112 0 56 56 0 1 0-112 0z"
-                />
-              </svg>
-            </i>
-          </button>
-          <button
-            className="ant-btn List-Buttons ant-btn-primary ant-btn-background-ghost"
-            disabled={false}
-            onClick={[Function]}
-            type="button"
-          >
-            <span>
-              Explore
-            </span>
-          </button>
-          <button
-            className="ant-btn List-Buttons ant-btn-primary ant-btn-background-ghost"
-            onClick={[Function]}
-            type="button"
-          >
-            <span>
-              Run
-            </span>
-          </button>
+                <svg
+                  aria-hidden="true"
+                  className=""
+                  data-icon="ellipsis"
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="64 64 896 896"
+                  width="1em"
+                >
+                  <path
+                    d="M176 511a56 56 0 1 0 112 0 56 56 0 1 0-112 0zm280 0a56 56 0 1 0 112 0 56 56 0 1 0-112 0zm280 0a56 56 0 1 0 112 0 56 56 0 1 0-112 0z"
+                  />
+                </svg>
+              </i>
+            </button>
+            <button
+              className="ant-btn List-Buttons ant-btn-primary ant-btn-background-ghost"
+              disabled={false}
+              onClick={[Function]}
+              type="button"
+            >
+              <span>
+                Explore
+              </span>
+            </button>
+            <button
+              className="ant-btn List-Buttons ant-btn-primary ant-btn-background-ghost"
+              onClick={[Function]}
+              type="button"
+            >
+              <span>
+                Run
+              </span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

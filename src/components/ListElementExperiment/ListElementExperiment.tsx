@@ -57,22 +57,24 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
     <div>
       <List.Item>
         <Card className='Card' title={cardTitle}>
-          <p className='Card-Content'>{props.content}</p>
-          <Dropdown overlay={menu} placement='bottomLeft'>
-            <Button className='List-Buttons' icon='ellipsis' />
-          </Dropdown>
-          <Button
-            className='List-Buttons'
-            onClick={props.onExplore}
-            type='primary'
-            ghost={true}
-            disabled={props.status === 'success' ? false : true}
-          >
-            Explore
-          </Button>
-          <Button className='List-Buttons' onClick={props.onRunStart} type='primary' ghost={true}>
-            Run
-          </Button>
+          <p className='Card-Content Experiment-Content'>{props.content}</p>
+          <div>
+            <Dropdown overlay={menu} placement='bottomLeft'>
+              <Button className='List-Buttons' icon='ellipsis' />
+            </Dropdown>
+            <Button
+              className='List-Buttons'
+              onClick={props.onExplore}
+              type='primary'
+              ghost={true}
+              disabled={props.status === 'success' ? false : true}
+            >
+              Explore
+            </Button>
+            <Button className='List-Buttons' onClick={props.onRunStart} type='primary' ghost={true}>
+              Run
+            </Button>
+          </div>
         </Card>
       </List.Item>
     </div>
