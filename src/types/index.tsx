@@ -1,10 +1,15 @@
-import { IAPIGraphNode, IAPIGraphEdges, ID3GraphNode } from './graphTypes';
+import {
+  IAPIGraphNode,
+  IAPIGraphEdges,
+  ID3GraphNode,
+  ID3Graph,
+} from './graphTypes';
 import { IndepenceTests } from '../constants/experiment';
 import { CIGraph } from '../utils/graph';
 
 export interface IStoreState {
   graph: CIGraph;
-  selectedGraph: any;
+  selectedGraph: ID3Graph;
   nodes: ID3GraphNode[];
   doFreeze: boolean;
 }
