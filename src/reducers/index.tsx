@@ -66,7 +66,11 @@ function graphExplorer(
                 ...node,
                 isContext: true,
               })),
-              { id: action.nodeID, isContext: false },
+              {
+                id: action.nodeID,
+                label: state.graph.node(action.nodeID),
+                isContext: false,
+              },
             ],
           },
           nodes: [
