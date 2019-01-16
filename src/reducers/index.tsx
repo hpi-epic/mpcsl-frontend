@@ -7,14 +7,19 @@ import {
 } from '../constants/actions';
 import { StoreState } from '../types';
 import { ID3GraphLink, ID3GraphNode } from '../types/graphTypes';
-import { addUniqueLinks, addUniqueNodes, resetLayout } from '../utils/graph';
+import {
+  addUniqueLinks,
+  addUniqueNodes,
+  resetLayout,
+  CIGraph,
+} from '../utils/graph';
 import { combineReducers } from 'redux';
 import { IState } from '../store';
 
 const initialState = {
-  graph: null,
+  graph: new CIGraph(),
   selectedGraph: { nodes: [] as ID3GraphNode[], links: [] as ID3GraphLink[] },
-  nodes: [] as string[],
+  nodes: [] as ID3GraphNode[],
   doFreeze: true,
 };
 
@@ -46,7 +51,10 @@ function graphExplorer(
               state.doFreeze,
             ),
           },
-          nodes: [...state.nodes, action.nodeID],
+          nodes: [
+            ...state.nodes,
+            { id: action.nodeID, label: state.graph.node(action.nodeID) },
+          ],
         };
       } else {
         return {
@@ -61,7 +69,10 @@ function graphExplorer(
               { id: action.nodeID, isContext: false },
             ],
           },
-          nodes: [action.nodeID],
+          nodes: [
+            ...state.nodes,
+            { id: action.nodeID, label: state.graph.node(action.nodeID) },
+          ],
         };
       }
     case NEW_GRAPH_LAYOUT:
