@@ -28,10 +28,10 @@ export interface IGraphRendererState {
 const graphSettings = {
   nodeMouseOverCursor: 'pointer',
   nodeRadius: 13,
-  nodeStrokeWidth: 1,
+  nodeStrokeWidth: 2,
   nodeStroke: '#001529',
   nodeColission: 25,
-  focusNodeColor: '#001529',
+  focusNodeColor: '#dcdcdc',
   contextNodeColor: '#eff1ef',
   contextNodeStrokeDashArray: '5, 5',
   linkStrokeWidth: 1,
