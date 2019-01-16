@@ -1,8 +1,11 @@
 import React from 'react';
-import { List } from 'antd';
+import { List, Tooltip } from 'antd';
+import { ID3GraphNode } from '../../types/graphTypes';
+
+import './GraphNodeList.css';
 
 interface IPropsGraphNodeList {
-  nodes: string[];
+  nodes: ID3GraphNode[];
 }
 
 function GraphNodeList(props: IPropsGraphNodeList) {
@@ -14,8 +17,16 @@ function GraphNodeList(props: IPropsGraphNodeList) {
         </span>}
       size='small'
       dataSource={props.nodes}
-      renderItem={(item: string) => (
-        <List.Item style={{ padding: '14px' }}>{item}</List.Item>
+      renderItem={(item: ID3GraphNode) => (
+        <Tooltip placement='topLeft' title={item.label}>
+          <List.Item
+            className='Node-List-Item'
+            key={item.id}
+            style={{ padding: '14px' }}
+          >
+            {item.label}
+          </List.Item>
+        </Tooltip>
       )}
     />
   );
