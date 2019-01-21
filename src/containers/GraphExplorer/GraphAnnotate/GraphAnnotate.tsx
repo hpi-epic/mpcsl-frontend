@@ -2,7 +2,7 @@ import React from 'react';
 
 import GraphRenderer from '../GraphRenderer/GraphRenderer';
 import GraphNodeList from '../../../components/GraphNodeList/GraphNodeList';
-import { Layout } from 'antd';
+import { Layout, Popover } from 'antd';
 
 import { ID3GraphNode } from '../../../types/graphTypes';
 
@@ -26,10 +26,12 @@ IGraphExplorationProps
     return(
     <div>
       <Layout>
-          <Layout.Sider className='graphSelectionSider'>
-            <GraphNodeList nodes={this.state.nodes} />
-          </Layout.Sider>
+        <Popover placement='topLeft' title={'Title'} content={'Content'}>
+        <Layout.Sider className='graphSelectionSider'>
+          <GraphNodeList nodes={this.state.nodes} />
+        </Layout.Sider>
         <GraphRenderer />
+        </Popover>
       </Layout>
     </div>
     );
