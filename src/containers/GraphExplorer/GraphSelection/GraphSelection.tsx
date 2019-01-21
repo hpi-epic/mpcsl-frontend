@@ -21,6 +21,7 @@ interface IGraphSelectionProps extends RouteComponentProps<IMatchParams> {
   fetchGraph: (resultID: number) => void;
   nodes: ID3GraphNode[];
   graph: CIGraph;
+  currentResultID?: string;
 }
 
 class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
@@ -29,7 +30,7 @@ class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
   }
 
   public componentDidMount() {
-    if (this.props.graph.nodeCount() <= 0) {
+    if (this.props.currentResultID !== this.props.match.params.result_id) {
       this.props.fetchGraph(Number(this.props.match.params.result_id));
     }
   }
@@ -50,6 +51,7 @@ export function mapStateToProps(state: IState) {
   return {
     nodes: state.graphExplorer!.nodes,
     graph: state.graphExplorer!.graph,
+    currentResultID: state.graphExplorer!.resultID!,
   };
 }
 

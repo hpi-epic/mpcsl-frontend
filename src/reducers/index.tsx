@@ -33,6 +33,8 @@ function graphExplorer(
         ...state,
         graph: action.graph,
         selectedGraph: action.graph.toD3Graph(),
+        resultID: action.resultID,
+        nodes: [],
       };
     case ADD_NODE:
       if (state.nodes.length > 0) {
