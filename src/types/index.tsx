@@ -8,6 +8,7 @@ import { IndepenceTests } from '../constants/experiment';
 import { CIGraph } from '../utils/graph';
 
 export interface IStoreState {
+  resultID?: string; // ID of current graph
   graph: CIGraph;
   selectedGraph: ID3Graph;
   nodes: ID3GraphNode[];
