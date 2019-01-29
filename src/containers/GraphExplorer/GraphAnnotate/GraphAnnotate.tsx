@@ -8,16 +8,26 @@ import { Layout } from 'antd';
 
 import { ID3GraphNode } from '../../../types/graphTypes';
 import { connect } from 'react-redux';
-
 import { IState } from '../../../store';
 
 interface IGraphExplorationProps {
   nodes: ID3GraphNode[];
 }
 
-class GraphAnnotate extends React.Component<IGraphExplorationProps, {}> {
+interface IGraphExplorationState {
+  dataModalVisible: boolean;
+}
+
+class GraphAnnotate extends React.Component<
+  IGraphExplorationProps,
+  IGraphExplorationState
+> {
   constructor(props: IGraphExplorationProps) {
     super(props);
+
+    this.state = {
+      dataModalVisible: false,
+    };
   }
 
   public render() {
@@ -30,14 +40,20 @@ class GraphAnnotate extends React.Component<IGraphExplorationProps, {}> {
               onNodeClick={(node: ID3GraphNode) => console.log(node)}
             />
           </Layout.Sider>
-          <GraphAnnotateDataModal />
+          <GraphAnnotateDataModal visible={this.state.dataModalVisible} />
           <GraphRenderer
             isSelectionMode={false}
-            onNodeClick={(node: ID3GraphNode) => console.log(node)} // example function
+            onNodeClick={this.showDataModal} // example function
           />
         </Layout>
       </div>
     );
+  }
+
+  private showDataModal = (node: ID3GraphNode) => {
+    this.setState({
+      dataModalVisible: true,
+    });
   }
 }
 
