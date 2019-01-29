@@ -9,6 +9,8 @@ import { Layout } from 'antd';
 import { ID3GraphNode } from '../../../types/graphTypes';
 import { connect } from 'react-redux';
 import { IState } from '../../../store';
+import { IAPIDistribution } from '../../../types';
+import { getNodeDataDistribution } from '../../../actions/apiRequests';
 
 interface IGraphExplorationProps {
   nodes: ID3GraphNode[];
@@ -16,6 +18,7 @@ interface IGraphExplorationProps {
 
 interface IGraphExplorationState {
   dataModalVisible: boolean;
+  selectedNodeDataDistribution: IAPIDistribution | undefined;
 }
 
 class GraphAnnotate extends React.Component<
@@ -27,6 +30,7 @@ class GraphAnnotate extends React.Component<
 
     this.state = {
       dataModalVisible: false,
+      selectedNodeDataDistribution: undefined,
     };
   }
 
@@ -37,22 +41,29 @@ class GraphAnnotate extends React.Component<
           <Layout.Sider className='graphSelectionSider'>
             <GraphNodeList
               nodes={this.props.nodes}
-              onNodeClick={(node: ID3GraphNode) => console.log(node)}
+              onNodeClick={this.showDataModal}
             />
           </Layout.Sider>
-          <GraphAnnotateDataModal visible={this.state.dataModalVisible} />
+          <GraphAnnotateDataModal
+            visible={this.state.dataModalVisible}
+            data={this.state.selectedNodeDataDistribution}
+          />
           <GraphRenderer
             isSelectionMode={false}
-            onNodeClick={this.showDataModal} // example function
+            onNodeClick={this.showDataModal}
           />
         </Layout>
       </div>
     );
   }
 
-  private showDataModal = (node: ID3GraphNode) => {
+  private showDataModal = async (node: ID3GraphNode) => {
+    const nodeDistribution: IAPIDistribution = await getNodeDataDistribution(
+      String(node.id),
+    );
     this.setState({
       dataModalVisible: true,
+      selectedNodeDataDistribution: nodeDistribution,
     });
   }
 }

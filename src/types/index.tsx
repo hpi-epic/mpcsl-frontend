@@ -97,3 +97,22 @@ export interface IAPIResult {
   meta_results: IAPIMetaResults;
   sepset: any[];
 }
+
+export interface IAPIDistribution {
+  dataset: {
+    time_created: string;
+    id: number;
+    description: string | undefined;
+    name: string;
+    remote_db: string | undefined;
+    load_query: string | undefined;
+  };
+  node: {
+    result: number;
+    name: string;
+    result_id: number;
+    id: number;
+  };
+  bin_edges: number[];
+  bins: number[];
+}

@@ -9,6 +9,7 @@ const Endpoints = {
   allJobs: '/jobs',
   allResults: baseApiUrl + '/results',
   result: baseApiUrl + '/result',
+  nodeDistribution: (nodeID: string) => `${baseApiUrl}/node/${nodeID}/marginal`,
 };
 
 export default Endpoints;
