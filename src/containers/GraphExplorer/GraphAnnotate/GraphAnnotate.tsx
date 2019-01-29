@@ -27,7 +27,7 @@ class GraphAnnotate extends React.Component<IGraphExplorationProps, {}> {
           </Layout.Sider>
           <GraphRenderer
             isSelectionMode={false}
-            onNodeClick={(node: ID3GraphNode) => console.log(node)}
+            onNodeClick={(node: ID3GraphNode) => console.log(node)} // example function
           />
         </Layout>
       </div>
