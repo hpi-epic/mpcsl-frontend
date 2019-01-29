@@ -192,7 +192,6 @@ class GraphRenderer extends React.Component<
       .style('cursor', graphSettings.nodeMouseOverCursor)
       .attr('r', graphSettings.nodeRadius)
       .on('mouseover.tooltip', (d: ID3GraphNode) => {
-        console.log('test');
         this.tooltip
           .transition()
           .duration(300)
