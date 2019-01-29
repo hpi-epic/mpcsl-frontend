@@ -49,5 +49,5 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "proxy": "http://localhost:5000"
+  "proxy": "http://vm-mpws2018-hana.eaalab.hpi.uni-potsdam.de:5000"
 }

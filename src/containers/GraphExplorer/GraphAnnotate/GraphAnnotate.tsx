@@ -2,40 +2,44 @@ import React from 'react';
 
 import GraphRenderer from '../GraphRenderer/GraphRenderer';
 import GraphNodeList from '../../../components/GraphNodeList/GraphNodeList';
-import { Layout, Popover } from 'antd';
+import { Layout } from 'antd';
 
 import { ID3GraphNode } from '../../../types/graphTypes';
+import { connect } from 'react-redux';
+
+import { IState } from '../../../store';
 
 interface IGraphExplorationProps {
   nodes: ID3GraphNode[];
 }
 
 class GraphAnnotate extends React.Component<
-{},
-IGraphExplorationProps
+  IGraphExplorationProps, {}
 > {
-  constructor(props: {}) {
+  constructor(props: IGraphExplorationProps) {
     super(props);
-
-    this.state = {
-      nodes: [ {id: 1, label: 'a'} ],
-    };
   }
 
   public render() {
     return(
     <div>
       <Layout>
-        <Popover placement='topLeft' title={'Title'} content={'Content'}>
         <Layout.Sider className='graphSelectionSider'>
-          <GraphNodeList nodes={this.state.nodes} />
+          <GraphNodeList nodes={this.props.nodes} />
         </Layout.Sider>
         <GraphRenderer />
-        </Popover>
       </Layout>
     </div>
     );
   }
 }
 
-export default GraphAnnotate;
+export function mapStateToProps(state: IState) {
+  return {
+    nodes: state.graphExplorer!.nodes,
+  };
+}
+
+export default connect(
+  mapStateToProps,
+)(GraphAnnotate);
