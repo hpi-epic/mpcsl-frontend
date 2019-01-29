@@ -18,6 +18,8 @@ export interface IGraphRendererProps {
   onAddNode: (graph: CIGraph, node: string) => void;
   graph: CIGraph;
   toggleFreezeLayout: () => void;
+  isSelectionMode: boolean;
+  onNodeClick?: (node: ID3GraphNode) => void;
 }
 
 export interface IGraphRendererState {
@@ -171,8 +173,12 @@ class GraphRenderer extends React.Component<
     selection
       .append('circle')
       .on('click', (d: ID3GraphNode) => {
-        if (d.isContext) {
-          this.props.onAddNode(this.props.graph, d.id.toString());
+        if (this.props.isSelectionMode) {
+          if (d.isContext) {
+            this.props.onAddNode(this.props.graph, d.id.toString());
+          }
+        } else {
+          this.props.onNodeClick!(d);
         }
       })
       .style('cursor', graphSettings.nodeMouseOverCursor)
