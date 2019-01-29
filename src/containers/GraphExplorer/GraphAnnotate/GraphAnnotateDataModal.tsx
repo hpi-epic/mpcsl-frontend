@@ -10,6 +10,7 @@ import {
   VerticalRectSeries,
 } from 'react-vis';
 
+import 'react-vis/dist/style.css';
 interface IGraphAnnotateDataModalProps {
   visible: boolean;
   data: IAPIDistribution | undefined;
