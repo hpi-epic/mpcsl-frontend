@@ -15,24 +15,28 @@ interface IGraphExplorationProps {
   nodes: ID3GraphNode[];
 }
 
-class GraphAnnotate extends React.Component<
-  IGraphExplorationProps, {}
-> {
+class GraphAnnotate extends React.Component<IGraphExplorationProps, {}> {
   constructor(props: IGraphExplorationProps) {
     super(props);
   }
 
   public render() {
-    return(
-    <div>
-      <Layout>
-        <Layout.Sider className='graphSelectionSider'>
-          <GraphNodeList nodes={this.props.nodes} />
-        </Layout.Sider>
+    return (
+      <div>
+        <Layout>
+          <Layout.Sider className='graphSelectionSider'>
+            <GraphNodeList
+              nodes={this.props.nodes}
+              onNodeClick={(node: ID3GraphNode) => console.log(node)}
+            />
+          </Layout.Sider>
           <GraphAnnotateDataModal />
-        <GraphRenderer />
-      </Layout>
-    </div>
+          <GraphRenderer
+            isSelectionMode={false}
+            onNodeClick={(node: ID3GraphNode) => console.log(node)} // example function
+          />
+        </Layout>
+      </div>
     );
   }
 }
@@ -43,6 +47,4 @@ export function mapStateToProps(state: IState) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-)(GraphAnnotate);
+export default connect(mapStateToProps)(GraphAnnotate);

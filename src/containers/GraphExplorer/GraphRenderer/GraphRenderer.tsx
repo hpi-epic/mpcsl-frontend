@@ -18,6 +18,8 @@ export interface IGraphRendererProps {
   onAddNode: (graph: CIGraph, node: string) => void;
   graph: CIGraph;
   toggleFreezeLayout: () => void;
+  isSelectionMode: boolean;
+  onNodeClick?: (node: ID3GraphNode) => void;
 }
 
 export interface IGraphRendererState {
@@ -50,6 +52,7 @@ class GraphRenderer extends React.Component<
   private force: d3.Simulation<any, any>;
   private graph?: any;
   private svg?: any;
+  private tooltip?: any;
 
   constructor(props: IGraphRendererProps) {
     super(props);
@@ -75,6 +78,13 @@ class GraphRenderer extends React.Component<
     this.force.on('tick', () => {
       this.graph.call(this.updateGraph);
     });
+
+    this.tooltip = d3
+      .select('body')
+      .append('div')
+      .attr('class', 'tooltip')
+      .style('opacity', 0);
+
     this.onReLayout();
   }
 
@@ -171,12 +181,38 @@ class GraphRenderer extends React.Component<
     selection
       .append('circle')
       .on('click', (d: ID3GraphNode) => {
-        if (d.isContext) {
-          this.props.onAddNode(this.props.graph, d.id.toString());
+        if (this.props.isSelectionMode) {
+          if (d.isContext) {
+            this.props.onAddNode(this.props.graph, d.id.toString());
+          }
+        } else {
+          this.props.onNodeClick!(d);
         }
       })
       .style('cursor', graphSettings.nodeMouseOverCursor)
-      .attr('r', graphSettings.nodeRadius);
+      .attr('r', graphSettings.nodeRadius)
+      .on('mouseover.tooltip', (d: ID3GraphNode) => {
+        console.log('test');
+        this.tooltip
+          .transition()
+          .duration(300)
+          .style('opacity', 0.8);
+        this.tooltip
+          .html(d.label)
+          .style('left', d3.event.pageX + 'px')
+          .style('top', d3.event.pageY + 'px');
+      })
+      .on('mouseout.tooltip', () => {
+        this.tooltip
+          .transition()
+          .duration(100)
+          .style('opacity', 0);
+      })
+      .on('mousemove', () => {
+        this.tooltip
+          .style('left', d3.event.pageX + 'px')
+          .style('top', d3.event.pageY + 10 + 'px');
+      });
 
     selection
       .append('text')

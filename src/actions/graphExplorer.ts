@@ -11,6 +11,7 @@ import { graph } from '../constants/testdata';
 export interface IFetchGraph {
   type: constants.ADD_GRAPH;
   graph: CIGraph;
+  resultID: string;
 }
 
 export const fetchGraph: ActionCreator<
@@ -25,6 +26,7 @@ export const fetchGraph: ActionCreator<
       return dispatch({
         type: constants.ADD_GRAPH as constants.ADD_GRAPH,
         graph: ciGraph,
+        resultID: resultID.toString(),
       });
     } catch (e) {
       // return fallback graph
@@ -33,6 +35,7 @@ export const fetchGraph: ActionCreator<
       return dispatch({
         type: constants.ADD_GRAPH as constants.ADD_GRAPH,
         graph: ciGraph,
+        resultID: 'fallback',
       });
     }
   };
