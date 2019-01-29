@@ -38,10 +38,6 @@ class GraphAnnotateDataModal extends React.Component<
             2,
         );
       }
-      const margin =
-        0.01 *
-        (this.props.data!.bin_edges[this.props.data!.bin_edges.length - 1] -
-          this.props.data!.bin_edges[0]);
       return (
         <div>
           <Card
@@ -74,11 +70,12 @@ class GraphAnnotateDataModal extends React.Component<
                 />
                 <YAxis />
                 <VerticalRectSeries
+                  style={{ stroke: '#fff' }}
                   data={this.props.data.bins.map(
                     (value: number, index: number) => {
                       return {
-                        x0: this.props.data!.bin_edges[index] + margin,
-                        x: this.props.data!.bin_edges[index + 1] - margin,
+                        x0: this.props.data!.bin_edges[index],
+                        x: this.props.data!.bin_edges[index + 1],
                         y: value,
                         y0: 0,
                       };
