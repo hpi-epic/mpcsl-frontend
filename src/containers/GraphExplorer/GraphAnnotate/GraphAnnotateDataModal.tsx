@@ -11,6 +11,7 @@ import {
 } from 'react-vis';
 
 import 'react-vis/dist/style.css';
+
 interface IGraphAnnotateDataModalProps {
   visible: boolean;
   data: IAPIDistribution | undefined;
@@ -30,6 +31,17 @@ class GraphAnnotateDataModal extends React.Component<
 
   public render() {
     if (this.props.visible && this.props.data) {
+      const ticks: number[] = [];
+      for (let i = 0; i < this.props.data!.bin_edges.length - 1; i++) {
+        ticks.push(
+          (this.props.data!.bin_edges[i + 1] + this.props.data!.bin_edges[i]) /
+            2,
+        );
+      }
+      const margin =
+        0.01 *
+        (this.props.data!.bin_edges[this.props.data!.bin_edges.length - 1] -
+          this.props.data!.bin_edges[0]);
       return (
         <div>
           <Card
@@ -45,7 +57,7 @@ class GraphAnnotateDataModal extends React.Component<
             <div>
               <XYPlot
                 width={250}
-                height={300}
+                height={150}
                 xDomain={[
                   this.props.data!.bin_edges[0],
                   this.props.data!.bin_edges[
@@ -55,14 +67,18 @@ class GraphAnnotateDataModal extends React.Component<
               >
                 <VerticalGridLines />
                 <HorizontalGridLines />
-                <XAxis />
+                <XAxis
+                  tickValues={ticks}
+                  tickFormat={(v) => parseFloat(v).toFixed(1)}
+                  tickLabelAngle={-45}
+                />
                 <YAxis />
                 <VerticalRectSeries
                   data={this.props.data.bins.map(
                     (value: number, index: number) => {
                       return {
-                        x0: this.props.data!.bin_edges[index],
-                        x: this.props.data!.bin_edges[index + 1],
+                        x0: this.props.data!.bin_edges[index] + margin,
+                        x: this.props.data!.bin_edges[index + 1] - margin,
                         y: value,
                         y0: 0,
                       };
