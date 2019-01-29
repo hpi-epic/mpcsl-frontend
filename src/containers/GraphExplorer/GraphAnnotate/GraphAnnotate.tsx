@@ -23,7 +23,10 @@ class GraphAnnotate extends React.Component<IGraphExplorationProps, {}> {
       <div>
         <Layout>
           <Layout.Sider className='graphSelectionSider'>
-            <GraphNodeList nodes={this.props.nodes} />
+            <GraphNodeList
+              nodes={this.props.nodes}
+              onNodeClick={(node: ID3GraphNode) => console.log(node)}
+            />
           </Layout.Sider>
           <GraphRenderer
             isSelectionMode={false}

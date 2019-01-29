@@ -39,7 +39,10 @@ class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
     return (
       <Layout>
         <Layout.Sider className='graphSelectionSider'>
-          <GraphNodeList nodes={this.props.nodes} />
+          <GraphNodeList
+            nodes={this.props.nodes}
+            onNodeClick={() => undefined}
+          />
         </Layout.Sider>
         <GraphRenderer isSelectionMode={true} />
       </Layout>

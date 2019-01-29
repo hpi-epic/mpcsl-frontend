@@ -6,6 +6,7 @@ import './GraphNodeList.css';
 
 interface IPropsGraphNodeList {
   nodes: ID3GraphNode[];
+  onNodeClick: (node: ID3GraphNode) => void;
 }
 
 function GraphNodeList(props: IPropsGraphNodeList) {
@@ -24,7 +25,7 @@ function GraphNodeList(props: IPropsGraphNodeList) {
             key={item.id}
             style={{ padding: '14px' }}
           >
-            {item.label}
+            <div onClick={() => props.onNodeClick(item)}>{item.label}</div>
           </List.Item>
         </Tooltip>
       )}
