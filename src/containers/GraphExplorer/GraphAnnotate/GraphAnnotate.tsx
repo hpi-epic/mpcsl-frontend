@@ -2,6 +2,8 @@ import React from 'react';
 
 import GraphRenderer from '../GraphRenderer/GraphRenderer';
 import GraphNodeList from '../../../components/GraphNodeList/GraphNodeList';
+import GraphAnnotateDataModal from './GraphAnnotateDataModal';
+
 import { Layout } from 'antd';
 
 import { ID3GraphNode } from '../../../types/graphTypes';
@@ -28,6 +30,7 @@ class GraphAnnotate extends React.Component<IGraphExplorationProps, {}> {
               onNodeClick={(node: ID3GraphNode) => console.log(node)}
             />
           </Layout.Sider>
+          <GraphAnnotateDataModal />
           <GraphRenderer
             isSelectionMode={false}
             onNodeClick={(node: ID3GraphNode) => console.log(node)} // example function
