@@ -17,12 +17,20 @@ interface IGraphAnnotateDataModalProps {
   data: IAPIDistribution | undefined;
 }
 
+interface IGraphAnnotateDataModalState {
+  crosshairValues: Array<{ x: number; y: number }>;
+}
+
 class GraphAnnotateDataModal extends React.Component<
   IGraphAnnotateDataModalProps,
-  {}
+  IGraphAnnotateDataModalState
 > {
   constructor(props: IGraphAnnotateDataModalProps) {
     super(props);
+
+    this.state = {
+      crosshairValues: [],
+    };
   }
 
   public componentDidMount = () => {};
@@ -38,6 +46,8 @@ class GraphAnnotateDataModal extends React.Component<
             2,
         );
       }
+
+      const maxYValue = Math.max(...this.props.data!.bins);
       return (
         <div>
           <Card
@@ -54,12 +64,14 @@ class GraphAnnotateDataModal extends React.Component<
               <XYPlot
                 width={250}
                 height={150}
+                onMouseLeave={() => this.setState({ crosshairValues: [] })}
                 xDomain={[
                   this.props.data!.bin_edges[0],
                   this.props.data!.bin_edges[
                     this.props.data!.bin_edges.length - 1
                   ],
                 ]}
+                yDomain={[0, maxYValue + 0.1 * maxYValue]}
               >
                 <VerticalGridLines />
                 <HorizontalGridLines />
@@ -70,6 +82,17 @@ class GraphAnnotateDataModal extends React.Component<
                 />
                 <YAxis />
                 <VerticalRectSeries
+                  onNearestX={(value) =>
+                    this.setState({
+                      crosshairValues: [
+                        {
+                          x: Number(parseFloat(String(value.x)).toFixed(1)),
+                          y: Number(value.y),
+                        },
+                      ],
+                    })
+                  }
+                  opacity={0.8}
                   style={{ stroke: '#fff' }}
                   data={this.props.data.bins.map(
                     (value: number, index: number) => {
