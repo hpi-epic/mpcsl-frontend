@@ -243,10 +243,13 @@ class NewExperimentModal extends React.Component<
       dataset_id: values.observationMatrix_id,
       name: values.name,
       description: values.description,
+      algorithm_id: 1,
       parameters: {
         alpha: values.alpha,
         independence_test: values.independence_test,
         cores: values.cores,
+        subset_size: 1,
+        verbose: 1,
       },
     });
     this.props.onClose();
