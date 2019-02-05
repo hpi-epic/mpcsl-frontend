@@ -13,7 +13,7 @@ import {
   addUniqueNodes,
   resetLayout,
   CIGraph,
-  removeNodeFromContext,
+  removeNodeFromFocus,
 } from '../utils/graph';
 import { combineReducers } from 'redux';
 import { IState } from '../store';
@@ -97,7 +97,7 @@ function graphExplorer(
     case REMOVE_NODE:
       return {
         ...state,
-        selectedGraph: removeNodeFromContext(state.selectedGraph, action.node),
+        selectedGraph: removeNodeFromFocus(state.selectedGraph, action.node),
         nodes: state.nodes.filter((node) =>
           node.id === action.node.id ? false : true,
         ),

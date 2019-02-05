@@ -124,7 +124,7 @@ export function resetLayout(graph: ID3Graph): ID3Graph {
   return graph;
 }
 
-export function removeNodeFromContext(
+export function removeNodeFromFocus(
   graph: ID3Graph,
   node: ID3GraphNode,
 ): ID3Graph {
