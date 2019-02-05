@@ -161,14 +161,7 @@ describe('addUniqueNodes()', () => {
 
     const expectedNodes: ID3GraphNode[] = [
       { id: '1', label: 'a', x: 1, y: 1, fx: 1, fy: 1, isContext: false },
-      {
-        id: '2',
-        label: 'b',
-        x: 1,
-        y: 1,
-        fx: 1,
-        fy: 1,
-      },
+      { id: '2', label: 'b', x: 1, y: 1, fx: 1, fy: 1 },
       { id: '3', label: 'c', isContext: true, contextOf: { 1: true } },
     ];
 
