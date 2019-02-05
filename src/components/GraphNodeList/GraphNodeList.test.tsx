@@ -4,9 +4,13 @@ import GraphNodeList from './GraphNodeList';
 
 describe('<GraphNodeList />', () => {
   it('renders correctly', () => {
-    const nodeList = ['node1', 'node2', 'node3'];
+    const nodeList = [
+      { id: '1', label: 'node1' },
+      { id: '2', label: 'node2' },
+      { id: '3', label: 'node3' },
+    ];
     const tree = renderer
-      .create(<GraphNodeList nodes={nodeList} onRemoveNode={() => undefined} />)
+      .create(<GraphNodeList onRemoveNode={() => undefined} nodes={nodeList} />)
       .toJSON();
 
     expect(tree).toMatchSnapshot();

@@ -1,7 +1,7 @@
 @import '~antd/dist/antd.css';
 
 .Card {
-	width: 50%;
+	min-width: 100%;
 	margin: 0 auto;
 	border-radius: 8px;
 }
@@ -34,8 +34,9 @@
 	margin-top: 15px;
 }
 
-.Card-Content {
+.Card-Content.Experiment-Content {
 	float: left;
+	width: 25%;
 }
 
 .Dropdown-Button {

@@ -2,6 +2,7 @@ import { Drawer, Form, Row, Input, Button, message } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import React from 'react';
 import { createObservationMatrix } from '../../actions/apiRequests';
+import TextArea from 'antd/lib/input/TextArea';
 
 export interface IPropsNewObservationMatrixModal extends FormComponentProps {
   visible: boolean;
@@ -58,7 +59,7 @@ class NewObservationMatrixModal extends React.Component<
         ? this.props.observationMatrix.query
         : undefined,
       rules: [{ required: true, message: 'Enter a query' }],
-    })(<Input disabled={disabled} placeholder='Your Query' />);
+    })(<TextArea rows={4} disabled={disabled} placeholder='Your Query' />);
 
     const observationMatrixRemoteDBEl = getFieldDecorator('remoteDB', {
       initialValue: this.props.observationMatrix
@@ -76,7 +77,7 @@ class NewObservationMatrixModal extends React.Component<
     return (
       <Drawer
         title={title}
-        width={720}
+        width={310}
         placement='right'
         onClose={this.props.onClose}
         visible={this.props.visible}

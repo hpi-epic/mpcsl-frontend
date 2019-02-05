@@ -30,12 +30,12 @@ class PipelineManager extends React.Component<
     return (
       <Layout className='Layout'>
         <Header className='Header'>
-          <Row>
-            <Col span={11} />
-            <Col span={2} className='Home'>
+          <Row gutter={{ xs: 8, sm: 16, md: 24 }} >
+            <Col md={11} sm={0} xs={0} />
+            <Col md={2} sm={4} xs={2} className='Home'>
               <Button onClick={this.onHomeClick} icon='home' ghost={true} />
             </Col>
-            <Col span={11} className='Nav-Switch'>
+            <Col md={11} sm={20} xs={22} className='Nav-Switch'>
               <ViewRadioNavigation
                 value={this.state.view}
                 onChange={this.onViewChange}

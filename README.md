@@ -6,7 +6,7 @@
 
 In the project directory, you can run (you can use `npm` instead of `yarn`):
 
-## `yarn install`
+### `yarn install`
 
 ### `yarn start`
 

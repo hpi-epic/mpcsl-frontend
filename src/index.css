@@ -1,11 +1,15 @@
 @import '~antd/dist/antd.css';
 
 body {
-  background: #eff1ef;
+  background: rgb(239, 241, 239);
 }
 
-.Modal-Form .ant-input-disabled  {
-    color: rgba(0, 0, 0, 0.98);
+.ant-layout {
+  background-color: rgb(239, 241, 239);
+}
+
+.Modal-Form .ant-input-disabled {
+  color: rgba(0, 0, 0, 0.98);
 }
 
 .Modal-Form .ant-select-disabled {

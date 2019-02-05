@@ -10,6 +10,8 @@ import * as actions from '../../../actions/graphExplorer';
 import './GraphSelection.css';
 import { IState } from '../../../store';
 import { ThunkDispatch } from 'redux-thunk';
+import { ID3GraphNode } from '../../../types/graphTypes';
+import { CIGraph } from '../../../utils/graph';
 
 interface IMatchParams {
   result_id: string;
@@ -17,8 +19,10 @@ interface IMatchParams {
 
 interface IGraphSelectionProps extends RouteComponentProps<IMatchParams> {
   fetchGraph: (resultID: number) => void;
-  onRemoveNode: (nodeID: string) => void;
-  nodes: string[];
+  nodes: ID3GraphNode[];
+  graph: CIGraph;
+  currentResultID?: string;
+  onRemoveNode: (node: ID3GraphNode) => void;
 }
 
 class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
@@ -27,7 +31,9 @@ class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
   }
 
   public componentDidMount() {
-    this.props.fetchGraph(Number(this.props.match.params.result_id));
+    if (this.props.currentResultID !== this.props.match.params.result_id) {
+      this.props.fetchGraph(Number(this.props.match.params.result_id));
+    }
   }
 
   public render() {
@@ -48,6 +54,8 @@ class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
 export function mapStateToProps(state: IState) {
   return {
     nodes: state.graphExplorer!.nodes,
+    graph: state.graphExplorer!.graph,
+    currentResultID: state.graphExplorer!.resultID!,
   };
 }
 
@@ -56,7 +64,7 @@ export function mapDispatchToProps(
 ) {
   return {
     fetchGraph: (resultID: number) => dispatch(actions.fetchGraph(resultID)),
-    onRemoveNode: (nodeID: string) => dispatch(actions.removeNode(nodeID)),
+    onRemoveNode: (node: ID3GraphNode) => dispatch(actions.removeNode(node)),
   };
 }
 

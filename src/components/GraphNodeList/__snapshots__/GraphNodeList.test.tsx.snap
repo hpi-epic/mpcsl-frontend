@@ -26,7 +26,9 @@ exports[`<GraphNodeList /> renders correctly 1`] = `
       className="ant-spin-container"
     >
       <div
-        className="ant-list-item"
+        className="ant-list-item Node-List-Item"
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
         style={
           Object {
             "paddingBottom": "4px",
@@ -71,7 +73,9 @@ exports[`<GraphNodeList /> renders correctly 1`] = `
         </ul>
       </div>
       <div
-        className="ant-list-item"
+        className="ant-list-item Node-List-Item"
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
         style={
           Object {
             "paddingBottom": "4px",
@@ -116,7 +120,9 @@ exports[`<GraphNodeList /> renders correctly 1`] = `
         </ul>
       </div>
       <div
-        className="ant-list-item"
+        className="ant-list-item Node-List-Item"
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
         style={
           Object {
             "paddingBottom": "4px",

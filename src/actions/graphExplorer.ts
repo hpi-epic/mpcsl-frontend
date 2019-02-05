@@ -1,5 +1,5 @@
 import { ThunkAction } from 'redux-thunk';
-import { ID3Graph } from '../types/graphTypes';
+import { ID3Graph, ID3GraphNode } from '../types/graphTypes';
 import * as constants from '../constants/actions';
 import { CIGraph } from '../utils/graph';
 import { getResult } from './apiRequests';
@@ -11,6 +11,7 @@ import { graph } from '../constants/testdata';
 export interface IFetchGraph {
   type: constants.ADD_GRAPH;
   graph: CIGraph;
+  resultID: string;
 }
 
 export const fetchGraph: ActionCreator<
@@ -25,6 +26,7 @@ export const fetchGraph: ActionCreator<
       return dispatch({
         type: constants.ADD_GRAPH as constants.ADD_GRAPH,
         graph: ciGraph,
+        resultID: resultID.toString(),
       });
     } catch (e) {
       // return fallback graph
@@ -33,6 +35,7 @@ export const fetchGraph: ActionCreator<
       return dispatch({
         type: constants.ADD_GRAPH as constants.ADD_GRAPH,
         graph: ciGraph,
+        resultID: 'fallback',
       });
     }
   };
@@ -55,13 +58,13 @@ export function addNode(ciGraph: CIGraph, nodeID: string): IAddNode {
 
 export interface IRemoveNode {
   type: constants.REMOVE_NODE;
-  nodeID: string;
+  node: ID3GraphNode;
 }
 
-export function removeNode(nodeID: string): IRemoveNode {
+export function removeNode(node: ID3GraphNode): IRemoveNode {
   return {
     type: constants.REMOVE_NODE,
-    nodeID,
+    node,
   };
 }
 

@@ -1,10 +1,17 @@
-import { IAPIGraphNode, IAPIGraphEdges } from './graphTypes';
+import {
+  IAPIGraphNode,
+  IAPIGraphEdges,
+  ID3GraphNode,
+  ID3Graph,
+} from './graphTypes';
 import { IndepenceTests } from '../constants/experiment';
+import { CIGraph } from '../utils/graph';
 
 export interface IStoreState {
-  graph: any;
-  selectedGraph: any;
-  nodes: string[];
+  resultID?: string; // ID of current graph
+  graph: CIGraph;
+  selectedGraph: ID3Graph;
+  nodes: ID3GraphNode[];
   doFreeze: boolean;
 }
 
@@ -67,7 +74,7 @@ export interface IJob {
     id: number;
     job_id: number;
     start_time: string;
-    end_time: string,
+    end_time: string;
     meta_results: any;
   };
 }

@@ -1,5 +1,13 @@
+.Node-List-Item > .ant-list-item-content {
+  max-width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+}
+
 .Node-List-Item {
+  overflow-y: scroll;
   max-height: 100vh;
   overflow: hidden;
-  overflow-y: scroll;
 }
