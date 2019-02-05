@@ -135,8 +135,8 @@ describe('addUniqueNodes()', () => {
 
   it('adds unique Nodes and freezes correctly', () => {
     const nodes: ID3GraphNode[] = [
-      { id: '1', label: 'a', x: 1, y: 1, isContext: true },
-      { id: '2', label: 'b', x: 1, y: 1, isContext: true },
+      { id: '1', label: 'a', x: 1, y: 1 },
+      { id: '2', label: 'b', x: 1, y: 1 },
     ];
 
     const ciGraph: CIGraph = new CIGraph();
@@ -155,8 +155,15 @@ describe('addUniqueNodes()', () => {
 
     const expectedNodes: ID3GraphNode[] = [
       { id: '1', label: 'a', x: 1, y: 1, fx: 1, fy: 1, isContext: false },
-      { id: '2', label: 'b', x: 1, y: 1, fx: 1, fy: 1, isContext: true },
-      { id: '3', label: 'c', isContext: true },
+      {
+        id: '2',
+        label: 'b',
+        x: 1,
+        y: 1,
+        fx: 1,
+        fy: 1,
+      },
+      { id: '3', label: 'c', isContext: true, contextOf: { 1: true } },
     ];
 
     expect(uniqueNodes).toEqual(expectedNodes);
@@ -185,7 +192,7 @@ describe('addUniqueNodes()', () => {
     const expectedNodes: ID3GraphNode[] = [
       { id: '1', label: 'a', x: 1, y: 1, isContext: false },
       { id: '2', label: 'b', x: 1, y: 1, isContext: true },
-      { id: '3', label: 'c', isContext: true },
+      { id: '3', label: 'c', isContext: true, contextOf: { 1: true } },
     ];
 
     expect(uniqueNodes).toEqual(expectedNodes);

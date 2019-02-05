@@ -19,10 +19,10 @@ interface IMatchParams {
 
 interface IGraphSelectionProps extends RouteComponentProps<IMatchParams> {
   fetchGraph: (resultID: number) => void;
+  onRemoveNode: (node: ID3GraphNode) => void;
   nodes: ID3GraphNode[];
   graph: CIGraph;
   currentResultID?: string;
-  onRemoveNode: (node: ID3GraphNode) => void;
 }
 
 class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
