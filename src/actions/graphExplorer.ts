@@ -1,5 +1,5 @@
 import { ThunkAction } from 'redux-thunk';
-import { ID3Graph } from '../types/graphTypes';
+import { ID3Graph, ID3GraphNode } from '../types/graphTypes';
 import * as constants from '../constants/actions';
 import { CIGraph } from '../utils/graph';
 import { getResult } from './apiRequests';
@@ -56,6 +56,18 @@ export function addNode(ciGraph: CIGraph, nodeID: string): IAddNode {
   };
 }
 
+export interface IRemoveNode {
+  type: constants.REMOVE_NODE;
+  node: ID3GraphNode;
+}
+
+export function removeNode(node: ID3GraphNode): IRemoveNode {
+  return {
+    type: constants.REMOVE_NODE,
+    node,
+  };
+}
+
 export interface INewLayout {
   type: constants.NEW_GRAPH_LAYOUT;
 }
@@ -80,4 +92,5 @@ export type GraphExplorerAction =
   | IFetchGraph
   | IAddNode
   | INewLayout
+  | IRemoveNode
   | IToggleFreezeLayout;

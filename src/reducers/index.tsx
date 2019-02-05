@@ -4,6 +4,7 @@ import {
   ADD_NODE,
   NEW_GRAPH_LAYOUT,
   TOGGLE_FREEZE_LAYOUT,
+  REMOVE_NODE,
 } from '../constants/actions';
 import { StoreState } from '../types';
 import { ID3GraphLink, ID3GraphNode } from '../types/graphTypes';
@@ -12,6 +13,7 @@ import {
   addUniqueNodes,
   resetLayout,
   CIGraph,
+  removeNodeFromFocus,
 } from '../utils/graph';
 import { combineReducers } from 'redux';
 import { IState } from '../store';
@@ -67,6 +69,7 @@ function graphExplorer(
               ...action.context.nodes.map((node) => ({
                 ...node,
                 isContext: true,
+                contextOf: { [action.nodeID]: true },
               })),
               {
                 id: action.nodeID,
@@ -90,6 +93,14 @@ function graphExplorer(
       return {
         ...state,
         doFreeze: !state.doFreeze,
+      };
+    case REMOVE_NODE:
+      return {
+        ...state,
+        selectedGraph: removeNodeFromFocus(state.selectedGraph, action.node),
+        nodes: state.nodes.filter((node) =>
+          node.id === action.node.id ? false : true,
+        ),
       };
     default:
       return state;

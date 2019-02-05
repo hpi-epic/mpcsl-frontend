@@ -96,9 +96,19 @@ export function addUniqueNodes(
   }
 
   addNodes.forEach((addNode) => {
-    if (nodes.find((n) => n.id === addNode.id) === undefined) {
+    const contextNodeAlreadyIn = nodes.find((n) => n.id === addNode.id);
+    if (contextNodeAlreadyIn === undefined) {
       addNode.isContext = true;
+      addNode.contextOf = {};
+      addNode.contextOf[addToFocusNodeID] = true;
       nodes.push(addNode);
+    } else if (contextNodeAlreadyIn.id !== addToFocusNodeID) {
+      if (contextNodeAlreadyIn.contextOf) {
+        contextNodeAlreadyIn.contextOf[addToFocusNodeID] = true;
+      } else {
+        contextNodeAlreadyIn.contextOf = {};
+        contextNodeAlreadyIn.contextOf[addToFocusNodeID] = true;
+      }
     }
   });
   return nodes;
@@ -112,4 +122,43 @@ export function resetLayout(graph: ID3Graph): ID3Graph {
     node.vy = 0;
   });
   return graph;
+}
+
+export function removeNodeFromFocus(
+  graph: ID3Graph,
+  node: ID3GraphNode,
+): ID3Graph {
+  let links = graph.links;
+  const nodes: ID3GraphNode[] = [];
+  graph.nodes.forEach((existingNode: ID3GraphNode) => {
+    if (existingNode.id !== node.id) {
+      if (existingNode.contextOf && node.id in existingNode.contextOf) {
+        delete existingNode.contextOf[node.id];
+        if (
+          Object.keys(existingNode.contextOf).length > 0 ||
+          !existingNode.isContext
+        ) {
+          nodes.push(existingNode);
+        }
+        links = links.filter((link: any) => {
+          if (
+            (link.source.id === existingNode.id &&
+              link.target.id === node.id) ||
+            (link.source.id === node.id && link.target.id === existingNode.id)
+          ) {
+            return false;
+          } else {
+            return true;
+          }
+        });
+      } else {
+        nodes.push(existingNode);
+      }
+    }
+  });
+
+  return {
+    nodes,
+    links,
+  };
 }
