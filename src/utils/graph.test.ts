@@ -1,5 +1,11 @@
 import { ID3GraphNode } from './../types/graphTypes';
-import { CIGraph, addUniqueLinks, addUniqueNodes, resetLayout } from './graph';
+import {
+  CIGraph,
+  addUniqueLinks,
+  addUniqueNodes,
+  resetLayout,
+  removeNodeFromFocus,
+} from './graph';
 import { IAPIResult } from '../types';
 import { ID3Graph } from '../types/graphTypes';
 import { IndepenceTests } from '../constants/experiment';
@@ -218,5 +224,36 @@ describe('resetLayout()', () => {
     };
 
     expect(resetLayout(testD3Graph)).toEqual(expectedGraph);
+  });
+});
+
+describe('removeNodeFromFocus()', () => {
+  it('removes Node correctly', () => {
+    const nodes: ID3GraphNode[] = [
+      { id: '1', label: 'a', isContext: true, contextOf: { 2: true } },
+      { id: '2', label: 'b', isContext: false },
+      { id: '3', label: 'c', isContext: false },
+    ];
+
+    const testD3Graph = {
+      nodes,
+      links: [
+        { source: nodes[0], target: nodes[1] },
+        { source: nodes[1], target: nodes[2] },
+      ],
+    };
+
+    const expectedGraph = {
+      nodes: [{ id: '3', label: 'c', isContext: false }],
+      links: [{ source: nodes[1], target: nodes[2] }],
+    };
+    const returnedGraph = removeNodeFromFocus(
+      (testD3Graph as unknown) as ID3Graph,
+      {
+        id: '2',
+        label: 'b',
+      },
+    );
+    expect(returnedGraph).toEqual(expectedGraph);
   });
 });
