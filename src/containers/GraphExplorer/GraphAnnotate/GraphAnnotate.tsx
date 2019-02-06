@@ -48,6 +48,7 @@ class GraphAnnotate extends React.Component<
           <GraphAnnotateDataModal
             visible={this.state.dataModalVisible}
             data={this.state.selectedNodeDataDistribution}
+            onClose={this.closeDataModal}
           />
           <GraphRenderer
             isSelectionMode={false}
@@ -62,9 +63,16 @@ class GraphAnnotate extends React.Component<
     const nodeDistribution: IAPIDistribution = await getNodeDataDistribution(
       String(node.id),
     );
+    console.log(nodeDistribution);
     this.setState({
       dataModalVisible: true,
       selectedNodeDataDistribution: nodeDistribution,
+    });
+  }
+
+  private closeDataModal = () => {
+    this.setState({
+      dataModalVisible: false,
     });
   }
 }
