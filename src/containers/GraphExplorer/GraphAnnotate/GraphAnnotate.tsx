@@ -42,7 +42,7 @@ class GraphAnnotate extends React.Component<
             <GraphNodeList
               nodes={this.props.nodes}
               onNodeClick={this.showDataModal}
-              allowRemove={false}
+              isSelectionMode={false}
             />
           </Layout.Sider>
           <GraphAnnotateDataModal

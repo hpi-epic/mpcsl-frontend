@@ -8,7 +8,7 @@ interface IPropsGraphNodeList {
   nodes: ID3GraphNode[];
   onNodeClick?: (node: ID3GraphNode) => void;
   onRemoveNode?: (nodeID: ID3GraphNode) => void;
-  allowRemove: boolean;
+  isSelectionMode: boolean;
 }
 
 function GraphNodeList(props: IPropsGraphNodeList) {
@@ -31,7 +31,7 @@ function GraphNodeList(props: IPropsGraphNodeList) {
               paddingTop: '4px',
             }}
             key={item.id}
-            actions={props.allowRemove ? [
+            actions={props.isSelectionMode ? [
               <Button
                 key={item.id}
                 onClick={() => props.onRemoveNode!(item)}
