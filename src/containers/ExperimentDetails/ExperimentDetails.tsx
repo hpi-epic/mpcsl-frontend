@@ -9,6 +9,8 @@ import './style.css';
 
 interface IStateJobsManagement {
   modalVisible: boolean;
+  extraLines: number;
+  currentJobId: number | undefined;
   jobList: IJob[];
   experiment: IExperiment | undefined;
 }
@@ -20,7 +22,7 @@ interface IMatchParams {
 class ExperimentDetails extends React.Component<
   RouteComponentProps<IMatchParams>,
   IStateJobsManagement
-  > {
+> {
   public exampleExperimentId = 2;
   private jobBadgeMap: any = {
     running: 'processing',
@@ -34,6 +36,8 @@ class ExperimentDetails extends React.Component<
 
     this.state = {
       modalVisible: false,
+      extraLines: 1,
+      currentJobId: undefined,
       jobList: [],
       experiment: undefined,
     };
@@ -47,7 +51,12 @@ class ExperimentDetails extends React.Component<
     if (this.state.experiment) {
       return (
         <div className='Content'>
-          <Button className='Go-Back-Button' onClick={() => this.onGoBack()} type='primary' ghost={true}>
+          <Button
+            className='Go-Back-Button'
+            onClick={() => this.onGoBack()}
+            type='primary'
+            ghost={true}
+          >
             <Icon type='left' />
           </Button>
           <h2>
@@ -73,7 +82,7 @@ class ExperimentDetails extends React.Component<
                   <Button
                     key={2}
                     type='primary'
-                    onClick={() => this.showModal()}
+                    onClick={() => this.showModal(job.id)}
                   >
                     view logs
                   </Button>,
@@ -88,18 +97,6 @@ class ExperimentDetails extends React.Component<
                         status={this.jobBadgeMap[job.status]}
                         text={job.status}
                       />
-                      <Modal
-                        title={`Job #  ${job.id}`}
-                        centered
-                        width='100'
-                        footer={null}
-                        visible={this.state.modalVisible}
-                        onCancel={this.handleCancel}
-                      >
-                        <div className='Log'>
-                          <LazyLog url={'http://localhost:3000/api/job/' + job.id + '/logs'} stream follow={true} />
-                        </div>
-                      </Modal>
                     </div>
                   }
                   description={
@@ -117,15 +114,45 @@ class ExperimentDetails extends React.Component<
               </List.Item>
             )}
           />
+          <Modal
+            title={`Job #  ${this.state.currentJobId}`}
+            centered={true}
+            width='100'
+            footer={null}
+            visible={this.state.modalVisible}
+            onCancel={this.handleCancel}
+          >
+            <div className='Log'>
+              <LazyLog
+                url={
+                  'http://localhost:3000/api/job/' +
+                  this.state.currentJobId +
+                  '/logs'
+                }
+                stream={true}
+                follow={true}
+                // @ts-ignore
+                onError={this.handleError}
+                // @ts-ignore
+                extraLines={this.state.extraLines}
+              />
+            </div>
+          </Modal>
         </div>
       );
     } else {
       return <span>Nothing to show</span>;
     }
   }
-  private showModal = () => {
+  private showModal = (jobId: number) => {
     this.setState({
+      currentJobId: jobId,
       modalVisible: true,
+    });
+  }
+  private handleError = (error: any) => {
+    this.setState({
+      extraLines: 0,
     });
   }
 
