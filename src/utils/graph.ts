@@ -140,20 +140,32 @@ export function removeNodeFromFocus(
         ) {
           nodes.push(existingNode);
         }
-        links = links.filter((link: any) => {
-          if (
-            (link.source.id === existingNode.id &&
-              link.target.id === node.id) ||
-            (link.source.id === node.id && link.target.id === existingNode.id)
-          ) {
-            return false;
-          } else {
-            return true;
-          }
-        });
       } else {
         nodes.push(existingNode);
       }
+    } else if (
+      !existingNode.isContext &&
+      existingNode.contextOf &&
+      Object.keys(existingNode.contextOf).length > 0
+    ) {
+      existingNode.isContext = true;
+      nodes.push(existingNode);
+    }
+  });
+
+  links = links.filter((link: any) => {
+    if (
+      node.contextOf &&
+      Object.keys(node.contextOf!).length < 1 &&
+      (link.source.id === node.id || link.target.id === node.id)
+    ) {
+      return false;
+    } else if (link.source.id === node.id && link.target.isContext) {
+      return false;
+    } else if (link.target.id === node.id && link.source.isContext) {
+      return false;
+    } else {
+      return true;
     }
   });
 
