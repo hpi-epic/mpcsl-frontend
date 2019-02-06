@@ -43,9 +43,10 @@ class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
           <GraphNodeList
             nodes={this.props.nodes}
             onRemoveNode={this.props.onRemoveNode}
+            isSelectionMode={true}
           />
         </Layout.Sider>
-        <GraphRenderer />
+        <GraphRenderer isSelectionMode={true} />
       </Layout>
     );
   }

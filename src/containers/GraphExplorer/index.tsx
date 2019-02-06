@@ -72,7 +72,8 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
       <Layout className='Layout'>
         <Header className='Header'>
           <Row>
-            <Col span={10}>{graphSearch}</Col>
+            <Col span={this.state.view === '/graph-explorer/selection' ? 10 : 0}>{graphSearch}</Col>
+            <Col span={this.state.view === '/graph-explorer/selection' ? 0 : 10} />
             <Col span={4} className='Home'>
               <Button onClick={this.onHomeClick} icon='home' ghost={true} />
             </Col>

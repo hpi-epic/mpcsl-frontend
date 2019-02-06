@@ -5,6 +5,7 @@ import {
   IExperiment,
   IJob,
   ICreateExperiment,
+  IAPIDistribution,
 } from '../types';
 import Endpoints from '../constants/api';
 
@@ -188,6 +189,25 @@ export function getResult(resultID: number): Promise<void> {
         reject({
           status: error.response.status,
           message: error.message,
+        });
+      });
+  });
+}
+
+export function getNodeDataDistribution(
+  nodeID: string,
+): Promise<IAPIDistribution> {
+  return new Promise<IAPIDistribution>((resolve, reject) => {
+    axios
+      .get(Endpoints.nodeDistribution(String(nodeID)))
+      .then((response: AxiosResponse) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        message.error('Failed to fetch Node Data Distribution');
+        reject({
+          status: error.response.status,
+          message: 'Failed to fetch Node Data Distribution',
         });
       });
   });
