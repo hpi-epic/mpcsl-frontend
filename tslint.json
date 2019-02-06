@@ -15,6 +15,6 @@
   },
   "rulesDirectory": [],
   "linterOptions": {
-    "exclude": ["src/serviceWorker.ts"]
+    "exclude": ["src/serviceWorker.ts", "src/types/react-vis.d.ts"]
   }
 }
