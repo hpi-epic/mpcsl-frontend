@@ -22,7 +22,7 @@ function GraphNodeList(props: IPropsGraphNodeList) {
       className='Node-List-Item'
       dataSource={props.nodes}
       renderItem={(item: ID3GraphNode) => (
-        <Tooltip placement='topLeft' title={item.label}>
+        <Tooltip placement='topLeft' title={item.label} overlayStyle={{paddingLeft: '4px'}}>
           <List.Item
             className='Node-List-Item'
             style={{
