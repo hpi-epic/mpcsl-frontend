@@ -10,7 +10,7 @@ import './style.css';
 
 interface IStateJobsManagement {
   modalVisible: boolean;
-  extraLines: number;
+  extraLines: number; // necessary for linux support
   currentJobId: number | undefined;
   jobList: IJob[];
   experiment: IExperiment | undefined;
@@ -118,12 +118,12 @@ class ExperimentDetails extends React.Component<
           <Modal
             title={`Job #  ${this.state.currentJobId}`}
             centered={true}
-            width='100'
+            width='1' // not sure why this is working
             footer={null}
             visible={this.state.modalVisible}
             onCancel={this.handleCancel}
           >
-            <div className='Log'>
+            <div className='Job-Log'>
               <LazyLog
                 url={Endpoints.jobLogs(this.state.currentJobId)}
                 stream={true}
