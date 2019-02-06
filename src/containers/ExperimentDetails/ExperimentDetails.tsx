@@ -131,7 +131,6 @@ class ExperimentDetails extends React.Component<
                 }
                 stream={true}
                 follow={true}
-                // @ts-ignore
                 onError={this.handleError}
                 // @ts-ignore
                 extraLines={this.state.extraLines}
@@ -160,6 +159,7 @@ class ExperimentDetails extends React.Component<
     console.log(e);
     this.setState({
       modalVisible: false,
+      extraLines: 1,
     });
   }
 
