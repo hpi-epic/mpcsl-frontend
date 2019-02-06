@@ -31,14 +31,13 @@ function GraphNodeList(props: IPropsGraphNodeList) {
               paddingTop: '4px',
             }}
             key={item.id}
-            actions={[
+            actions={props.allowRemove ? [
               <Button
                 key={item.id}
                 onClick={() => props.onRemoveNode!(item)}
                 icon='close'
-                disabled={!props.allowRemove}
               />,
-            ]}
+            ] : []}
           >
             <div onClick={() => props.onNodeClick!(item)}>{item.label}</div>
           </List.Item>
