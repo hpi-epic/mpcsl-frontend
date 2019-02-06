@@ -1,17 +1,11 @@
 import React from 'react';
 import { Card, Button, Divider, Table } from 'antd';
 import { IAPIDistribution } from '../../../types';
-import {
-  XYPlot,
-  VerticalGridLines,
-  HorizontalGridLines,
-  XAxis,
-  YAxis,
-  VerticalRectSeries,
-} from 'react-vis';
 
 import 'react-vis/dist/style.css';
 import './GraphAnnotate.css';
+
+import GraphAnnotateDataPlot from './GraphAnnotateDataPlot';
 
 interface IGraphAnnotateDataModalProps {
   visible: boolean;
@@ -20,7 +14,6 @@ interface IGraphAnnotateDataModalProps {
 }
 
 interface IGraphAnnotateDataModalState {
-  crosshairValues: Array<{ x: number; y: number }>;
   cardWidth: number;
   cardHeight: number;
   plotWidth: number;
@@ -36,7 +29,6 @@ class GraphAnnotateDataModal extends React.Component<
     super(props);
 
     this.state = {
-      crosshairValues: [],
       cardWidth: 300,
       cardHeight: 280,
       plotWidth: 250,
@@ -45,21 +37,8 @@ class GraphAnnotateDataModal extends React.Component<
     };
   }
 
-  public componentDidMount = () => { };
-
-  public componentWillUnmount = () => { };
-
   public render() {
     if (this.props.visible && this.props.data) {
-      const ticks: number[] = [];
-      for (let i = 0; i < this.props.data!.bin_edges.length - 1; i++) {
-        ticks.push(
-          (this.props.data!.bin_edges[i + 1] + this.props.data!.bin_edges[i]) /
-          2,
-        );
-      }
-
-      const maxYValue = Math.max(...this.props.data!.bins);
       const columns = [{
         title: 'Dataset name',
         dataIndex: 'datasetname',
@@ -106,51 +85,11 @@ class GraphAnnotateDataModal extends React.Component<
             }
           >
             <div>
-              <XYPlot
-                width={this.state.plotWidth}
-                height={this.state.plotHeight}
-                onMouseLeave={() => this.setState({ crosshairValues: [] })}
-                xDomain={[
-                  this.props.data!.bin_edges[0],
-                  this.props.data!.bin_edges[
-                  this.props.data!.bin_edges.length - 1
-                  ],
-                ]}
-                yDomain={[0, maxYValue + 0.1 * maxYValue]}
-              >
-                <VerticalGridLines />
-                <HorizontalGridLines />
-                <XAxis
-                  tickValues={ticks}
-                  tickFormat={(v) => parseFloat(v).toFixed(1)}
-                  tickLabelAngle={-45}
-                />
-                <YAxis />
-                <VerticalRectSeries
-                  onNearestX={(value) =>
-                    this.setState({
-                      crosshairValues: [
-                        {
-                          x: Number(parseFloat(String(value.x)).toFixed(1)),
-                          y: Number(value.y),
-                        },
-                      ],
-                    })
-                  }
-                  opacity={0.8}
-                  style={{ stroke: '#fff' }}
-                  data={this.props.data.bins.map(
-                    (value: number, index: number) => {
-                      return {
-                        x0: this.props.data!.bin_edges[index],
-                        x: this.props.data!.bin_edges[index + 1],
-                        y: value,
-                        y0: 0,
-                      };
-                    },
-                  )}
-                />
-              </XYPlot>
+              <GraphAnnotateDataPlot
+                data={this.props.data!}
+                plotWidth={this.state.plotWidth}
+                plotHeight={this.state.plotHeight}
+              />
             </div>
             {this.state.expanded ?
               <div>
