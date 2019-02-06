@@ -6,8 +6,9 @@ import './GraphNodeList.css';
 
 interface IPropsGraphNodeList {
   nodes: ID3GraphNode[];
-  onNodeClick: (node: ID3GraphNode) => void;
-  onRemoveNode: (nodeID: ID3GraphNode) => void;
+  onNodeClick?: (node: ID3GraphNode) => void;
+  onRemoveNode?: (nodeID: ID3GraphNode) => void;
+  allowRemove: boolean;
 }
 
 function GraphNodeList(props: IPropsGraphNodeList) {
@@ -33,12 +34,13 @@ function GraphNodeList(props: IPropsGraphNodeList) {
             actions={[
               <Button
                 key={item.id}
-                onClick={() => props.onRemoveNode(item)}
+                onClick={() => props.onRemoveNode!(item)}
                 icon='close'
+                disabled={!props.allowRemove}
               />,
             ]}
           >
-            <div onClick={() => props.onNodeClick(item)}>{item.label}</div>
+            <div onClick={() => props.onNodeClick!(item)}>{item.label}</div>
           </List.Item>
         </Tooltip>
       )}
