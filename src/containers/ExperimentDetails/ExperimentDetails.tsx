@@ -1,12 +1,14 @@
 import React from 'react';
-import { Button, List, Badge, Icon } from 'antd';
+import { Button, List, Badge, Icon, Modal } from 'antd';
 import { IExperiment, IJob } from '../../types';
+import { LazyLog } from 'react-lazylog';
 import { getJobsForExperiment, getExperiment } from '../../actions/apiRequests';
 import moment from 'moment';
 import { RouteComponentProps } from 'react-router-dom';
 import './style.css';
 
 interface IStateJobsManagement {
+  modalVisible: boolean;
   jobList: IJob[];
   experiment: IExperiment | undefined;
 }
@@ -31,6 +33,7 @@ class ExperimentDetails extends React.Component<
     super(props);
 
     this.state = {
+      modalVisible: false,
       jobList: [],
       experiment: undefined,
     };
@@ -67,6 +70,13 @@ class ExperimentDetails extends React.Component<
                   >
                     explore
                   </Button>,
+                  <Button
+                    key={2}
+                    type='primary'
+                    onClick={() => this.showModal()}
+                  >
+                    view logs
+                  </Button>,
                 ]}
               >
                 <List.Item.Meta
@@ -78,6 +88,18 @@ class ExperimentDetails extends React.Component<
                         status={this.jobBadgeMap[job.status]}
                         text={job.status}
                       />
+                      <Modal
+                        title={`Job #  ${job.id}`}
+                        centered
+                        width='100'
+                        footer={null}
+                        visible={this.state.modalVisible}
+                        onCancel={this.handleCancel}
+                      >
+                        <div className='Log'>
+                          <LazyLog url={'http://localhost:3000/api/job/' + job.id + '/logs'} stream follow={true} />
+                        </div>
+                      </Modal>
                     </div>
                   }
                   description={
@@ -100,6 +122,18 @@ class ExperimentDetails extends React.Component<
     } else {
       return <span>Nothing to show</span>;
     }
+  }
+  private showModal = () => {
+    this.setState({
+      modalVisible: true,
+    });
+  }
+
+  private handleCancel = (e: any) => {
+    console.log(e);
+    this.setState({
+      modalVisible: false,
+    });
   }
 
   private async fetchJobs(experiment: IExperiment) {
