@@ -1,10 +1,11 @@
 import React from 'react';
-import { Button, List, Badge, Icon, Modal } from 'antd';
-import { IExperiment, IJob } from '../../types';
-import { LazyLog } from 'react-lazylog';
-import { getJobsForExperiment, getExperiment } from '../../actions/apiRequests';
-import moment from 'moment';
 import { RouteComponentProps } from 'react-router-dom';
+import { Button, List, Badge, Icon, Modal } from 'antd';
+import { LazyLog } from 'react-lazylog';
+import moment from 'moment';
+import { IExperiment, IJob } from '../../types';
+import { getJobsForExperiment, getExperiment } from '../../actions/apiRequests';
+import Endpoints from '../../constants/api';
 import './style.css';
 
 interface IStateJobsManagement {
@@ -124,16 +125,13 @@ class ExperimentDetails extends React.Component<
           >
             <div className='Log'>
               <LazyLog
-                url={
-                  'http://localhost:3000/api/job/' +
-                  this.state.currentJobId +
-                  '/logs'
-                }
+                url={Endpoints.jobLogs(this.state.currentJobId)}
                 stream={true}
                 follow={true}
                 onError={this.handleError}
                 // @ts-ignore
                 extraLines={this.state.extraLines}
+                selectableLines={true}
               />
             </div>
           </Modal>
