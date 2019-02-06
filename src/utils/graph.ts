@@ -132,6 +132,7 @@ export function removeNodeFromFocus(
   const nodes: ID3GraphNode[] = [];
   graph.nodes.forEach((existingNode: ID3GraphNode) => {
     if (existingNode.id !== node.id) {
+      // delete node in contextOf for all other nodes
       if (existingNode.contextOf && node.id in existingNode.contextOf) {
         delete existingNode.contextOf[node.id];
         if (
@@ -140,20 +141,34 @@ export function removeNodeFromFocus(
         ) {
           nodes.push(existingNode);
         }
-        links = links.filter((link: any) => {
-          if (
-            (link.source.id === existingNode.id &&
-              link.target.id === node.id) ||
-            (link.source.id === node.id && link.target.id === existingNode.id)
-          ) {
-            return false;
-          } else {
-            return true;
-          }
-        });
       } else {
         nodes.push(existingNode);
       }
+    } else if (
+      !existingNode.isContext &&
+      existingNode.contextOf &&
+      Object.keys(existingNode.contextOf).length > 0
+    ) {
+      // keep node as context node if it is in context of other node(s)
+      existingNode.isContext = true;
+      nodes.push(existingNode);
+    }
+  });
+
+  links = links.filter((link: any) => {
+    // only keep links outgoing/incoming to this node that connect to focused nodes
+    if (
+      node.contextOf &&
+      Object.keys(node.contextOf!).length < 1 &&
+      (link.source.id === node.id || link.target.id === node.id)
+    ) {
+      return false;
+    } else if (link.source.id === node.id && link.target.isContext) {
+      return false;
+    } else if (link.target.id === node.id && link.source.isContext) {
+      return false;
+    } else {
+      return true;
     }
   });
 
