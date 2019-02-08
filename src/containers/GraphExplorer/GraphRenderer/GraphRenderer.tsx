@@ -2,21 +2,20 @@ import React from 'react';
 import * as d3 from 'd3';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions/graphExplorer';
-import { Dispatch } from 'redux';
-import { CIGraph } from '../../../utils/graph';
 
 import { Button, Row, Checkbox, Col } from 'antd';
 import { IState } from '../../../store';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 import './GraphRenderer.css';
-import { ID3Graph, ID3GraphNode } from '../../../types/graphTypes';
+import { ID3GraphNode } from '../../../types/graphTypes';
+import Graph from '../../../utils/graph';
+import { ThunkDispatch } from 'redux-thunk';
 
 export interface IGraphRendererProps {
   resetLayout: () => void;
-  selectedGraph: ID3Graph;
-  onAddNode: (graph: CIGraph, node: string) => void;
-  graph: CIGraph;
+  selectedGraph: Graph;
+  onAddNode: (nodeID: number) => void;
   toggleFreezeLayout: () => void;
   isSelectionMode: boolean;
   onNodeClick?: (node: ID3GraphNode) => void;
@@ -144,18 +143,9 @@ class GraphRenderer extends React.Component<
   }
 
   public enterGraph = (props: IGraphRendererProps) => {
-    const links = this.graph.selectAll('.link').data(props.selectedGraph.links);
-
     const nodes = this.graph
       .selectAll('.node')
       .data(props.selectedGraph.nodes, (node: ID3GraphNode) => node.id);
-
-    links
-      .enter()
-      .insert('line', '.node')
-      .call(this.enterLink);
-    links.exit().remove();
-    links.call(this.updateLink);
 
     nodes.exit().remove();
     nodes.call(this.updateNode);
@@ -163,6 +153,14 @@ class GraphRenderer extends React.Component<
       .enter()
       .append('g')
       .call(this.enterNode);
+
+    const links = this.graph.selectAll('.link').data(props.selectedGraph.links);
+    links
+      .enter()
+      .insert('line', '.node')
+      .call(this.enterLink);
+    links.exit().remove();
+    links.call(this.updateLink);
 
     this.force.nodes(props.selectedGraph.nodes).force(
       'links',
@@ -183,7 +181,7 @@ class GraphRenderer extends React.Component<
       .on('click', (d: ID3GraphNode) => {
         if (this.props.isSelectionMode) {
           if (d.isContext) {
-            this.props.onAddNode(this.props.graph, d.id.toString());
+            this.props.onAddNode(Number(d.id));
           }
         } else {
           this.props.onNodeClick!(d);
@@ -291,17 +289,15 @@ class GraphRenderer extends React.Component<
 export function mapStateToProps(state: IState) {
   return {
     selectedGraph: state.graphExplorer!.selectedGraph,
-    graph: state.graphExplorer!.graph,
   };
 }
 
 export function mapDispatchToProps(
-  dispatch: Dispatch<actions.GraphExplorerAction>,
+  dispatch: ThunkDispatch<IState, void, actions.GraphExplorerAction>,
 ) {
   return {
     resetLayout: () => dispatch(actions.newLayout()),
-    onAddNode: (graph: CIGraph, node: string) =>
-      dispatch(actions.addNode(graph, node)),
+    onAddNode: (nodeID: number) => dispatch(actions.addNode(nodeID)),
     toggleFreezeLayout: () => dispatch(actions.toggleFreezeLayout()),
   };
 }
