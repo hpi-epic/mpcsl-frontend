@@ -133,7 +133,7 @@ export interface IAPIDistributionCategorical {
     id: number;
   };
   categorical: true;
-  bins: ICategoricalBin[];
+  bins: ICategoricalBin;
 }
 
 export type IAPIDistribution =

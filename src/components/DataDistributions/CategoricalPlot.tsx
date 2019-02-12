@@ -21,15 +21,21 @@ class CategoricalPlot extends React.Component<ICategoricalPlotProps, {}> {
   public render() {
     return (
       <div>
-        <XYPlot width={this.props.plotWidth} height={this.props.plotHeight}>
+        <XYPlot
+          xType='ordinal'
+          width={this.props.plotWidth}
+          height={this.props.plotHeight}
+        >
           <VerticalGridLines />
           <HorizontalGridLines />
-          <XAxis tickLabelAngle={-45} />
+          <XAxis />
           <YAxis />
           <VerticalBarSeries
             opacity={0.8}
             style={{ stroke: '#fff' }}
-            data={this.props.data.bins as any[]}
+            data={Object.keys(this.props.data.bins).map((key: string) => {
+              return { x: key, y: this.props.data.bins[key] };
+            })}
           />
         </XYPlot>
       </div>
