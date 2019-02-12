@@ -6,7 +6,7 @@ const Endpoints = {
   experiment: baseApiUrl + '/experiment',
   allExperiments: baseApiUrl + '/experiments',
   job: baseApiUrl + '/job',
-  jobLogs: (jobId: number | undefined) => `${baseApiUrl}/job/${String(jobId)}/logs`,
+  jobLogs: (jobId: number) => `${baseApiUrl}/job/${String(jobId)}/logs`,
   allJobs: '/jobs',
   allResults: baseApiUrl + '/results',
   result: baseApiUrl + '/result',

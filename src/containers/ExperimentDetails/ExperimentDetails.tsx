@@ -118,22 +118,23 @@ class ExperimentDetails extends React.Component<
           <Modal
             title={`Job #  ${this.state.currentJobId}`}
             centered={true}
-            width='1' // not sure why this is working
+            width={820} // not sure why this is working
             footer={null}
             visible={this.state.modalVisible}
             onCancel={this.handleCancel}
+            destroyOnClose={true}
           >
-            <div className='Job-Log'>
-              <LazyLog
-                url={Endpoints.jobLogs(this.state.currentJobId)}
-                stream={true}
-                follow={true}
-                onError={this.handleError}
-                // @ts-ignore
-                extraLines={this.state.extraLines}
-                selectableLines={true}
-              />
-            </div>
+            <LazyLog
+              url={Endpoints.jobLogs(this.state.currentJobId!)}
+              stream={true}
+              follow={true}
+              width={772}
+              height={500}
+              onError={this.handleError}
+              // @ts-ignore
+              extraLines={this.state.extraLines}
+              selectableLines={true}
+            />
           </Modal>
         </div>
       );
@@ -154,7 +155,6 @@ class ExperimentDetails extends React.Component<
   }
 
   private handleCancel = (e: any) => {
-    console.log(e);
     this.setState({
       modalVisible: false,
       extraLines: 1,
