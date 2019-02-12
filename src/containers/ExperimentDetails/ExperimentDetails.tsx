@@ -1,12 +1,17 @@
 import React from 'react';
-import { Button, List, Badge, Icon } from 'antd';
+import { RouteComponentProps } from 'react-router-dom';
+import { Button, List, Badge, Icon, Modal } from 'antd';
+import { LazyLog } from 'react-lazylog';
+import moment from 'moment';
 import { IExperiment, IJob } from '../../types';
 import { getJobsForExperiment, getExperiment } from '../../actions/apiRequests';
-import moment from 'moment';
-import { RouteComponentProps } from 'react-router-dom';
+import Endpoints from '../../constants/api';
 import './style.css';
 
 interface IStateJobsManagement {
+  modalVisible: boolean;
+  extraLines: number; // necessary for linux support
+  currentJobId: number | undefined;
   jobList: IJob[];
   experiment: IExperiment | undefined;
 }
@@ -18,7 +23,7 @@ interface IMatchParams {
 class ExperimentDetails extends React.Component<
   RouteComponentProps<IMatchParams>,
   IStateJobsManagement
-  > {
+> {
   public exampleExperimentId = 2;
   private jobBadgeMap: any = {
     running: 'processing',
@@ -31,6 +36,9 @@ class ExperimentDetails extends React.Component<
     super(props);
 
     this.state = {
+      modalVisible: false,
+      extraLines: 1,
+      currentJobId: undefined,
       jobList: [],
       experiment: undefined,
     };
@@ -44,7 +52,12 @@ class ExperimentDetails extends React.Component<
     if (this.state.experiment) {
       return (
         <div className='Content'>
-          <Button className='Go-Back-Button' onClick={() => this.onGoBack()} type='primary' ghost={true}>
+          <Button
+            className='Go-Back-Button'
+            onClick={() => this.onGoBack()}
+            type='primary'
+            ghost={true}
+          >
             <Icon type='left' />
           </Button>
           <h2>
@@ -66,6 +79,13 @@ class ExperimentDetails extends React.Component<
                     disabled={job.status === 'done' ? false : true}
                   >
                     explore
+                  </Button>,
+                  <Button
+                    key={2}
+                    type='primary'
+                    onClick={() => this.showModal(job.id)}
+                  >
+                    view logs
                   </Button>,
                 ]}
               >
@@ -95,11 +115,50 @@ class ExperimentDetails extends React.Component<
               </List.Item>
             )}
           />
+          <Modal
+            title={`Job #  ${this.state.currentJobId}`}
+            centered={true}
+            width={820}
+            footer={null}
+            visible={this.state.modalVisible}
+            onCancel={this.handleCancel}
+            destroyOnClose={true}
+          >
+            <LazyLog
+              url={Endpoints.jobLogs(this.state.currentJobId!)}
+              stream={true}
+              follow={true}
+              width={772}
+              height={500}
+              onError={this.handleError}
+              // @ts-ignore
+              extraLines={this.state.extraLines}
+              selectableLines={true}
+            />
+          </Modal>
         </div>
       );
     } else {
       return <span>Nothing to show</span>;
     }
+  }
+  private showModal = (jobId: number) => {
+    this.setState({
+      currentJobId: jobId,
+      modalVisible: true,
+    });
+  }
+  private handleError = (error: any) => {
+    this.setState({
+      extraLines: 0,
+    });
+  }
+
+  private handleCancel = (e: any) => {
+    this.setState({
+      modalVisible: false,
+      extraLines: 1,
+    });
   }
 
   private async fetchJobs(experiment: IExperiment) {
