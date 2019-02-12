@@ -63,7 +63,6 @@ class GraphAnnotate extends React.Component<
     const nodeDistribution: IAPIDistribution = await getNodeDataDistribution(
       String(node.id),
     );
-    console.log(nodeDistribution);
     this.setState({
       dataModalVisible: true,
       selectedNodeDataDistribution: nodeDistribution,
