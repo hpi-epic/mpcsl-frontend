@@ -1,4 +1,4 @@
-type NodeID = string | number;
+type NodeID = string;
 
 export interface ID3Graph {
   nodes: ID3GraphNode[];

@@ -1,18 +1,13 @@
-import {
-  IAPIGraphNode,
-  IAPIGraphEdges,
-  ID3GraphNode,
-  ID3Graph,
-} from './graphTypes';
+import { IAPIGraphNode, IAPIGraphEdges, ID3GraphNode } from './graphTypes';
 import { IndepenceTests } from '../constants/experiment';
-import { CIGraph } from '../utils/graph';
+import Graph from '../utils/graph';
 
 export interface IStoreState {
   resultID?: string; // ID of current graph
-  graph: CIGraph;
-  selectedGraph: ID3Graph;
+  selectedGraph: Graph;
   nodes: ID3GraphNode[];
   doFreeze: boolean;
+  availableNodes: IAPIGraphNode[];
 }
 
 export type StoreState = IStoreState | undefined;
@@ -115,4 +110,10 @@ export interface IAPIDistribution {
   };
   bin_edges: number[];
   bins: number[];
+}
+
+export interface IAPINodeContext {
+  edges: IAPIGraphEdges[];
+  context_nodes: IAPIGraphNode[];
+  main_node: IAPIGraphNode;
 }

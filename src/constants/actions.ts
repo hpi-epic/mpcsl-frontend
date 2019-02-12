@@ -1,3 +1,5 @@
+export const ADD_AVAILABLE_NODES = 'ADD_AVAILABLE_NODES';
+export type ADD_AVAILABLE_NODES = 'ADD_AVAILABLE_NODES';
 export const ADD_GRAPH = 'ADD_GRAPH';
 export type ADD_GRAPH = 'ADD_GRAPH';
 export const ADD_NODE = 'ADD_NODE';

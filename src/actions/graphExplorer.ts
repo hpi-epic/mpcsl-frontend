@@ -1,60 +1,51 @@
 import { ThunkAction } from 'redux-thunk';
-import { ID3Graph, ID3GraphNode } from '../types/graphTypes';
+import {
+  ID3GraphNode,
+  IAPIGraphNode,
+  IAPIGraphEdges,
+} from '../types/graphTypes';
 import * as constants from '../constants/actions';
-import { CIGraph } from '../utils/graph';
-import { getResult } from './apiRequests';
+import { getResultNodes, getNodeContext } from './apiRequests';
 import { Action, Dispatch, ActionCreator } from 'redux';
 import { IState } from '../store';
-import { IAPIResult } from '../types';
-import { graph } from '../constants/testdata';
 
-export interface IFetchGraph {
-  type: constants.ADD_GRAPH;
-  graph: CIGraph;
-  resultID: string;
+export interface IFetchAvailableNodes {
+  type: constants.ADD_AVAILABLE_NODES;
+  availableNodes: IAPIGraphNode[];
 }
 
-export const fetchGraph: ActionCreator<
+export const fetchAvailableNodes: ActionCreator<
   ThunkAction<Promise<Action>, IState, void, Action>
 > = (resultID: number) => {
-  return async (dispatch: Dispatch<Action>): Promise<IFetchGraph> => {
-    try {
-      const result = await getResult(resultID);
-      const ciGraph = new CIGraph();
-      ciGraph.fromAPIGraph((result as unknown) as IAPIResult);
-
-      return dispatch({
-        type: constants.ADD_GRAPH as constants.ADD_GRAPH,
-        graph: ciGraph,
-        resultID: resultID.toString(),
-      });
-    } catch (e) {
-      // return fallback graph
-      const ciGraph = new CIGraph();
-      ciGraph.fromD3Graph(graph);
-      return dispatch({
-        type: constants.ADD_GRAPH as constants.ADD_GRAPH,
-        graph: ciGraph,
-        resultID: 'fallback',
-      });
-    }
+  return async (dispatch: Dispatch<Action>): Promise<IFetchAvailableNodes> => {
+    const result = await getResultNodes(resultID);
+    return dispatch({
+      type: constants.ADD_AVAILABLE_NODES as constants.ADD_AVAILABLE_NODES,
+      availableNodes: result,
+    });
   };
 };
 
 export interface IAddNode {
   type: constants.ADD_NODE;
-  context: ID3Graph;
-  nodeID: string;
+  contextNodes: IAPIGraphNode[];
+  addNode: IAPIGraphNode;
+  edges: IAPIGraphEdges[];
 }
 
-export function addNode(ciGraph: CIGraph, nodeID: string): IAddNode {
-  const contextGraph = ciGraph.getContext(nodeID);
-  return {
-    type: constants.ADD_NODE,
-    context: contextGraph,
-    nodeID,
+export const addNode: ActionCreator<
+  ThunkAction<Promise<Action>, IState, void, Action>
+> = (nodeID: number) => {
+  return async (dispatch: Dispatch<Action>): Promise<IAddNode> => {
+    const result = await getNodeContext(nodeID);
+    return dispatch({
+      type: constants.ADD_NODE as constants.ADD_NODE,
+      contextNodes: result.context_nodes,
+      addNode: result.main_node,
+      edges: result.edges,
+    });
   };
-}
+};
 
 export interface IRemoveNode {
   type: constants.REMOVE_NODE;
@@ -89,7 +80,7 @@ export function toggleFreezeLayout(): IToggleFreezeLayout {
 }
 
 export type GraphExplorerAction =
-  | IFetchGraph
+  | IFetchAvailableNodes
   | IAddNode
   | INewLayout
   | IRemoveNode

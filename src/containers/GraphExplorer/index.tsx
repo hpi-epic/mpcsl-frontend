@@ -10,10 +10,9 @@ import GraphViewRadioNavigation from '../../components/GraphExplorerNavigation/G
 import { RadioChangeEvent } from 'antd/lib/radio';
 import GraphAnnotate from './GraphAnnotate/GraphAnnotate';
 import GraphCausalExplorer from './GraphCausalExplorer/GraphCausalExplorer';
-import { Dispatch } from 'redux';
-import { CIGraph } from '../../utils/graph';
 import { IState } from '../../store';
-import { ID3GraphNode } from '../../types/graphTypes';
+import { ID3GraphNode, IAPIGraphNode } from '../../types/graphTypes';
+import { ThunkDispatch } from 'redux-thunk';
 
 const { Header, Content } = Layout;
 
@@ -26,8 +25,8 @@ interface IMatchParams {
 }
 
 export interface IGraphExplorerProps extends RouteComponentProps<IMatchParams> {
-  onAddNode: (graph: CIGraph, node: string) => void;
-  graph: CIGraph;
+  onAddNode: (nodeID: number) => void;
+  availableNodes: IAPIGraphNode[];
   nodes: ID3GraphNode[];
 }
 
@@ -47,19 +46,18 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
         style={{ width: 200 }}
         placeholder='Add a node'
         optionFilterProp='children'
-        onSelect={(value) =>
-          this.props.onAddNode(this.props.graph, value.toString())
-        }
+        onSelect={(value) => this.props.onAddNode(Number(value))}
       >
-        {this.props.graph
-          ? this.props.graph.nodes().map((node: string) => {
+        {this.props.availableNodes
+          ? this.props.availableNodes.map((node: IAPIGraphNode) => {
               if (
-                this.props.nodes.find((n: ID3GraphNode) => node === n.id) ===
-                undefined
+                this.props.nodes.find(
+                  (n: ID3GraphNode) => node.id.toString() === n.id,
+                ) === undefined
               ) {
                 return (
-                  <Select.Option key={node} value={node}>
-                    {this.props.graph.node(node)}
+                  <Select.Option key={node.id.toString()} value={node.id}>
+                    {node.name}
                   </Select.Option>
                 );
               }
@@ -72,8 +70,14 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
       <Layout className='Layout'>
         <Header className='Header'>
           <Row>
-            <Col span={this.state.view === '/graph-explorer/selection' ? 10 : 0}>{graphSearch}</Col>
-            <Col span={this.state.view === '/graph-explorer/selection' ? 0 : 10} />
+            <Col
+              span={this.state.view === '/graph-explorer/selection' ? 10 : 0}
+            >
+              {graphSearch}
+            </Col>
+            <Col
+              span={this.state.view === '/graph-explorer/selection' ? 0 : 10}
+            />
             <Col span={4} className='Home'>
               <Button onClick={this.onHomeClick} icon='home' ghost={true} />
             </Col>
@@ -129,17 +133,16 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
 
 export function mapStateToProps(state: IState) {
   return {
-    graph: state.graphExplorer!.graph,
+    availableNodes: state.graphExplorer!.availableNodes,
     nodes: state.graphExplorer!.nodes,
   };
 }
 
 export function mapDispatchToProps(
-  dispatch: Dispatch<actions.GraphExplorerAction>,
+  dispatch: ThunkDispatch<IState, void, actions.GraphExplorerAction>,
 ) {
   return {
-    onAddNode: (graph: CIGraph, node: string) =>
-      dispatch(actions.addNode(graph, node)),
+    onAddNode: (nodeID: number) => dispatch(actions.addNode(nodeID)),
   };
 }
 
