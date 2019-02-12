@@ -36,7 +36,7 @@ function graphExplorer(
         state.selectedGraph.links,
       );
       graph.addUniqueNodes(action.addNode, action.contextNodes, state.doFreeze);
-      graph.addUniqueLinks(action.edges);
+      graph.addUniqueAPILinks(action.edges);
       return {
         ...state,
         selectedGraph: graph,

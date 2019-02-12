@@ -10,8 +10,13 @@ class Graph implements ID3Graph {
   public links: ID3GraphLink[];
   public nodes: ID3GraphNode[];
 
-  constructor(nodes: ID3GraphNode[] = [], links: ID3GraphLink[] = []) {
-    this.links = links;
+  constructor(
+    nodes: ID3GraphNode[] = [],
+    links:
+      | ID3GraphLink[]
+      | Array<{ source: ID3GraphNode; target: ID3GraphNode }> = [],
+  ) {
+    this.links = links as ID3GraphLink[];
     this.nodes = nodes;
   }
 
@@ -22,13 +27,13 @@ class Graph implements ID3Graph {
     });
   }
 
-  public addUniqueLinks(addLinks: IAPIGraphEdges[]): void {
+  public addUniqueAPILinks(addLinks: IAPIGraphEdges[]): void {
     addLinks.forEach((link: IAPIGraphEdges) => {
       if (
         this.links.find(
           (existingLink: any) =>
-            existingLink.source.id === link.from_node &&
-            existingLink.target.id === link.to_node,
+            existingLink.source.id === link.from_node.toString() &&
+            existingLink.target.id === link.to_node.toString(),
         ) === undefined
       ) {
         this.addLink(link.from_node, link.to_node);
