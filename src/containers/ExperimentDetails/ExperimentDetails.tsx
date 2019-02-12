@@ -118,7 +118,7 @@ class ExperimentDetails extends React.Component<
           <Modal
             title={`Job #  ${this.state.currentJobId}`}
             centered={true}
-            width={820} // not sure why this is working
+            width={820}
             footer={null}
             visible={this.state.modalVisible}
             onCancel={this.handleCancel}
