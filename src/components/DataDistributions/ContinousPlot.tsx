@@ -1,5 +1,4 @@
 import React from 'react';
-import { IAPIDistribution } from '../../../types';
 import {
   XYPlot,
   VerticalGridLines,
@@ -10,23 +9,23 @@ import {
 } from 'react-vis';
 
 import 'react-vis/dist/style.css';
-import './GraphAnnotate.css';
+import { IAPIDistributionContinous } from '../../types';
 
-interface IGraphAnnotateDataPlotProps {
-  data: IAPIDistribution | undefined;
+interface IContinousPlotProps {
+  data: IAPIDistributionContinous | undefined;
   plotWidth: number;
   plotHeight: number;
 }
 
-interface IGraphAnnotateDataPlotState {
+interface IContinousPlotState {
   crosshairValues: Array<{ x: number; y: number }>;
 }
 
-class GraphAnnotateDataPlot extends React.Component<
-  IGraphAnnotateDataPlotProps,
-  IGraphAnnotateDataPlotState
-  > {
-  constructor(props: IGraphAnnotateDataPlotProps) {
+class ContinousPlot extends React.Component<
+  IContinousPlotProps,
+  IContinousPlotState
+> {
+  constructor(props: IContinousPlotProps) {
     super(props);
 
     this.state = {
@@ -38,8 +37,7 @@ class GraphAnnotateDataPlot extends React.Component<
     const ticks: number[] = [];
     for (let i = 0; i < this.props.data!.bin_edges.length - 1; i++) {
       ticks.push(
-        (this.props.data!.bin_edges[i + 1] + this.props.data!.bin_edges[i]) /
-        2,
+        (this.props.data!.bin_edges[i + 1] + this.props.data!.bin_edges[i]) / 2,
       );
     }
 
@@ -52,9 +50,7 @@ class GraphAnnotateDataPlot extends React.Component<
           onMouseLeave={() => this.setState({ crosshairValues: [] })}
           xDomain={[
             this.props.data!.bin_edges[0],
-            this.props.data!.bin_edges[
-            this.props.data!.bin_edges.length - 1
-            ],
+            this.props.data!.bin_edges[this.props.data!.bin_edges.length - 1],
           ]}
           yDomain={[0, maxYValue + 0.1 * maxYValue]}
         >
@@ -79,16 +75,14 @@ class GraphAnnotateDataPlot extends React.Component<
             }
             opacity={0.8}
             style={{ stroke: '#fff' }}
-            data={this.props.data!.bins.map(
-              (value: number, index: number) => {
-                return {
-                  x0: this.props.data!.bin_edges[index],
-                  x: this.props.data!.bin_edges[index + 1],
-                  y: value,
-                  y0: 0,
-                };
-              },
-            )}
+            data={this.props.data!.bins.map((value: number, index: number) => {
+              return {
+                x0: this.props.data!.bin_edges[index],
+                x: this.props.data!.bin_edges[index + 1],
+                y: value,
+                y0: 0,
+              };
+            })}
           />
         </XYPlot>
       </div>
@@ -96,4 +90,4 @@ class GraphAnnotateDataPlot extends React.Component<
   }
 }
 
-export default GraphAnnotateDataPlot;
+export default ContinousPlot;
