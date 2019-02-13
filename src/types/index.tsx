@@ -93,7 +93,7 @@ export interface IAPIResult {
   sepset: any[];
 }
 
-export interface IAPIDistributionContinous {
+interface IAPIDistributionBase {
   dataset: {
     time_created: string;
     id: number;
@@ -108,6 +108,9 @@ export interface IAPIDistributionContinous {
     result_id: number;
     id: number;
   };
+}
+
+export interface IAPIDistributionContinous extends IAPIDistributionBase {
   categorical: false;
   bin_edges: number[];
   bins: number[];
@@ -117,21 +120,7 @@ interface ICategoricalBin {
   [bin: string]: number;
 }
 
-export interface IAPIDistributionCategorical {
-  dataset: {
-    time_created: string;
-    id: number;
-    description: string | undefined;
-    name: string;
-    remote_db: string | undefined;
-    load_query: string | undefined;
-  };
-  node: {
-    result: number;
-    name: string;
-    result_id: number;
-    id: number;
-  };
+export interface IAPIDistributionCategorical extends IAPIDistributionBase {
   categorical: true;
   bins: ICategoricalBin;
 }
