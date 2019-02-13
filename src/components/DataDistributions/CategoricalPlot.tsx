@@ -40,7 +40,7 @@ class CategoricalPlot extends React.Component<
     data = data.map((value: { x: string; y: number }) => {
       return {
         x: value.x,
-        y: value.y / count,
+        y: Number(((value.y / count) * 100).toFixed(1)),
         count: value.y,
       };
     });
@@ -52,11 +52,12 @@ class CategoricalPlot extends React.Component<
           width={this.props.plotWidth}
           height={this.props.plotHeight}
           onMouseLeave={() => this.setState({ value: undefined })}
+          yDomain={[0, 100]}
         >
           <VerticalGridLines />
           <HorizontalGridLines />
           <XAxis />
-          <YAxis />
+          <YAxis tickFormat={(v: string) => `${v}%`} />
           <VerticalBarSeries
             onNearestX={this.onHover}
             opacity={0.8}
