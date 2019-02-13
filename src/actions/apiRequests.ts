@@ -1,3 +1,4 @@
+import { IAPIGraphNode } from './../types/graphTypes';
 import { message } from 'antd';
 import axios, { AxiosResponse } from 'axios';
 import {
@@ -5,6 +6,8 @@ import {
   IExperiment,
   IJob,
   ICreateExperiment,
+  IAPIDistribution,
+  IAPINodeContext,
 } from '../types';
 import Endpoints from '../constants/api';
 
@@ -188,6 +191,61 @@ export function getResult(resultID: number): Promise<void> {
         reject({
           status: error.response.status,
           message: error.message,
+        });
+      });
+  });
+}
+
+export function getNodeContext(nodeID: number): Promise<IAPINodeContext> {
+  return new Promise<any>((resolve, reject) => {
+    axios
+      .get(Endpoints.nodeContext(nodeID))
+      .then((response: AxiosResponse) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        message.error(`Failed to fetch Context for Node with ID: ${nodeID}`);
+        reject({
+          status: error.response.status,
+          message: error.message,
+        });
+      });
+  });
+}
+
+export function getResultNodes(resultID: number): Promise<IAPIGraphNode[]> {
+  return new Promise<any>((resolve, reject) => {
+    axios
+      .get(Endpoints.resultNodes(resultID))
+      .then((response: AxiosResponse) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        message.error(
+          `Failed to fetch available Nodes for Result with ID: ${resultID}`,
+        );
+        reject({
+          status: error.response.status,
+          message: error.message,
+        });
+      });
+  });
+}
+
+export function getNodeDataDistribution(
+  nodeID: string,
+): Promise<IAPIDistribution> {
+  return new Promise<IAPIDistribution>((resolve, reject) => {
+    axios
+      .get(Endpoints.nodeDistribution(String(nodeID)))
+      .then((response: AxiosResponse) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        message.error('Failed to fetch Node Data Distribution');
+        reject({
+          status: error.response.status,
+          message: 'Failed to fetch Node Data Distribution',
         });
       });
   });

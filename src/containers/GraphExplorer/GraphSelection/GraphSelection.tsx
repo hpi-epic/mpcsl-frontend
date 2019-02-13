@@ -10,17 +10,17 @@ import * as actions from '../../../actions/graphExplorer';
 import './GraphSelection.css';
 import { IState } from '../../../store';
 import { ThunkDispatch } from 'redux-thunk';
-import { ID3GraphNode } from '../../../types/graphTypes';
-import { CIGraph } from '../../../utils/graph';
+import { ID3GraphNode, IAPIGraphNode } from '../../../types/graphTypes';
 
 interface IMatchParams {
   result_id: string;
 }
 
 interface IGraphSelectionProps extends RouteComponentProps<IMatchParams> {
-  fetchGraph: (resultID: number) => void;
+  fecthAvailableNodes: (resultID: number) => void;
+  onRemoveNode: (node: ID3GraphNode) => void;
   nodes: ID3GraphNode[];
-  graph: CIGraph;
+  availableNodes: IAPIGraphNode[];
   currentResultID?: string;
 }
 
@@ -30,18 +30,20 @@ class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
   }
 
   public componentDidMount() {
-    if (this.props.currentResultID !== this.props.match.params.result_id) {
-      this.props.fetchGraph(Number(this.props.match.params.result_id));
-    }
+    this.props.fecthAvailableNodes(Number(this.props.match.params.result_id));
   }
 
   public render() {
     return (
       <Layout>
         <Layout.Sider className='graphSelectionSider'>
-          <GraphNodeList nodes={this.props.nodes} />
+          <GraphNodeList
+            nodes={this.props.nodes}
+            onRemoveNode={this.props.onRemoveNode}
+            isSelectionMode={true}
+          />
         </Layout.Sider>
-        <GraphRenderer />
+        <GraphRenderer isSelectionMode={true} />
       </Layout>
     );
   }
@@ -50,7 +52,7 @@ class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
 export function mapStateToProps(state: IState) {
   return {
     nodes: state.graphExplorer!.nodes,
-    graph: state.graphExplorer!.graph,
+    availableNodes: state.graphExplorer!.availableNodes,
     currentResultID: state.graphExplorer!.resultID!,
   };
 }
@@ -59,7 +61,9 @@ export function mapDispatchToProps(
   dispatch: ThunkDispatch<IState, void, actions.GraphExplorerAction>,
 ) {
   return {
-    fetchGraph: (resultID: number) => dispatch(actions.fetchGraph(resultID)),
+    fecthAvailableNodes: (resultID: number) =>
+      dispatch(actions.fetchAvailableNodes(resultID)),
+    onRemoveNode: (node: ID3GraphNode) => dispatch(actions.removeNode(node)),
   };
 }
 

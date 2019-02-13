@@ -6,9 +6,13 @@ const Endpoints = {
   experiment: baseApiUrl + '/experiment',
   allExperiments: baseApiUrl + '/experiments',
   job: baseApiUrl + '/job',
+  jobLogs: (jobId: number) => `${baseApiUrl}/job/${String(jobId)}/logs`,
   allJobs: '/jobs',
   allResults: baseApiUrl + '/results',
   result: baseApiUrl + '/result',
+  nodeDistribution: (nodeID: string) => `${baseApiUrl}/node/${nodeID}/marginal`,
+  resultNodes: (resultID: number) => `${baseApiUrl}/result/${resultID}/nodes`,
+  nodeContext: (nodeID: number) => `${baseApiUrl}/node/${nodeID}/context`,
 };
 
 export default Endpoints;

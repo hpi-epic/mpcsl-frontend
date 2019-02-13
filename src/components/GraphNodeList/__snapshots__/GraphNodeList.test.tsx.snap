@@ -2,7 +2,7 @@
 
 exports[`<GraphNodeList /> renders correctly 1`] = `
 <div
-  className="ant-list ant-list-sm ant-list-split"
+  className="ant-list Node-List-Item ant-list-sm ant-list-split"
 >
   <div
     className="ant-list-header"
@@ -31,14 +31,20 @@ exports[`<GraphNodeList /> renders correctly 1`] = `
         onMouseLeave={[Function]}
         style={
           Object {
-            "padding": "14px",
+            "paddingBottom": "4px",
+            "paddingLeft": "14px",
+            "paddingTop": "4px",
           }
         }
       >
         <div
           className="ant-list-item-content ant-list-item-content-single"
         >
-          node1
+          <div
+            onClick={[Function]}
+          >
+            node1
+          </div>
         </div>
       </div>
       <div
@@ -47,14 +53,20 @@ exports[`<GraphNodeList /> renders correctly 1`] = `
         onMouseLeave={[Function]}
         style={
           Object {
-            "padding": "14px",
+            "paddingBottom": "4px",
+            "paddingLeft": "14px",
+            "paddingTop": "4px",
           }
         }
       >
         <div
           className="ant-list-item-content ant-list-item-content-single"
         >
-          node2
+          <div
+            onClick={[Function]}
+          >
+            node2
+          </div>
         </div>
       </div>
       <div
@@ -63,14 +75,20 @@ exports[`<GraphNodeList /> renders correctly 1`] = `
         onMouseLeave={[Function]}
         style={
           Object {
-            "padding": "14px",
+            "paddingBottom": "4px",
+            "paddingLeft": "14px",
+            "paddingTop": "4px",
           }
         }
       >
         <div
           className="ant-list-item-content ant-list-item-content-single"
         >
-          node3
+          <div
+            onClick={[Function]}
+          >
+            node3
+          </div>
         </div>
       </div>
     </div>

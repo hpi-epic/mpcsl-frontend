@@ -1,4 +1,4 @@
-type NodeID = string | number;
+type NodeID = string;
 
 export interface ID3Graph {
   nodes: ID3GraphNode[];
@@ -15,6 +15,7 @@ export interface ID3GraphNode {
   vx?: number;
   vy?: number;
   isContext?: boolean;
+  contextOf?: { [node: string]: boolean };
 }
 
 export interface ID3GraphLink {
