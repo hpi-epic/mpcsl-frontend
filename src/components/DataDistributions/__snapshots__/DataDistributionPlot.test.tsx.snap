@@ -166,7 +166,7 @@ exports[`<DataDistributinoPlot /> works for categorical data 1`] = `
               textAnchor="end"
               transform="translate(-14, 0)"
             >
-              0
+              0.0
             </text>
           </g>
           <g
@@ -189,7 +189,7 @@ exports[`<DataDistributinoPlot /> works for categorical data 1`] = `
               textAnchor="end"
               transform="translate(-14, 0)"
             >
-              2
+              0.2
             </text>
           </g>
           <g
@@ -212,7 +212,7 @@ exports[`<DataDistributinoPlot /> works for categorical data 1`] = `
               textAnchor="end"
               transform="translate(-14, 0)"
             >
-              4
+              0.4
             </text>
           </g>
           <g
@@ -235,7 +235,7 @@ exports[`<DataDistributinoPlot /> works for categorical data 1`] = `
               textAnchor="end"
               transform="translate(-14, 0)"
             >
-              6
+              0.6
             </text>
           </g>
           <g
@@ -258,7 +258,7 @@ exports[`<DataDistributinoPlot /> works for categorical data 1`] = `
               textAnchor="end"
               transform="translate(-14, 0)"
             >
-              8
+              0.8
             </text>
           </g>
           <g
@@ -281,7 +281,7 @@ exports[`<DataDistributinoPlot /> works for categorical data 1`] = `
               textAnchor="end"
               transform="translate(-14, 0)"
             >
-              10
+              1.0
             </text>
           </g>
         </g>
