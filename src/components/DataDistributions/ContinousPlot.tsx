@@ -6,20 +6,20 @@ import {
   XAxis,
   YAxis,
   VerticalRectSeries,
+  Hint,
 } from 'react-vis';
 
 import 'react-vis/dist/style.css';
 import { IAPIDistributionContinous } from '../../types';
-import { IDistributionPlotProps } from './DataDistributionPlot';
 
-interface IContinousPlotProps extends IDistributionPlotProps {
+interface IContinousPlotProps {
   data: IAPIDistributionContinous | undefined;
   plotWidth: number;
   plotHeight: number;
 }
 
 interface IContinousPlotState {
-  crosshairValues: Array<{ x: number; y: number }>;
+  value: any;
 }
 
 class ContinousPlot extends React.Component<
@@ -29,9 +29,7 @@ class ContinousPlot extends React.Component<
   constructor(props: IContinousPlotProps) {
     super(props);
 
-    this.state = {
-      crosshairValues: [],
-    };
+    this.state = { value: undefined };
   }
 
   public render() {
@@ -48,7 +46,7 @@ class ContinousPlot extends React.Component<
         <XYPlot
           width={this.props.plotWidth}
           height={this.props.plotHeight}
-          onMouseLeave={() => this.setState({ crosshairValues: [] })}
+          onMouseLeave={() => this.setState({ value: undefined })}
           xDomain={[
             this.props.data!.bin_edges[0],
             this.props.data!.bin_edges[this.props.data!.bin_edges.length - 1],
@@ -64,16 +62,7 @@ class ContinousPlot extends React.Component<
           />
           <YAxis />
           <VerticalRectSeries
-            onNearestX={(value: any, event: any) => {
-              this.props.onHover(
-                {
-                  x: Number(parseFloat(String(value.x)).toFixed(1)),
-                  x0: Number(parseFloat(String(value.x0)).toFixed(1)),
-                  y: Number(value.y),
-                },
-                event,
-              );
-            }}
+            onNearestX={this.onHover}
             opacity={0.8}
             style={{ stroke: '#fff' }}
             data={this.props.data!.bins.map((value: number, index: number) => {
@@ -85,9 +74,14 @@ class ContinousPlot extends React.Component<
               };
             })}
           />
+          {this.state.value ? <Hint value={this.state.value} /> : false}
         </XYPlot>
       </div>
     );
+  }
+
+  private onHover = (value: any) => {
+    this.setState({ value });
   }
 }
 
