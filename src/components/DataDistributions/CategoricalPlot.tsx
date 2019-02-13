@@ -7,6 +7,8 @@ import {
   YAxis,
   VerticalBarSeries,
   Hint,
+  // @ts-ignore
+  ChartLabel,
 } from 'react-vis';
 
 import 'react-vis/dist/style.css';
@@ -24,10 +26,25 @@ class CategoricalPlot extends React.Component<
 > {
   constructor(props: ICategoricalPlotProps) {
     super(props);
-    this.state = { value: undefined };
+    this.state = {
+      value: undefined,
+    };
   }
 
   public render() {
+    let count = 0;
+    let data = Object.keys(this.props.data.bins).map((key: string) => {
+      count += this.props.data.bins[key];
+      return { x: key, y: this.props.data.bins[key] };
+    });
+    data = data.map((value: { x: string; y: number }) => {
+      return {
+        x: value.x,
+        y: Number(((value.y / count) * 100).toFixed(1)),
+        count: value.y,
+      };
+    });
+
     return (
       <div>
         <XYPlot
@@ -35,18 +52,17 @@ class CategoricalPlot extends React.Component<
           width={this.props.plotWidth}
           height={this.props.plotHeight}
           onMouseLeave={() => this.setState({ value: undefined })}
+          yDomain={[0, 100]}
         >
           <VerticalGridLines />
           <HorizontalGridLines />
           <XAxis />
-          <YAxis />
+          <YAxis tickFormat={(v: string) => `${v}%`} />
           <VerticalBarSeries
             onNearestX={this.onHover}
             opacity={0.8}
             style={{ stroke: '#fff' }}
-            data={Object.keys(this.props.data.bins).map((key: string) => {
-              return { x: key, y: this.props.data.bins[key] };
-            })}
+            data={data}
           />
           {this.state.value ? <Hint value={this.state.value} /> : false}
         </XYPlot>
