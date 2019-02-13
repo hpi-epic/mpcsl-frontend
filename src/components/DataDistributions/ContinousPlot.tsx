@@ -10,8 +10,9 @@ import {
 
 import 'react-vis/dist/style.css';
 import { IAPIDistributionContinous } from '../../types';
+import { IDistributionPlotProps } from './DataDistributionPlot';
 
-interface IContinousPlotProps {
+interface IContinousPlotProps extends IDistributionPlotProps {
   data: IAPIDistributionContinous | undefined;
   plotWidth: number;
   plotHeight: number;
@@ -63,16 +64,16 @@ class ContinousPlot extends React.Component<
           />
           <YAxis />
           <VerticalRectSeries
-            onNearestX={(value) =>
-              this.setState({
-                crosshairValues: [
-                  {
-                    x: Number(parseFloat(String(value.x)).toFixed(1)),
-                    y: Number(value.y),
-                  },
-                ],
-              })
-            }
+            onNearestX={(value: any, event: any) => {
+              this.props.onHover(
+                {
+                  x: Number(parseFloat(String(value.x)).toFixed(1)),
+                  x0: Number(parseFloat(String(value.x0)).toFixed(1)),
+                  y: Number(value.y),
+                },
+                event,
+              );
+            }}
             opacity={0.8}
             style={{ stroke: '#fff' }}
             data={this.props.data!.bins.map((value: number, index: number) => {
