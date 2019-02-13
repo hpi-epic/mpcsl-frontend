@@ -4,8 +4,7 @@ import { IAPIDistribution } from '../../../types';
 
 import 'react-vis/dist/style.css';
 import './GraphAnnotate.css';
-
-import GraphAnnotateDataPlot from './GraphAnnotateDataPlot';
+import DataDistributionPlot from '../../../components/DataDistributions/DataDistributionPlot';
 
 interface IGraphAnnotateDataModalProps {
   visible: boolean;
@@ -24,7 +23,7 @@ interface IGraphAnnotateDataModalState {
 class GraphAnnotateDataModal extends React.Component<
   IGraphAnnotateDataModalProps,
   IGraphAnnotateDataModalState
-  > {
+> {
   constructor(props: IGraphAnnotateDataModalProps) {
     super(props);
 
@@ -39,21 +38,25 @@ class GraphAnnotateDataModal extends React.Component<
 
   public render() {
     if (this.props.visible && this.props.data) {
-      const columns = [{
-        title: 'Dataset name',
-        dataIndex: 'datasetname',
-        key: 'datasetname',
-      },
-      {
-        title: 'Remote DB',
-        dataIndex: 'remoteDB',
-        key: 'remoteDB',
-      }];
-      const tableData = [{
-        key: '1',
-        datasetname: this.props.data.dataset.name,
-        remoteDB: this.props.data.dataset.remote_db,
-      }];
+      const columns = [
+        {
+          title: 'Dataset name',
+          dataIndex: 'datasetname',
+          key: 'datasetname',
+        },
+        {
+          title: 'Remote DB',
+          dataIndex: 'remoteDB',
+          key: 'remoteDB',
+        },
+      ];
+      const tableData = [
+        {
+          key: '1',
+          datasetname: this.props.data.dataset.name,
+          remoteDB: this.props.data.dataset.remote_db,
+        },
+      ];
       return (
         <div>
           <Card
@@ -68,35 +71,44 @@ class GraphAnnotateDataModal extends React.Component<
             }}
             extra={
               <div>
-                {this.state.expanded ?
+                {this.state.expanded ? (
                   <Button
                     onClick={() => this.showLess()}
                     icon='fullscreen-exit'
-                  /> :
-                  <Button
-                    onClick={() => this.showMore()}
-                    icon='fullscreen'
-                  />}
+                  />
+                ) : (
+                  <Button onClick={() => this.showMore()} icon='fullscreen' />
+                )}
                 <Button
-                  onClick={() => { this.showLess(); this.props.onClose(); }}
+                  onClick={() => {
+                    this.showLess();
+                    this.props.onClose();
+                  }}
                   icon='close'
                 />
               </div>
             }
           >
             <div>
-              <GraphAnnotateDataPlot
-                data={this.props.data!}
+              <DataDistributionPlot
                 plotWidth={this.state.plotWidth}
                 plotHeight={this.state.plotHeight}
+                data={this.props.data!}
               />
             </div>
-            {this.state.expanded ?
+            {this.state.expanded ? (
               <div>
                 <Divider />
-                <Table columns={columns} dataSource={tableData} size='small' pagination={false} />
+                <Table
+                  columns={columns}
+                  dataSource={tableData}
+                  size='small'
+                  pagination={false}
+                />
               </div>
-            : ''}
+            ) : (
+              ''
+            )}
           </Card>
         </div>
       );

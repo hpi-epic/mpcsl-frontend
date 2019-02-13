@@ -96,7 +96,7 @@ export interface IAPIResult {
   sepset: any[];
 }
 
-export interface IAPIDistribution {
+interface IAPIDistributionBase {
   dataset: {
     time_created: string;
     id: number;
@@ -111,9 +111,26 @@ export interface IAPIDistribution {
     result_id: number;
     id: number;
   };
+}
+
+export interface IAPIDistributionContinous extends IAPIDistributionBase {
+  categorical: false;
   bin_edges: number[];
   bins: number[];
 }
+
+interface ICategoricalBin {
+  [bin: string]: number;
+}
+
+export interface IAPIDistributionCategorical extends IAPIDistributionBase {
+  categorical: true;
+  bins: ICategoricalBin;
+}
+
+export type IAPIDistribution =
+  | IAPIDistributionCategorical
+  | IAPIDistributionContinous;
 
 export interface IAPINodeContext {
   edges: IAPIGraphEdges[];
