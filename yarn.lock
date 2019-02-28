@@ -717,7 +717,6 @@
 "@mattiasbuelens/web-streams-polyfill@^0.2.0":
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@mattiasbuelens/web-streams-polyfill/-/web-streams-polyfill-0.2.1.tgz#d7c4aa94f98084ec0787be084d47167d62ea5f67"
-  integrity sha512-oKuFCQFa3W7Hj7zKn0+4ypI8JFm4ZKIoncwAC6wd5WwFW2sL7O1hpPoJdSWpynQ4DJ4lQ6MvFoVDmCLilonDFg==
   dependencies:
     "@types/whatwg-streams" "^0.0.7"
 
@@ -975,7 +974,6 @@
 "@types/react-lazylog@^3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@types/react-lazylog/-/react-lazylog-3.1.1.tgz#510e59c978fd3f5b5ac5a079f33ad6888b2b3cd0"
-  integrity sha512-1V0BG5ljue+AE8xfcaDSNVapqqtQ4HsqtapMYk2bOxmS/zwZtmBUxmXuTS/aXr7Dhn59jXs6ThS3SgK3dI0Qqw==
   dependencies:
     "@types/react" "*"
     immutable ">=3.8.2"
@@ -1002,10 +1000,31 @@
     "@types/history" "*"
     "@types/react" "*"
 
+"@types/react-select@^1":
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/@types/react-select/-/react-select-1.3.4.tgz#e3cd29b0e4b8a782ddfe76e5500f08d3476370ce"
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-test-renderer@^16.0.3":
   version "16.0.3"
   resolved "https://registry.yarnpkg.com/@types/react-test-renderer/-/react-test-renderer-16.0.3.tgz#cce5c983d66cc5c3582e7c2f44b274ab635a8acc"
   dependencies:
+    "@types/react" "*"
+
+"@types/react-virtualized-select@^3.0.7":
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/@types/react-virtualized-select/-/react-virtualized-select-3.0.7.tgz#068c97c5ff1cd46b292b29a34cb06f2efa0e94d4"
+  dependencies:
+    "@types/react" "*"
+    "@types/react-select" "^1"
+    "@types/react-virtualized" "*"
+
+"@types/react-virtualized@*":
+  version "9.18.12"
+  resolved "https://registry.yarnpkg.com/@types/react-virtualized/-/react-virtualized-9.18.12.tgz#541e65c5e0b4629d6a1c6f339171c7943e016ecb"
+  dependencies:
+    "@types/prop-types" "*"
     "@types/react" "*"
 
 "@types/react@*", "@types/react@16.7.3":
@@ -1034,7 +1053,6 @@
 "@types/whatwg-streams@^0.0.7":
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/@types/whatwg-streams/-/whatwg-streams-0.0.7.tgz#28bfe73dc850562296367249c4b32a50db81e9d3"
-  integrity sha512-6sDiSEP6DWcY2ZolsJ2s39ZmsoGQ7KVwBDI3sESQsEm9P2dHTcqnDIHRZFRNtLCzWp7hCFGqYbw5GyfpQnJ01A==
 
 "@webassemblyjs/ast@1.7.6":
   version "1.7.6"
@@ -1751,7 +1769,7 @@ babel-register@^6.26.0:
     mkdirp "^0.5.1"
     source-map-support "^0.4.15"
 
-babel-runtime@6.x, babel-runtime@^6.22.0, babel-runtime@^6.23.0, babel-runtime@^6.26.0:
+babel-runtime@6.x, babel-runtime@^6.11.6, babel-runtime@^6.22.0, babel-runtime@^6.23.0, babel-runtime@^6.26.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
   dependencies:
@@ -2221,7 +2239,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@2.x, classnames@^2.2.0, classnames@^2.2.1, classnames@^2.2.3, classnames@^2.2.5, classnames@^2.2.6, classnames@~2.2.6:
+classnames@2.x, classnames@^2.2.0, classnames@^2.2.1, classnames@^2.2.3, classnames@^2.2.4, classnames@^2.2.5, classnames@^2.2.6, classnames@~2.2.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
 
@@ -3245,7 +3263,6 @@ dom-converter@~0.2:
 "dom-helpers@^2.4.0 || ^3.0.0":
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/dom-helpers/-/dom-helpers-3.4.0.tgz#e9b369700f959f62ecde5a6babde4bccd9169af8"
-  integrity sha512-LnuPJ+dwqKDIyotW1VzmOZ5TONUN7CwkCR5hrgawTUbkBGYdeoNLZo6nNfGkCrjtE1nXXaj7iMMpDa8/d9WoIA==
   dependencies:
     "@babel/runtime" "^7.1.2"
 
@@ -3893,7 +3910,6 @@ fbjs@^0.8.0, fbjs@^0.8.15, fbjs@^0.8.16, fbjs@^0.8.9:
 fetch-readablestream@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/fetch-readablestream/-/fetch-readablestream-0.2.0.tgz#eaa6d1a76b12de2d4731a343393c6ccdcfe2c795"
-  integrity sha512-qu4mXWf4wus4idBIN/kVH+XSer8IZ9CwHP+Pd7DL7TuKNC1hP7ykon4kkBjwJF3EMX2WsFp4hH7gU7CyL7ucXw==
 
 figgy-pudding@^3.1.0, figgy-pudding@^3.5.1:
   version "3.5.1"
@@ -6121,7 +6137,6 @@ mississippi@^3.0.0:
 mitt@^1.1.2:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/mitt/-/mitt-1.1.3.tgz#528c506238a05dce11cd914a741ea2cc332da9b8"
-  integrity sha512-mUDCnVNsAi+eD6qA0HkRkwYczbLHJ49z17BGe2PYRhZL4wpZUFZGJHU7/5tmvohoma+Hdn0Vh/oJTiPEmgSruA==
 
 mixin-deep@^1.2.0:
   version "1.3.1"
@@ -8001,6 +8016,12 @@ react-error-overlay@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-5.1.0.tgz#c516995a5652e7bfbed8b497910d5280df74a7e8"
 
+react-input-autosize@^2.1.2:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/react-input-autosize/-/react-input-autosize-2.2.1.tgz#ec428fa15b1592994fb5f9aa15bb1eb6baf420f8"
+  dependencies:
+    prop-types "^15.5.8"
+
 react-is@^16.3.2, react-is@^16.6.0:
   version "16.6.3"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.6.3.tgz#d2d7462fcfcbe6ec0da56ad69047e47e56e7eac0"
@@ -8021,7 +8042,6 @@ react-lazy-load@^3.0.13:
 react-lazylog@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-lazylog/-/react-lazylog-3.2.0.tgz#3c59794527341405f2e36332cd9df6fbdcf70bc4"
-  integrity sha512-JkqkWfkAQ+ptc0jlSsLfejukCrPJld43OxNDoHWnMCb30Uv68HBul93slrU3y+EQr9gyTpN9SAv3+eBlUfY3Kg==
   dependencies:
     "@mattiasbuelens/web-streams-polyfill" "^0.2.0"
     fetch-readablestream "^0.2.0"
@@ -8133,6 +8153,14 @@ react-scripts@2.1.1:
   optionalDependencies:
     fsevents "1.2.4"
 
+react-select@^1.0.0-rc.2:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/react-select/-/react-select-1.3.0.tgz#1828ad5bf7f3e42a835c7e2d8cb13b5c20714876"
+  dependencies:
+    classnames "^2.2.4"
+    prop-types "^15.5.8"
+    react-input-autosize "^2.1.2"
+
 react-slick@~0.23.2:
   version "0.23.2"
   resolved "https://registry.yarnpkg.com/react-slick/-/react-slick-0.23.2.tgz#8d8bdbc77a6678e8ad36f50c32578c7c0f1c54f6"
@@ -8153,10 +8181,18 @@ react-test-renderer@^16.7.0:
     react-is "^16.7.0"
     scheduler "^0.12.0"
 
-react-virtualized@^9.21.0:
+react-virtualized-select@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/react-virtualized-select/-/react-virtualized-select-3.1.3.tgz#e5c1fed5e493e3e5a628e53100e83d27cfd8c0ac"
+  dependencies:
+    babel-runtime "^6.11.6"
+    prop-types "^15.5.8"
+    react-select "^1.0.0-rc.2"
+    react-virtualized "^9.0.0"
+
+react-virtualized@^9.0.0, react-virtualized@^9.21.0:
   version "9.21.0"
   resolved "https://registry.yarnpkg.com/react-virtualized/-/react-virtualized-9.21.0.tgz#8267c40ffb48db35b242a36dea85edcf280a6506"
-  integrity sha512-duKD2HvO33mqld4EtQKm9H9H0p+xce1c++2D5xn59Ma7P8VT7CprfAe5hwjd1OGkyhqzOZiTMlTal7LxjH5yBQ==
   dependencies:
     babel-runtime "^6.26.0"
     classnames "^2.2.3"
@@ -9232,7 +9268,6 @@ test-exclude@^4.2.1:
 text-encoding-utf-8@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/text-encoding-utf-8/-/text-encoding-utf-8-1.0.2.tgz#585b62197b0ae437e3c7b5d0af27ac1021e10d13"
-  integrity sha512-8bw4MY9WjdsD2aMtO0OzOCY3pXGYNx2d2FfHRVUKkiCPDWjKuOlhLVASS+pD7VkLTVjW268LYJHwsnPFlBpbAg==
 
 text-table@0.2.0, text-table@^0.2.0:
   version "0.2.0"
@@ -9800,7 +9835,6 @@ whatwg-fetch@3.0.0, whatwg-fetch@>=0.10.0:
 whatwg-fetch@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.4.tgz#dde6a5df315f9d39991aa17621853d720b85566f"
-  integrity sha512-dcQ1GWpOD/eEQ97k66aiEVpNnapVj90/+R+SXTPYGHpYBBypfKJEQjLrvMZ7YXbKm21gXd4NcuxUTjiv1YtLng==
 
 whatwg-mimetype@^2.1.0, whatwg-mimetype@^2.2.0:
   version "2.2.0"

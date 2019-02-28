@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes } from '../../constants/routes';
-import { Layout, Row, Col, Button, Select } from 'antd';
+import { Layout, Row, Col, Button } from 'antd';
 import * as actions from '../../actions/graphExplorer';
 import { connect } from 'react-redux';
 import { Route, RouteComponentProps, Switch, Redirect } from 'react-router-dom';
@@ -13,11 +13,20 @@ import GraphCausalExplorer from './GraphCausalExplorer/GraphCausalExplorer';
 import { IState } from '../../store';
 import { ID3GraphNode, IAPIGraphNode } from '../../types/graphTypes';
 import { ThunkDispatch } from 'redux-thunk';
+import Select from 'react-virtualized-select';
+
+import 'react-select/dist/react-select.css';
+import 'react-virtualized/styles.css';
+import 'react-virtualized-select/styles.css';
+
+import './index.css';
 
 const { Header, Content } = Layout;
 
 export interface IGraphExplorerState {
   view: typeof Routes;
+  value: any;
+  options: null | object[];
 }
 
 interface IMatchParams {
@@ -36,35 +45,26 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
 
     this.state = {
       view: this.props.location.pathname.replace(new RegExp('\\/\\d*$'), ''),
+      value: '',
+      options: null,
     };
   }
 
   public render() {
-    const graphSearch = (
-      <Select
-        showSearch={true}
-        style={{ width: 200 }}
-        placeholder='Add a node'
-        optionFilterProp='children'
-        onSelect={(value) => this.props.onAddNode(Number(value))}
-      >
-        {this.props.availableNodes
-          ? this.props.availableNodes.map((node: IAPIGraphNode) => {
-              if (
-                this.props.nodes.find(
-                  (n: ID3GraphNode) => node.id.toString() === n.id,
-                ) === undefined
-              ) {
-                return (
-                  <Select.Option key={node.id.toString()} value={node.id}>
-                    {node.name}
-                  </Select.Option>
-                );
-              }
-            })
-          : null}
-      </Select>
-    );
+    const graphSearch = this.props.availableNodes
+      ? this.props.availableNodes.map((node: IAPIGraphNode) => {
+          if (
+            this.props.nodes.find(
+              (n: ID3GraphNode) => node.id.toString() === n.id,
+            ) === undefined
+          ) {
+            return {
+              value: node.id,
+              label: node.name,
+            };
+          }
+        })
+      : new Array();
 
     return (
       <Layout className='Layout'>
@@ -73,7 +73,33 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
             <Col
               span={this.state.view === '/graph-explorer/selection' ? 10 : 0}
             >
-              {graphSearch}
+              <Select
+                key={'a'}
+                onChange={(option: any) => {
+                  this.setState({
+                    value: null,
+                  });
+                  this.forceUpdate();
+                  this.props.onAddNode(option!.value);
+                }}
+                options={
+                  graphSearch ? graphSearch.filter((n) => (n ? true : false)) : []
+                }
+                async={false}
+                onSelectResetsInput={true}
+                onBlurResetsInput={false}
+                valueKey='value'
+                labelKey='label'
+                closeOnSelect={false}
+                value={this.state.value}
+                removeSelected={true}
+                clearable={true}
+                placeholder='Select nodes'
+                style={{
+                  lineHeight: '14px',
+                  marginTop: '15px',
+                }}
+              />
             </Col>
             <Col
               span={this.state.view === '/graph-explorer/selection' ? 0 : 10}
