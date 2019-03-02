@@ -87,6 +87,10 @@ class GraphRenderer extends React.Component<
     this.onReLayout();
   }
 
+  public componentWillUnmount() {
+    this.force.stop();
+  }
+
   public shouldComponentUpdate(nextProps: IGraphRendererProps) {
     this.enterGraphChanges(nextProps);
     return false;
