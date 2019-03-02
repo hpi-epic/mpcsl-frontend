@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@blueprintjs/core": "^3.14.0",
+    "@blueprintjs/icons": "^3.6.0",
     "@dagrejs/graphlib": "^2.1.4",
     "@types/axios": "^0.14.0",
     "@types/d3": "^5.0.1",
@@ -23,6 +25,7 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-lazylog": "^3.2.0",
+    "react-mosaic-component": "2.0.2",
     "react-redux": "^5.1.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
