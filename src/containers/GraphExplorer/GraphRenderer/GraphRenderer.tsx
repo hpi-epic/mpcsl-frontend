@@ -84,7 +84,7 @@ class GraphRenderer extends React.Component<
       .attr('class', 'tooltip')
       .style('opacity', 0);
 
-    this.onReLayout();
+    this.shouldComponentUpdate(this.props);
   }
 
   public componentWillUnmount() {
