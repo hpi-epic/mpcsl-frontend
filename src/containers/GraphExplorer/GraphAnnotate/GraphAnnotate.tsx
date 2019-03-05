@@ -51,6 +51,7 @@ class GraphAnnotate extends React.Component<
             onClose={this.closeDataModal}
           />
           <GraphRenderer
+            showMenu={false}
             isSelectionMode={false}
             onNodeClick={this.showDataModal}
           />

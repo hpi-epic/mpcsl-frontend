@@ -8,7 +8,11 @@ import './GraphCausalExplorer.css';
 
 const ELEMENT_MAP: { [viewId: string]: JSX.Element } = {
   a: <div>Left Window</div>,
-  b: <GraphRenderer key='test' isSelectionMode={false} />,
+  b: (
+    <div style={{ overflow: 'hidden' }}>
+      <GraphRenderer showMenu={false} key='test' isSelectionMode={false} />
+    </div>
+  ),
   c: <div>Bottom Left Window</div>,
   d: <div>Bottom Right Window</div>,
 };
