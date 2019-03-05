@@ -120,7 +120,7 @@ class GraphRenderer extends React.Component<
     return (
       <div>
         <Row type='flex' justify='start'>
-          <Col span={2}>
+          <Col span={3}>
             <Button onClick={this.onReLayout}>Re-Layout</Button>
           </Col>
           <Col span={4} className='GraphRenderer-Menu'>
@@ -128,6 +128,7 @@ class GraphRenderer extends React.Component<
               Freeze Layout
             </Checkbox>
           </Col>
+          <Col span={5} />
         </Row>
         <svg
           ref={(svg) => (this.svg = d3.select(svg))}
