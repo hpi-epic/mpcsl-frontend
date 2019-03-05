@@ -62,6 +62,15 @@ export interface ICreateExperiment {
   };
 }
 
+export interface IAlgorithm {
+  id: number;
+  name: string;
+  script_filename: string;
+  backend: string;
+  description: string;
+  validParameters: object;
+}
+
 export interface IJob {
   id: number;
   experiment_id: number;
