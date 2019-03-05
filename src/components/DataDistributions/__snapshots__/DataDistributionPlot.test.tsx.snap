@@ -298,7 +298,7 @@ exports[`<DataDistributinoPlot /> works for categorical data 1`] = `
           onMouseOver={[Function]}
           style={
             Object {
-              "fill": "#12939A",
+              "fill": "#1e96be",
               "opacity": 0.8,
               "stroke": "#fff",
             }
@@ -699,7 +699,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           onMouseOver={[Function]}
           style={
             Object {
-              "fill": "#12939A",
+              "fill": "#1c7c7c7",
               "opacity": 0.8,
               "stroke": "#fff",
             }
@@ -716,7 +716,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           onMouseOver={[Function]}
           style={
             Object {
-              "fill": "#12939A",
+              "fill": "#1c7c7c7",
               "opacity": 0.8,
               "stroke": "#fff",
             }
@@ -733,7 +733,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           onMouseOver={[Function]}
           style={
             Object {
-              "fill": "#12939A",
+              "fill": "#1c7c7c7",
               "opacity": 0.8,
               "stroke": "#fff",
             }
@@ -750,7 +750,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           onMouseOver={[Function]}
           style={
             Object {
-              "fill": "#12939A",
+              "fill": "#1c7c7c7",
               "opacity": 0.8,
               "stroke": "#fff",
             }
@@ -760,7 +760,51 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           y={27.272727272727273}
         />
       </g>
+      <g
+        className=" rv-highlight-container"
+        transform="translate(0, 0)"
+      >
+        <rect
+          className="rv-mouse-target"
+          fill="black"
+          height={100}
+          onContextMenu={[Function]}
+          onContextMenuCapture={[Function]}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseMove={[Function]}
+          onMouseUp={[Function]}
+          onTouchCancel={[Function]}
+          onTouchEnd={[Function]}
+          opacity="0"
+          width={100}
+          x="0"
+          y="0"
+        />
+        <rect
+          className="rv-highlight"
+          fill="#829AE3"
+          height={0}
+          opacity={0.3}
+          pointerEvents="none"
+          width={0}
+          x={0}
+          y={0}
+        />
+      </g>
     </svg>
+  </div>
+  <div>
+    <b>
+      selectionStart:
+    </b>
+     
+    NaN,
+    <b>
+      selectionEnd:
+    </b>
+     
+    NaN,
   </div>
 </div>
 `;

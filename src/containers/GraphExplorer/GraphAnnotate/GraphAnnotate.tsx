@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { IState } from '../../../store';
 import { IAPIDistribution } from '../../../types';
 import { getNodeDataDistribution } from '../../../actions/apiRequests';
-import GraphDataModal from '../../GraphDataModal';
+import GraphDataModal from '../GraphDataModal';
 
 interface IGraphExplorationProps {
   nodes: ID3GraphNode[];

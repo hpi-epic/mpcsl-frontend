@@ -1,9 +1,9 @@
 import React from 'react';
 import { Card, Button, Divider, Table } from 'antd';
-import { IAPIDistribution } from '../types';
+import { IAPIDistribution } from '../../types';
 
 import 'react-vis/dist/style.css';
-import DataDistributionPlot from '../components/DataDistributions/DataDistributionPlot';
+import DataDistributionPlot from '../../components/DataDistributions/DataDistributionPlot';
 
 interface IGraphDataModalProps {
   visible: boolean;
@@ -90,6 +90,7 @@ class GraphDataModal extends React.Component<
           >
             <div>
               <DataDistributionPlot
+                selectable={false}
                 plotWidth={this.state.plotWidth}
                 plotHeight={this.state.plotHeight}
                 data={this.props.data!}
