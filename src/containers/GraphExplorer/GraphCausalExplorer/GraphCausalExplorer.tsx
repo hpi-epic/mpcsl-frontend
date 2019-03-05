@@ -3,13 +3,73 @@ import { Mosaic } from 'react-mosaic-component';
 
 import 'react-mosaic-component/react-mosaic-component.css';
 import GraphRenderer from '../GraphRenderer/GraphRenderer';
-
+import { connect } from 'react-redux';
 import './GraphCausalExplorer.css';
+import { IState } from '../../../store';
+import { IAPIGraphNode, ID3GraphNode } from '../../../types/graphTypes';
+import { List, Tooltip } from 'antd';
+import Graph from '../../../utils/graph';
 
-class GraphCausalExplorer extends React.Component {
+interface IGraphCausalExplorerProps {
+  nodes: ID3GraphNode[];
+  availableNodes: IAPIGraphNode[];
+  selectedGraph: Graph;
+}
+
+interface IGraphCausalExplorerState {
+  conditions: {};
+}
+
+class GraphCausalExplorer extends React.Component<
+  IGraphCausalExplorerProps,
+  IGraphCausalExplorerState
+> {
+  constructor(props: IGraphCausalExplorerProps) {
+    super(props);
+
+    this.state = {
+      conditions: {},
+    };
+  }
   public render() {
+    const externFactorsNodes = this.props.selectedGraph.nodes.filter(
+      (value: ID3GraphNode) => true, // TODO
+    );
+
+    const externFactorsList = (
+      <List
+        size='small'
+        header={
+          <div style={{ padding: '14px', fontWeight: 'bold' }}>
+            External Factors
+          </div>}
+        dataSource={externFactorsNodes}
+        renderItem={(item: any) => (
+          <Tooltip
+            placement='topLeft'
+            title={item.label}
+            overlayStyle={{ paddingLeft: '4px' }}
+          >
+            <List.Item key={item.value} style={{ paddingLeft: '14px' }}>
+              {item.label}
+            </List.Item>
+          </Tooltip>
+        )}
+      />
+    );
+
     const elementMap: { [viewId: string]: JSX.Element } = {
-      externFactors: <div>Extern Factors</div>,
+      externFactors: (
+        <div
+          style={{
+            backgroundColor: 'white',
+            overflow: 'hidden',
+            overflowY: 'scroll',
+          }}
+        >
+          {externFactorsList}
+        </div>
+      ),
       externFactorsDistribution: <div>Extern Factors Distribution</div>,
       renderer: (
         <div style={{ overflow: 'hidden' }}>
@@ -50,4 +110,12 @@ class GraphCausalExplorer extends React.Component {
   }
 }
 
-export default GraphCausalExplorer;
+export function mapStateToProps(state: IState) {
+  return {
+    nodes: state.graphExplorer!.nodes,
+    availableNodes: state.graphExplorer!.availableNodes,
+    selectedGraph: state.graphExplorer!.selectedGraph,
+  };
+}
+
+export default connect(mapStateToProps)(GraphCausalExplorer);
