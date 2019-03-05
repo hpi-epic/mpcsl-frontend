@@ -2,7 +2,6 @@ import React from 'react';
 
 import GraphRenderer from '../GraphRenderer/GraphRenderer';
 import GraphNodeList from '../../../components/GraphNodeList/GraphNodeList';
-import GraphAnnotateDataModal from './GraphAnnotateDataModal';
 
 import { Layout } from 'antd';
 
@@ -11,6 +10,7 @@ import { connect } from 'react-redux';
 import { IState } from '../../../store';
 import { IAPIDistribution } from '../../../types';
 import { getNodeDataDistribution } from '../../../actions/apiRequests';
+import GraphDataModal from '../../GraphDataModal';
 
 interface IGraphExplorationProps {
   nodes: ID3GraphNode[];
@@ -45,7 +45,7 @@ class GraphAnnotate extends React.Component<
               isSelectionMode={false}
             />
           </Layout.Sider>
-          <GraphAnnotateDataModal
+          <GraphDataModal
             visible={this.state.dataModalVisible}
             data={this.state.selectedNodeDataDistribution}
             onClose={this.closeDataModal}
