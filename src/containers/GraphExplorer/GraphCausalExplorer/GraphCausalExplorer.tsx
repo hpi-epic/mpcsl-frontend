@@ -10,7 +10,7 @@ const ELEMENT_MAP: { [viewId: string]: JSX.Element } = {
   a: <div>Left Window</div>,
   b: (
     <div style={{ overflow: 'hidden' }}>
-      <GraphRenderer key='test' isSelectionMode={false} />
+      <GraphRenderer key='test' isSelectionMode={false} showMenu={false} />
     </div>
   ),
   c: <div>Bottom Left Window</div>,
@@ -36,7 +36,7 @@ class GraphCausalExplorer extends React.Component {
               },
               splitPercentage: 70,
             },
-            splitPercentage: 25,
+            splitPercentage: 20,
           }}
         />
       </div>

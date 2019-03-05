@@ -2,7 +2,7 @@ import React from 'react';
 
 import GraphRenderer from '../GraphRenderer/GraphRenderer';
 import GraphNodeList from '../../../components/GraphNodeList/GraphNodeList';
-import GraphAnnotateDataModal from './GraphAnnotateDataModal';
+import GraphDataModal from '../../GraphDataModal';
 
 import { Layout } from 'antd';
 
@@ -45,12 +45,13 @@ class GraphAnnotate extends React.Component<
               isSelectionMode={false}
             />
           </Layout.Sider>
-          <GraphAnnotateDataModal
+          <GraphDataModal
             visible={this.state.dataModalVisible}
             data={this.state.selectedNodeDataDistribution}
             onClose={this.closeDataModal}
           />
           <GraphRenderer
+            showMenu={false}
             isSelectionMode={false}
             onNodeClick={this.showDataModal}
           />

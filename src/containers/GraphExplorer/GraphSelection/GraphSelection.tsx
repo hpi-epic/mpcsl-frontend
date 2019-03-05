@@ -43,7 +43,7 @@ class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
             isSelectionMode={true}
           />
         </Layout.Sider>
-        <GraphRenderer isSelectionMode={true} />
+        <GraphRenderer showMenu={true} isSelectionMode={true} />
       </Layout>
     );
   }
