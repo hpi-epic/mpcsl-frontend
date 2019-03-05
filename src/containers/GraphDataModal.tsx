@@ -1,18 +1,17 @@
 import React from 'react';
 import { Card, Button, Divider, Table } from 'antd';
-import { IAPIDistribution } from '../../../types';
+import { IAPIDistribution } from '../types';
 
 import 'react-vis/dist/style.css';
-import './GraphAnnotate.css';
-import DataDistributionPlot from '../../../components/DataDistributions/DataDistributionPlot';
+import DataDistributionPlot from '../components/DataDistributions/DataDistributionPlot';
 
-interface IGraphAnnotateDataModalProps {
+interface IGraphDataModalProps {
   visible: boolean;
   data: IAPIDistribution | undefined;
   onClose: () => void;
 }
 
-interface IGraphAnnotateDataModalState {
+interface IGraphDataModalState {
   cardWidth: number;
   cardHeight: number;
   plotWidth: number;
@@ -20,11 +19,11 @@ interface IGraphAnnotateDataModalState {
   expanded: boolean;
 }
 
-class GraphAnnotateDataModal extends React.Component<
-  IGraphAnnotateDataModalProps,
-  IGraphAnnotateDataModalState
+class GraphDataModal extends React.Component<
+  IGraphDataModalProps,
+  IGraphDataModalState
 > {
-  constructor(props: IGraphAnnotateDataModalProps) {
+  constructor(props: IGraphDataModalProps) {
     super(props);
 
     this.state = {
@@ -138,4 +137,4 @@ class GraphAnnotateDataModal extends React.Component<
   }
 }
 
-export default GraphAnnotateDataModal;
+export default GraphDataModal;
