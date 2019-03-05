@@ -6,33 +6,39 @@ import GraphRenderer from '../GraphRenderer/GraphRenderer';
 
 import './GraphCausalExplorer.css';
 
-const ELEMENT_MAP: { [viewId: string]: JSX.Element } = {
-  a: <div>Left Window</div>,
-  b: (
-    <div style={{ overflow: 'hidden' }}>
-      <GraphRenderer key='test' isSelectionMode={false} showMenu={false} />
-    </div>
-  ),
-  c: <div>Bottom Left Window</div>,
-  d: <div>Bottom Right Window</div>,
-};
-
 class GraphCausalExplorer extends React.Component {
   public render() {
+    const elementMap: { [viewId: string]: JSX.Element } = {
+      externFactors: <div>Extern Factors</div>,
+      externFactorsDistribution: <div>Extern Factors Distribution</div>,
+      renderer: (
+        <div style={{ overflow: 'hidden' }}>
+          <GraphRenderer key='test' isSelectionMode={false} showMenu={false} />
+        </div>
+      ),
+      firstConditionNode: <div>First Condition Node</div>,
+      exploreNode: <div>Exploration Node</div>,
+    };
+
     return (
       <div style={{ width: '100%', height: '100%', margin: 0 }}>
         <Mosaic<string>
-          renderTile={(id) => ELEMENT_MAP[id]}
+          renderTile={(id) => elementMap[id]}
           initialValue={{
             direction: 'row',
-            first: 'a',
+            first: {
+              direction: 'column',
+              first: 'externFactors',
+              second: 'externFactorsDistribution',
+              splitPercentage: 70,
+            },
             second: {
               direction: 'column',
-              first: 'b',
+              first: 'renderer',
               second: {
                 direction: 'row',
-                first: 'c',
-                second: 'd',
+                first: 'firstConditionNode',
+                second: 'exploreNode',
               },
               splitPercentage: 70,
             },
