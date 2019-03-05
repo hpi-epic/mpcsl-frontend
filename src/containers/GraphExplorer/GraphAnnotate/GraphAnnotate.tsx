@@ -2,6 +2,7 @@ import React from 'react';
 
 import GraphRenderer from '../GraphRenderer/GraphRenderer';
 import GraphNodeList from '../../../components/GraphNodeList/GraphNodeList';
+import GraphDataModal from '../../GraphDataModal';
 
 import { Layout } from 'antd';
 

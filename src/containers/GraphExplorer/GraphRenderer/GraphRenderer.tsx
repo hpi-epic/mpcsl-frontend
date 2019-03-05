@@ -132,6 +132,7 @@ class GraphRenderer extends React.Component<
         <Col span={5} />
       </Row>
     );
+
     return (
       <div>
         {this.props.showMenu ? menu : null}
