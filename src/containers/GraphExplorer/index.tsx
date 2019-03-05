@@ -118,14 +118,17 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
         <Content style={{ background: colors.contentBackground }}>
           <Switch>
             <Route
+              key='selection'
               path={`${Routes.graphExplorerSelection}/:result_id`}
               component={GraphSelection}
             />
             <Route
+              key='annotate'
               path={`${Routes.graphExplorerAnnotate}/:result_id`}
               component={GraphAnnotate}
             />
             <Route
+              key='explorer'
               path={`${Routes.graphExplorerCausalExploration}/:result_id`}
               component={GraphCausalExplorer}
             />
