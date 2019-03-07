@@ -7,8 +7,12 @@ import { connect } from 'react-redux';
 import './GraphCausalExplorer.css';
 import { IState } from '../../../store';
 import { IAPIGraphNode, ID3GraphNode } from '../../../types/graphTypes';
-import { List, Tooltip } from 'antd';
+import { List, Tooltip, Card } from 'antd';
 import Graph from '../../../utils/graph';
+import { NodeSelection } from './NodeSearch';
+import { IAPIDistribution } from '../../../types';
+
+import { getNodeDataDistribution } from '../../../actions/apiRequests';
 
 interface IGraphCausalExplorerProps {
   nodes: ID3GraphNode[];
@@ -18,6 +22,12 @@ interface IGraphCausalExplorerProps {
 
 interface IGraphCausalExplorerState {
   conditions: {};
+  effectNode:
+    | { nodeID: string; distribution: IAPIDistribution; nodeLabel: string }
+    | undefined;
+  causalNode:
+    | { nodeID: string; distribution: IAPIDistribution; nodeLabel: string }
+    | undefined;
 }
 
 class GraphCausalExplorer extends React.Component<
@@ -29,21 +39,23 @@ class GraphCausalExplorer extends React.Component<
 
     this.state = {
       conditions: {},
+      effectNode: undefined,
+      causalNode: undefined,
     };
   }
   public render() {
-    const externFactorsNodes = this.props.selectedGraph.nodes.filter(
+    const externalFactorsNodes = this.props.selectedGraph.nodes.filter(
       (value: ID3GraphNode) => true, // TODO
     );
 
-    const externFactorsList = (
+    const externalFactorsList = (
       <List
         size='small'
         header={
           <div style={{ padding: '14px', fontWeight: 'bold' }}>
             External Factors
           </div>}
-        dataSource={externFactorsNodes}
+        dataSource={externalFactorsNodes}
         renderItem={(item: any) => (
           <Tooltip
             placement='topLeft'
@@ -67,7 +79,7 @@ class GraphCausalExplorer extends React.Component<
             overflowY: 'scroll',
           }}
         >
-          {externFactorsList}
+          {externalFactorsList}
         </div>
       ),
       externFactorsDistribution: <div>Extern Factors Distribution</div>,
@@ -76,12 +88,51 @@ class GraphCausalExplorer extends React.Component<
           <GraphRenderer key='test' isSelectionMode={false} showMenu={false} />
         </div>
       ),
-      firstConditionNode: <div>First Condition Node</div>,
-      exploreNode: <div>Exploration Node</div>,
+      firstConditionNode: (
+        <Card title='Causal Node'>
+          <div style={{ height: '100%' }}>
+            {!this.state.causalNode ? (
+              <NodeSelection
+                onNodeSelection={this.onCausalNodeClick}
+                nodes={this.props.selectedGraph.nodes.filter(
+                  (node: ID3GraphNode) => !node.isContext,
+                )}
+                placeholder='Select a Causal Node'
+              />
+            ) : (
+              <div />
+            )}
+          </div>
+        </Card>
+      ),
+      exploreNode: (
+        <Card title='Effect Node'>
+          <div style={{ height: '100%' }}>
+            {!this.state.effectNode ? (
+              <NodeSelection
+                onNodeSelection={this.onEffectNodeClick}
+                nodes={this.props.selectedGraph.nodes.filter(
+                  (node: ID3GraphNode) => !node.isContext,
+                )}
+                placeholder='Select an Effect Node'
+              />
+            ) : (
+              <div />
+            )}
+          </div>
+        </Card>
+      ),
     };
 
     return (
-      <div style={{ width: '100%', height: '100%', margin: 0 }}>
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          margin: 0,
+          backgroundColor: 'white',
+        }}
+      >
         <Mosaic<string>
           renderTile={(id) => elementMap[id]}
           initialValue={{
@@ -90,7 +141,7 @@ class GraphCausalExplorer extends React.Component<
               direction: 'column',
               first: 'externFactors',
               second: 'externFactorsDistribution',
-              splitPercentage: 70,
+              splitPercentage: 55,
             },
             second: {
               direction: 'column',
@@ -100,13 +151,35 @@ class GraphCausalExplorer extends React.Component<
                 first: 'firstConditionNode',
                 second: 'exploreNode',
               },
-              splitPercentage: 70,
+              splitPercentage: 55,
             },
             splitPercentage: 20,
           }}
         />
       </div>
     );
+  }
+
+  public onEffectNodeClick = async (nodeID: string) => {
+    const distribution = await getNodeDataDistribution(nodeID);
+    this.setState({
+      effectNode: {
+        nodeID,
+        distribution,
+        nodeLabel: distribution.node.name,
+      },
+    });
+  }
+
+  public onCausalNodeClick = async (nodeID: string) => {
+    const distribution = await getNodeDataDistribution(nodeID);
+    this.setState({
+      causalNode: {
+        nodeID,
+        distribution,
+        nodeLabel: distribution.node.name,
+      },
+    });
   }
 }
 
