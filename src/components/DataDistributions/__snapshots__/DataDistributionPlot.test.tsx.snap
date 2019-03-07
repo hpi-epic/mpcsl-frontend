@@ -462,7 +462,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           <g
             className="rv-xy-plot__axis__tick"
             style={Object {}}
-            transform="translate(8.333333333333332, 0)"
+            transform="translate(0, 0)"
           >
             <line
               className="rv-xy-plot__axis__tick__line"
@@ -479,13 +479,13 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
               textAnchor="end"
               transform="translate(0, 14) rotate(-45)"
             >
-              1.5
+              1.0
             </text>
           </g>
           <g
             className="rv-xy-plot__axis__tick"
             style={Object {}}
-            transform="translate(25, 0)"
+            transform="translate(16.666666666666664, 0)"
           >
             <line
               className="rv-xy-plot__axis__tick__line"
@@ -502,13 +502,13 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
               textAnchor="end"
               transform="translate(0, 14) rotate(-45)"
             >
-              2.5
+              2.0
             </text>
           </g>
           <g
             className="rv-xy-plot__axis__tick"
             style={Object {}}
-            transform="translate(41.66666666666667, 0)"
+            transform="translate(33.33333333333333, 0)"
           >
             <line
               className="rv-xy-plot__axis__tick__line"
@@ -525,7 +525,30 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
               textAnchor="end"
               transform="translate(0, 14) rotate(-45)"
             >
-              3.5
+              3.0
+            </text>
+          </g>
+          <g
+            className="rv-xy-plot__axis__tick"
+            style={Object {}}
+            transform="translate(50, 0)"
+          >
+            <line
+              className="rv-xy-plot__axis__tick__line"
+              style={Object {}}
+              x1={0}
+              x2={0}
+              y1={-6}
+              y2={6}
+            />
+            <text
+              className="rv-xy-plot__axis__tick__text"
+              dy="0"
+              style={Object {}}
+              textAnchor="end"
+              transform="translate(0, 14) rotate(-45)"
+            >
+              4.0
             </text>
           </g>
         </g>
