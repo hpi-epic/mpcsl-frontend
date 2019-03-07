@@ -139,10 +139,10 @@ class ExperimentsManager extends React.Component<
   }
 
   private onNewExperiment = () => {
-    this.setState({
-      newExperimentModalVisible: true,
-      editExperiment: true,
-    });
+      this.setState({
+        newExperimentModalVisible: true,
+        editExperiment: true,
+      });
   }
 
   private onClose = () => {
@@ -172,6 +172,7 @@ class ExperimentsManager extends React.Component<
         independence_test: experiment.parameters.independence_test,
         cores: experiment.parameters.cores,
         observationMatrix_id: experiment.dataset_id,
+        algorithm_id: experiment.algorithm_id,
       },
     });
   }
@@ -191,6 +192,7 @@ class ExperimentsManager extends React.Component<
         independence_test: experiment.parameters.independence_test,
         cores: experiment.parameters.cores,
         observationMatrix_id: experiment.dataset_id,
+        algorithm_id: experiment.algorithm_id,
       },
     });
   }

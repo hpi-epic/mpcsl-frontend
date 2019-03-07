@@ -27,6 +27,7 @@ export interface IExperiment {
   id?: number;
   name: string;
   description?: string;
+  algorithm_id: number;
   parameters: {
     alpha: number;
     independence_test: string;
@@ -68,7 +69,7 @@ export interface IAlgorithm {
   script_filename: string;
   backend: string;
   description: string;
-  validParameters: object;
+  valid_parameters: {[name: string]: any};
 }
 
 export interface IJob {

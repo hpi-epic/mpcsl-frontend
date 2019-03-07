@@ -10,12 +10,13 @@ import {
 } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import React from 'react';
-import { IObservationMatrix } from '../../types';
+import { IObservationMatrix, IAlgorithm } from '../../types';
 import {
   getObservationMatrices,
   createExperiment,
+  getAllAlgorithms,
 } from '../../actions/apiRequests';
-import { IndepenceTests } from '../../constants/experiment';
+// import { IndepenceTests } from '../../constants/experiment';
 
 export interface IPropsNewExperimentModal extends FormComponentProps {
   visible: boolean;
@@ -27,15 +28,12 @@ export interface IPropsNewExperimentModal extends FormComponentProps {
 interface IStateNewExperimentModal {
   hasErrors: boolean;
   observationMatrices: IObservationMatrix[];
+  algorithms: IAlgorithm[];
+  selectedAlgorithm: IAlgorithm | undefined;
 }
 
 export interface IFormExperiment {
-  name: string;
-  description: string;
-  alpha: number;
-  independence_test: string;
-  cores: number;
-  observationMatrix_id: number;
+  [name: string]: any;
 }
 
 class NewExperimentModal extends React.Component<
@@ -50,12 +48,15 @@ class NewExperimentModal extends React.Component<
     this.state = {
       hasErrors: true,
       observationMatrices: [],
+      algorithms: [],
+      selectedAlgorithm: undefined,
     };
   }
 
   public componentDidMount = () => {
     this.mounted = true;
     this.fetchObservationMatrices();
+    this.fetchAlgorithms();
     if (this.props.experiment && !this.props.editDisabled) {
       this.hasErrors();
     }
@@ -83,13 +84,18 @@ class NewExperimentModal extends React.Component<
       </Select>
     );
 
-    const independenceTestSelect = (
-      <Select disabled={this.props.editDisabled} onChange={this.hasErrors}>
-        {Object.keys(IndepenceTests).map((key: any) => (
-          <Select.Option value={IndepenceTests[key]} key={IndepenceTests[key]}>
-            {IndepenceTests[key]}
-          </Select.Option>
-        ))}
+    const algorithmsSelect = (
+      <Select disabled={this.props.editDisabled} onChange={(algId) => this.hasErrors && this.setSelectedAlgo(algId)}>
+        {this.state.algorithms.map(
+          (algorithm: IAlgorithm) => (
+            <Select.Option
+              value={algorithm.id}
+              key={String(algorithm.id)}
+            >
+              {algorithm.name}
+            </Select.Option>
+          ),
+        )}
       </Select>
     );
 
@@ -121,38 +127,12 @@ class NewExperimentModal extends React.Component<
       rules: [{ required: true, message: 'Select a Observation Matrix' }],
     })(observationMatrixSelect);
 
-    const alphaEl = getFieldDecorator('alpha', {
+    const algorithmsEl = getFieldDecorator('algorithms_id', {
       initialValue: this.props.experiment
-        ? this.props.experiment.alpha
-        : undefined,
-      rules: [{ required: true, message: 'Enter an Alpha value' }],
-    })(
-      <InputNumber
-        disabled={this.props.editDisabled}
-        onChange={this.hasErrors}
-        placeholder='0'
-      />,
-    );
-
-    const independenceTestEl = getFieldDecorator('independence_test', {
-      initialValue: this.props.experiment
-        ? this.props.experiment.independence_test
-        : IndepenceTests.gaussCI,
-      rules: [{ required: true, message: 'Select an Indepent Test' }],
-    })(independenceTestSelect);
-
-    const coresEl = getFieldDecorator('cores', {
-      initialValue: this.props.experiment ? this.props.experiment.cores : 1,
-      rules: [{ required: true, message: 'Enter the Number of Cores' }],
-    })(
-      <InputNumber
-        disabled={this.props.editDisabled}
-        onChange={this.hasErrors}
-        placeholder='0'
-        min={0}
-        step={1}
-      />,
-    );
+        ? this.props.experiment.algorithm_id
+        : this.state.algorithms.length > 0 ? this.state.selectedAlgorithm!.id : undefined,
+      rules: [{ required: true, message: 'Select a Algorithm' }],
+    })(algorithmsSelect);
 
     return (
       <Drawer
@@ -182,13 +162,10 @@ class NewExperimentModal extends React.Component<
             <Form.Item label='Observation Matrix' hasFeedback={true}>
               {observationMatrixEl}
             </Form.Item>
-            <Form.Item label='Alpha' hasFeedback={true}>
-              {alphaEl}
+            <Form.Item label='Algorithm Selection' hasFeedback={true}>
+              {algorithmsEl}
             </Form.Item>
-            <Form.Item label='Independence Test' hasFeedback={true}>
-              {independenceTestEl}
-            </Form.Item>
-            <Form.Item label='Cores'>{coresEl}</Form.Item>
+            {this.createFormElementForParameters()}
             <Form.Item>
               <Button
                 type='primary'
@@ -209,6 +186,16 @@ class NewExperimentModal extends React.Component<
     if (this.mounted) {
       this.setState({
         observationMatrices,
+      });
+    }
+  }
+
+  private async fetchAlgorithms() {
+    const algorithms = await getAllAlgorithms();
+    if (this.mounted) {
+      this.setState({
+        algorithms,
+        selectedAlgorithm: algorithms[2],
       });
     }
   }
@@ -253,6 +240,72 @@ class NewExperimentModal extends React.Component<
       },
     });
     this.props.onClose();
+  }
+
+  private setSelectedAlgo = (algorithmId: any) => {
+    this.state.algorithms.forEach((algorithm: IAlgorithm) => {
+      if (algorithm.id === algorithmId) {
+        const selectedAlgorithm = algorithm;
+        this.setState({
+          selectedAlgorithm,
+        });
+      }
+    });
+  }
+
+  private createFormElementForParameters = () => {
+    if (this.state.selectedAlgorithm !== undefined && this.state.selectedAlgorithm.valid_parameters) {
+      return Object.keys(this.state.selectedAlgorithm.valid_parameters).map((key: string) => {
+        const parameter = this.state.selectedAlgorithm!.valid_parameters[key];
+        return (
+          <Form.Item label={key} key={key}>
+          {parameter.type === 'enum' ? this.createSelectElement(key, parameter)
+          : this.createInputElement(key, parameter)}</Form.Item>
+        );
+      });
+    }
+  }
+
+  private createInputElement = (key: string, parameter: any) => {
+    const { getFieldDecorator } = this.props.form;
+    return getFieldDecorator(key, {
+      initialValue: this.props.experiment
+        ? this.props.experiment[key]
+        : (parameter.minimum ? parameter.minimum : (parameter.default ? parameter.default : 0)),
+      rules: [{ required: parameter.required, message: `Enter an ${key} value` }],
+    })(
+    <InputNumber
+        disabled={this.props.editDisabled}
+        onChange={this.hasErrors}
+        placeholder='0'
+        min={parameter.minimum ? parameter.minimum : undefined}
+        max={parameter.maximum ? parameter.maximum : undefined}
+        step={parameter.type === 'float' ? 0.01 : 1}
+    />,
+    );
+  }
+
+  private createSelectElement = (key: string, parameter: any) => {
+    const { getFieldDecorator } = this.props.form;
+    return getFieldDecorator(key, {
+      initialValue: this.props.experiment
+        ? this.props.experiment[key]
+        : parameter.values[Object.keys(parameter.values)[0]],
+      rules: [{ required: parameter.required, message: `Enter an ${key} value` }],
+    })(
+    <Select disabled={this.props.editDisabled}>
+      {Object.keys(parameter.values).map(
+        (val: any) => (
+          <Select.Option
+            value={parameter.values[val]}
+            key={parameter.values[val]}
+          >
+          {parameter.values[val]}
+          </Select.Option>
+        ),
+      )}
+    </Select>,
+    );
   }
 }
 

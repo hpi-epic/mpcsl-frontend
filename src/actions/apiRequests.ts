@@ -252,7 +252,7 @@ export function getNodeDataDistribution(
   });
 }
 
-export function getAlgorithms(): Promise<IAlgorithm[]> {
+export function getAllAlgorithms(): Promise<IAlgorithm[]> {
   return new Promise<IAlgorithm[]>((resolve, reject) => {
     axios
       .get(Endpoints.allAlgorithms)
