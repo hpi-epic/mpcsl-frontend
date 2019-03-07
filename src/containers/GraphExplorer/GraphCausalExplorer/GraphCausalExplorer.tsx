@@ -12,7 +12,13 @@ import Graph from '../../../utils/graph';
 import { NodeSelection } from './NodeSearch';
 import { IAPIDistribution } from '../../../types';
 
-import { getNodeDataDistribution } from '../../../actions/apiRequests';
+import {
+  getNodeDataDistribution,
+  getConditionalNodeDataDistribution,
+} from '../../../actions/apiRequests';
+import DataDistributionPlot from '../../../components/DataDistributions/DataDistributionPlot';
+// @ts-ignore
+import { SizeMe } from 'react-sizeme';
 
 interface IGraphCausalExplorerProps {
   nodes: ID3GraphNode[];
@@ -20,15 +26,39 @@ interface IGraphCausalExplorerProps {
   selectedGraph: Graph;
 }
 
+type ISelectionTypes =
+  | { [bin: string]: number }
+  | { startSelection: number; endSelection: number };
+type ISelectionAPITypes =
+  | { categorical: boolean; values: string[] }
+  | { categorical: boolean; from_value: number; to_value: number };
+
 interface IGraphCausalExplorerState {
   conditions: {};
   effectNode:
-    | { nodeID: string; distribution: IAPIDistribution; nodeLabel: string }
+    | {
+        nodeID: string;
+        distribution: IAPIDistribution;
+        nodeLabel: string;
+        selection?: ISelectionAPITypes;
+      }
     | undefined;
   causalNode:
-    | { nodeID: string; distribution: IAPIDistribution; nodeLabel: string }
+    | {
+        nodeID: string;
+        distribution: IAPIDistribution;
+        nodeLabel: string;
+        selection?: ISelectionAPITypes;
+      }
     | undefined;
 }
+
+const cardBodyStyle = {
+  height: '100%',
+  padding: '12px 18px 12px 18px',
+  display: 'flex',
+  flexFlow: 'column',
+};
 
 class GraphCausalExplorer extends React.Component<
   IGraphCausalExplorerProps,
@@ -45,7 +75,9 @@ class GraphCausalExplorer extends React.Component<
   }
   public render() {
     const externalFactorsNodes = this.props.selectedGraph.nodes.filter(
-      (value: ID3GraphNode) => true, // TODO
+      (node: ID3GraphNode) =>
+        (this.state.effectNode && node.id !== this.state.effectNode!.nodeID) ||
+        (this.state.causalNode && node.id !== this.state.causalNode!.nodeID),
     );
 
     const externalFactorsList = (
@@ -89,35 +121,74 @@ class GraphCausalExplorer extends React.Component<
         </div>
       ),
       firstConditionNode: (
-        <Card title='Causal Node'>
-          <div style={{ height: '100%' }}>
+        <Card bodyStyle={cardBodyStyle}>
+          <h3>
+            Causal Node:{' '}
+            {this.state.causalNode ? (
+              <i>{this.state.causalNode.nodeLabel}</i>
+            ) : null}
+          </h3>
+          <div style={{ flexGrow: 1 }}>
             {!this.state.causalNode ? (
               <NodeSelection
                 onNodeSelection={this.onCausalNodeClick}
                 nodes={this.props.selectedGraph.nodes.filter(
-                  (node: ID3GraphNode) => !node.isContext,
+                  (node: ID3GraphNode) =>
+                    !node.isContext &&
+                    ((this.state.effectNode &&
+                      node.id !== this.state.effectNode!.nodeID) ||
+                      !this.state.effectNode),
                 )}
                 placeholder='Select a Causal Node'
               />
             ) : (
-              <div />
+              <SizeMe monitorHeight={true}>
+                {({ size }: any) => (
+                  <DataDistributionPlot
+                    selectable={true}
+                    data={this.state.causalNode!.distribution}
+                    plotHeight={size.height}
+                    plotWidth={size.width}
+                    onDataSelection={this.onCausalNodeDataChange}
+                  />
+                )}
+              </SizeMe>
             )}
           </div>
         </Card>
       ),
       exploreNode: (
-        <Card title='Effect Node'>
-          <div style={{ height: '100%' }}>
+        <Card bodyStyle={cardBodyStyle}>
+          <h3>
+            Effect Node:{' '}
+            {this.state.effectNode ? (
+              <i> {this.state.effectNode.nodeLabel} </i>
+            ) : null}
+          </h3>
+          <div style={{ flexGrow: 1 }}>
             {!this.state.effectNode ? (
               <NodeSelection
                 onNodeSelection={this.onEffectNodeClick}
                 nodes={this.props.selectedGraph.nodes.filter(
-                  (node: ID3GraphNode) => !node.isContext,
+                  (node: ID3GraphNode) =>
+                    !node.isContext &&
+                    ((this.state.causalNode &&
+                      node.id !== this.state.causalNode!.nodeID) ||
+                      !this.state.causalNode),
                 )}
                 placeholder='Select an Effect Node'
               />
             ) : (
-              <div />
+              <SizeMe monitorHeight={true}>
+                {({ size }: any) => (
+                  <DataDistributionPlot
+                    selectable={false}
+                    data={this.state.effectNode!.distribution}
+                    plotHeight={size.height}
+                    plotWidth={size.width}
+                  />
+                )}
+              </SizeMe>
             )}
           </div>
         </Card>
@@ -160,7 +231,7 @@ class GraphCausalExplorer extends React.Component<
     );
   }
 
-  public onEffectNodeClick = async (nodeID: string) => {
+  private onEffectNodeClick = async (nodeID: string) => {
     const distribution = await getNodeDataDistribution(nodeID);
     this.setState({
       effectNode: {
@@ -171,7 +242,7 @@ class GraphCausalExplorer extends React.Component<
     });
   }
 
-  public onCausalNodeClick = async (nodeID: string) => {
+  private onCausalNodeClick = async (nodeID: string) => {
     const distribution = await getNodeDataDistribution(nodeID);
     this.setState({
       causalNode: {
@@ -180,6 +251,56 @@ class GraphCausalExplorer extends React.Component<
         nodeLabel: distribution.node.name,
       },
     });
+  }
+
+  private onCausalNodeDataChange = (data: ISelectionTypes) => {
+    if ('selectionEnd' in data) {
+      this.setState({
+        causalNode: {
+          ...this.state.causalNode!,
+          selection: {
+            categorical: false,
+            from_value: data.selectionStart,
+            to_value: data.selectionEnd,
+          },
+        },
+      });
+    } else {
+      this.setState({
+        causalNode: {
+          ...this.state.causalNode!,
+          selection: {
+            categorical: true,
+            values: Object.keys(data).map((value) => value.toString()),
+          },
+        },
+      });
+    }
+
+    const distributions: any = {};
+    distributions[this.state.causalNode!.nodeID] = {
+      categorical: true,
+      values: Object.keys(data).map((value) => value.toString()),
+    };
+    this.onDataDistributionChange(distributions);
+  }
+
+  private onDataDistributionChange = async (distributions: {
+    [nodeID: number]: { [nodeID: number]: ISelectionAPITypes };
+  }) => {
+    if (this.state.effectNode && this.state.causalNode) {
+      const distribution = await getConditionalNodeDataDistribution(
+        this.state.effectNode.nodeID,
+        distributions,
+      );
+      const effectNode = this.state.effectNode;
+      this.setState({
+        effectNode: {
+          ...effectNode,
+          distribution,
+        },
+      });
+    }
   }
 }
 
