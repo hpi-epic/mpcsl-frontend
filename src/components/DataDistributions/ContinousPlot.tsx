@@ -39,18 +39,15 @@ class ContinousPlot extends React.Component<
 
     this.state = {
       value: undefined,
-      selectionStart: undefined,
-      selectionEnd: undefined,
+      selectionStart: this.props.data!.bin_edges[0],
+      selectionEnd: this.props.data!.bin_edges[
+        this.props.data!.bin_edges.length - 1
+      ],
     };
   }
 
   public render() {
-    const ticks: number[] = [];
-    for (let i = 0; i < this.props.data!.bin_edges.length - 1; i++) {
-      ticks.push(
-        (this.props.data!.bin_edges[i + 1] + this.props.data!.bin_edges[i]) / 2,
-      );
-    }
+    const ticks: number[] = this.props.data!.bin_edges;
 
     const maxYValue = Math.max(...this.props.data!.bins);
 
@@ -112,7 +109,7 @@ class ContinousPlot extends React.Component<
                 this.state.selectionStart === null ||
                 this.state.selectionEnd === null
               ) {
-                return '#1e96be';
+                return '#c7c7c7';
               }
               const inX =
                 d.x >= this.state.selectionStart &&
@@ -127,12 +124,12 @@ class ContinousPlot extends React.Component<
                 this.state.selectionEnd >= d.x0 &&
                 this.state.selectionEnd <= d.x;
 
-              return inStart || inEnd || inX || inX0 ? '#1e96be' : '#1c7c7c7';
+              return inStart || inEnd || inX || inX0 ? '#1e96be' : '#c7c7c7';
             }}
           />
           {this.props.selectable ? (
             <Highlight
-              color='#829AE3'
+              color='#1e96be'
               drag={true}
               enableY={false}
               onDrag={updateDragState}
@@ -141,14 +138,6 @@ class ContinousPlot extends React.Component<
           ) : null}
           {this.state.value ? <Hint value={this.state.value} /> : false}
         </XYPlot>
-        {this.props.selectable ? (
-          <div>
-            <b>selectionStart:</b>{' '}
-            {`${Math.floor(this.state.selectionStart * 100) / 100},`}
-            <b>selectionEnd:</b>{' '}
-            {`${Math.floor(this.state.selectionEnd * 100) / 100},`}
-          </div>
-        ) : null}
       </div>
     );
   }

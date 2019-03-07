@@ -699,7 +699,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           onMouseOver={[Function]}
           style={
             Object {
-              "fill": "#1c7c7c7",
+              "fill": "#1e96be",
               "opacity": 0.8,
               "stroke": "#fff",
             }
@@ -716,7 +716,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           onMouseOver={[Function]}
           style={
             Object {
-              "fill": "#1c7c7c7",
+              "fill": "#1e96be",
               "opacity": 0.8,
               "stroke": "#fff",
             }
@@ -733,7 +733,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           onMouseOver={[Function]}
           style={
             Object {
-              "fill": "#1c7c7c7",
+              "fill": "#1e96be",
               "opacity": 0.8,
               "stroke": "#fff",
             }
@@ -750,7 +750,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           onMouseOver={[Function]}
           style={
             Object {
-              "fill": "#1c7c7c7",
+              "fill": "#1e96be",
               "opacity": 0.8,
               "stroke": "#fff",
             }
@@ -783,7 +783,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
         />
         <rect
           className="rv-highlight"
-          fill="#829AE3"
+          fill="#1e96be"
           height={0}
           opacity={0.3}
           pointerEvents="none"
@@ -793,18 +793,6 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
         />
       </g>
     </svg>
-  </div>
-  <div>
-    <b>
-      selectionStart:
-    </b>
-     
-    NaN,
-    <b>
-      selectionEnd:
-    </b>
-     
-    NaN,
   </div>
 </div>
 `;
