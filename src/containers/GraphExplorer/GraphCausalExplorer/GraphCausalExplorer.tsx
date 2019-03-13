@@ -81,7 +81,8 @@ class GraphCausalExplorer extends React.Component<
   public render() {
     const externalFactorsNodes = this.props.selectedGraph.nodes.filter(
       (node: ID3GraphNode) =>
-        (this.state.effectNode && node.id !== this.state.effectNode!.nodeID) ||
+        this.state.effectNode &&
+        node.id !== this.state.effectNode!.nodeID &&
         (this.state.causalNode && node.id !== this.state.causalNode!.nodeID),
     );
 
