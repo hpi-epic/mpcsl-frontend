@@ -16,7 +16,6 @@ import {
   createExperiment,
   getAllAlgorithms,
 } from '../../actions/apiRequests';
-// import { IndepenceTests } from '../../constants/experiment';
 
 export interface IPropsNewExperimentModal extends FormComponentProps {
   visible: boolean;
@@ -105,7 +104,10 @@ class NewExperimentModal extends React.Component<
         : undefined,
       rules: [{ required: true, message: 'Enter a Experiment Name' }],
     })(
-      <Input disabled={this.props.editDisabled} placeholder='Experiment Name' />,
+      <Input
+        disabled={this.props.editDisabled}
+        placeholder='Experiment Name'
+      />,
     );
 
     const experimentDescEl = getFieldDecorator('description', {
@@ -130,7 +132,7 @@ class NewExperimentModal extends React.Component<
     const algorithmsEl = getFieldDecorator('algorithms_id', {
       initialValue: this.props.experiment
         ? this.props.experiment.algorithm_id
-        : this.state.algorithms.length > 0 ? this.state.selectedAlgorithm!.id : undefined,
+        : undefined,
       rules: [{ required: true, message: 'Select a Algorithm' }],
     })(algorithmsSelect);
 
@@ -195,7 +197,7 @@ class NewExperimentModal extends React.Component<
     if (this.mounted) {
       this.setState({
         algorithms,
-        selectedAlgorithm: algorithms[2],
+        // selectedAlgorithm: algorithms[2],
       });
     }
   }
@@ -226,18 +228,17 @@ class NewExperimentModal extends React.Component<
   }
 
   private submitExperiment = (values: IFormExperiment) => {
+    const keyList = Object.keys(this.state.selectedAlgorithm!.valid_parameters);
+    const params: {[name: string]: any} = {};
+    keyList.forEach((key: any) => {
+      params[key] = values[key];
+    });
     createExperiment({
       dataset_id: values.observationMatrix_id,
       name: values.name,
       description: values.description,
-      algorithm_id: 1,
-      parameters: {
-        alpha: values.alpha,
-        independence_test: values.independence_test,
-        cores: values.cores,
-        subset_size: 1,
-        verbose: 1,
-      },
+      algorithm_id: values.algorithms_id,
+      parameters: params,
     });
     this.props.onClose();
   }
@@ -276,10 +277,9 @@ class NewExperimentModal extends React.Component<
     })(
     <InputNumber
         disabled={this.props.editDisabled}
-        onChange={this.hasErrors}
-        placeholder='0'
-        min={parameter.minimum ? parameter.minimum : undefined}
-        max={parameter.maximum ? parameter.maximum : undefined}
+        onChange={parameter.required ? this.hasErrors : undefined}
+        min={parameter.minimum !== undefined ? parameter.minimum : undefined}
+        max={parameter.maximum !== undefined ? parameter.maximum : undefined}
         step={parameter.type === 'float' ? 0.01 : 1}
     />,
     );
@@ -290,10 +290,10 @@ class NewExperimentModal extends React.Component<
     return getFieldDecorator(key, {
       initialValue: this.props.experiment
         ? this.props.experiment[key]
-        : parameter.values[Object.keys(parameter.values)[0]],
+        : undefined,
       rules: [{ required: parameter.required, message: `Enter an ${key} value` }],
     })(
-    <Select disabled={this.props.editDisabled}>
+    <Select disabled={this.props.editDisabled} onChange={this.hasErrors}>
       {Object.keys(parameter.values).map(
         (val: any) => (
           <Select.Option

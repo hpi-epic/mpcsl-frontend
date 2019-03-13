@@ -54,13 +54,7 @@ export interface ICreateExperiment {
   name: string;
   description: string;
   algorithm_id: number;
-  parameters: {
-    alpha: number;
-    independence_test: string;
-    cores: number;
-    verbose: number;
-    subset_size: number;
-  };
+  parameters: {[name: string]: any};
 }
 
 export interface IAlgorithm {
