@@ -271,8 +271,9 @@ class NewExperimentModal extends React.Component<
     const { getFieldDecorator } = this.props.form;
     return getFieldDecorator(key, {
       initialValue: this.props.experiment
-        ? this.props.experiment[key]
-        : (parameter.minimum ? parameter.minimum : (parameter.default ? parameter.default : 0)),
+        ? this.props.experiment[key] !== undefined
+        : (parameter.minimum  !== undefined ? parameter.minimum
+          : (parameter.default !== undefined ? parameter.default : 0)),
       rules: [{ required: parameter.required, message: `Enter an ${key} value` }],
     })(
     <InputNumber
@@ -288,7 +289,7 @@ class NewExperimentModal extends React.Component<
   private createSelectElement = (key: string, parameter: any) => {
     const { getFieldDecorator } = this.props.form;
     return getFieldDecorator(key, {
-      initialValue: this.props.experiment
+      initialValue: this.props.experiment !== undefined
         ? this.props.experiment[key]
         : undefined,
       rules: [{ required: parameter.required, message: `Enter an ${key} value` }],

@@ -28,11 +28,7 @@ export interface IExperiment {
   name: string;
   description?: string;
   algorithm_id: number;
-  parameters: {
-    alpha: number;
-    independence_test: string;
-    cores: number;
-  };
+  parameters: {[name: string]: any};
   last_job?: {
     id: number;
     experiment_id: number;

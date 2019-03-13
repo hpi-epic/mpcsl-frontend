@@ -126,6 +126,7 @@ class ExperimentsManager extends React.Component<
     const experiments = await getExperiments();
     if (this.mounted) {
       this.setState({ experiments });
+      console.log(experiments);
     }
   }
 
