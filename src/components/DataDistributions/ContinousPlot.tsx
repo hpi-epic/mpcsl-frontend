@@ -106,10 +106,11 @@ class ContinousPlot extends React.Component<
             colorType='literal'
             getColor={(d) => {
               if (
+                !this.props.selectable ||
                 this.state.selectionStart === null ||
                 this.state.selectionEnd === null
               ) {
-                return '#c7c7c7';
+                return '#1e96be';
               }
               const inX =
                 d.x >= this.state.selectionStart &&
