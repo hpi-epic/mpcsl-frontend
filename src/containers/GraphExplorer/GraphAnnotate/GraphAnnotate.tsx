@@ -46,9 +46,11 @@ class GraphAnnotate extends React.Component<
             />
           </Layout.Sider>
           <GraphDataModal
+            resizable={true}
             visible={this.state.dataModalVisible}
             data={this.state.selectedNodeDataDistribution}
             onClose={this.closeDataModal}
+            position={{ bottom: 0, right: 0, type: 'fixed' }}
           />
           <GraphRenderer
             showMenu={false}

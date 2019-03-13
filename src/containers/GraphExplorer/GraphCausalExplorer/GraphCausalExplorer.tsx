@@ -19,6 +19,7 @@ import {
 import DataDistributionPlot from '../../../components/DataDistributions/DataDistributionPlot';
 // @ts-ignore
 import { SizeMe } from 'react-sizeme';
+import GraphDataModal from '../GraphDataModal';
 
 interface IGraphCausalExplorerProps {
   nodes: ID3GraphNode[];
@@ -51,6 +52,8 @@ interface IGraphCausalExplorerState {
         selection?: ISelectionAPITypes;
       }
     | undefined;
+  dataModalVisible: boolean;
+  selectedNodeDataDistribution: IAPIDistribution | undefined;
 }
 
 const cardBodyStyle = {
@@ -71,6 +74,8 @@ class GraphCausalExplorer extends React.Component<
       conditions: {},
       effectNode: undefined,
       causalNode: undefined,
+      dataModalVisible: false,
+      selectedNodeDataDistribution: undefined,
     };
   }
   public render() {
@@ -116,8 +121,20 @@ class GraphCausalExplorer extends React.Component<
       ),
       externFactorsDistribution: <div>Extern Factors Distribution</div>,
       renderer: (
-        <div style={{ overflow: 'hidden' }}>
-          <GraphRenderer key='test' isSelectionMode={false} showMenu={false} />
+        <div style={{ overflow: 'hidden', position: 'relative' }}>
+          <GraphRenderer
+            key='test'
+            isSelectionMode={false}
+            showMenu={false}
+            onNodeClick={this.showDataModal}
+          />
+          <GraphDataModal
+            resizable={false}
+            visible={this.state.dataModalVisible}
+            data={this.state.selectedNodeDataDistribution}
+            onClose={this.closeDataModal}
+            position={{ bottom: 0, right: 0, type: 'absolute' }}
+          />
         </div>
       ),
       firstConditionNode: (
@@ -308,6 +325,22 @@ class GraphCausalExplorer extends React.Component<
         },
       });
     }
+  }
+
+  private showDataModal = async (node: ID3GraphNode) => {
+    const nodeDistribution: IAPIDistribution = await getNodeDataDistribution(
+      String(node.id),
+    );
+    this.setState({
+      dataModalVisible: true,
+      selectedNodeDataDistribution: nodeDistribution,
+    });
+  }
+
+  private closeDataModal = () => {
+    this.setState({
+      dataModalVisible: false,
+    });
   }
 }
 
