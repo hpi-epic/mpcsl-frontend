@@ -281,10 +281,12 @@ class GraphCausalExplorer extends React.Component<
           },
         },
       });
-      distributions[this.state.causalNode!.nodeID] = {
-        categorical: true,
-        values: Object.keys(data).map((value) => value.toString()),
-      };
+      if (Object.keys(data).length > 0) {
+        distributions[this.state.causalNode!.nodeID] = {
+          categorical: true,
+          values: Object.keys(data).map((value) => value.toString()),
+        };
+      }
     }
 
     this.onDataDistributionChange(distributions);
