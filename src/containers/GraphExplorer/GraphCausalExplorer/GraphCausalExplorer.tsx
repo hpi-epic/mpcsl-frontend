@@ -274,21 +274,23 @@ class GraphCausalExplorer extends React.Component<
   private onCausalNodeDataChange = (data: ISelectionTypes) => {
     const distributions: any = {};
     if ('selectionEnd' in data) {
-      this.setState({
-        causalNode: {
-          ...this.state.causalNode!,
-          selection: {
-            categorical: false,
-            from_value: data.selectionStart,
-            to_value: data.selectionEnd,
+      if (data.selectionStart && data.selectionEnd) {
+        this.setState({
+          causalNode: {
+            ...this.state.causalNode!,
+            selection: {
+              categorical: false,
+              from_value: data.selectionStart,
+              to_value: data.selectionEnd,
+            },
           },
-        },
-      });
-      distributions[this.state.causalNode!.nodeID] = {
-        categorical: false,
-        from_value: data.selectionStart,
-        to_value: data.selectionEnd,
-      };
+        });
+        distributions[this.state.causalNode!.nodeID] = {
+          categorical: false,
+          from_value: data.selectionStart,
+          to_value: data.selectionEnd,
+        };
+      }
     } else {
       this.setState({
         causalNode: {
