@@ -261,7 +261,7 @@ class NewExperimentModal extends React.Component<
       return Object.keys(this.state.selectedAlgorithm.valid_parameters).map((key: string) => {
         const parameter = this.state.selectedAlgorithm!.valid_parameters[key];
         return (
-          <Form.Item label={key} key={key}>
+          <Form.Item label={key} key={key} hasFeedback={true}>
           {parameter.type === 'enum' ? this.createSelectElement(key, parameter)
           : this.createInputElement(key, parameter)}</Form.Item>
         );
@@ -280,7 +280,7 @@ class NewExperimentModal extends React.Component<
     })(
     <InputNumber
         disabled={this.props.editDisabled}
-        onChange={parameter.required ? this.hasErrors : undefined}
+        onChange={parameter.required ? this.hasErrors : () => undefined}
         min={parameter.minimum !== undefined ? parameter.minimum : undefined}
         max={parameter.maximum !== undefined ? parameter.maximum : undefined}
         step={parameter.type === 'float' ? 0.01 : 1}
@@ -296,7 +296,7 @@ class NewExperimentModal extends React.Component<
         : undefined,
       rules: [{ required: parameter.required, message: `Enter an ${key} value` }],
     })(
-    <Select disabled={this.props.editDisabled} onChange={this.hasErrors}>
+      <Select disabled={this.props.editDisabled} onChange={parameter.required ? this.hasErrors : () => undefined}>
       {Object.keys(parameter.values).map(
         (val: any) => (
           <Select.Option
