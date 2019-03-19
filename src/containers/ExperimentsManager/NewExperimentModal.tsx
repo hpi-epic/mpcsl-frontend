@@ -198,7 +198,7 @@ class NewExperimentModal extends React.Component<
       this.setState({
         algorithms,
       });
-      if (this.props.editDisabled) {
+      if (this.props.experiment && this.props.experiment!.algorithm_id) {
         this.setSelectedAlgo(this.props.experiment!.algorithm_id);
       }
     }
