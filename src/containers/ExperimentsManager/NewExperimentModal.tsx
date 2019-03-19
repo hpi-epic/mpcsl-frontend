@@ -129,7 +129,7 @@ class NewExperimentModal extends React.Component<
       rules: [{ required: true, message: 'Select a Observation Matrix' }],
     })(observationMatrixSelect);
 
-    const algorithmsEl = getFieldDecorator('algorithms_id', {
+    const algorithmsEl = getFieldDecorator('algorithm_id', {
       initialValue: this.props.experiment
         ? this.props.experiment.algorithm_id
         : undefined,
@@ -197,8 +197,10 @@ class NewExperimentModal extends React.Component<
     if (this.mounted) {
       this.setState({
         algorithms,
-        // selectedAlgorithm: algorithms[2],
       });
+      if (this.props.editDisabled) {
+        this.setSelectedAlgo(this.props.experiment!.algorithm_id);
+      }
     }
   }
 
@@ -237,7 +239,7 @@ class NewExperimentModal extends React.Component<
       dataset_id: values.observationMatrix_id,
       name: values.name,
       description: values.description,
-      algorithm_id: values.algorithms_id,
+      algorithm_id: values.algorithm_id,
       parameters: params,
     });
     this.props.onClose();
@@ -271,7 +273,7 @@ class NewExperimentModal extends React.Component<
     const { getFieldDecorator } = this.props.form;
     return getFieldDecorator(key, {
       initialValue: this.props.experiment
-        ? this.props.experiment[key] !== undefined
+        ? this.props.experiment.parameters[key]
         : (parameter.minimum  !== undefined ? parameter.minimum
           : (parameter.default !== undefined ? parameter.default : 0)),
       rules: [{ required: parameter.required, message: `Enter an ${key} value` }],
@@ -290,7 +292,7 @@ class NewExperimentModal extends React.Component<
     const { getFieldDecorator } = this.props.form;
     return getFieldDecorator(key, {
       initialValue: this.props.experiment !== undefined
-        ? this.props.experiment[key]
+        ? this.props.experiment.parameters[key]
         : undefined,
       rules: [{ required: parameter.required, message: `Enter an ${key} value` }],
     })(
