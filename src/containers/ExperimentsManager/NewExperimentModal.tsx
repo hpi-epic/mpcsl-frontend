@@ -25,7 +25,6 @@ export interface IPropsNewExperimentModal extends FormComponentProps {
 }
 
 interface IStateNewExperimentModal {
-  hasErrors: boolean;
   observationMatrices: IObservationMatrix[];
   algorithms: IAlgorithm[];
   selectedAlgorithm: IAlgorithm | undefined;
@@ -45,7 +44,6 @@ class NewExperimentModal extends React.Component<
     super(props);
 
     this.state = {
-      hasErrors: true,
       observationMatrices: [],
       algorithms: [],
       selectedAlgorithm: undefined,
@@ -56,9 +54,6 @@ class NewExperimentModal extends React.Component<
     this.mounted = true;
     this.fetchObservationMatrices();
     this.fetchAlgorithms();
-    if (this.props.experiment && !this.props.editDisabled) {
-      this.hasErrors();
-    }
   }
 
   public componentWillUnmount = () => {
@@ -69,7 +64,7 @@ class NewExperimentModal extends React.Component<
     const { getFieldDecorator } = this.props.form;
 
     const observationMatrixSelect = (
-      <Select disabled={this.props.editDisabled} onChange={this.hasErrors}>
+      <Select disabled={this.props.editDisabled}>
         {this.state.observationMatrices.map(
           (observationMatrix: IObservationMatrix) => (
             <Select.Option
@@ -84,7 +79,10 @@ class NewExperimentModal extends React.Component<
     );
 
     const algorithmsSelect = (
-      <Select disabled={this.props.editDisabled} onChange={(algId) => this.hasErrors && this.setSelectedAlgo(algId)}>
+      <Select
+        disabled={this.props.editDisabled}
+        onSelect={(algId) => this.setSelectedAlgo(algId)}
+      >
         {this.state.algorithms.map(
           (algorithm: IAlgorithm) => (
             <Select.Option
@@ -151,7 +149,6 @@ class NewExperimentModal extends React.Component<
         <Form
           layout='vertical'
           onSubmit={this.handleSubmit}
-          onChange={this.hasErrors}
           className='Modal-Form'
         >
           <Row gutter={16}>
@@ -172,7 +169,7 @@ class NewExperimentModal extends React.Component<
               <Button
                 type='primary'
                 htmlType='submit'
-                disabled={this.props.editDisabled ? true : this.state.hasErrors}
+                disabled={this.props.editDisabled}
               >
                 Submit
               </Button>
@@ -211,20 +208,6 @@ class NewExperimentModal extends React.Component<
         this.submitExperiment(values);
       } else {
         message.error('Set a required Values!');
-      }
-    });
-  }
-
-  private hasErrors = () => {
-    this.props.form.validateFields((err: Error, values: IFormExperiment) => {
-      if (err) {
-        this.setState({
-          hasErrors: true,
-        });
-      } else {
-        this.setState({
-          hasErrors: false,
-        });
       }
     });
   }
@@ -274,13 +257,12 @@ class NewExperimentModal extends React.Component<
     return getFieldDecorator(key, {
       initialValue: this.props.experiment
         ? this.props.experiment.parameters[key]
-        : (parameter.minimum  !== undefined ? parameter.minimum
-          : (parameter.default !== undefined ? parameter.default : 0)),
-      rules: [{ required: parameter.required, message: `Enter an ${key} value` }],
+        : (parameter.required ? null : (parameter.minimum  !== undefined ? parameter.minimum
+          : (parameter.default !== undefined ? parameter.default : 0))),
+      rules: [{ required: parameter.required, message: `Enter ${key} value` }],
     })(
     <InputNumber
         disabled={this.props.editDisabled}
-        onChange={parameter.required ? this.hasErrors : () => undefined}
         min={parameter.minimum !== undefined ? parameter.minimum : undefined}
         max={parameter.maximum !== undefined ? parameter.maximum : undefined}
         step={parameter.type === 'float' ? 0.01 : 1}
@@ -294,9 +276,11 @@ class NewExperimentModal extends React.Component<
       initialValue: this.props.experiment !== undefined
         ? this.props.experiment.parameters[key]
         : undefined,
-      rules: [{ required: parameter.required, message: `Enter an ${key} value` }],
+      rules: [{ required: parameter.required, message: `Enter ${key} value` }],
     })(
-      <Select disabled={this.props.editDisabled} onChange={parameter.required ? this.hasErrors : () => undefined}>
+    <Select
+      disabled={this.props.editDisabled}
+    >
       {Object.keys(parameter.values).map(
         (val: any) => (
           <Select.Option
