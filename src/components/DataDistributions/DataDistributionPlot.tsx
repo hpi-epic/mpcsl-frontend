@@ -13,7 +13,12 @@ interface IDataDistributionPlotProps {
       | { [bin: string]: number }
       | { startSelection: number; endSelection: number },
   ) => void;
+  selection?: IDataSelection;
 }
+
+export type IDataSelection =
+  | { [bin: string]: number }
+  | { startSelection: number; endSelection: number };
 
 class DataDistributionPlot extends React.Component<
   IDataDistributionPlotProps,
@@ -30,6 +35,7 @@ class DataDistributionPlot extends React.Component<
           onDataSelection={
             this.props.onDataSelection ? this.props.onDataSelection : undefined
           }
+          selection={this.props.selection}
         />
       );
     } else {

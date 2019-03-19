@@ -32,13 +32,13 @@ interface INode {
   nodeID: string;
   distribution: IAPIDistribution;
   nodeLabel: string;
-  selection?: ISelectionAPITypes;
+  selection?: ISelectionTypes;
 }
 
 type ISelectionTypes =
   | { [bin: string]: number }
   | { startSelection: number; endSelection: number };
-type ISelectionAPITypes =
+export type ISelectionAPITypes =
   | { categorical: boolean; values: string[] }
   | { categorical: boolean; from_value: number; to_value: number };
 
@@ -109,6 +109,7 @@ class GraphCausalExplorer extends React.Component<
             <SizeMe monitorHeight={true}>
               {({ size }: any) => (
                 <DataDistributionPlot
+                  key={this.state.selectedExternalFactorID!}
                   selectable={true}
                   data={
                     this.state.externalFactors![
@@ -117,7 +118,21 @@ class GraphCausalExplorer extends React.Component<
                   }
                   plotHeight={size.height}
                   plotWidth={size.width}
-                  onDataSelection={() => undefined} // TODO
+                  onDataSelection={(data: ISelectionTypes) =>
+                    this.onExternalFactorDataChange(
+                      this.state.selectedExternalFactorID!,
+                      data,
+                    )
+                  }
+                  selection={
+                    this.state.externalFactors![
+                      this.state.selectedExternalFactorID!
+                    ].selection
+                      ? this.state.externalFactors![
+                          this.state.selectedExternalFactorID!
+                        ].selection
+                      : undefined
+                  }
                 />
               )}
             </SizeMe>
@@ -292,7 +307,25 @@ class GraphCausalExplorer extends React.Component<
         selectedExternalFactorID: nodeID,
         externalFactors,
       });
+    } else {
+      this.setState({
+        selectedExternalFactorID: nodeID,
+      });
     }
+  }
+
+  private onExternalFactorDataChange = (
+    nodeID: string,
+    data: ISelectionTypes,
+  ) => {
+    const externalFactors = this.state.externalFactors;
+    externalFactors![nodeID].selection = {
+      ...data,
+    };
+
+    this.setState({
+      externalFactors,
+    });
   }
 
   private onCausalNodeDataChange = (data: ISelectionTypes) => {
@@ -303,7 +336,6 @@ class GraphCausalExplorer extends React.Component<
           causalNode: {
             ...this.state.causalNode!,
             selection: {
-              categorical: false,
               from_value: data.selectionStart,
               to_value: data.selectionEnd,
             },
@@ -319,10 +351,7 @@ class GraphCausalExplorer extends React.Component<
       this.setState({
         causalNode: {
           ...this.state.causalNode!,
-          selection: {
-            categorical: true,
-            values: Object.keys(data).map((value) => value.toString()),
-          },
+          selection: data,
         },
       });
       if (Object.keys(data).length > 0) {

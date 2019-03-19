@@ -22,17 +22,28 @@ interface ICategoricalPlotProps {
   plotHeight: number;
   selectable: boolean;
   onDataSelection?: (data: { [bin: string]: number }) => void;
+  selection?: ISelectedValues;
+}
+
+interface ISelectedValues {
+  [bin: string]: number;
 }
 
 class CategoricalPlot extends React.Component<
   ICategoricalPlotProps,
-  { value: any; selectedValues: { [bin: string]: number } }
+  { value: any; selectedValues: ISelectedValues }
 > {
   constructor(props: ICategoricalPlotProps) {
     super(props);
+    let selectedValues = {};
+
+    if (this.props.selection) {
+      selectedValues = props.selection as ISelectedValues;
+    }
+
     this.state = {
       value: undefined,
-      selectedValues: {},
+      selectedValues,
     };
   }
 
