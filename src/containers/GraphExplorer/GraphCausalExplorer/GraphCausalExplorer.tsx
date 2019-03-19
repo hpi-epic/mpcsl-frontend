@@ -323,52 +323,63 @@ class GraphCausalExplorer extends React.Component<
       ...data,
     };
 
-    this.setState({
-      externalFactors,
-    });
+    this.setState(
+      {
+        externalFactors,
+      },
+      () => this.onDataDistributionChange(),
+    );
   }
 
   private onCausalNodeDataChange = (data: ISelectionTypes) => {
-    const distributions: any = {};
     if ('selectionEnd' in data) {
       if (data.selectionStart && data.selectionEnd) {
-        this.setState({
-          causalNode: {
-            ...this.state.causalNode!,
-            selection: {
-              from_value: data.selectionStart,
-              to_value: data.selectionEnd,
-            },
+        const causalNode = {
+          ...this.state.causalNode!,
+          selection: {
+            from_value: data.selectionStart,
+            to_value: data.selectionEnd,
           },
-        });
-        distributions[this.state.causalNode!.nodeID] = {
-          categorical: false,
-          from_value: data.selectionStart,
-          to_value: data.selectionEnd,
         };
+
+        this.setState(
+          {
+            causalNode,
+          },
+          () => this.onDataDistributionChange(),
+        );
       }
     } else {
-      this.setState({
-        causalNode: {
-          ...this.state.causalNode!,
-          selection: data,
+      this.setState(
+        {
+          causalNode: {
+            ...this.state.causalNode!,
+            selection: data,
+          },
         },
-      });
-      if (Object.keys(data).length > 0) {
-        distributions[this.state.causalNode!.nodeID] = {
-          categorical: true,
-          values: Object.keys(data).map((value) => value.toString()),
-        };
-      }
+        () => this.onDataDistributionChange(),
+      );
     }
-
-    this.onDataDistributionChange(distributions);
   }
 
-  private onDataDistributionChange = async (distributions: {
-    [nodeID: number]: { [nodeID: number]: ISelectionAPITypes };
-  }) => {
+  private onDataDistributionChange = async () => {
     if (this.state.effectNode && this.state.causalNode) {
+      const distributions: { [nodeID: string]: ISelectionAPITypes } = {};
+
+      // causal node
+      const causalNodeID = this.state.causalNode.nodeID;
+      distributions[causalNodeID] = getApiCondition(this.state.causalNode);
+
+      // external factors
+      if (this.state.externalFactors) {
+        Object.keys(this.state.externalFactors!).forEach((nodeID: string) => {
+          const externalFactor = this.state.externalFactors![nodeID];
+          if (externalFactor.selection) {
+            distributions[nodeID] = getApiCondition(externalFactor);
+          }
+        });
+      }
+
       const distribution = await getConditionalNodeDataDistribution(
         this.state.effectNode.nodeID,
         distributions,
@@ -407,5 +418,20 @@ export function mapStateToProps(state: IState) {
     selectedGraph: state.graphExplorer!.selectedGraph,
   };
 }
+
+const getApiCondition = (node: INode): ISelectionAPITypes => {
+  if (node.distribution.categorical) {
+    return {
+      categorical: true,
+      values: Object.keys(node.selection as {}).map((bin: string) => bin),
+    };
+  } else {
+    return {
+      categorical: false,
+      from_value: (node.selection as any).selectionStart,
+      to_value: (node.selection as any).selectionEnd,
+    };
+  }
+};
 
 export default connect(mapStateToProps)(GraphCausalExplorer);
