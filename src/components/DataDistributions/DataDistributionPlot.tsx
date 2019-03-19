@@ -48,6 +48,12 @@ class DataDistributionPlot extends React.Component<
           onDataSelection={
             this.props.onDataSelection ? this.props.onDataSelection : undefined
           }
+          selection={
+            this.props.selection as {
+              startSelection: number;
+              endSelection: number;
+            }
+          }
         />
       );
     }

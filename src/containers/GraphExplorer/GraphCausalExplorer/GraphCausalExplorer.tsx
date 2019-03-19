@@ -336,10 +336,7 @@ class GraphCausalExplorer extends React.Component<
       if (data.selectionStart && data.selectionEnd) {
         const causalNode = {
           ...this.state.causalNode!,
-          selection: {
-            from_value: data.selectionStart,
-            to_value: data.selectionEnd,
-          },
+          selection: data,
         };
 
         this.setState(
@@ -368,7 +365,9 @@ class GraphCausalExplorer extends React.Component<
 
       // causal node
       const causalNodeID = this.state.causalNode.nodeID;
-      distributions[causalNodeID] = getApiCondition(this.state.causalNode);
+      if (this.state.causalNode.selection) {
+        distributions[causalNodeID] = getApiCondition(this.state.causalNode);
+      }
 
       // external factors
       if (this.state.externalFactors) {

@@ -22,6 +22,7 @@ interface IContinousPlotProps {
   onDataSelection?: (
     data: { selectionStart: number; selectionEnd: number },
   ) => void;
+  selection?: { startSelection: number; endSelection: number };
 }
 
 interface IContinousPlotState {
@@ -39,10 +40,12 @@ class ContinousPlot extends React.Component<
 
     this.state = {
       value: undefined,
-      selectionStart: this.props.data!.bin_edges[0],
-      selectionEnd: this.props.data!.bin_edges[
-        this.props.data!.bin_edges.length - 1
-      ],
+      selectionStart: this.props.selection
+        ? this.props.selection.startSelection
+        : this.props.data!.bin_edges[0],
+      selectionEnd: this.props.selection
+        ? this.props.selection.endSelection
+        : this.props.data!.bin_edges[this.props.data!.bin_edges.length - 1],
     };
   }
 
