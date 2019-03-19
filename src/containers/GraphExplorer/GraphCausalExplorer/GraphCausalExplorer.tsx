@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import './GraphCausalExplorer.css';
 import { IState } from '../../../store';
 import { IAPIGraphNode, ID3GraphNode } from '../../../types/graphTypes';
-import { List, Tooltip, Card } from 'antd';
+import { Card } from 'antd';
 import Graph from '../../../utils/graph';
 import { NodeSelection } from './NodeSearch';
 import { IAPIDistribution } from '../../../types';
@@ -20,11 +20,19 @@ import DataDistributionPlot from '../../../components/DataDistributions/DataDist
 // @ts-ignore
 import { SizeMe } from 'react-sizeme';
 import GraphDataModal from '../GraphDataModal';
+import ExternalFactorList from '../../../components/GraphCausalExplorer/ExternalFactorsList';
 
 interface IGraphCausalExplorerProps {
   nodes: ID3GraphNode[];
   availableNodes: IAPIGraphNode[];
   selectedGraph: Graph;
+}
+
+interface INode {
+  nodeID: string;
+  distribution: IAPIDistribution;
+  nodeLabel: string;
+  selection?: ISelectionAPITypes;
 }
 
 type ISelectionTypes =
@@ -36,22 +44,10 @@ type ISelectionAPITypes =
 
 interface IGraphCausalExplorerState {
   conditions: {};
-  effectNode:
-    | {
-        nodeID: string;
-        distribution: IAPIDistribution;
-        nodeLabel: string;
-        selection?: ISelectionAPITypes;
-      }
-    | undefined;
-  causalNode:
-    | {
-        nodeID: string;
-        distribution: IAPIDistribution;
-        nodeLabel: string;
-        selection?: ISelectionAPITypes;
-      }
-    | undefined;
+  effectNode: INode | undefined;
+  causalNode: INode | undefined;
+  externalFactors: { [nodeID: string]: INode } | undefined;
+  selectedExternalFactorID: string | undefined;
   dataModalVisible: boolean;
   selectedNodeDataDistribution: IAPIDistribution | undefined;
 }
@@ -74,7 +70,9 @@ class GraphCausalExplorer extends React.Component<
       conditions: {},
       effectNode: undefined,
       causalNode: undefined,
+      externalFactors: undefined,
       dataModalVisible: false,
+      selectedExternalFactorID: undefined,
       selectedNodeDataDistribution: undefined,
     };
   }
@@ -86,41 +84,46 @@ class GraphCausalExplorer extends React.Component<
         (this.state.causalNode && node.id !== this.state.causalNode!.nodeID),
     );
 
-    const externalFactorsList = (
-      <List
-        size='small'
-        header={
-          <div style={{ padding: '14px', fontWeight: 'bold' }}>
-            External Factors
-          </div>}
-        dataSource={externalFactorsNodes}
-        renderItem={(item: any) => (
-          <Tooltip
-            placement='topLeft'
-            title={item.label}
-            overlayStyle={{ paddingLeft: '4px' }}
-          >
-            <List.Item key={item.value} style={{ paddingLeft: '14px' }}>
-              {item.label}
-            </List.Item>
-          </Tooltip>
-        )}
-      />
-    );
-
     const elementMap: { [viewId: string]: JSX.Element } = {
       externFactors: (
-        <div
-          style={{
-            backgroundColor: 'white',
-            overflow: 'hidden',
-            overflowY: 'scroll',
-          }}
-        >
-          {externalFactorsList}
-        </div>
+        <ExternalFactorList
+          onExternalFactorClick={this.onExternalFactorClick}
+          externalFactorsNodes={externalFactorsNodes}
+        />
       ),
-      externFactorsDistribution: <div>Extern Factors Distribution</div>,
+      externFactorsDistribution: !this.state.selectedExternalFactorID ? (
+        <div>Extern Factors Distribution</div>
+      ) : (
+        <Card bodyStyle={cardBodyStyle}>
+          <h3>
+            External Factor:{' '}
+            <i>
+              {
+                this.state.externalFactors![
+                  this.state.selectedExternalFactorID!
+                ].nodeLabel
+              }
+            </i>
+          </h3>
+          <div style={{ flexGrow: 1 }}>
+            <SizeMe monitorHeight={true}>
+              {({ size }: any) => (
+                <DataDistributionPlot
+                  selectable={true}
+                  data={
+                    this.state.externalFactors![
+                      this.state.selectedExternalFactorID!
+                    ].distribution
+                  }
+                  plotHeight={size.height}
+                  plotWidth={size.width}
+                  onDataSelection={() => undefined} // TODO
+                />
+              )}
+            </SizeMe>
+          </div>
+        </Card>
+      ),
       renderer: (
         <div style={{ overflow: 'hidden', position: 'relative' }}>
           <GraphRenderer
@@ -269,6 +272,27 @@ class GraphCausalExplorer extends React.Component<
         nodeLabel: distribution.node.name,
       },
     });
+  }
+
+  private onExternalFactorClick = async (nodeID: string) => {
+    if (
+      this.state.externalFactors === undefined ||
+      !(nodeID in this.state.externalFactors!)
+    ) {
+      const distribution = await getNodeDataDistribution(nodeID);
+      const externalFactors = this.state.externalFactors || {};
+
+      externalFactors[nodeID] = {
+        nodeID,
+        distribution,
+        nodeLabel: distribution.node.name,
+      };
+
+      this.setState({
+        selectedExternalFactorID: nodeID,
+        externalFactors,
+      });
+    }
   }
 
   private onCausalNodeDataChange = (data: ISelectionTypes) => {
