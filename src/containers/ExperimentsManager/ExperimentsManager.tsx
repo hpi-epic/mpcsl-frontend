@@ -139,10 +139,10 @@ class ExperimentsManager extends React.Component<
   }
 
   private onNewExperiment = () => {
-      this.setState({
-        newExperimentModalVisible: true,
-        editExperiment: true,
-      });
+    this.setState({
+      newExperimentModalVisible: true,
+      editExperiment: true,
+    });
   }
 
   private onClose = () => {
