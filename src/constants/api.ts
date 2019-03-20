@@ -1,3 +1,5 @@
+import { GraphExportFormat } from '../types';
+
 const baseApiUrl = '/api';
 
 const Endpoints = {
@@ -13,6 +15,8 @@ const Endpoints = {
   nodeDistribution: (nodeID: string) => `${baseApiUrl}/node/${nodeID}/marginal`,
   resultNodes: (resultID: number) => `${baseApiUrl}/result/${resultID}/nodes`,
   nodeContext: (nodeID: number) => `${baseApiUrl}/node/${nodeID}/context`,
+  resultExport: (resultID: number, format: GraphExportFormat) =>
+    `${baseApiUrl}/result/${resultID}/export?format=${format}`,
 };
 
 export default Endpoints;
