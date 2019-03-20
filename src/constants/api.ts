@@ -14,6 +14,8 @@ const Endpoints = {
   resultNodes: (resultID: number) => `${baseApiUrl}/result/${resultID}/nodes`,
   nodeContext: (nodeID: number, resultID: number) =>
     `${baseApiUrl}/node/${nodeID}/result/${resultID}/context`,
+  algorithm: (algorithmId: number) => `${baseApiUrl}/algorithms/${algorithmId}`,
+  allAlgorithms: baseApiUrl + '/algorithms',
 };
 
 export default Endpoints;
