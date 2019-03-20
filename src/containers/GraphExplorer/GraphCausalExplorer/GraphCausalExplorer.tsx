@@ -20,7 +20,9 @@ import DataDistributionPlot from '../../../components/DataDistributions/DataDist
 // @ts-ignore
 import { SizeMe } from 'react-sizeme';
 import GraphDataModal from '../GraphDataModal';
-import ExternalFactorList from '../../../components/GraphCausalExplorer/ExternalFactorsList';
+import ExternalFactorList, {
+  IExternalFactorNode,
+} from '../../../components/GraphCausalExplorer/ExternalFactorsList';
 
 interface IGraphCausalExplorerProps {
   nodes: ID3GraphNode[];
@@ -84,15 +86,36 @@ class GraphCausalExplorer extends React.Component<
         (this.state.causalNode && node.id !== this.state.causalNode!.nodeID),
     );
 
+    // add information about whether node distribution was edited
+    const enrichedExternalFactorNodes = externalFactorsNodes.map(
+      (node: ID3GraphNode): IExternalFactorNode => {
+        if (
+          this.state.externalFactors &&
+          node.id in this.state.externalFactors! &&
+          this.state.externalFactors![node.id].selection !== undefined
+        ) {
+          return {
+            ...node,
+            edited: true,
+          };
+        } else {
+          return {
+            ...node,
+            edited: false,
+          };
+        }
+      },
+    );
+
     const elementMap: { [viewId: string]: JSX.Element } = {
       externFactors: (
         <ExternalFactorList
           onExternalFactorClick={this.onExternalFactorClick}
-          externalFactorsNodes={externalFactorsNodes}
+          externalFactorsNodes={enrichedExternalFactorNodes}
         />
       ),
       externFactorsDistribution: !this.state.selectedExternalFactorID ? (
-        <div>Extern Factors Distribution</div>
+        <div />
       ) : (
         <Card bodyStyle={cardBodyStyle}>
           <h3>

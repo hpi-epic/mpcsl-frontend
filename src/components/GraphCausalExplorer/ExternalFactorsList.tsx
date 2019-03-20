@@ -1,11 +1,15 @@
 import React from 'react';
-import { List, Tooltip } from 'antd';
+import { List, Tooltip, Icon, Col, Row } from 'antd';
 import { ID3GraphNode } from '../../types/graphTypes';
 
 import './ExternalFactorsList.css';
 
+export interface IExternalFactorNode extends ID3GraphNode {
+  edited: boolean;
+}
+
 const ExternalFactorList = (props: {
-  externalFactorsNodes: ID3GraphNode[];
+  externalFactorsNodes: IExternalFactorNode[];
   onExternalFactorClick: (nodeID: string) => void;
 }) => {
   return (
@@ -23,7 +27,7 @@ const ExternalFactorList = (props: {
             External Factors
           </div>}
         dataSource={props.externalFactorsNodes}
-        renderItem={(item: ID3GraphNode) => (
+        renderItem={(item: IExternalFactorNode) => (
           <Tooltip
             placement='topLeft'
             title={item.label}
@@ -36,7 +40,14 @@ const ExternalFactorList = (props: {
               className='external-factor-list-item'
             >
               <List.Item key={item.id} style={{ paddingLeft: '14px' }}>
-                {item.label}
+                <div style={{ width: '100%' }}>
+                  <Row type='flex' justify='space-around' gutter={12}>
+                    <Col span={10}>{item.label}</Col>
+                    <Col span={2}>
+                      {item.edited ? <Icon type='edit' /> : null}
+                    </Col>
+                  </Row>
+                </div>
               </List.Item>
             </div>
           </Tooltip>
