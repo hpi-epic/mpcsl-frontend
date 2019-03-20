@@ -12,7 +12,8 @@ const Endpoints = {
   result: baseApiUrl + '/result',
   nodeDistribution: (nodeID: string) => `${baseApiUrl}/node/${nodeID}/marginal`,
   resultNodes: (resultID: number) => `${baseApiUrl}/result/${resultID}/nodes`,
-  nodeContext: (nodeID: number) => `${baseApiUrl}/node/${nodeID}/context`,
+  nodeContext: (nodeID: number, resultID: number) =>
+    `${baseApiUrl}/node/${nodeID}/result/${resultID}/context`,
 };
 
 export default Endpoints;
