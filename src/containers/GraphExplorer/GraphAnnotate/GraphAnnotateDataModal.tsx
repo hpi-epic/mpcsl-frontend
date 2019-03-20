@@ -40,21 +40,21 @@ class GraphAnnotateDataModal extends React.Component<
     if (this.props.visible && this.props.data) {
       const columns = [
         {
-          title: 'Dataset name',
+          title: 'Dataset Name',
           dataIndex: 'datasetname',
           key: 'datasetname',
         },
         {
-          title: 'Remote DB',
-          dataIndex: 'remoteDB',
-          key: 'remoteDB',
+          title: 'Data Source (DB)',
+          dataIndex: 'dataSource',
+          key: 'dataSource',
         },
       ];
       const tableData = [
         {
           key: '1',
           datasetname: this.props.data.dataset.name,
-          remoteDB: this.props.data.dataset.remote_db,
+          dataSource: this.props.data.dataset.data_source,
         },
       ];
       return (
