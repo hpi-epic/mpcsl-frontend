@@ -162,16 +162,19 @@ class ExperimentsManager extends React.Component<
   }
 
   private onExperimentClick = (experiment: IExperiment) => {
+    const params: {[name: string]: any} = {};
+    Object.keys(experiment.parameters).forEach((parameter: any) => {
+      params[parameter] = experiment.parameters[parameter];
+    });
     this.setState({
       newExperimentModalVisible: true,
       editExperiment: false,
       clickedExperiment: {
         name: experiment.name,
         description: experiment.description || '-',
-        alpha: experiment.parameters.alpha,
-        independence_test: experiment.parameters.independence_test,
-        cores: experiment.parameters.cores,
         observationMatrix_id: experiment.dataset_id,
+        algorithm_id: experiment.algorithm_id,
+        parameters: params,
       },
     });
   }
@@ -181,16 +184,19 @@ class ExperimentsManager extends React.Component<
   }
 
   private onDuplicateExperiment = (experiment: IExperiment) => {
+    const params: { [name: string]: any } = {};
+    Object.keys(experiment.parameters).forEach((parameter: any) => {
+      params[parameter] = experiment.parameters[parameter];
+    });
     this.setState({
       newExperimentModalVisible: true,
       editExperiment: true,
       clickedExperiment: {
         name: `${experiment.name} - Copy`,
         description: experiment.description || '-',
-        alpha: experiment.parameters.alpha,
-        independence_test: experiment.parameters.independence_test,
-        cores: experiment.parameters.cores,
         observationMatrix_id: experiment.dataset_id,
+        algorithm_id: experiment.algorithm_id,
+        parameters: params,
       },
     });
   }
