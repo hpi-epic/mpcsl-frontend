@@ -8,6 +8,7 @@ import {
   ICreateExperiment,
   IAPIDistribution,
   IAPINodeContext,
+  IAlgorithm,
 } from '../types';
 import Endpoints from '../constants/api';
 
@@ -246,6 +247,40 @@ export function getNodeDataDistribution(
         reject({
           status: error.response.status,
           message: 'Failed to fetch Node Data Distribution',
+        });
+      });
+  });
+}
+
+export function getAllAlgorithms(): Promise<IAlgorithm[]> {
+  return new Promise<IAlgorithm[]>((resolve, reject) => {
+    axios
+      .get(Endpoints.allAlgorithms)
+      .then((response: AxiosResponse) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        message.error('Failed to fetch Algorithms');
+        reject({
+          status: error.response.status,
+          message: error.message,
+        });
+      });
+  });
+}
+
+export function getAlgorithm(algorithmId: number): Promise<IAlgorithm> {
+  return new Promise<IAlgorithm>((resolve, reject) => {
+    axios
+      .get(Endpoints.algorithm(algorithmId))
+      .then((response: AxiosResponse) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        message.error('Failed to fetch Algorithm');
+        reject({
+          status: error.response.status,
+          message: error.message,
         });
       });
   });
