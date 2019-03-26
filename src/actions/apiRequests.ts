@@ -60,7 +60,7 @@ export function createObservationMatrix(
         resolve();
       })
       .catch((error) => {
-        if(error.response.status == 400) {
+        if (error.response.status === 400) {
           message.error(`${error.response.data.message}. Please enter a valid query!`);
         } else {
           message.error('Failed to create Observation Matrix');
@@ -320,7 +320,7 @@ export function getAllAvailableDataSources(): Promise<[]> {
     axios
       .get(Endpoints.datasources)
       .then((response: AxiosResponse) => {
-        resolve(response.data.data_sources)
+        resolve(response.data.data_sources);
       })
       .catch((error) => {
         message.error('Failed to fetch data sources');
@@ -329,5 +329,5 @@ export function getAllAvailableDataSources(): Promise<[]> {
           message: error.message,
         });
       });
-  })
+  });
 }
