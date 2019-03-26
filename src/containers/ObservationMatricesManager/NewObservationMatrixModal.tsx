@@ -130,7 +130,7 @@ class NewObservationMatrixModal extends React.Component<
             </Form.Item>
             <Form.Item label="Query">{observationMatrixQueryEl}</Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" disabled={disabled}>
                 Submit
               </Button>
             </Form.Item>
@@ -161,8 +161,13 @@ class NewObservationMatrixModal extends React.Component<
       name: values.observationMatrixName,
       description: values.observationMatrixDescription,
       data_source: values.dataSource
-    });
-    this.props.onClose();
+    }).then(() => {
+      this.props.onClose();
+    }).catch((error) => {
+      if(error.status != 400) {
+        this.props.onClose();
+      }
+    })
   };
 
   private async getAvailableDataSources() {
