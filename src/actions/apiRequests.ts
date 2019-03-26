@@ -60,7 +60,11 @@ export function createObservationMatrix(
         resolve();
       })
       .catch((error) => {
-        message.error('Failed to create Observation Matrix');
+        if (error.response.status === 400) {
+          message.error(`${error.response.data.message}. Please enter a valid query!`);
+        } else {
+          message.error('Failed to create Observation Matrix');
+        }
         reject({
           status: error.response.status,
           message: error.message,
@@ -303,6 +307,23 @@ export function getAlgorithm(algorithmId: number): Promise<IAlgorithm> {
       })
       .catch((error) => {
         message.error('Failed to fetch Algorithm');
+        reject({
+          status: error.response.status,
+          message: error.message,
+        });
+      });
+  });
+}
+
+export function getAllAvailableDataSources(): Promise<[]> {
+  return new Promise<[]>((resolve, reject) => {
+    axios
+      .get(Endpoints.datasources)
+      .then((response: AxiosResponse) => {
+        resolve(response.data.data_sources);
+      })
+      .catch((error) => {
+        message.error('Failed to fetch data sources');
         reject({
           status: error.response.status,
           message: error.message,
