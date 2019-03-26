@@ -1,19 +1,23 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { Button, List, Badge, Icon, Modal } from 'antd';
+import { Button, List, Badge, Icon, Modal, Select } from 'antd';
 import { LazyLog } from 'react-lazylog';
 import moment from 'moment';
-import { IExperiment, IJob } from '../../types';
+import { IExperiment, IJob, GraphExportFormat } from '../../types';
 import { getJobsForExperiment, getExperiment } from '../../actions/apiRequests';
 import Endpoints from '../../constants/api';
 import './style.css';
+import Axios from 'axios';
 
 interface IStateJobsManagement {
   modalVisible: boolean;
+  downloadModalVisible: boolean;
   extraLines: number; // necessary for linux support
   currentJobId: number | undefined;
   jobList: IJob[];
   experiment: IExperiment | undefined;
+  format: GraphExportFormat;
+  currentResultID: number | undefined;
 }
 
 interface IMatchParams {
@@ -37,10 +41,13 @@ class ExperimentDetails extends React.Component<
 
     this.state = {
       modalVisible: false,
+      downloadModalVisible: false,
       extraLines: 1,
       currentJobId: undefined,
       jobList: [],
+      currentResultID: undefined,
       experiment: undefined,
+      format: GraphExportFormat.GEXF,
     };
   }
 
@@ -79,6 +86,15 @@ class ExperimentDetails extends React.Component<
                     disabled={job.status === 'done' ? false : true}
                   >
                     explore
+                  </Button>,
+                  <Button
+                    key={2}
+                    type='primary'
+                    ghost={true}
+                    onClick={() => this.showDownloadModal(job.result!.id)}
+                    disabled={job.status === 'done' ? false : true}
+                  >
+                    download graph
                   </Button>,
                   <Button
                     key={2}
@@ -136,6 +152,27 @@ class ExperimentDetails extends React.Component<
               selectableLines={true}
             />
           </Modal>
+          <Modal
+            title={'Download Graph'}
+            centered={true}
+            width={820}
+            visible={this.state.downloadModalVisible}
+            onCancel={this.handleDownloadCancel}
+            onOk={this.handleDownload}
+          >
+            <span>Format:</span>
+            <Select
+              onChange={(value: any) => this.setState({ format: value })}
+              style={{ width: 250 }}
+              value={this.state.format}
+            >
+              {Object.keys(GraphExportFormat).map((key: any) => (
+                <Select.Option value={GraphExportFormat[key]}>
+                  {key}
+                </Select.Option>
+              ))}
+            </Select>
+          </Modal>
         </div>
       );
     } else {
@@ -158,6 +195,42 @@ class ExperimentDetails extends React.Component<
     this.setState({
       modalVisible: false,
       extraLines: 1,
+    });
+  }
+
+  private handleDownloadCancel = (e: any) => {
+    this.setState({
+      downloadModalVisible: false,
+    });
+  }
+
+  private handleDownload = (e: any) => {
+    this.setState({
+      downloadModalVisible: false,
+    });
+    console.log(
+      Endpoints.resultExport(this.state.currentResultID!, this.state.format),
+    );
+
+    Axios.get(
+      Endpoints.resultExport(this.state.currentResultID!, this.state.format),
+    ).then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute(
+        'download',
+        `result${this.state.currentResultID}.${this.state.format}`,
+      );
+      document.body.appendChild(link);
+      link.click();
+    });
+  }
+
+  private showDownloadModal = (resultID: number) => {
+    this.setState({
+      downloadModalVisible: true,
+      currentResultID: resultID,
     });
   }
 

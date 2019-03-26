@@ -1,3 +1,5 @@
+import { GraphExportFormat } from '../types';
+
 const baseApiUrl = '/api';
 
 const Endpoints = {
@@ -18,6 +20,8 @@ const Endpoints = {
     `${baseApiUrl}/node/${nodeID}/result/${resultID}/context`,
   algorithm: (algorithmId: number) => `${baseApiUrl}/algorithms/${algorithmId}`,
   allAlgorithms: baseApiUrl + '/algorithms',
+  resultExport: (resultID: number, format: GraphExportFormat) =>
+    `${baseApiUrl}/result/${resultID}/export?format=${format}`,
 };
 
 export default Endpoints;

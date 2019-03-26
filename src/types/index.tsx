@@ -137,3 +137,9 @@ export interface IAPINodeContext {
   context_nodes: IAPIGraphNode[];
   main_node: IAPIGraphNode;
 }
+
+export enum GraphExportFormat {
+  GEXF = 'GEXF',
+  GraphML = 'GraphML',
+  GML = 'GML',
+}
