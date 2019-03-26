@@ -17,7 +17,7 @@ export interface IObservationMatrix {
   load_query: string;
   name: string;
   description?: string;
-  remote_db?: string;
+  data_source?: string;
   time_created?: string;
 }
 
@@ -28,7 +28,7 @@ export interface IExperiment {
   name: string;
   description?: string;
   algorithm_id: number;
-  parameters: {[name: string]: any};
+  parameters: { [name: string]: any };
   last_job?: {
     id: number;
     experiment_id: number;
@@ -50,7 +50,7 @@ export interface ICreateExperiment {
   name: string;
   description: string;
   algorithm_id: number;
-  parameters: {[name: string]: any};
+  parameters: { [name: string]: any };
 }
 
 export interface IAlgorithm {
@@ -59,7 +59,7 @@ export interface IAlgorithm {
   script_filename: string;
   backend: string;
   description: string;
-  valid_parameters: {[name: string]: any};
+  valid_parameters: { [name: string]: any };
 }
 
 export interface IJob {
@@ -102,7 +102,7 @@ interface IAPIDistributionBase {
     id: number;
     description: string | undefined;
     name: string;
-    remote_db: string | undefined;
+    data_source: string | undefined;
     load_query: string | undefined;
   };
   node: {
