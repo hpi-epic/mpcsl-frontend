@@ -56,7 +56,9 @@ class ObservationMatricesManagement extends React.Component<
             </Button>
           </div>
         </Row>
-        <Row><Col>{ObservationMatrixList}</Col></Row>
+        <Row>
+          <Col>{ObservationMatrixList}</Col>
+        </Row>
         <ObservationMatrixModal
           visible={this.state.observationMatrixModalVisible}
           onClose={this.onClose}
@@ -106,7 +108,7 @@ class ObservationMatricesManagement extends React.Component<
         observationMatrixName: observationMatrix.name,
         observationMatrixDescription: observationMatrix.description || '-',
         query: observationMatrix.load_query,
-        remoteDB: observationMatrix.remote_db || '-',
+        dataSource: observationMatrix.data_source || '-',
       },
       observationMatrixModalVisible: true,
     });
