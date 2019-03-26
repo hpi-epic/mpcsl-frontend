@@ -1,18 +1,19 @@
 import React from 'react';
 import { Card, Button, Divider, Table } from 'antd';
-import { IAPIDistribution } from '../../../types';
+import { IAPIDistribution } from '../../types';
 
 import 'react-vis/dist/style.css';
-import './GraphAnnotate.css';
-import DataDistributionPlot from '../../../components/DataDistributions/DataDistributionPlot';
+import DataDistributionPlot from '../../components/DataDistributions/DataDistributionPlot';
 
-interface IGraphAnnotateDataModalProps {
+interface IGraphDataModalProps {
   visible: boolean;
   data: IAPIDistribution | undefined;
   onClose: () => void;
+  position: { bottom: number; right: number; type: 'fixed' | 'absolute' };
+  resizable: boolean;
 }
 
-interface IGraphAnnotateDataModalState {
+interface IGraphDataModalState {
   cardWidth: number;
   cardHeight: number;
   plotWidth: number;
@@ -20,11 +21,11 @@ interface IGraphAnnotateDataModalState {
   expanded: boolean;
 }
 
-class GraphAnnotateDataModal extends React.Component<
-  IGraphAnnotateDataModalProps,
-  IGraphAnnotateDataModalState
+class GraphDataModal extends React.Component<
+  IGraphDataModalProps,
+  IGraphDataModalState
 > {
-  constructor(props: IGraphAnnotateDataModalProps) {
+  constructor(props: IGraphDataModalProps) {
     super(props);
 
     this.state = {
@@ -58,27 +59,32 @@ class GraphAnnotateDataModal extends React.Component<
         },
       ];
       return (
-        <div>
+        <div
+          style={{
+            bottom: this.props.position.bottom,
+            right: this.props.position.right,
+            position: this.props.position.type,
+            margin: '10px',
+          }}
+        >
           <Card
             title={`Node: ${this.props.data!.node.name}`}
             style={{
               width: this.state.cardWidth,
               height: this.state.cardHeight,
-              bottom: 0,
-              right: 0,
-              position: 'fixed',
-              margin: '10px',
             }}
             extra={
               <div>
-                {this.state.expanded ? (
-                  <Button
-                    onClick={() => this.showLess()}
-                    icon='fullscreen-exit'
-                  />
-                ) : (
-                  <Button onClick={() => this.showMore()} icon='fullscreen' />
-                )}
+                {this.props.resizable ? (
+                  this.state.expanded ? (
+                    <Button
+                      onClick={() => this.showLess()}
+                      icon='fullscreen-exit'
+                    />
+                  ) : (
+                    <Button onClick={() => this.showMore()} icon='fullscreen' />
+                  )
+                ) : null}
                 <Button
                   onClick={() => {
                     this.showLess();
@@ -91,6 +97,7 @@ class GraphAnnotateDataModal extends React.Component<
           >
             <div>
               <DataDistributionPlot
+                selectable={false}
                 plotWidth={this.state.plotWidth}
                 plotHeight={this.state.plotHeight}
                 data={this.props.data!}
@@ -138,4 +145,4 @@ class GraphAnnotateDataModal extends React.Component<
   }
 }
 
-export default GraphAnnotateDataModal;
+export default GraphDataModal;

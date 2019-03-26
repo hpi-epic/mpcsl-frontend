@@ -298,7 +298,7 @@ exports[`<DataDistributinoPlot /> works for categorical data 1`] = `
           onMouseOver={[Function]}
           style={
             Object {
-              "fill": "#12939A",
+              "fill": "#1e96be",
               "opacity": 0.8,
               "stroke": "#fff",
             }
@@ -462,7 +462,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           <g
             className="rv-xy-plot__axis__tick"
             style={Object {}}
-            transform="translate(8.333333333333332, 0)"
+            transform="translate(0, 0)"
           >
             <line
               className="rv-xy-plot__axis__tick__line"
@@ -479,13 +479,13 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
               textAnchor="end"
               transform="translate(0, 14) rotate(-45)"
             >
-              1.5
+              1.0
             </text>
           </g>
           <g
             className="rv-xy-plot__axis__tick"
             style={Object {}}
-            transform="translate(25, 0)"
+            transform="translate(16.666666666666664, 0)"
           >
             <line
               className="rv-xy-plot__axis__tick__line"
@@ -502,13 +502,13 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
               textAnchor="end"
               transform="translate(0, 14) rotate(-45)"
             >
-              2.5
+              2.0
             </text>
           </g>
           <g
             className="rv-xy-plot__axis__tick"
             style={Object {}}
-            transform="translate(41.66666666666667, 0)"
+            transform="translate(33.33333333333333, 0)"
           >
             <line
               className="rv-xy-plot__axis__tick__line"
@@ -525,7 +525,30 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
               textAnchor="end"
               transform="translate(0, 14) rotate(-45)"
             >
-              3.5
+              3.0
+            </text>
+          </g>
+          <g
+            className="rv-xy-plot__axis__tick"
+            style={Object {}}
+            transform="translate(50, 0)"
+          >
+            <line
+              className="rv-xy-plot__axis__tick__line"
+              style={Object {}}
+              x1={0}
+              x2={0}
+              y1={-6}
+              y2={6}
+            />
+            <text
+              className="rv-xy-plot__axis__tick__text"
+              dy="0"
+              style={Object {}}
+              textAnchor="end"
+              transform="translate(0, 14) rotate(-45)"
+            >
+              4.0
             </text>
           </g>
         </g>
@@ -699,7 +722,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           onMouseOver={[Function]}
           style={
             Object {
-              "fill": "#12939A",
+              "fill": "#1e96be",
               "opacity": 0.8,
               "stroke": "#fff",
             }
@@ -716,7 +739,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           onMouseOver={[Function]}
           style={
             Object {
-              "fill": "#12939A",
+              "fill": "#1e96be",
               "opacity": 0.8,
               "stroke": "#fff",
             }
@@ -733,7 +756,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           onMouseOver={[Function]}
           style={
             Object {
-              "fill": "#12939A",
+              "fill": "#1e96be",
               "opacity": 0.8,
               "stroke": "#fff",
             }
@@ -750,7 +773,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           onMouseOver={[Function]}
           style={
             Object {
-              "fill": "#12939A",
+              "fill": "#1e96be",
               "opacity": 0.8,
               "stroke": "#fff",
             }
@@ -758,6 +781,38 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           width={NaN}
           x={50}
           y={27.272727272727273}
+        />
+      </g>
+      <g
+        className=" rv-highlight-container"
+        transform="translate(0, 0)"
+      >
+        <rect
+          className="rv-mouse-target"
+          fill="black"
+          height={100}
+          onContextMenu={[Function]}
+          onContextMenuCapture={[Function]}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseMove={[Function]}
+          onMouseUp={[Function]}
+          onTouchCancel={[Function]}
+          onTouchEnd={[Function]}
+          opacity="0"
+          width={100}
+          x="0"
+          y="0"
+        />
+        <rect
+          className="rv-highlight"
+          fill="#1e96be"
+          height={0}
+          opacity={0.3}
+          pointerEvents="none"
+          width={0}
+          x={0}
+          y={0}
         />
       </g>
     </svg>

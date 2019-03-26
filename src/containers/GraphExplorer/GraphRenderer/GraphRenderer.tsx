@@ -19,6 +19,7 @@ export interface IGraphRendererProps {
   toggleFreezeLayout: () => void;
   isSelectionMode: boolean;
   onNodeClick?: (node: ID3GraphNode) => void;
+  showMenu: boolean;
 }
 
 export interface IGraphRendererState {
@@ -117,18 +118,24 @@ class GraphRenderer extends React.Component<
         </marker>
       </defs>
     );
+
+    const menu = (
+      <Row type='flex' justify='start'>
+        <Col span={3}>
+          <Button onClick={this.onReLayout}>Re-Layout</Button>
+        </Col>
+        <Col span={4} className='GraphRenderer-Menu'>
+          <Checkbox defaultChecked={true} onChange={this.onFreezeChange}>
+            Freeze Layout
+          </Checkbox>
+        </Col>
+        <Col span={5} />
+      </Row>
+    );
+
     return (
       <div>
-        <Row type='flex' justify='start'>
-          <Col span={2}>
-            <Button onClick={this.onReLayout}>Re-Layout</Button>
-          </Col>
-          <Col span={4} className='GraphRenderer-Menu'>
-            <Checkbox defaultChecked={true} onChange={this.onFreezeChange}>
-              Freeze Layout
-            </Checkbox>
-          </Col>
-        </Row>
+        {this.props.showMenu ? menu : null}
         <svg
           ref={(svg) => (this.svg = d3.select(svg))}
           width={this.state.width}
