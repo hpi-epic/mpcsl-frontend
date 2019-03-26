@@ -37,7 +37,13 @@ export const addNode: ActionCreator<
   ThunkAction<Promise<Action>, IState, void, Action>
 > = (nodeID: number) => {
   return async (dispatch: Dispatch<Action>): Promise<IAddNode> => {
-    const result = await getNodeContext(nodeID);
+    let resultID;
+    try {
+      resultID = window.location.href.match(new RegExp('\\d*$'))![0];
+    } catch (error) {
+      throw error;
+    }
+    const result = await getNodeContext(nodeID, Number(resultID!));
     return dispatch({
       type: constants.ADD_NODE as constants.ADD_NODE,
       contextNodes: result.context_nodes,

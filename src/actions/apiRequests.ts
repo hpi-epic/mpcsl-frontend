@@ -197,10 +197,13 @@ export function getResult(resultID: number): Promise<void> {
   });
 }
 
-export function getNodeContext(nodeID: number): Promise<IAPINodeContext> {
+export function getNodeContext(
+  nodeID: number,
+  resultID: number,
+): Promise<IAPINodeContext> {
   return new Promise<any>((resolve, reject) => {
     axios
-      .get(Endpoints.nodeContext(nodeID))
+      .get(Endpoints.nodeContext(nodeID, resultID))
       .then((response: AxiosResponse) => {
         resolve(response.data);
       })
