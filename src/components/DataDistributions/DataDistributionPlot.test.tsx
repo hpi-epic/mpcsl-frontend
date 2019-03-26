@@ -16,6 +16,7 @@ describe('<DataDistributinoPlot />', () => {
         <DataDistributionPlot
           plotHeight={100}
           plotWidth={100}
+          selectable={true}
           data={
             (categoricalAPIDataDistribution as unknown) as IAPIDistributionCategorical
           }
@@ -34,6 +35,7 @@ describe('<DataDistributinoPlot />', () => {
     const tree = renderer
       .create(
         <DataDistributionPlot
+          selectable={true}
           plotHeight={100}
           plotWidth={100}
           data={

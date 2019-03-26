@@ -7,6 +7,8 @@ import {
   YAxis,
   VerticalRectSeries,
   Hint,
+  // @ts-ignore
+  Highlight,
 } from 'react-vis';
 
 import 'react-vis/dist/style.css';
@@ -16,10 +18,17 @@ interface IContinousPlotProps {
   data: IAPIDistributionContinous | undefined;
   plotWidth: number;
   plotHeight: number;
+  selectable: boolean;
+  onDataSelection?: (
+    data: { selectionStart: number; selectionEnd: number },
+  ) => void;
+  selection?: { startSelection: number; endSelection: number };
 }
 
 interface IContinousPlotState {
   value: any;
+  selectionStart: any;
+  selectionEnd: any;
 }
 
 class ContinousPlot extends React.Component<
@@ -29,18 +38,42 @@ class ContinousPlot extends React.Component<
   constructor(props: IContinousPlotProps) {
     super(props);
 
-    this.state = { value: undefined };
+    this.state = {
+      value: undefined,
+      selectionStart: this.props.selection
+        ? this.props.selection.startSelection
+        : this.props.data!.bin_edges[0],
+      selectionEnd: this.props.selection
+        ? this.props.selection.endSelection
+        : this.props.data!.bin_edges[this.props.data!.bin_edges.length - 1],
+    };
   }
 
   public render() {
-    const ticks: number[] = [];
-    for (let i = 0; i < this.props.data!.bin_edges.length - 1; i++) {
-      ticks.push(
-        (this.props.data!.bin_edges[i + 1] + this.props.data!.bin_edges[i]) / 2,
-      );
-    }
+    const ticks: number[] = this.props.data!.bin_edges;
 
     const maxYValue = Math.max(...this.props.data!.bins);
+
+    const updateDragState = (area: any) => {
+      this.setState({
+        selectionStart: area && area.left,
+        selectionEnd: area && area.right,
+      });
+    };
+
+    const updateDragStateEnd = (area: any) => {
+      this.setState({
+        selectionStart: area && area.left,
+        selectionEnd: area && area.right,
+      });
+      if (this.props.onDataSelection) {
+        this.props.onDataSelection({
+          selectionStart: area && area.left,
+          selectionEnd: area && area.right,
+        });
+      }
+    };
+
     return (
       <div>
         <XYPlot
@@ -73,7 +106,40 @@ class ContinousPlot extends React.Component<
                 y0: 0,
               };
             })}
+            colorType='literal'
+            getColor={(d) => {
+              if (
+                !this.props.selectable ||
+                this.state.selectionStart === null ||
+                this.state.selectionEnd === null
+              ) {
+                return '#1e96be';
+              }
+              const inX =
+                d.x >= this.state.selectionStart &&
+                d.x <= this.state.selectionEnd;
+              const inX0 =
+                d.x0 >= this.state.selectionStart &&
+                d.x0 <= this.state.selectionEnd;
+              const inStart =
+                this.state.selectionStart >= d.x0 &&
+                this.state.selectionStart <= d.x;
+              const inEnd =
+                this.state.selectionEnd >= d.x0 &&
+                this.state.selectionEnd <= d.x;
+
+              return inStart || inEnd || inX || inX0 ? '#1e96be' : '#c7c7c7';
+            }}
           />
+          {this.props.selectable ? (
+            <Highlight
+              color='#1e96be'
+              drag={true}
+              enableY={false}
+              onDrag={updateDragState}
+              onDragEnd={updateDragStateEnd}
+            />
+          ) : null}
           {this.state.value ? <Hint value={this.state.value} /> : false}
         </XYPlot>
       </div>
