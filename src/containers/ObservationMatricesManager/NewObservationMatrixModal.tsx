@@ -1,7 +1,7 @@
-import { Drawer, Form, Row, Input, Button, message } from 'antd';
+import { Drawer, Form, Row, Input, Button, message, Select } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import React from 'react';
-import { createObservationMatrix } from '../../actions/apiRequests';
+import { createObservationMatrix, getAllAvailableDataSources } from '../../actions/apiRequests';
 import TextArea from 'antd/lib/input/TextArea';
 
 export interface IPropsNewObservationMatrixModal extends FormComponentProps {
@@ -11,26 +11,38 @@ export interface IPropsNewObservationMatrixModal extends FormComponentProps {
 }
 
 interface IStateNewObservationMatrixModal {
-  hasErrors: boolean;
+  dataSources: any[];
 }
 
 export interface IFormObservationMatrix {
   observationMatrixName: string;
   observationMatrixDescription: string;
   query: string;
-  dataSource?: string;
+  dataSource: string;
 }
 
 class NewObservationMatrixModal extends React.Component<
   IPropsNewObservationMatrixModal,
   IStateNewObservationMatrixModal
 > {
+
+  public mounted = false;
+
   constructor(props: IPropsNewObservationMatrixModal) {
     super(props);
 
     this.state = {
-      hasErrors: false,
+      dataSources: [],
     };
+  }
+
+  public componentDidMount = () => {
+    this.mounted = true;
+    this.getAvailableDataSources();
+  }
+
+  public componentWillUnmount = () => {
+    this.mounted = false;
   }
 
   public render() {
@@ -61,10 +73,7 @@ class NewObservationMatrixModal extends React.Component<
         ],
       },
     )(
-      <Input
-        disabled={disabled}
-        placeholder='Observation Matrix Description'
-      />,
+      <Input disabled={disabled} placeholder='Observation Matrix Description' />,
     );
 
     const observationMatrixQueryEl = getFieldDecorator('query', {
@@ -78,8 +87,21 @@ class NewObservationMatrixModal extends React.Component<
       initialValue: this.props.observationMatrix
         ? this.props.observationMatrix.dataSource
         : null,
-      rules: [{ required: false, message: 'Select a data source (DB)' }],
-    })(<Input disabled={disabled} placeholder='data source (DB)' />);
+      rules: [{ required: true, message: 'Select a data source (DB)' }],
+    })(
+      <Select disabled={disabled}>
+        {this.state.dataSources.map(
+        (val: any) => (
+          <Select.Option
+            value={val}
+            key={val}
+          >
+            {val}
+          </Select.Option>
+        ),
+      )}
+      </Select>,
+    );
 
     const title = this.props.observationMatrix
       ? `Observation Matrix “${
@@ -98,7 +120,6 @@ class NewObservationMatrixModal extends React.Component<
         <Form
           layout='vertical'
           onSubmit={this.handleSubmit}
-          onChange={this.hasErrors}
           className='Modal-Form'
         >
           <Row gutter={16}>
@@ -109,13 +130,7 @@ class NewObservationMatrixModal extends React.Component<
             </Form.Item>
             <Form.Item label='Query'>{observationMatrixQueryEl}</Form.Item>
             <Form.Item>
-              <Button
-                type='primary'
-                htmlType='submit'
-                disabled={
-                  this.props.observationMatrix ? true : this.state.hasErrors
-                }
-              >
+              <Button type='primary' htmlType='submit' disabled={disabled}>
                 Submit
               </Button>
             </Form.Item>
@@ -132,23 +147,9 @@ class NewObservationMatrixModal extends React.Component<
         if (!err) {
           this.submitObservationMatrix(values);
         } else {
-          message.error('Set a Observation Matrix Name and Query!');
-        }
-      },
-    );
-  }
-
-  private hasErrors = () => {
-    this.props.form.validateFields(
-      (err: Error, values: IFormObservationMatrix) => {
-        if (err) {
-          this.setState({
-            hasErrors: true,
-          });
-        } else {
-          this.setState({
-            hasErrors: false,
-          });
+          message.error(
+            'Set a Observation Matrix Name and Query and select a Data Source from the list.',
+          );
         }
       },
     );
@@ -160,8 +161,22 @@ class NewObservationMatrixModal extends React.Component<
       name: values.observationMatrixName,
       description: values.observationMatrixDescription,
       data_source: values.dataSource,
+    }).then(() => {
+      this.props.onClose();
+    }).catch((error) => {
+      if (error.status !== 400) {
+        this.props.onClose();
+      }
     });
-    this.props.onClose();
+  }
+
+  private async getAvailableDataSources() {
+    const dataSources = await getAllAvailableDataSources();
+    if (this.mounted) {
+      this.setState({
+        dataSources,
+      });
+    }
   }
 }
 
