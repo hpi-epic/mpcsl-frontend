@@ -68,7 +68,7 @@ class NewObservationMatrixModal extends React.Component<
         rules: [
           {
             required: false,
-            message: 'Enter a Observation Matrix Description'
+            message: 'Enter a Observation Matrix Description',
           },
         ],
       },
