@@ -310,3 +310,20 @@ export function getAlgorithm(algorithmId: number): Promise<IAlgorithm> {
       });
   });
 }
+
+export function getAllAvailableDataSources(): Promise<[]> {
+  return new Promise<[]>((resolve, reject) => {
+    axios
+      .get(Endpoints.datasources)
+      .then((response: AxiosResponse) => {
+        resolve(response.data.data_sources)
+      })
+      .catch((error) => {
+        message.error('Failed to fetch data sources');
+        reject({
+          status: error.response.status,
+          message: error.message,
+        });
+      });
+  })
+}

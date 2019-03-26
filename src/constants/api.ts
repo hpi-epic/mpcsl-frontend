@@ -22,6 +22,7 @@ const Endpoints = {
   allAlgorithms: baseApiUrl + '/algorithms',
   resultExport: (resultID: number, format: GraphExportFormat) =>
     `${baseApiUrl}/result/${resultID}/export?format=${format}`,
+  datasources: baseApiUrl + '/datasources',
 };
 
 export default Endpoints;
