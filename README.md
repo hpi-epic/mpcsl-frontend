@@ -16,6 +16,10 @@ In the project directory, you can run (you can use `npm` instead of `yarn`):
 
 `yarn test`
 
+### Run Linter
+
+`yarn run lint`
+
 ### Create a Production Build
 
 `yarn run build`
