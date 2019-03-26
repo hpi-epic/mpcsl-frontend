@@ -11,6 +11,8 @@ const Endpoints = {
   allResults: baseApiUrl + '/results',
   result: baseApiUrl + '/result',
   nodeDistribution: (nodeID: string) => `${baseApiUrl}/node/${nodeID}/marginal`,
+  conditionalNodeDistribution: (nodeID: string) =>
+    `${baseApiUrl}/node/${nodeID}/conditional`,
   resultNodes: (resultID: number) => `${baseApiUrl}/result/${resultID}/nodes`,
   nodeContext: (nodeID: number) => `${baseApiUrl}/node/${nodeID}/context`,
   allAlgorithms: baseApiUrl + '/algorithms',

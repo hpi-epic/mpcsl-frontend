@@ -9,6 +9,8 @@ import {
   Hint,
   // @ts-ignore
   ChartLabel,
+  // @ts-ignore
+  Highlight,
 } from 'react-vis';
 
 import 'react-vis/dist/style.css';
@@ -18,16 +20,30 @@ interface ICategoricalPlotProps {
   data: IAPIDistributionCategorical;
   plotWidth: number;
   plotHeight: number;
+  selectable: boolean;
+  onDataSelection?: (data: { [bin: string]: number }) => void;
+  selection?: ISelectedValues;
+}
+
+interface ISelectedValues {
+  [bin: string]: number;
 }
 
 class CategoricalPlot extends React.Component<
   ICategoricalPlotProps,
-  { value: any }
+  { value: any; selectedValues: ISelectedValues }
 > {
   constructor(props: ICategoricalPlotProps) {
     super(props);
+    let selectedValues = {};
+
+    if (this.props.selection) {
+      selectedValues = props.selection as ISelectedValues;
+    }
+
     this.state = {
       value: undefined,
+      selectedValues,
     };
   }
 
@@ -63,6 +79,33 @@ class CategoricalPlot extends React.Component<
             opacity={0.8}
             style={{ stroke: '#fff' }}
             data={data}
+            colorType='literal'
+            getColor={(d) => {
+              if (Object.keys(this.state.selectedValues).length === 0) {
+                return '#1e96be';
+              } else if (d.x in this.state.selectedValues) {
+                return '#1e96be';
+              } else {
+                return '#c7c7c7';
+              }
+            }}
+            onValueClick={(d: any) => {
+              if (this.props.selectable) {
+                const { selectedValues } = this.state;
+                if (d.x in selectedValues) {
+                  delete selectedValues[d.x];
+                } else {
+                  selectedValues[d.x] = d.y;
+                }
+                this.setState({
+                  selectedValues,
+                });
+
+                if (this.props.onDataSelection) {
+                  this.props.onDataSelection(selectedValues);
+                }
+              }
+            }}
           />
           {this.state.value ? <Hint value={this.state.value} /> : false}
         </XYPlot>
