@@ -252,6 +252,28 @@ export function getNodeDataDistribution(
   });
 }
 
+export function getConditionalNodeDataDistribution(
+  nodeID: string,
+  distributions: any,
+): Promise<IAPIDistribution> {
+  return new Promise<IAPIDistribution>((resolve, reject) => {
+    axios
+      .post(Endpoints.conditionalNodeDistribution(String(nodeID)), {
+        conditions: distributions,
+      })
+      .then((response: AxiosResponse) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        message.error('Failed to fetch Conditional Data Distribution');
+        reject({
+          status: error.response.status,
+          message: 'Failed to fetch Conditional Node Data Distribution',
+        });
+      });
+  });
+}
+
 export function getAllAlgorithms(): Promise<IAlgorithm[]> {
   return new Promise<IAlgorithm[]>((resolve, reject) => {
     axios
