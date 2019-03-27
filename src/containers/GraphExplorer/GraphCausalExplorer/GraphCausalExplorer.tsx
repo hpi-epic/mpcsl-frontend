@@ -228,7 +228,7 @@ class GraphCausalExplorer extends React.Component<
             ) : null}
           </h3>
           <div>
-            Intervention:
+            Intervention <i>(only categorical data)</i>:
             <Checkbox onChange={this.toggleIntervention} />
           </div>
           <div style={{ flexGrow: 1 }}>
@@ -427,7 +427,10 @@ class GraphCausalExplorer extends React.Component<
         // causal node
         const causalNodeID = this.state.causalNode.nodeID;
         if (this.state.causalNode.selection) {
-          distributions[causalNodeID] = getApiCondition(this.state.causalNode);
+          const condition = getApiCondition(this.state.causalNode);
+          if (condition) {
+            distributions[causalNodeID] = condition;
+          }
         }
 
         // external factors
@@ -435,14 +438,24 @@ class GraphCausalExplorer extends React.Component<
           Object.keys(this.state.externalFactors!).forEach((nodeID: string) => {
             const externalFactor = this.state.externalFactors![nodeID];
             if (externalFactor.selection) {
-              distributions[nodeID] = getApiCondition(externalFactor);
+              const condition = getApiCondition(externalFactor);
+              if (condition) {
+                distributions[nodeID] = condition;
+              }
             }
           });
         }
-        distribution = await getConditionalNodeDataDistribution(
-          this.state.effectNode.nodeID,
-          distributions,
-        );
+
+        if (Object.keys(distributions).length < 1) {
+          distribution = await getNodeDataDistribution(
+            this.state.effectNode.nodeID,
+          );
+        } else {
+          distribution = await getConditionalNodeDataDistribution(
+            this.state.effectNode.nodeID,
+            distributions,
+          );
+        }
 
         const effectNode = this.state.effectNode;
         this.setState({
@@ -487,12 +500,17 @@ export function mapStateToProps(state: IState) {
   };
 }
 
-const getApiCondition = (node: INode): ISelectionAPITypes => {
+const getApiCondition = (node: INode): ISelectionAPITypes | undefined => {
   if (node.distribution.categorical) {
-    return {
-      categorical: true,
-      values: Object.keys(node.selection as {}).map((bin: string) => bin),
-    };
+    const values = Object.keys(node.selection as {}).map((bin: string) => bin);
+    if (values.length > 0) {
+      return {
+        categorical: true,
+        values: Object.keys(node.selection as {}).map((bin: string) => bin),
+      };
+    } else {
+      return undefined;
+    }
   } else {
     return {
       categorical: false,
