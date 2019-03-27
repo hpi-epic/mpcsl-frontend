@@ -82,7 +82,9 @@ class ExperimentDetails extends React.Component<
                     key={1}
                     type='primary'
                     ghost={true}
-                    onClick={() => this.onExploreExperiment(job.result!.id)}
+                    onClick={() =>
+                      this.onExploreExperiment(job.result!.id)
+                    }
                     disabled={job.status === 'done' ? false : true}
                   >
                     explore
@@ -97,7 +99,7 @@ class ExperimentDetails extends React.Component<
                     download graph
                   </Button>,
                   <Button
-                    key={2}
+                    key={3}
                     type='primary'
                     onClick={() => this.showModal(job.id)}
                   >
@@ -167,7 +169,7 @@ class ExperimentDetails extends React.Component<
               value={this.state.format}
             >
               {Object.keys(GraphExportFormat).map((key: any) => (
-                <Select.Option value={GraphExportFormat[key]}>
+                <Select.Option value={GraphExportFormat[key]} key={key}>
                   {key}
                 </Select.Option>
               ))}
@@ -208,9 +210,6 @@ class ExperimentDetails extends React.Component<
     this.setState({
       downloadModalVisible: false,
     });
-    console.log(
-      Endpoints.resultExport(this.state.currentResultID!, this.state.format),
-    );
 
     Axios.get(
       Endpoints.resultExport(this.state.currentResultID!, this.state.format),
