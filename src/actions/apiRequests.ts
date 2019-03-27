@@ -61,7 +61,9 @@ export function createObservationMatrix(
       })
       .catch((error) => {
         if (error.response.status === 400) {
-          message.error(`${error.response.data.message}. Please enter a valid query!`);
+          message.error(
+            `${error.response.data.message}. Please enter a valid query!`,
+          );
         } else {
           message.error('Failed to create Observation Matrix');
         }
@@ -276,6 +278,35 @@ export function getConditionalNodeDataDistribution(
         reject({
           status: error.response.status,
           message: 'Failed to fetch Conditional Node Data Distribution',
+        });
+      });
+  });
+}
+
+export function getInterventionNodeDataDistribution(
+  causeNodeID: string,
+  effectNodeID: string,
+  factorNodeIDs: string[],
+  causeCondition: string,
+): Promise<IAPIDistribution> {
+  return new Promise<IAPIDistribution>((resolve, reject) => {
+    axios
+      .get(
+        Endpoints.interventionalNodeDistribution(
+          causeNodeID,
+          effectNodeID,
+          factorNodeIDs,
+          causeCondition,
+        ),
+      )
+      .then((response: AxiosResponse) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        message.error('Failed to fetch Data Distribution after Intervention');
+        reject({
+          status: error.response.status,
+          message: error.message,
         });
       });
   });

@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import './GraphCausalExplorer.css';
 import { IState } from '../../../store';
 import { IAPIGraphNode, ID3GraphNode } from '../../../types/graphTypes';
-import { Card } from 'antd';
+import { Card, Checkbox, message } from 'antd';
 import Graph from '../../../utils/graph';
 import { NodeSelection } from './NodeSearch';
 import { IAPIDistribution } from '../../../types';
@@ -15,6 +15,7 @@ import { IAPIDistribution } from '../../../types';
 import {
   getNodeDataDistribution,
   getConditionalNodeDataDistribution,
+  getInterventionNodeDataDistribution,
 } from '../../../actions/apiRequests';
 import DataDistributionPlot from '../../../components/DataDistributions/DataDistributionPlot';
 // @ts-ignore
@@ -52,6 +53,7 @@ interface IGraphCausalExplorerState {
   selectedExternalFactorID: string | undefined;
   dataModalVisible: boolean;
   selectedNodeDataDistribution: IAPIDistribution | undefined;
+  isIntervention: boolean;
 }
 
 const cardBodyStyle = {
@@ -76,6 +78,7 @@ class GraphCausalExplorer extends React.Component<
       dataModalVisible: false,
       selectedExternalFactorID: undefined,
       selectedNodeDataDistribution: undefined,
+      isIntervention: false,
     };
   }
   public render() {
@@ -224,6 +227,10 @@ class GraphCausalExplorer extends React.Component<
               <i> {this.state.effectNode.nodeLabel} </i>
             ) : null}
           </h3>
+          <div>
+            Intervention <i>(only categorical data)</i>:
+            <Checkbox onChange={this.toggleIntervention} />
+          </div>
           <div style={{ flexGrow: 1 }}>
             {!this.state.effectNode ? (
               <NodeSelection
@@ -384,35 +391,80 @@ class GraphCausalExplorer extends React.Component<
 
   private onDataDistributionChange = async () => {
     if (this.state.effectNode && this.state.causalNode) {
-      const distributions: { [nodeID: string]: ISelectionAPITypes } = {};
+      let distribution;
 
-      // causal node
-      const causalNodeID = this.state.causalNode.nodeID;
-      if (this.state.causalNode.selection) {
-        distributions[causalNodeID] = getApiCondition(this.state.causalNode);
-      }
+      if (this.state.isIntervention) {
+        const condition = Object.keys(this.state.causalNode
+          .selection as {}).map((bin: string) => bin);
 
-      // external factors
-      if (this.state.externalFactors) {
-        Object.keys(this.state.externalFactors!).forEach((nodeID: string) => {
-          const externalFactor = this.state.externalFactors![nodeID];
-          if (externalFactor.selection) {
-            distributions[nodeID] = getApiCondition(externalFactor);
+        if (condition.length !== 1) {
+          message.error('Select only one category');
+        } else {
+          const externalFactorIDs = this.props.selectedGraph.nodes.filter(
+            (node: ID3GraphNode) =>
+              this.state.effectNode &&
+              node.id !== this.state.effectNode!.nodeID &&
+              (this.state.causalNode &&
+                node.id !== this.state.causalNode!.nodeID),
+          );
+          distribution = await getInterventionNodeDataDistribution(
+            this.state.causalNode.nodeID,
+            this.state.effectNode.nodeID,
+            externalFactorIDs.map((node) => node.id),
+            condition[0],
+          );
+          const effectNode = this.state.effectNode;
+          this.setState({
+            effectNode: {
+              ...effectNode,
+              distribution,
+            },
+          });
+        }
+      } else {
+        const distributions: { [nodeID: string]: ISelectionAPITypes } = {};
+
+        // causal node
+        const causalNodeID = this.state.causalNode.nodeID;
+        if (this.state.causalNode.selection) {
+          const condition = getApiCondition(this.state.causalNode);
+          if (condition) {
+            distributions[causalNodeID] = condition;
           }
+        }
+
+        // external factors
+        if (this.state.externalFactors) {
+          Object.keys(this.state.externalFactors!).forEach((nodeID: string) => {
+            const externalFactor = this.state.externalFactors![nodeID];
+            if (externalFactor.selection) {
+              const condition = getApiCondition(externalFactor);
+              if (condition) {
+                distributions[nodeID] = condition;
+              }
+            }
+          });
+        }
+
+        if (Object.keys(distributions).length < 1) {
+          distribution = await getNodeDataDistribution(
+            this.state.effectNode.nodeID,
+          );
+        } else {
+          distribution = await getConditionalNodeDataDistribution(
+            this.state.effectNode.nodeID,
+            distributions,
+          );
+        }
+
+        const effectNode = this.state.effectNode;
+        this.setState({
+          effectNode: {
+            ...effectNode,
+            distribution,
+          },
         });
       }
-
-      const distribution = await getConditionalNodeDataDistribution(
-        this.state.effectNode.nodeID,
-        distributions,
-      );
-      const effectNode = this.state.effectNode;
-      this.setState({
-        effectNode: {
-          ...effectNode,
-          distribution,
-        },
-      });
     }
   }
 
@@ -431,6 +483,13 @@ class GraphCausalExplorer extends React.Component<
       dataModalVisible: false,
     });
   }
+
+  private toggleIntervention = () => {
+    const isInterv = this.state.isIntervention;
+    this.setState({
+      isIntervention: !isInterv,
+    });
+  }
 }
 
 export function mapStateToProps(state: IState) {
@@ -441,12 +500,17 @@ export function mapStateToProps(state: IState) {
   };
 }
 
-const getApiCondition = (node: INode): ISelectionAPITypes => {
+const getApiCondition = (node: INode): ISelectionAPITypes | undefined => {
   if (node.distribution.categorical) {
-    return {
-      categorical: true,
-      values: Object.keys(node.selection as {}).map((bin: string) => bin),
-    };
+    const values = Object.keys(node.selection as {}).map((bin: string) => bin);
+    if (values.length > 0) {
+      return {
+        categorical: true,
+        values: Object.keys(node.selection as {}).map((bin: string) => bin),
+      };
+    } else {
+      return undefined;
+    }
   } else {
     return {
       categorical: false,
