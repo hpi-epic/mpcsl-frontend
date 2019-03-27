@@ -303,10 +303,10 @@ export function getInterventionNodeDataDistribution(
         resolve(response.data);
       })
       .catch((error) => {
-        message.error('Failed to fetch Conditional Data Distribution');
+        message.error('Failed to fetch Data Distribution after Intervention');
         reject({
           status: error.response.status,
-          message: 'Failed to fetch Conditional Node Data Distribution',
+          message: error.message,
         });
       });
   });
