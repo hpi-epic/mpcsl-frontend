@@ -210,9 +210,6 @@ class ExperimentDetails extends React.Component<
     this.setState({
       downloadModalVisible: false,
     });
-    console.log(
-      Endpoints.resultExport(this.state.currentResultID!, this.state.format),
-    );
 
     Axios.get(
       Endpoints.resultExport(this.state.currentResultID!, this.state.format),
