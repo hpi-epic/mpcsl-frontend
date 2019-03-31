@@ -16,6 +16,7 @@ import {
   getNodeDataDistribution,
   getConditionalNodeDataDistribution,
   getInterventionNodeDataDistribution,
+  getConfounders,
 } from '../../../actions/apiRequests';
 import DataDistributionPlot from '../../../components/DataDistributions/DataDistributionPlot';
 // @ts-ignore
@@ -401,17 +402,13 @@ class GraphCausalExplorer extends React.Component<
           if (condition.length !== 1) {
             message.error('Select only one category');
           } else {
-            const externalFactorIDs = this.props.selectedGraph.nodes.filter(
-              (node: ID3GraphNode) =>
-                this.state.effectNode &&
-                node.id !== this.state.effectNode!.nodeID &&
-                (this.state.causalNode &&
-                  node.id !== this.state.causalNode!.nodeID),
+            const confounders = await getConfounders(
+              this.state.effectNode.nodeID,
             );
             distribution = await getInterventionNodeDataDistribution(
               this.state.causalNode.nodeID,
               this.state.effectNode.nodeID,
-              externalFactorIDs.map((node) => node.id),
+              confounders.confounders[0],
               condition[0],
             );
             const effectNode = this.state.effectNode;
