@@ -486,9 +486,12 @@ class GraphCausalExplorer extends React.Component<
 
   private toggleIntervention = () => {
     const isInterv = this.state.isIntervention;
-    this.setState({
-      isIntervention: !isInterv,
-    });
+    this.setState(
+      {
+        isIntervention: !isInterv,
+      },
+      this.onDataDistributionChange,
+    );
   }
 }
 
