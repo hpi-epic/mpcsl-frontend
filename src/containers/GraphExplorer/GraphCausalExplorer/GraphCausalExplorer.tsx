@@ -394,32 +394,36 @@ class GraphCausalExplorer extends React.Component<
       let distribution;
 
       if (this.state.isIntervention) {
-        const condition = Object.keys(this.state.causalNode
-          .selection as {}).map((bin: string) => bin);
+        if (this.state.causalNode.selection) {
+          const condition = Object.keys(this.state.causalNode
+            .selection as {}).map((bin: string) => bin);
 
-        if (condition.length !== 1) {
-          message.error('Select only one category');
+          if (condition.length !== 1) {
+            message.error('Select only one category');
+          } else {
+            const externalFactorIDs = this.props.selectedGraph.nodes.filter(
+              (node: ID3GraphNode) =>
+                this.state.effectNode &&
+                node.id !== this.state.effectNode!.nodeID &&
+                (this.state.causalNode &&
+                  node.id !== this.state.causalNode!.nodeID),
+            );
+            distribution = await getInterventionNodeDataDistribution(
+              this.state.causalNode.nodeID,
+              this.state.effectNode.nodeID,
+              externalFactorIDs.map((node) => node.id),
+              condition[0],
+            );
+            const effectNode = this.state.effectNode;
+            this.setState({
+              effectNode: {
+                ...effectNode,
+                distribution,
+              },
+            });
+          }
         } else {
-          const externalFactorIDs = this.props.selectedGraph.nodes.filter(
-            (node: ID3GraphNode) =>
-              this.state.effectNode &&
-              node.id !== this.state.effectNode!.nodeID &&
-              (this.state.causalNode &&
-                node.id !== this.state.causalNode!.nodeID),
-          );
-          distribution = await getInterventionNodeDataDistribution(
-            this.state.causalNode.nodeID,
-            this.state.effectNode.nodeID,
-            externalFactorIDs.map((node) => node.id),
-            condition[0],
-          );
-          const effectNode = this.state.effectNode;
-          this.setState({
-            effectNode: {
-              ...effectNode,
-              distribution,
-            },
-          });
+          message.info('Please select a category');
         }
       } else {
         const distributions: { [nodeID: string]: ISelectionAPITypes } = {};
