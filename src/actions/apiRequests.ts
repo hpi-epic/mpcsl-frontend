@@ -9,6 +9,7 @@ import {
   IAPIDistribution,
   IAPINodeContext,
   IAlgorithm,
+  IAPIConfounders,
 } from '../types';
 import Endpoints from '../constants/api';
 
@@ -304,6 +305,29 @@ export function getInterventionNodeDataDistribution(
       })
       .catch((error) => {
         message.error('Failed to fetch Data Distribution after Intervention');
+        reject({
+          status: error.response.status,
+          message: error.message,
+        });
+      });
+  });
+}
+
+export function getConfounders(nodeID: string): Promise<IAPIConfounders> {
+  return new Promise<IAPIConfounders>((resolve, reject) => {
+    let resultID;
+    try {
+      resultID = window.location.href.match(new RegExp('\\d*$'))![0];
+    } catch (error) {
+      throw error;
+    }
+    axios
+      .get(Endpoints.confounders(nodeID, resultID))
+      .then((response: AxiosResponse) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        message.error('Failed to fetch confounders');
         reject({
           status: error.response.status,
           message: error.message,
