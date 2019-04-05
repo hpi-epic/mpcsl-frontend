@@ -143,3 +143,7 @@ export enum GraphExportFormat {
   GraphML = 'GraphML',
   GML = 'GML',
 }
+
+export interface IAPIConfounders {
+  confounders: string[][];
+}

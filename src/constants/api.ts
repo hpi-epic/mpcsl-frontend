@@ -33,6 +33,8 @@ const Endpoints = {
   resultExport: (resultID: number, format: GraphExportFormat) =>
     `${baseApiUrl}/result/${resultID}/export?format=${format}`,
   datasources: baseApiUrl + '/datasources',
+  confounders: (nodeID: string, resultID: string) =>
+    `${baseApiUrl}/node/${nodeID}/result/${resultID}/confounders`,
 };
 
 export default Endpoints;
