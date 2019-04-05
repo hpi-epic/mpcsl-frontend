@@ -403,7 +403,7 @@ class GraphCausalExplorer extends React.Component<
             message.error('Select only one category');
           } else {
             const confounders = await getConfounders(
-              this.state.effectNode.nodeID,
+              this.state.causalNode.nodeID,
             );
             distribution = await getInterventionNodeDataDistribution(
               this.state.causalNode.nodeID,
