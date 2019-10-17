@@ -73,6 +73,8 @@ export interface IJob {
     job_id: number;
     start_time: string;
     end_time: string;
+    execution_time: number;
+    dataset_loading_time: number;
     meta_results: any;
   };
 }
