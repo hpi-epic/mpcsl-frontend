@@ -141,7 +141,7 @@ export interface IAPINodeContext {
 export enum GraphExportFormat {
   GEXF = 'GEXF',
   GraphML = 'GraphML',
-  GML = 'GML',
+  GML = 'GML'
 }
 
 export interface IAPIConfounders {

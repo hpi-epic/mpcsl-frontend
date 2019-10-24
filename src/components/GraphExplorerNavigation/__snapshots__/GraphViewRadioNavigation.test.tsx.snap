@@ -14,7 +14,6 @@ exports[`<GraphViewRadioNavigation /> renders correctly for route /graph-explore
       <input
         checked={false}
         className="ant-radio-button-input"
-        disabled={false}
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
@@ -39,7 +38,6 @@ exports[`<GraphViewRadioNavigation /> renders correctly for route /graph-explore
       <input
         checked={true}
         className="ant-radio-button-input"
-        disabled={false}
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
@@ -64,7 +62,6 @@ exports[`<GraphViewRadioNavigation /> renders correctly for route /graph-explore
       <input
         checked={false}
         className="ant-radio-button-input"
-        disabled={false}
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
@@ -96,7 +93,6 @@ exports[`<GraphViewRadioNavigation /> renders correctly for route /graph-explore
       <input
         checked={false}
         className="ant-radio-button-input"
-        disabled={false}
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
@@ -121,7 +117,6 @@ exports[`<GraphViewRadioNavigation /> renders correctly for route /graph-explore
       <input
         checked={false}
         className="ant-radio-button-input"
-        disabled={false}
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
@@ -146,7 +141,6 @@ exports[`<GraphViewRadioNavigation /> renders correctly for route /graph-explore
       <input
         checked={true}
         className="ant-radio-button-input"
-        disabled={false}
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
@@ -178,7 +172,6 @@ exports[`<GraphViewRadioNavigation /> renders correctly for route /graph-explore
       <input
         checked={true}
         className="ant-radio-button-input"
-        disabled={false}
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
@@ -203,7 +196,6 @@ exports[`<GraphViewRadioNavigation /> renders correctly for route /graph-explore
       <input
         checked={false}
         className="ant-radio-button-input"
-        disabled={false}
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}
@@ -228,7 +220,6 @@ exports[`<GraphViewRadioNavigation /> renders correctly for route /graph-explore
       <input
         checked={false}
         className="ant-radio-button-input"
-        disabled={false}
         onBlur={[Function]}
         onChange={[Function]}
         onFocus={[Function]}

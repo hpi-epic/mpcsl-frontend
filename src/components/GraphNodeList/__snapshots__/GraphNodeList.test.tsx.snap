@@ -20,77 +20,68 @@ exports[`<GraphNodeList /> renders correctly 1`] = `
   </div>
   <div
     className="ant-spin-nested-loading"
-    style={null}
   >
     <div
       className="ant-spin-container"
     >
-      <div
-        className="ant-list-item Node-List-Item"
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
-        style={
-          Object {
-            "paddingBottom": "4px",
-            "paddingLeft": "14px",
-            "paddingTop": "4px",
-          }
-        }
+      <ul
+        className="ant-list-items"
       >
-        <div
-          className="ant-list-item-content ant-list-item-content-single"
+        <li
+          className="ant-list-item Node-List-Item"
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          style={
+            Object {
+              "paddingBottom": "4px",
+              "paddingLeft": "14px",
+              "paddingTop": "4px",
+            }
+          }
         >
           <div
             onClick={[Function]}
           >
             node1
           </div>
-        </div>
-      </div>
-      <div
-        className="ant-list-item Node-List-Item"
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
-        style={
-          Object {
-            "paddingBottom": "4px",
-            "paddingLeft": "14px",
-            "paddingTop": "4px",
+        </li>
+        <li
+          className="ant-list-item Node-List-Item"
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          style={
+            Object {
+              "paddingBottom": "4px",
+              "paddingLeft": "14px",
+              "paddingTop": "4px",
+            }
           }
-        }
-      >
-        <div
-          className="ant-list-item-content ant-list-item-content-single"
         >
           <div
             onClick={[Function]}
           >
             node2
           </div>
-        </div>
-      </div>
-      <div
-        className="ant-list-item Node-List-Item"
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
-        style={
-          Object {
-            "paddingBottom": "4px",
-            "paddingLeft": "14px",
-            "paddingTop": "4px",
+        </li>
+        <li
+          className="ant-list-item Node-List-Item"
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          style={
+            Object {
+              "paddingBottom": "4px",
+              "paddingLeft": "14px",
+              "paddingTop": "4px",
+            }
           }
-        }
-      >
-        <div
-          className="ant-list-item-content ant-list-item-content-single"
         >
           <div
             onClick={[Function]}
           >
             node3
           </div>
-        </div>
-      </div>
+        </li>
+      </ul>
     </div>
   </div>
 </div>

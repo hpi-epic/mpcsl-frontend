@@ -2,7 +2,7 @@ import { ThunkAction } from 'redux-thunk';
 import {
   ID3GraphNode,
   IAPIGraphNode,
-  IAPIGraphEdges,
+  IAPIGraphEdges
 } from '../types/graphTypes';
 import * as constants from '../constants/actions';
 import { getResultNodes, getNodeContext } from './apiRequests';
@@ -21,7 +21,7 @@ export const fetchAvailableNodes: ActionCreator<
     const result = await getResultNodes(resultID);
     return dispatch({
       type: constants.ADD_AVAILABLE_NODES as constants.ADD_AVAILABLE_NODES,
-      availableNodes: result,
+      availableNodes: result
     });
   };
 };
@@ -37,18 +37,17 @@ export const addNode: ActionCreator<
   ThunkAction<Promise<Action>, IState, void, Action>
 > = (nodeID: number) => {
   return async (dispatch: Dispatch<Action>): Promise<IAddNode> => {
-    let resultID;
-    try {
-      resultID = window.location.href.match(new RegExp('\\d*$'))![0];
-    } catch (error) {
-      throw error;
+    const match = window.location.href.match(new RegExp('\\d*$'));
+    if (!match || !match[0]) {
+      throw new Error();
     }
-    const result = await getNodeContext(nodeID, Number(resultID!));
+    const resultID = match[0];
+    const result = await getNodeContext(nodeID, Number(resultID));
     return dispatch({
       type: constants.ADD_NODE as constants.ADD_NODE,
       contextNodes: result.context_nodes,
       addNode: result.main_node,
-      edges: result.edges,
+      edges: result.edges
     });
   };
 };
@@ -61,7 +60,7 @@ export interface IRemoveNode {
 export function removeNode(node: ID3GraphNode): IRemoveNode {
   return {
     type: constants.REMOVE_NODE,
-    node,
+    node
   };
 }
 
@@ -71,7 +70,7 @@ export interface INewLayout {
 
 export function newLayout(): INewLayout {
   return {
-    type: constants.NEW_GRAPH_LAYOUT,
+    type: constants.NEW_GRAPH_LAYOUT
   };
 }
 
@@ -81,7 +80,7 @@ export interface IToggleFreezeLayout {
 
 export function toggleFreezeLayout(): IToggleFreezeLayout {
   return {
-    type: constants.TOGGLE_FREEZE_LAYOUT,
+    type: constants.TOGGLE_FREEZE_LAYOUT
   };
 }
 
