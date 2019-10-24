@@ -7,17 +7,17 @@ describe('<ListElementExperiment />', () => {
     const tree = renderer
       .create(
         <ListElementExperiment
-          title='Test Title'
-          status='success'
-          statusText='done'
-          content='Test Content'
+          title="Test Title"
+          status="success"
+          statusText="done"
+          content="Test Content"
           onDelete={() => undefined}
           onDuplicate={() => undefined}
           onRunStart={() => undefined}
           onExplore={() => undefined}
           onView={() => undefined}
           onShowDetails={() => undefined}
-        />,
+        />
       )
       .toJSON();
 

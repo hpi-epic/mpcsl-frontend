@@ -9,16 +9,16 @@ export const NodeSelection = (props: {
 }) => {
   return (
     <Row
-      type='flex'
-      align='middle'
-      justify='space-around'
+      type="flex"
+      align="middle"
+      justify="space-around"
       style={{ height: '100%' }}
     >
       <Col span={12}>
         <Select
           showSearch={true}
           placeholder={props.placeholder}
-          onChange={(value) => props.onNodeSelection(value.toString())}
+          onChange={value => props.onNodeSelection(value.toString())}
           style={{ width: '100%' }}
         >
           {props.nodes.map((node: ID3GraphNode) => (

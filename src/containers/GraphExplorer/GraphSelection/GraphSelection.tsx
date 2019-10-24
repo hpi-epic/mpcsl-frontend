@@ -25,10 +25,6 @@ interface IGraphSelectionProps extends RouteComponentProps<IMatchParams> {
 }
 
 class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
-  constructor(props: IGraphSelectionProps) {
-    super(props);
-  }
-
   public componentDidMount() {
     this.props.fecthAvailableNodes(Number(this.props.match.params.result_id));
   }
@@ -36,7 +32,7 @@ class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
   public render() {
     return (
       <Layout>
-        <Layout.Sider className='graphSelectionSider'>
+        <Layout.Sider className="graphSelectionSider">
           <GraphNodeList
             nodes={this.props.nodes}
             onRemoveNode={this.props.onRemoveNode}
@@ -53,21 +49,21 @@ export function mapStateToProps(state: IState) {
   return {
     nodes: state.graphExplorer!.nodes,
     availableNodes: state.graphExplorer!.availableNodes,
-    currentResultID: state.graphExplorer!.resultID!,
+    currentResultID: state.graphExplorer!.resultID!
   };
 }
 
 export function mapDispatchToProps(
-  dispatch: ThunkDispatch<IState, void, actions.GraphExplorerAction>,
+  dispatch: ThunkDispatch<IState, void, actions.GraphExplorerAction>
 ) {
   return {
     fecthAvailableNodes: (resultID: number) =>
       dispatch(actions.fetchAvailableNodes(resultID)),
-    onRemoveNode: (node: ID3GraphNode) => dispatch(actions.removeNode(node)),
+    onRemoveNode: (node: ID3GraphNode) => dispatch(actions.removeNode(node))
   };
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(GraphSelection);

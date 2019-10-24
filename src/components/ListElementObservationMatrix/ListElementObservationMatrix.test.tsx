@@ -7,11 +7,11 @@ describe('<ListElementObservationMatrix />', () => {
     const tree = renderer
       .create(
         <ListElementObservationMatrix
-          title='Test ObservationMatrix'
-          content='A Test ObeservationMatrix'
+          title="Test ObservationMatrix"
+          content="A Test ObeservationMatrix"
           onDelete={() => undefined}
           onView={() => undefined}
-        />,
+        />
       )
       .toJSON();
 

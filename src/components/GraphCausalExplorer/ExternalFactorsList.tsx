@@ -17,19 +17,20 @@ const ExternalFactorList = (props: {
       style={{
         backgroundColor: 'white',
         overflow: 'hidden',
-        overflowY: 'scroll',
+        overflowY: 'scroll'
       }}
     >
       <List
-        size='small'
+        size="small"
         header={
           <div style={{ padding: '14px', fontWeight: 'bold' }}>
             External Factors
-          </div>}
+          </div>
+        }
         dataSource={props.externalFactorsNodes}
         renderItem={(item: IExternalFactorNode) => (
           <Tooltip
-            placement='topLeft'
+            placement="topLeft"
             title={item.label}
             overlayStyle={{ paddingLeft: '4px' }}
           >
@@ -37,14 +38,14 @@ const ExternalFactorList = (props: {
               onClick={() => {
                 props.onExternalFactorClick(item.id);
               }}
-              className='external-factor-list-item'
+              className="external-factor-list-item"
             >
               <List.Item key={item.id} style={{ paddingLeft: '14px' }}>
                 <div style={{ width: '100%' }}>
-                  <Row type='flex' justify='space-around' gutter={12}>
+                  <Row type="flex" justify="space-around" gutter={12}>
                     <Col span={10}>{item.label}</Col>
                     <Col span={2}>
-                      {item.edited ? <Icon type='edit' /> : null}
+                      {item.edited ? <Icon type="edit" /> : null}
                     </Col>
                   </Row>
                 </div>

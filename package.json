@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@blueprintjs/core": "^3.19.1",
+    "@blueprintjs/icons": "^3.11.0",
     "antd": "^3.24.2",
     "axios": "^0.19.0",
     "d3": "^5.12.0",
@@ -26,6 +28,7 @@
     "@types/axios": "^0.14.0",
     "@types/d3": "^5.7.2",
     "@types/jest": "24.0.19",
+    "@types/node": "12.11.6",
     "@types/react": "16.9.9",
     "@types/react-dom": "16.9.2",
     "@types/react-lazylog": "^3.1.1",
@@ -37,9 +40,12 @@
     "@types/redux-thunk": "^2.1.0",
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",
+    "eslint": "6.5.1",
     "eslint-config-prettier": "^6.4.0",
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-prettier": "^3.1.1",
+    "husky": "^3.0.9",
+    "lint-staged": "^9.4.2",
     "prettier": "^1.18.2"
   },
   "scripts": {
@@ -47,16 +53,38 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint src/**/*.ts{,x}"
+    "lint": "eslint \"./src/**/*.{ts,tsx}\"",
+    "prettier": "prettier \"**/*.{json,md,scss,yaml,yml}\""
   },
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
-  "proxy": "http://localhost:5000"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "proxy": "http://localhost:5000",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{json,md,scss,yaml,yml}": [
+      "prettier --write",
+      "git add"
+    ]
+  }
 }

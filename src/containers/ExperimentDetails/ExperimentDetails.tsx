@@ -1,13 +1,15 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Button, List, Badge, Icon, Modal, Select } from 'antd';
-import { LazyLog } from 'react-lazylog';
+import { LazyLog as _LazyLog } from 'react-lazylog';
 import moment from 'moment';
 import { IExperiment, IJob, GraphExportFormat } from '../../types';
 import { getJobsForExperiment, getExperiment } from '../../actions/apiRequests';
 import Endpoints from '../../constants/api';
 import './style.css';
 import Axios from 'axios';
+
+const LazyLog: any = _LazyLog;
 
 interface IStateJobsManagement {
   modalVisible: boolean;
@@ -33,7 +35,7 @@ class ExperimentDetails extends React.Component<
     running: 'processing',
     done: 'success',
     error: 'error',
-    cancelled: 'warning',
+    cancelled: 'warning'
   };
 
   constructor(props: RouteComponentProps<IMatchParams>) {
@@ -47,32 +49,32 @@ class ExperimentDetails extends React.Component<
       jobList: [],
       currentResultID: undefined,
       experiment: undefined,
-      format: GraphExportFormat.GEXF,
+      format: GraphExportFormat.GEXF
     };
   }
 
   public componentDidMount = () => {
     this.fetchExperiment(Number(this.props.match.params.experiment_id));
-  }
+  };
 
   public render() {
     if (this.state.experiment) {
       return (
-        <div className='Content'>
+        <div className="Content">
           <Button
-            className='Go-Back-Button'
+            className="Go-Back-Button"
             onClick={() => this.onGoBack()}
-            type='primary'
+            type="primary"
             ghost={true}
           >
-            <Icon type='left' />
+            <Icon type="left" />
           </Button>
           <h2>
             Experiment: <i>{this.state.experiment.name}</i>
           </h2>
           <List
-            itemLayout='horizontal'
-            className='Job-List'
+            itemLayout="horizontal"
+            className="Job-List"
             header={<h3>Job List</h3>}
             dataSource={this.state.jobList}
             renderItem={(job: IJob) => (
@@ -80,18 +82,16 @@ class ExperimentDetails extends React.Component<
                 actions={[
                   <Button
                     key={1}
-                    type='primary'
+                    type="primary"
                     ghost={true}
-                    onClick={() =>
-                      this.onExploreExperiment(job.result!.id)
-                    }
+                    onClick={() => this.onExploreExperiment(job.result!.id)}
                     disabled={job.status === 'done' ? false : true}
                   >
                     explore
                   </Button>,
                   <Button
                     key={2}
-                    type='primary'
+                    type="primary"
                     ghost={true}
                     onClick={() => this.showDownloadModal(job.result!.id)}
                     disabled={job.status === 'done' ? false : true}
@@ -100,11 +100,11 @@ class ExperimentDetails extends React.Component<
                   </Button>,
                   <Button
                     key={3}
-                    type='primary'
+                    type="primary"
                     onClick={() => this.showModal(job.id)}
                   >
                     view logs
-                  </Button>,
+                  </Button>
                 ]}
               >
                 <List.Item.Meta
@@ -112,7 +112,7 @@ class ExperimentDetails extends React.Component<
                     <div>
                       {<h3> Job #{job.id}</h3>}
                       <Badge
-                        className='Job-Badge'
+                        className="Job-Badge"
                         status={this.jobBadgeMap[job.status]}
                         text={job.status}
                       />
@@ -124,7 +124,7 @@ class ExperimentDetails extends React.Component<
                         {' '}
                         Starting Time:{' '}
                         {moment(job.start_time).format(
-                          'dddd, MMMM Do YYYY, h:mm:ss a',
+                          'dddd, MMMM Do YYYY, h:mm:ss a'
                         )}
                       </i>
                     </div>
@@ -143,15 +143,18 @@ class ExperimentDetails extends React.Component<
             destroyOnClose={true}
           >
             <LazyLog
-              url={Endpoints.jobLogs(this.state.currentJobId!)}
+              url={
+                this.state.currentJobId
+                  ? Endpoints.jobLogs(this.state.currentJobId)
+                  : undefined
+              }
               stream={true}
               follow={true}
               width={772}
               height={500}
               onError={this.handleError}
-              // @ts-ignore
-              extraLines={this.state.extraLines}
               selectableLines={true}
+              extraLines={this.state.extraLines}
             />
           </Modal>
           <Modal
@@ -168,8 +171,11 @@ class ExperimentDetails extends React.Component<
               style={{ width: 250 }}
               value={this.state.format}
             >
-              {Object.keys(GraphExportFormat).map((key: any) => (
-                <Select.Option value={GraphExportFormat[key]} key={key}>
+              {Object.keys(GraphExportFormat).map(key => (
+                <Select.Option
+                  value={(GraphExportFormat as any)[key]}
+                  key={key}
+                >
                   {key}
                 </Select.Option>
               ))}
@@ -184,54 +190,54 @@ class ExperimentDetails extends React.Component<
   private showModal = (jobId: number) => {
     this.setState({
       currentJobId: jobId,
-      modalVisible: true,
+      modalVisible: true
     });
-  }
-  private handleError = (error: any) => {
+  };
+  private handleError = () => {
     this.setState({
-      extraLines: 0,
+      extraLines: 0
     });
-  }
+  };
 
-  private handleCancel = (e: any) => {
+  private handleCancel = () => {
     this.setState({
       modalVisible: false,
-      extraLines: 1,
+      extraLines: 1
     });
-  }
+  };
 
-  private handleDownloadCancel = (e: any) => {
+  private handleDownloadCancel = () => {
     this.setState({
-      downloadModalVisible: false,
+      downloadModalVisible: false
     });
-  }
+  };
 
-  private handleDownload = (e: any) => {
+  private handleDownload = () => {
     this.setState({
-      downloadModalVisible: false,
+      downloadModalVisible: false
     });
 
     Axios.get(
-      Endpoints.resultExport(this.state.currentResultID!, this.state.format),
-    ).then((response) => {
+      Endpoints.resultExport(this.state.currentResultID!, this.state.format)
+    ).then(response => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute(
         'download',
-        `result${this.state.currentResultID}.${this.state.format}`,
+        `result${this.state.currentResultID}.${this.state.format}`
       );
       document.body.appendChild(link);
       link.click();
     });
-  }
+  };
 
   private showDownloadModal = (resultID: number) => {
     this.setState({
       downloadModalVisible: true,
-      currentResultID: resultID,
+      currentResultID: resultID
     });
-  }
+  };
 
   private async fetchJobs(experiment: IExperiment) {
     const jobList = await getJobsForExperiment(experiment);
@@ -246,11 +252,11 @@ class ExperimentDetails extends React.Component<
 
   private onExploreExperiment = (resultId: number) => {
     this.props.history.push(`/graph-explorer/selection/${resultId}`);
-  }
+  };
 
   private onGoBack = () => {
     this.props.history.push('/manager/experiments');
-  }
+  };
 }
 
 export default ExperimentDetails;

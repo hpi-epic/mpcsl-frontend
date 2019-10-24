@@ -5,7 +5,6 @@ import * as actions from '../../../actions/graphExplorer';
 
 import { Button, Row, Checkbox, Col } from 'antd';
 import { IState } from '../../../store';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 import './GraphRenderer.css';
 import { ID3GraphNode } from '../../../types/graphTypes';
@@ -42,7 +41,7 @@ const graphSettings = {
   forceLinkDistance: 75,
   labelColor: 'black',
   labelDistance: 2,
-  labelDirection: 1,
+  labelDirection: 1
 };
 
 class GraphRenderer extends React.Component<
@@ -58,7 +57,7 @@ class GraphRenderer extends React.Component<
     super(props);
     this.state = {
       width: window.innerWidth,
-      height: window.innerHeight,
+      height: window.innerHeight
     };
 
     this.force = d3
@@ -66,11 +65,11 @@ class GraphRenderer extends React.Component<
       .force('charge', d3.forceManyBody().strength(-300))
       .force(
         'center',
-        d3.forceCenter(this.state.width / 2, this.state.height / 2),
+        d3.forceCenter(this.state.width / 2, this.state.height / 2)
       )
       .force(
         'collision',
-        d3.forceCollide().radius(graphSettings.nodeColission),
+        d3.forceCollide().radius(graphSettings.nodeColission)
       );
   }
 
@@ -101,17 +100,17 @@ class GraphRenderer extends React.Component<
     const defs = (
       <defs>
         <marker
-          id='arrow'
-          viewBox='-0 -5 10 10'
+          id="arrow"
+          viewBox="-0 -5 10 10"
           refX={graphSettings.nodeRadius + 7}
-          refY='0'
-          orient='auto'
-          markerWidth='13'
-          markerHeight='13'
+          refY="0"
+          orient="auto"
+          markerWidth="13"
+          markerHeight="13"
           opacity={graphSettings.linkOpacity}
         >
           <path
-            d='M 0,-5 L 10 ,0 L 0,5'
+            d="M 0,-5 L 10 ,0 L 0,5"
             fill={graphSettings.linkColor}
             style={{ stroke: 'none' }}
           />
@@ -120,11 +119,11 @@ class GraphRenderer extends React.Component<
     );
 
     const menu = (
-      <Row type='flex' justify='start'>
+      <Row type="flex" justify="start">
         <Col span={3}>
           <Button onClick={this.onReLayout}>Re-Layout</Button>
         </Col>
-        <Col span={4} className='GraphRenderer-Menu'>
+        <Col span={4} className="GraphRenderer-Menu">
           <Checkbox defaultChecked={true} onChange={this.onFreezeChange}>
             Freeze Layout
           </Checkbox>
@@ -137,12 +136,12 @@ class GraphRenderer extends React.Component<
       <div>
         {this.props.showMenu ? menu : null}
         <svg
-          ref={(svg) => (this.svg = d3.select(svg))}
+          ref={svg => (this.svg = d3.select(svg))}
           width={this.state.width}
           height={this.state.height}
         >
           {defs}
-          <g ref={(graph) => (this.graph = d3.select(graph))} />
+          <g ref={graph => (this.graph = d3.select(graph))} />
         </svg>
       </div>
     );
@@ -151,7 +150,7 @@ class GraphRenderer extends React.Component<
   public enterGraphChanges = (props: IGraphRendererProps) => {
     this.enterGraph(props);
     this.force.alpha(1).restart();
-  }
+  };
 
   public enterGraph = (props: IGraphRendererProps) => {
     const nodes = this.graph
@@ -178,12 +177,12 @@ class GraphRenderer extends React.Component<
       d3
         .forceLink(props.selectedGraph.links)
         .distance(graphSettings.forceLinkDistance)
-        .id((d: any) => d.id),
+        .id((d: any) => d.id)
     );
 
     const zoomHandler = d3.zoom().on('zoom', this.zoomActions);
     zoomHandler(this.svg);
-  }
+  };
 
   public enterNode = (selection: d3.Selection<any, any, any, any>) => {
     selection.classed('node', true);
@@ -227,93 +226,85 @@ class GraphRenderer extends React.Component<
       .attr(
         'x',
         graphSettings.labelDirection *
-          (graphSettings.nodeRadius + graphSettings.labelDistance),
+          (graphSettings.nodeRadius + graphSettings.labelDistance)
       )
       .attr('y', graphSettings.nodeRadius / 2)
       .text((d: ID3GraphNode) => {
         return d.label!.length > 20 ? d.label.slice(0, 20) + '...' : d.label;
       })
       .attr('class', 'Node-Label');
-  }
+  };
 
   public updateNode = (selection: d3.Selection<any, any, any, any>) => {
     selection
-      .attr('transform', (d) => `translate(${d.x ? d.x : 0},${d.y ? d.y : 0})`)
+      .attr('transform', d => `translate(${d.x ? d.x : 0},${d.y ? d.y : 0})`)
       .select('circle')
-      .attr(
-        'fill',
-        (d: ID3GraphNode): string => {
-          return d.isContext
-            ? graphSettings.contextNodeColor
-            : graphSettings.focusNodeColor;
-        },
-      )
+      .attr('fill', (d: ID3GraphNode): string => {
+        return d.isContext
+          ? graphSettings.contextNodeColor
+          : graphSettings.focusNodeColor;
+      })
       .attr('stroke', graphSettings.nodeStroke)
       .attr('stroke-width', graphSettings.nodeStrokeWidth)
-      .attr(
-        'stroke-dasharray',
-        (d: ID3GraphNode): string => {
-          return d.isContext
-            ? graphSettings.contextNodeStrokeDashArray
-            : 'none';
-        },
-      );
-  }
+      .attr('stroke-dasharray', (d: ID3GraphNode): string => {
+        return d.isContext ? graphSettings.contextNodeStrokeDashArray : 'none';
+      });
+  };
 
   public enterLink = (selection: d3.Selection<any, any, any, any>) => {
     selection
       .classed('link', true)
-      .attr('stroke-width', (d) => d.size)
+      .attr('stroke-width', d => d.size)
       .attr('stroke', graphSettings.linkColor)
       .attr('stroke-width', graphSettings.linkStrokeWidth)
       .attr('opacity', graphSettings.linkOpacity)
       .attr('marker-end', 'url(#arrow)');
-  }
+  };
 
   public updateLink = (selection: d3.Selection<any, any, any, any>) => {
     selection
-      .attr('x1', (d) => d.source.x)
-      .attr('y1', (d) => d.source.y)
-      .attr('x2', (d) => d.target.x)
-      .attr('y2', (d) => d.target.y);
-  }
+      .attr('x1', d => d.source.x)
+      .attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x)
+      .attr('y2', d => d.target.y);
+  };
 
   public updateGraph = (selection: d3.Selection<any, any, any, any>) => {
     selection.selectAll('.node').call(this.updateNode);
     selection.selectAll('.link').call(this.updateLink);
-  }
+  };
 
   private zoomActions = () => {
     this.graph.attr('transform', d3.event.transform);
-  }
+  };
 
   private onReLayout = () => {
     this.props.resetLayout();
     this.shouldComponentUpdate(this.props);
-  }
+  };
 
-  private onFreezeChange = (e: CheckboxChangeEvent) => {
+  private onFreezeChange = () => {
     this.props.toggleFreezeLayout();
-  }
+  };
 }
 
 export function mapStateToProps(state: IState) {
   return {
-    selectedGraph: state.graphExplorer!.selectedGraph,
+    selectedGraph: state.graphExplorer!.selectedGraph
   };
 }
 
 export function mapDispatchToProps(
-  dispatch: ThunkDispatch<IState, void, actions.GraphExplorerAction>,
+  dispatch: ThunkDispatch<IState, void, actions.GraphExplorerAction>
 ) {
   return {
     resetLayout: () => dispatch(actions.newLayout()),
     onAddNode: (nodeID: number) => dispatch(actions.addNode(nodeID)),
-    toggleFreezeLayout: () => dispatch(actions.toggleFreezeLayout()),
+    toggleFreezeLayout: () => dispatch(actions.toggleFreezeLayout())
   };
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(GraphRenderer);

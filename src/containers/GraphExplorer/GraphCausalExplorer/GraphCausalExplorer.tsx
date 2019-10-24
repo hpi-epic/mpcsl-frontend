@@ -16,14 +16,15 @@ import {
   getNodeDataDistribution,
   getConditionalNodeDataDistribution,
   getInterventionNodeDataDistribution,
-  getConfounders,
+  getConfounders
 } from '../../../actions/apiRequests';
 import DataDistributionPlot from '../../../components/DataDistributions/DataDistributionPlot';
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import { SizeMe } from 'react-sizeme';
 import GraphDataModal from '../GraphDataModal';
 import ExternalFactorList, {
-  IExternalFactorNode,
+  IExternalFactorNode
 } from '../../../components/GraphCausalExplorer/ExternalFactorsList';
 
 interface IGraphCausalExplorerProps {
@@ -61,7 +62,27 @@ const cardBodyStyle = {
   height: '100%',
   padding: '12px 18px 12px 18px',
   display: 'flex',
-  flexFlow: 'column',
+  flexFlow: 'column'
+};
+
+const getApiCondition = (node: INode): ISelectionAPITypes | undefined => {
+  if (node.distribution.categorical) {
+    const values = Object.keys(node.selection as {}).map((bin: string) => bin);
+    if (values.length > 0) {
+      return {
+        categorical: true,
+        values: Object.keys(node.selection as {}).map((bin: string) => bin)
+      };
+    } else {
+      return undefined;
+    }
+  } else {
+    return {
+      categorical: false,
+      from_value: (node.selection as any).selectionStart,
+      to_value: (node.selection as any).selectionEnd
+    };
+  }
 };
 
 class GraphCausalExplorer extends React.Component<
@@ -79,7 +100,7 @@ class GraphCausalExplorer extends React.Component<
       dataModalVisible: false,
       selectedExternalFactorID: undefined,
       selectedNodeDataDistribution: undefined,
-      isIntervention: false,
+      isIntervention: false
     };
   }
   public render() {
@@ -87,7 +108,7 @@ class GraphCausalExplorer extends React.Component<
       (node: ID3GraphNode) =>
         this.state.effectNode &&
         node.id !== this.state.effectNode!.nodeID &&
-        (this.state.causalNode && node.id !== this.state.causalNode!.nodeID),
+        (this.state.causalNode && node.id !== this.state.causalNode!.nodeID)
     );
 
     // add information about whether node distribution was edited
@@ -100,15 +121,15 @@ class GraphCausalExplorer extends React.Component<
         ) {
           return {
             ...node,
-            edited: true,
+            edited: true
           };
         } else {
           return {
             ...node,
-            edited: false,
+            edited: false
           };
         }
-      },
+      }
     );
 
     const elementMap: { [viewId: string]: JSX.Element } = {
@@ -148,7 +169,7 @@ class GraphCausalExplorer extends React.Component<
                   onDataSelection={(data: ISelectionTypes) =>
                     this.onExternalFactorDataChange(
                       this.state.selectedExternalFactorID!,
-                      data,
+                      data
                     )
                   }
                   selection={
@@ -169,7 +190,7 @@ class GraphCausalExplorer extends React.Component<
       renderer: (
         <div style={{ overflow: 'hidden', position: 'relative' }}>
           <GraphRenderer
-            key='test'
+            key="test"
             isSelectionMode={false}
             showMenu={false}
             onNodeClick={this.showDataModal}
@@ -200,9 +221,9 @@ class GraphCausalExplorer extends React.Component<
                     !node.isContext &&
                     ((this.state.effectNode &&
                       node.id !== this.state.effectNode!.nodeID) ||
-                      !this.state.effectNode),
+                      !this.state.effectNode)
                 )}
-                placeholder='Select a Causal Node'
+                placeholder="Select a Causal Node"
               />
             ) : (
               <SizeMe monitorHeight={true}>
@@ -241,9 +262,9 @@ class GraphCausalExplorer extends React.Component<
                     !node.isContext &&
                     ((this.state.causalNode &&
                       node.id !== this.state.causalNode!.nodeID) ||
-                      !this.state.causalNode),
+                      !this.state.causalNode)
                 )}
-                placeholder='Select an Effect Node'
+                placeholder="Select an Effect Node"
               />
             ) : (
               <SizeMe monitorHeight={true}>
@@ -259,7 +280,7 @@ class GraphCausalExplorer extends React.Component<
             )}
           </div>
         </Card>
-      ),
+      )
     };
 
     return (
@@ -268,18 +289,18 @@ class GraphCausalExplorer extends React.Component<
           width: '100%',
           height: '100%',
           margin: 0,
-          backgroundColor: 'white',
+          backgroundColor: 'white'
         }}
       >
         <Mosaic<string>
-          renderTile={(id) => elementMap[id]}
+          renderTile={id => elementMap[id]}
           initialValue={{
             direction: 'row',
             first: {
               direction: 'column',
               first: 'externFactors',
               second: 'externFactorsDistribution',
-              splitPercentage: 55,
+              splitPercentage: 55
             },
             second: {
               direction: 'column',
@@ -287,11 +308,11 @@ class GraphCausalExplorer extends React.Component<
               second: {
                 direction: 'row',
                 first: 'firstConditionNode',
-                second: 'exploreNode',
+                second: 'exploreNode'
               },
-              splitPercentage: 55,
+              splitPercentage: 55
             },
-            splitPercentage: 20,
+            splitPercentage: 20
           }}
         />
       </div>
@@ -304,10 +325,10 @@ class GraphCausalExplorer extends React.Component<
       effectNode: {
         nodeID,
         distribution,
-        nodeLabel: distribution.node.name,
-      },
+        nodeLabel: distribution.node.name
+      }
     });
-  }
+  };
 
   private onCausalNodeClick = async (nodeID: string) => {
     const distribution = await getNodeDataDistribution(nodeID);
@@ -315,10 +336,10 @@ class GraphCausalExplorer extends React.Component<
       causalNode: {
         nodeID,
         distribution,
-        nodeLabel: distribution.node.name,
-      },
+        nodeLabel: distribution.node.name
+      }
     });
-  }
+  };
 
   private onExternalFactorClick = async (nodeID: string) => {
     if (
@@ -331,50 +352,50 @@ class GraphCausalExplorer extends React.Component<
       externalFactors[nodeID] = {
         nodeID,
         distribution,
-        nodeLabel: distribution.node.name,
+        nodeLabel: distribution.node.name
       };
 
       this.setState({
         selectedExternalFactorID: nodeID,
-        externalFactors,
+        externalFactors
       });
     } else {
       this.setState({
-        selectedExternalFactorID: nodeID,
+        selectedExternalFactorID: nodeID
       });
     }
-  }
+  };
 
   private onExternalFactorDataChange = (
     nodeID: string,
-    data: ISelectionTypes,
+    data: ISelectionTypes
   ) => {
     const externalFactors = this.state.externalFactors;
     externalFactors![nodeID].selection = {
-      ...data,
+      ...data
     };
 
     this.setState(
       {
-        externalFactors,
+        externalFactors
       },
-      () => this.onDataDistributionChange(),
+      () => this.onDataDistributionChange()
     );
-  }
+  };
 
   private onCausalNodeDataChange = (data: ISelectionTypes) => {
     if ('selectionEnd' in data) {
       if (data.selectionStart && data.selectionEnd) {
         const causalNode = {
           ...this.state.causalNode!,
-          selection: data,
+          selection: data
         };
 
         this.setState(
           {
-            causalNode,
+            causalNode
           },
-          () => this.onDataDistributionChange(),
+          () => this.onDataDistributionChange()
         );
       }
     } else {
@@ -382,13 +403,13 @@ class GraphCausalExplorer extends React.Component<
         {
           causalNode: {
             ...this.state.causalNode!,
-            selection: data,
-          },
+            selection: data
+          }
         },
-        () => this.onDataDistributionChange(),
+        () => this.onDataDistributionChange()
       );
     }
-  }
+  };
 
   private onDataDistributionChange = async () => {
     if (this.state.effectNode && this.state.causalNode) {
@@ -403,20 +424,20 @@ class GraphCausalExplorer extends React.Component<
             message.error('Select only one category');
           } else {
             const confounders = await getConfounders(
-              this.state.causalNode.nodeID,
+              this.state.causalNode.nodeID
             );
             distribution = await getInterventionNodeDataDistribution(
               this.state.causalNode.nodeID,
               this.state.effectNode.nodeID,
               confounders.confounders[0],
-              condition[0],
+              condition[0]
             );
             const effectNode = this.state.effectNode;
             this.setState({
               effectNode: {
                 ...effectNode,
-                distribution,
-              },
+                distribution
+              }
             });
           }
         } else {
@@ -449,12 +470,12 @@ class GraphCausalExplorer extends React.Component<
 
         if (Object.keys(distributions).length < 1) {
           distribution = await getNodeDataDistribution(
-            this.state.effectNode.nodeID,
+            this.state.effectNode.nodeID
           );
         } else {
           distribution = await getConditionalNodeDataDistribution(
             this.state.effectNode.nodeID,
-            distributions,
+            distributions
           );
         }
 
@@ -462,66 +483,46 @@ class GraphCausalExplorer extends React.Component<
         this.setState({
           effectNode: {
             ...effectNode,
-            distribution,
-          },
+            distribution
+          }
         });
       }
     }
-  }
+  };
 
   private showDataModal = async (node: ID3GraphNode) => {
     const nodeDistribution: IAPIDistribution = await getNodeDataDistribution(
-      String(node.id),
+      String(node.id)
     );
     this.setState({
       dataModalVisible: true,
-      selectedNodeDataDistribution: nodeDistribution,
+      selectedNodeDataDistribution: nodeDistribution
     });
-  }
+  };
 
   private closeDataModal = () => {
     this.setState({
-      dataModalVisible: false,
+      dataModalVisible: false
     });
-  }
+  };
 
   private toggleIntervention = () => {
     const isInterv = this.state.isIntervention;
     this.setState(
       {
-        isIntervention: !isInterv,
+        isIntervention: !isInterv
       },
-      this.onDataDistributionChange,
+      this.onDataDistributionChange
     );
-  }
+  };
 }
 
 export function mapStateToProps(state: IState) {
   return {
     nodes: state.graphExplorer!.nodes,
     availableNodes: state.graphExplorer!.availableNodes,
-    selectedGraph: state.graphExplorer!.selectedGraph,
+    selectedGraph: state.graphExplorer!.selectedGraph
   };
 }
-
-const getApiCondition = (node: INode): ISelectionAPITypes | undefined => {
-  if (node.distribution.categorical) {
-    const values = Object.keys(node.selection as {}).map((bin: string) => bin);
-    if (values.length > 0) {
-      return {
-        categorical: true,
-        values: Object.keys(node.selection as {}).map((bin: string) => bin),
-      };
-    } else {
-      return undefined;
-    }
-  } else {
-    return {
-      categorical: false,
-      from_value: (node.selection as any).selectionStart,
-      to_value: (node.selection as any).selectionEnd,
-    };
-  }
-};
 
 export default connect(mapStateToProps)(GraphCausalExplorer);

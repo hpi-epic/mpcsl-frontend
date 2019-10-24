@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import {
   XYPlot,
@@ -10,7 +12,7 @@ import {
   // @ts-ignore
   ChartLabel,
   // @ts-ignore
-  Highlight,
+  Highlight
 } from 'react-vis';
 
 import 'react-vis/dist/style.css';
@@ -43,7 +45,7 @@ class CategoricalPlot extends React.Component<
 
     this.state = {
       value: undefined,
-      selectedValues,
+      selectedValues
     };
   }
 
@@ -57,14 +59,14 @@ class CategoricalPlot extends React.Component<
       return {
         x: value.x,
         y: Number(((value.y / count) * 100).toFixed(1)),
-        count: value.y,
+        count: value.y
       };
     });
 
     return (
       <div>
         <XYPlot
-          xType='ordinal'
+          xType="ordinal"
           width={this.props.plotWidth}
           height={this.props.plotHeight}
           onMouseLeave={() => this.setState({ value: undefined })}
@@ -79,8 +81,8 @@ class CategoricalPlot extends React.Component<
             opacity={0.8}
             style={{ stroke: '#fff' }}
             data={data}
-            colorType='literal'
-            getColor={(d) => {
+            colorType="literal"
+            getColor={d => {
               if (Object.keys(this.state.selectedValues).length === 0) {
                 return '#1e96be';
               } else if (d.x in this.state.selectedValues) {
@@ -98,7 +100,7 @@ class CategoricalPlot extends React.Component<
                   selectedValues[d.x] = d.y;
                 }
                 this.setState({
-                  selectedValues,
+                  selectedValues
                 });
 
                 if (this.props.onDataSelection) {
@@ -115,7 +117,7 @@ class CategoricalPlot extends React.Component<
 
   private onHover = (value: any) => {
     this.setState({ value });
-  }
+  };
 }
 
 export default CategoricalPlot;

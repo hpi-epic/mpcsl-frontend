@@ -20,22 +20,32 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
   const menu = (
     <Menu>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.onShowDetails} key='1'>
+        <Button
+          className="Dropdown-Button"
+          onClick={props.onShowDetails}
+          key="1"
+        >
           View Jobs
         </Button>
       </Menu.Item>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.onView} key='1'>
+        <Button className="Dropdown-Button" onClick={props.onView} key="1">
           View Settings
         </Button>
       </Menu.Item>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.onDuplicate} key='3'>
+        <Button className="Dropdown-Button" onClick={props.onDuplicate} key="3">
           Duplicate
         </Button>
       </Menu.Item>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.onDelete} type='danger' ghost={true} key='4'>
+        <Button
+          className="Dropdown-Button"
+          onClick={props.onDelete}
+          type="danger"
+          ghost={true}
+          key="4"
+        >
           Delete
         </Button>
       </Menu.Item>
@@ -44,9 +54,11 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
 
   const cardTitle = (
     <div>
-      <button className='Card-Title' onClick={props.onShowDetails}>{props.title}</button>
+      <button className="Card-Title" onClick={props.onShowDetails}>
+        {props.title}
+      </button>
       <Badge
-        className='Card-Badge'
+        className="Card-Badge"
         text={props.statusText}
         status={props.status}
       />
@@ -56,22 +68,27 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
   return (
     <div>
       <List.Item>
-        <Card className='Card' title={cardTitle}>
-          <p className='Card-Content Experiment-Content'>{props.content}</p>
+        <Card className="Card" title={cardTitle}>
+          <p className="Card-Content Experiment-Content">{props.content}</p>
           <div>
-            <Dropdown overlay={menu} placement='bottomLeft'>
-              <Button className='List-Buttons' icon='ellipsis' />
+            <Dropdown overlay={menu} placement="bottomLeft">
+              <Button className="List-Buttons" icon="ellipsis" />
             </Dropdown>
             <Button
-              className='List-Buttons'
+              className="List-Buttons"
               onClick={props.onExplore}
-              type='primary'
+              type="primary"
               ghost={true}
               disabled={props.status === 'success' ? false : true}
             >
               Explore
             </Button>
-            <Button className='List-Buttons' onClick={props.onRunStart} type='primary' ghost={true}>
+            <Button
+              className="List-Buttons"
+              onClick={props.onRunStart}
+              type="primary"
+              ghost={true}
+            >
               Run
             </Button>
           </div>

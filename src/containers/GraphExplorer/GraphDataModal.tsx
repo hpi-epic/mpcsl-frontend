@@ -33,7 +33,7 @@ class GraphDataModal extends React.Component<
       cardHeight: 280,
       plotWidth: 250,
       plotHeight: 150,
-      expanded: false,
+      expanded: false
     };
   }
 
@@ -43,20 +43,20 @@ class GraphDataModal extends React.Component<
         {
           title: 'Dataset Name',
           dataIndex: 'datasetname',
-          key: 'datasetname',
+          key: 'datasetname'
         },
         {
           title: 'Data Source (DB)',
           dataIndex: 'dataSource',
-          key: 'dataSource',
-        },
+          key: 'dataSource'
+        }
       ];
       const tableData = [
         {
           key: '1',
           datasetname: this.props.data.dataset.name,
-          dataSource: this.props.data.dataset.data_source,
-        },
+          dataSource: this.props.data.dataset.data_source
+        }
       ];
       return (
         <div
@@ -64,14 +64,14 @@ class GraphDataModal extends React.Component<
             bottom: this.props.position.bottom,
             right: this.props.position.right,
             position: this.props.position.type,
-            margin: '10px',
+            margin: '10px'
           }}
         >
           <Card
             title={`Node: ${this.props.data!.node.name}`}
             style={{
               width: this.state.cardWidth,
-              height: this.state.cardHeight,
+              height: this.state.cardHeight
             }}
             extra={
               <div>
@@ -79,10 +79,10 @@ class GraphDataModal extends React.Component<
                   this.state.expanded ? (
                     <Button
                       onClick={() => this.showLess()}
-                      icon='fullscreen-exit'
+                      icon="fullscreen-exit"
                     />
                   ) : (
-                    <Button onClick={() => this.showMore()} icon='fullscreen' />
+                    <Button onClick={() => this.showMore()} icon="fullscreen" />
                   )
                 ) : null}
                 <Button
@@ -90,7 +90,7 @@ class GraphDataModal extends React.Component<
                     this.showLess();
                     this.props.onClose();
                   }}
-                  icon='close'
+                  icon="close"
                 />
               </div>
             }
@@ -109,7 +109,7 @@ class GraphDataModal extends React.Component<
                 <Table
                   columns={columns}
                   dataSource={tableData}
-                  size='small'
+                  size="small"
                   pagination={false}
                 />
               </div>
@@ -130,9 +130,9 @@ class GraphDataModal extends React.Component<
       cardHeight: 600,
       plotWidth: 450,
       plotHeight: 350,
-      expanded: true,
+      expanded: true
     });
-  }
+  };
 
   private showLess = () => {
     this.setState({
@@ -140,9 +140,9 @@ class GraphDataModal extends React.Component<
       cardHeight: 280,
       plotWidth: 250,
       plotHeight: 150,
-      expanded: false,
+      expanded: false
     });
-  }
+  };
 }
 
 export default GraphDataModal;

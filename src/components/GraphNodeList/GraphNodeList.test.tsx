@@ -7,7 +7,7 @@ describe('<GraphNodeList />', () => {
     const nodeList = [
       { id: '1', label: 'node1' },
       { id: '2', label: 'node2' },
-      { id: '3', label: 'node3' },
+      { id: '3', label: 'node3' }
     ];
     const tree = renderer
       .create(
@@ -15,7 +15,7 @@ describe('<GraphNodeList />', () => {
           nodes={nodeList}
           onNodeClick={() => undefined}
           onRemoveNode={() => undefined}
-        />,
+        />
       )
       .toJSON();
 

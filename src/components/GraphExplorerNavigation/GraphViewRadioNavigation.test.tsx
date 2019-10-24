@@ -6,15 +6,15 @@ import { Routes } from '../../constants/routes';
 const routes = [
   Routes.graphExplorerSelection,
   Routes.graphExplorerAnnotate,
-  Routes.graphExplorerCausalExploration,
+  Routes.graphExplorerCausalExploration
 ];
 
 describe('<GraphViewRadioNavigation />', () => {
-  routes.forEach((route) => {
+  routes.forEach(route => {
     it(`renders correctly for route ${route}`, () => {
       const tree = renderer
         .create(
-          <GraphViewRadioNavigation value={route} onChange={() => undefined} />,
+          <GraphViewRadioNavigation value={route} onChange={() => undefined} />
         )
         .toJSON();
 

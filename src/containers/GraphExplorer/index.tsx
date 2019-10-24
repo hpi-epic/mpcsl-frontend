@@ -46,29 +46,29 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
     this.state = {
       view: this.props.location.pathname.replace(new RegExp('\\/\\d*$'), ''),
       value: '',
-      options: null,
+      options: null
     };
   }
 
   public render() {
     const graphSearch = this.props.availableNodes
-      ? this.props.availableNodes.map((node: IAPIGraphNode) => {
+      ? this.props.availableNodes.map(node => {
           if (
-            this.props.nodes.find(
-              (n: ID3GraphNode) => node.id.toString() === n.id,
-            ) === undefined
+            this.props.nodes.find(n => node.id.toString() === n.id) ===
+            undefined
           ) {
             return {
               value: node.id,
-              label: node.name,
+              label: node.name
             };
           }
+          return undefined;
         })
-      : new Array();
+      : [];
 
     return (
-      <Layout className='Layout'>
-        <Header className='Header'>
+      <Layout className="Layout">
+        <Header className="Header">
           <Row>
             <Col
               span={this.state.view === '/graph-explorer/selection' ? 10 : 0}
@@ -77,37 +77,41 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
                 key={'a'}
                 onChange={(option: any) => {
                   this.setState({
-                    value: null,
+                    value: null
                   });
                   this.forceUpdate();
-                  this.props.onAddNode(option!.value);
+                  this.props.onAddNode(option.value);
                 }}
                 options={
-                  graphSearch ? graphSearch.filter((n) => (n ? true : false)) : []
+                  graphSearch
+                    ? (graphSearch.filter(n => !!n) as {
+                        value: number;
+                        label: string;
+                      }[])
+                    : []
                 }
-                async={false}
                 onSelectResetsInput={true}
                 onBlurResetsInput={false}
-                valueKey='value'
-                labelKey='label'
+                valueKey="value"
+                labelKey="label"
                 closeOnSelect={false}
                 value={this.state.value}
                 removeSelected={true}
                 clearable={true}
-                placeholder='Select nodes'
+                placeholder="Select nodes"
                 style={{
                   lineHeight: '14px',
-                  marginTop: '15px',
+                  marginTop: '15px'
                 }}
               />
             </Col>
             <Col
               span={this.state.view === '/graph-explorer/selection' ? 0 : 10}
             />
-            <Col span={4} className='Home'>
-              <Button onClick={this.onHomeClick} icon='home' ghost={true} />
+            <Col span={4} className="Home">
+              <Button onClick={this.onHomeClick} icon="home" ghost={true} />
             </Col>
-            <Col span={10} className='Nav-Switch'>
+            <Col span={10} className="Nav-Switch">
               <GraphViewRadioNavigation
                 value={this.state.view}
                 onChange={this.onViewChange}
@@ -118,17 +122,17 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
         <Content style={{ background: colors.contentBackground }}>
           <Switch>
             <Route
-              key='selection'
+              key="selection"
               path={`${Routes.graphExplorerSelection}/:result_id`}
               component={GraphSelection}
             />
             <Route
-              key='annotate'
+              key="annotate"
               path={`${Routes.graphExplorerAnnotate}/:result_id`}
               component={GraphAnnotate}
             />
             <Route
-              key='explorer'
+              key="explorer"
               path={`${Routes.graphExplorerCausalExploration}/:result_id`}
               component={GraphCausalExplorer}
             />
@@ -146,37 +150,37 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
   private onViewChange = (e: RadioChangeEvent) => {
     const resultID = window.location.href.match(new RegExp('\\/\\d*$'));
     this.changeView(e.target.value, resultID ? resultID[0] : '');
-  }
+  };
 
   private onHomeClick = () => {
     this.changeView(Routes.experimentManager, '');
     window.location.reload();
-  }
+  };
 
   private changeView = (newView: string, resultID: string | null) => {
     this.setState({
-      view: newView,
+      view: newView
     });
     this.props.history.push(newView + resultID);
-  }
+  };
 }
 
 export function mapStateToProps(state: IState) {
   return {
     availableNodes: state.graphExplorer!.availableNodes,
-    nodes: state.graphExplorer!.nodes,
+    nodes: state.graphExplorer!.nodes
   };
 }
 
 export function mapDispatchToProps(
-  dispatch: ThunkDispatch<IState, void, actions.GraphExplorerAction>,
+  dispatch: ThunkDispatch<IState, void, actions.GraphExplorerAction>
 ) {
   return {
-    onAddNode: (nodeID: number) => dispatch(actions.addNode(nodeID)),
+    onAddNode: (nodeID: number) => dispatch(actions.addNode(nodeID))
   };
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(GraphExplorer);

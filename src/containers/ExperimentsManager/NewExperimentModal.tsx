@@ -6,7 +6,7 @@ import {
   Button,
   message,
   Select,
-  InputNumber,
+  InputNumber
 } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import React from 'react';
@@ -14,7 +14,7 @@ import { IObservationMatrix, IAlgorithm } from '../../types';
 import {
   getObservationMatrices,
   createExperiment,
-  getAllAlgorithms,
+  getAllAlgorithms
 } from '../../actions/apiRequests';
 
 export interface IPropsNewExperimentModal extends FormComponentProps {
@@ -46,7 +46,7 @@ class NewExperimentModal extends React.Component<
     this.state = {
       observationMatrices: [],
       algorithms: [],
-      selectedAlgorithm: undefined,
+      selectedAlgorithm: undefined
     };
   }
 
@@ -54,11 +54,11 @@ class NewExperimentModal extends React.Component<
     this.mounted = true;
     this.fetchObservationMatrices();
     this.fetchAlgorithms();
-  }
+  };
 
   public componentWillUnmount = () => {
     this.mounted = false;
-  }
+  };
 
   public render() {
     const { getFieldDecorator } = this.props.form;
@@ -73,7 +73,7 @@ class NewExperimentModal extends React.Component<
             >
               {observationMatrix.name}
             </Select.Option>
-          ),
+          )
         )}
       </Select>
     );
@@ -81,18 +81,13 @@ class NewExperimentModal extends React.Component<
     const algorithmsSelect = (
       <Select
         disabled={this.props.editDisabled}
-        onSelect={(algId) => this.setSelectedAlgo(algId)}
+        onSelect={algId => this.setSelectedAlgo(algId)}
       >
-        {this.state.algorithms.map(
-          (algorithm: IAlgorithm) => (
-            <Select.Option
-              value={algorithm.id}
-              key={String(algorithm.id)}
-            >
-              {algorithm.name}
-            </Select.Option>
-          ),
-        )}
+        {this.state.algorithms.map((algorithm: IAlgorithm) => (
+          <Select.Option value={algorithm.id} key={String(algorithm.id)}>
+            {algorithm.name}
+          </Select.Option>
+        ))}
       </Select>
     );
 
@@ -100,38 +95,35 @@ class NewExperimentModal extends React.Component<
       initialValue: this.props.experiment
         ? this.props.experiment.name
         : undefined,
-      rules: [{ required: true, message: 'Enter a Experiment Name' }],
+      rules: [{ required: true, message: 'Enter a Experiment Name' }]
     })(
-      <Input
-        disabled={this.props.editDisabled}
-        placeholder='Experiment Name'
-      />,
+      <Input disabled={this.props.editDisabled} placeholder="Experiment Name" />
     );
 
     const experimentDescEl = getFieldDecorator('description', {
       initialValue: this.props.experiment
         ? this.props.experiment.description
         : undefined,
-      rules: [{ required: false, message: 'Enter a Experiment Description' }],
+      rules: [{ required: false, message: 'Enter a Experiment Description' }]
     })(
       <Input
         disabled={this.props.editDisabled}
-        placeholder='Experiment Description'
-      />,
+        placeholder="Experiment Description"
+      />
     );
 
     const observationMatrixEl = getFieldDecorator('observationMatrix_id', {
       initialValue: this.props.experiment
         ? this.props.experiment.observationMatrix_id
         : undefined,
-      rules: [{ required: true, message: 'Select a Observation Matrix' }],
+      rules: [{ required: true, message: 'Select a Observation Matrix' }]
     })(observationMatrixSelect);
 
     const algorithmsEl = getFieldDecorator('algorithm_id', {
       initialValue: this.props.experiment
         ? this.props.experiment.algorithm_id
         : undefined,
-      rules: [{ required: true, message: 'Select a Algorithm' }],
+      rules: [{ required: true, message: 'Select a Algorithm' }]
     })(algorithmsSelect);
 
     return (
@@ -142,33 +134,33 @@ class NewExperimentModal extends React.Component<
             : 'Create new Experiment'
         }
         width={310}
-        placement='right'
+        placement="right"
         onClose={this.props.onClose}
         visible={this.props.visible}
       >
         <Form
-          layout='vertical'
+          layout="vertical"
           onSubmit={this.handleSubmit}
-          className='Modal-Form'
+          className="Modal-Form"
         >
           <Row gutter={16}>
-            <Form.Item label='Experiment Name' hasFeedback={true}>
+            <Form.Item label="Experiment Name" hasFeedback={true}>
               {experimentNameEl}
             </Form.Item>
-            <Form.Item label='Experiment Description' hasFeedback={true}>
+            <Form.Item label="Experiment Description" hasFeedback={true}>
               {experimentDescEl}
             </Form.Item>
-            <Form.Item label='Observation Matrix' hasFeedback={true}>
+            <Form.Item label="Observation Matrix" hasFeedback={true}>
               {observationMatrixEl}
             </Form.Item>
-            <Form.Item label='Algorithm Selection' hasFeedback={true}>
+            <Form.Item label="Algorithm Selection" hasFeedback={true}>
               {algorithmsEl}
             </Form.Item>
             {this.createFormElementForParameters()}
             <Form.Item>
               <Button
-                type='primary'
-                htmlType='submit'
+                type="primary"
+                htmlType="submit"
                 disabled={this.props.editDisabled}
               >
                 Submit
@@ -184,7 +176,7 @@ class NewExperimentModal extends React.Component<
     const observationMatrices = await getObservationMatrices();
     if (this.mounted) {
       this.setState({
-        observationMatrices,
+        observationMatrices
       });
     }
   }
@@ -193,7 +185,7 @@ class NewExperimentModal extends React.Component<
     const algorithms = await getAllAlgorithms();
     if (this.mounted) {
       this.setState({
-        algorithms,
+        algorithms
       });
       if (this.props.experiment && this.props.experiment!.algorithm_id) {
         this.setSelectedAlgo(this.props.experiment!.algorithm_id);
@@ -210,11 +202,11 @@ class NewExperimentModal extends React.Component<
         message.error('Set a required Values!');
       }
     });
-  }
+  };
 
   private submitExperiment = (values: IFormExperiment) => {
     const keyList = Object.keys(this.state.selectedAlgorithm!.valid_parameters);
-    const params: {[name: string]: any} = {};
+    const params: { [name: string]: any } = {};
     keyList.forEach((key: any) => {
       params[key] = values[key];
     });
@@ -223,77 +215,86 @@ class NewExperimentModal extends React.Component<
       name: values.name,
       description: values.description,
       algorithm_id: values.algorithm_id,
-      parameters: params,
+      parameters: params
     });
     this.props.onClose();
-  }
+  };
 
   private setSelectedAlgo = (algorithmId: any) => {
     this.state.algorithms.forEach((algorithm: IAlgorithm) => {
       if (algorithm.id === algorithmId) {
         const selectedAlgorithm = algorithm;
         this.setState({
-          selectedAlgorithm,
+          selectedAlgorithm
         });
       }
     });
-  }
+  };
 
   private createFormElementForParameters = () => {
-    if (this.state.selectedAlgorithm !== undefined && this.state.selectedAlgorithm.valid_parameters) {
-      return Object.keys(this.state.selectedAlgorithm.valid_parameters).map((key: string) => {
-        const parameter = this.state.selectedAlgorithm!.valid_parameters[key];
-        return (
-          <Form.Item label={key} key={key} hasFeedback={true}>
-          {parameter.type === 'enum' ? this.createSelectElement(key, parameter)
-          : this.createInputElement(key, parameter)}</Form.Item>
-        );
-      });
+    if (
+      this.state.selectedAlgorithm !== undefined &&
+      this.state.selectedAlgorithm.valid_parameters
+    ) {
+      return Object.keys(this.state.selectedAlgorithm.valid_parameters).map(
+        (key: string) => {
+          const parameter = this.state.selectedAlgorithm!.valid_parameters[key];
+          return (
+            <Form.Item label={key} key={key} hasFeedback={true}>
+              {parameter.type === 'enum'
+                ? this.createSelectElement(key, parameter)
+                : this.createInputElement(key, parameter)}
+            </Form.Item>
+          );
+        }
+      );
     }
-  }
+  };
 
   private createInputElement = (key: string, parameter: any) => {
     const { getFieldDecorator } = this.props.form;
     return getFieldDecorator(key, {
       initialValue: this.props.experiment
         ? this.props.experiment.parameters[key]
-        : (parameter.required ? null : (parameter.minimum  !== undefined ? parameter.minimum
-          : (parameter.default !== undefined ? parameter.default : 0))),
-      rules: [{ required: parameter.required, message: `Enter ${key} value` }],
+        : parameter.required
+        ? null
+        : parameter.minimum !== undefined
+        ? parameter.minimum
+        : parameter.default !== undefined
+        ? parameter.default
+        : 0,
+      rules: [{ required: parameter.required, message: `Enter ${key} value` }]
     })(
-    <InputNumber
+      <InputNumber
         disabled={this.props.editDisabled}
         min={parameter.minimum !== undefined ? parameter.minimum : undefined}
         max={parameter.maximum !== undefined ? parameter.maximum : undefined}
         step={parameter.type === 'float' ? 0.01 : 1}
-    />,
+      />
     );
-  }
+  };
 
   private createSelectElement = (key: string, parameter: any) => {
     const { getFieldDecorator } = this.props.form;
     return getFieldDecorator(key, {
-      initialValue: this.props.experiment !== undefined
-        ? this.props.experiment.parameters[key]
-        : undefined,
-      rules: [{ required: parameter.required, message: `Enter ${key} value` }],
+      initialValue:
+        this.props.experiment !== undefined
+          ? this.props.experiment.parameters[key]
+          : undefined,
+      rules: [{ required: parameter.required, message: `Enter ${key} value` }]
     })(
-    <Select
-      disabled={this.props.editDisabled}
-    >
-      {Object.keys(parameter.values).map(
-        (val: any) => (
+      <Select disabled={this.props.editDisabled}>
+        {Object.keys(parameter.values).map((val: any) => (
           <Select.Option
             value={parameter.values[val]}
             key={parameter.values[val]}
           >
-          {parameter.values[val]}
+            {parameter.values[val]}
           </Select.Option>
-        ),
-      )}
-    </Select>,
+        ))}
+      </Select>
     );
-  }
+  };
 }
 
 export default NewExperimentModal;
