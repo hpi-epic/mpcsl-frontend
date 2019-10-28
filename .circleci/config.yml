@@ -1,10 +1,14 @@
-language: node_js
-node_js:
-  - '8'
-cache:
-  directories:
-    - node_modules
-script:
-  - npm run lint
-  - npm test
-  - npm run build
+orbs:
+  node: circleci/node@1.1
+version: 2.1
+jobs:
+  build:
+    executor: node/default:12.13
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: yarn install
+      - run: yarn lint
+      - run: yarn test
+      - run: yarn build
