@@ -60,4 +60,8 @@ jobs:
           steps:
             - run:
                 name: Run Linter
-                command: yarn lint
+                command: yarn lint --format junit --output-file ./reports/eslint.xml
+      - store_test_results:
+          path: ./reports
+      - store_artifacts:
+          path: ./reports
