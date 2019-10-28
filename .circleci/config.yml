@@ -6,14 +6,14 @@ workflows:
     jobs:
       - install
       - build:
-        requires:
-          - install
+          requires:
+            - install
       - test:
-        requires:
-          - install
+          requires:
+            - install
       - lint:
-        requires:
-          - install
+          requires:
+            - install
 jobs:
   install:
     executor:
@@ -39,7 +39,7 @@ jobs:
     steps:
       - run:
           name: Run Tests
-          command: yarn test -- --env=jsdom --coverage --testResultsProcessor ./node_modules/jest-junit
+          command: yarn test --ci --coverage --reporters=default --reporters=jest-junit
       - store_test_results:
           path: ./reports/junit/jest.xml
       - store_artifacts:
