@@ -3,7 +3,7 @@ orbs:
 version: 2.1
 jobs:
   build:
-    executor: node/default:12.13
+    executor: node/default
     steps:
       - checkout
       - node/with-cache:
