@@ -29,17 +29,23 @@ jobs:
       name: node/default
       tag: '12.13'
     steps:
-      - run:
-          name: Run Build
-          command: yarn build
+      - checkout
+      - node/with-cache:
+          steps:
+            - run:
+                name: Run Build
+                command: yarn build
   test:
     executor:
       name: node/default
       tag: '12.13'
     steps:
-      - run:
-          name: Run Tests
-          command: yarn test --ci --coverage --reporters=default --reporters=jest-junit
+      - checkout
+      - node/with-cache:
+          steps:
+            - run:
+                name: Run Tests
+                command: yarn test --ci --coverage --reporters=default --reporters=jest-junit
       - store_test_results:
           path: ./reports/junit/jest.xml
       - store_artifacts:
@@ -51,9 +57,12 @@ jobs:
       name: node/default
       tag: '12.13'
     steps:
-      - run:
-          name: Run Linter
-          command: yarn lint -- --format junit -o ./reports/junit/eslint.xml
+      - checkout
+      - node/with-cache:
+          steps:
+            - run:
+                name: Run Linter
+                command: yarn lint -- --format junit -o ./reports/junit/eslint.xml
       - store_test_results:
           path: ./reports/junit/eslint.xml
       - store_artifacts:
