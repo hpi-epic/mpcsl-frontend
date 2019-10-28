@@ -1,8 +1,21 @@
 orbs:
   node: circleci/node@1.1
 version: 2.1
+workflows:
+  build-test-lint:
+    jobs:
+      - install
+      - build:
+        requires:
+          - install
+      - test:
+        requires:
+          - install
+      - lint:
+        requires:
+          - install
 jobs:
-  build:
+  install:
     executor:
       name: node/default
       tag: '12.13'
@@ -11,12 +24,29 @@ jobs:
       - node/with-cache:
           steps:
             - run: yarn install
-      - run:
-          name: Run Linter
-          command: yarn lint
-      - run:
-          name: Run Tests
-          command: yarn test
+  build:
+    executor:
+      name: node/default
+      tag: '12.13'
+    steps:
       - run:
           name: Run Build
           command: yarn build
+  test:
+    executor:
+      name: node/default
+      tag: '12.13'
+    steps:
+      - run:
+          name: Run Tests
+          command: yarn test
+    
+  lint:
+    executor:
+      name: node/default
+      tag: '12.13'
+    steps:
+      - run:
+          name: Run Linter
+          command: yarn lint
+    
