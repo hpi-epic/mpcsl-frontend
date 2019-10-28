@@ -3,12 +3,21 @@ orbs:
 version: 2.1
 jobs:
   build:
-    executor: node/default
+    executor:
+      name: node/default
+      tag: '12.13'
     steps:
       - checkout
       - node/with-cache:
+          name: Install Dependencies
           steps:
             - run: yarn install
-      - run: yarn lint
-      - run: yarn test
-      - run: yarn build
+      - run:
+          name: Run Linter
+          command: yarn lint
+      - run:
+          name: Run Tests
+          command: yarn test
+      - run:
+          name: Run Build
+          command: yarn build
