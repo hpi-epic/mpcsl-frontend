@@ -22,6 +22,7 @@ jobs:
     steps:
       - checkout
       - node/with-cache:
+          cache-version: v2
           steps:
             - run: yarn install
   build:
@@ -31,6 +32,7 @@ jobs:
     steps:
       - checkout
       - node/with-cache:
+          cache-version: v2
           steps:
             - run:
                 name: Run Build
@@ -42,6 +44,7 @@ jobs:
     steps:
       - checkout
       - node/with-cache:
+          cache-version: v2
           steps:
             - run:
                 name: Run Tests
@@ -57,6 +60,7 @@ jobs:
     steps:
       - checkout
       - node/with-cache:
+          cache-version: v2
           steps:
             - run:
                 name: Run Linter
