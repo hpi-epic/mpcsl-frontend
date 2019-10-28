@@ -9,7 +9,6 @@ jobs:
     steps:
       - checkout
       - node/with-cache:
-          name: Install Dependencies
           steps:
             - run: yarn install
       - run:
