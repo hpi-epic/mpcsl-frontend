@@ -47,11 +47,9 @@ jobs:
                 name: Run Tests
                 command: yarn test --ci --coverage --reporters=default --reporters=jest-junit
       - store_test_results:
-          path: ./reports/junit/jest.xml
+          path: ./junit.xml
       - store_artifacts:
-          path: ./reports/junit/jest.xml
-    environment:
-      JEST_JUNIT_OUTPUT: "./reports/junit/jest.xml"
+          path: ./junit.xml
   lint:
     executor:
       name: node/default
@@ -62,8 +60,4 @@ jobs:
           steps:
             - run:
                 name: Run Linter
-                command: yarn lint -- --format junit -o ./reports/junit/eslint.xml
-      - store_test_results:
-          path: ./reports/junit/eslint.xml
-      - store_artifacts:
-          path: ./reports/junit/eslint.xml
+                command: yarn lint
