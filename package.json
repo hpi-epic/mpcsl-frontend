@@ -56,5 +56,12 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "proxy": "http://localhost:5000"
+  "proxy": "http://localhost:5000",
+  "devDependencies": {
+    "jest-junit": "^9.0.0"
+  },
+  "jest-junit": {
+    "outputDirectory": "./reports",
+    "outputName": "jest.xml"
+  }
 }
