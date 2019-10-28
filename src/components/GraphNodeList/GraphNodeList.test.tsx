@@ -15,6 +15,7 @@ describe('<GraphNodeList />', () => {
           nodes={nodeList}
           onNodeClick={() => undefined}
           onRemoveNode={() => undefined}
+          isSelectionMode={false}
         />
       )
       .toJSON();
