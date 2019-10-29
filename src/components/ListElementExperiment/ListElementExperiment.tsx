@@ -8,7 +8,8 @@ interface IPropsListElementExperiment {
   status?: BadgeProps['status'];
   statusText?: string;
   content: string;
-  avgExecutionTime?: number;
+  executionTimeStatistics?: {[name: string]: number};
+  
   onDuplicate: (e: React.MouseEvent<HTMLElement>) => void;
   onDelete: (e: React.MouseEvent<HTMLElement>) => void;
   onRunStart: (e: React.MouseEvent<HTMLElement>) => void;
@@ -64,9 +65,9 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
           status={props.status}
         />
       </div>
-      {props.avgExecutionTime ? (
+      {props.executionTimeStatistics ? (
         <i style={{ fontWeight: 'lighter', fontSize: '0.8rem' }}>
-          Average Execution Time: {props.avgExecutionTime}s
+          Mean Execution Time: {props.executionTimeStatistics['mean']}s
         </i>
       ) : null}
     </div>
