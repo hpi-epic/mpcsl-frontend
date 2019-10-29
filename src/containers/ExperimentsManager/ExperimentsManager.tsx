@@ -85,6 +85,7 @@ class ExperimentsManager extends React.Component<
               ? 'Experiment was not started yet.'
               : experiment.last_job!.status
           }
+          executionTimeStatistics={experiment.execution_time_statistics}
           content={experiment.description || '-'}
           onDelete={() => this.onDeleteExperiment(experiment)}
           onDuplicate={() => this.onDuplicateExperiment(experiment)}

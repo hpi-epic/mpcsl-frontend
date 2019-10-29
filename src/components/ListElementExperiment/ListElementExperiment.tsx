@@ -8,6 +8,8 @@ interface IPropsListElementExperiment {
   status?: BadgeProps['status'];
   statusText?: string;
   content: string;
+  executionTimeStatistics?: { [name: string]: number };
+
   onDuplicate: (e: React.MouseEvent<HTMLElement>) => void;
   onDelete: (e: React.MouseEvent<HTMLElement>) => void;
   onRunStart: (e: React.MouseEvent<HTMLElement>) => void;
@@ -51,17 +53,23 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
       </Menu.Item>
     </Menu>
   );
-
   const cardTitle = (
-    <div>
-      <button className="Card-Title" onClick={props.onShowDetails}>
-        {props.title}
-      </button>
-      <Badge
-        className="Card-Badge"
-        text={props.statusText}
-        status={props.status}
-      />
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ lineHeight: 0.2 }}>
+        <button className="Card-Title" onClick={props.onShowDetails}>
+          {props.title}
+        </button>
+        <Badge
+          className="Card-Badge"
+          text={props.statusText}
+          status={props.status}
+        />
+      </div>
+      {props.executionTimeStatistics ? (
+        <i style={{ fontWeight: 'lighter', fontSize: '0.8rem' }}>
+          Mean Execution Time: {props.executionTimeStatistics['mean']}s
+        </i>
+      ) : null}
     </div>
   );
 
