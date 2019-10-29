@@ -3,13 +3,13 @@ import React from 'react';
 import { IObservationMatrix } from '../../types';
 import NewObservationMatrixModal, {
   IPropsNewObservationMatrixModal,
-  IFormObservationMatrix,
+  IFormObservationMatrix
 } from './NewObservationMatrixModal';
 import ListElementObservationMatrix from '../../components/ListElementObservationMatrix/ListElementObservationMatrix';
 import './style.css';
 import {
   getObservationMatrices,
-  deleteObservationMatrix,
+  deleteObservationMatrix
 } from '../../actions/apiRequests';
 
 interface IStateObservationMatricesManagement {
@@ -28,7 +28,7 @@ class ObservationMatricesManagement extends React.Component<
     this.state = {
       observationMatrixModalVisible: false,
       observationMatrices: [],
-      currentObservationMatrix: undefined,
+      currentObservationMatrix: undefined
     };
   }
 
@@ -45,13 +45,13 @@ class ObservationMatricesManagement extends React.Component<
           onDelete={() => this.onObservationMatrixDelete(observationMatrix)}
           onView={() => this.onObservationMatrixView(observationMatrix)}
         />
-      ),
+      )
     );
     return (
-      <div className='Content'>
+      <div className="Content">
         <Row>
-          <div className='ObservationMatrix-Controls'>
-            <Button type='primary' onClick={this.onNewObservationMatrix}>
+          <div className="ObservationMatrix-Controls">
+            <Button type="primary" onClick={this.onNewObservationMatrix}>
               + New Observation Matrix
             </Button>
           </div>
@@ -75,32 +75,32 @@ class ObservationMatricesManagement extends React.Component<
   private onNewObservationMatrix = () => {
     this.setState({
       currentObservationMatrix: undefined,
-      observationMatrixModalVisible: true,
+      observationMatrixModalVisible: true
     });
-  }
+  };
 
   private onClose = () => {
     this.setState({
       currentObservationMatrix: undefined,
-      observationMatrixModalVisible: false,
+      observationMatrixModalVisible: false
     });
     this.fetchObservationMatrices();
-  }
+  };
 
   private async fetchObservationMatrices() {
     const observationMatrices = await getObservationMatrices();
     this.setState({
-      observationMatrices,
+      observationMatrices
     });
   }
 
   private onObservationMatrixDelete = (
-    observationMatrix: IObservationMatrix,
+    observationMatrix: IObservationMatrix
   ) => {
     deleteObservationMatrix(observationMatrix).then(() => {
       this.fetchObservationMatrices();
     });
-  }
+  };
 
   private onObservationMatrixView = (observationMatrix: IObservationMatrix) => {
     this.setState({
@@ -108,11 +108,11 @@ class ObservationMatricesManagement extends React.Component<
         observationMatrixName: observationMatrix.name,
         observationMatrixDescription: observationMatrix.description || '-',
         query: observationMatrix.load_query,
-        dataSource: observationMatrix.data_source || '-',
+        dataSource: observationMatrix.data_source || '-'
       },
-      observationMatrixModalVisible: true,
+      observationMatrixModalVisible: true
     });
-  }
+  };
 }
 
 export default ObservationMatricesManagement;

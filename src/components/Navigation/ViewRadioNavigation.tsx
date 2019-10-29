@@ -14,7 +14,7 @@ interface IPropsRadioNavigation {
 function ViewRadioNavigation(props: IPropsRadioNavigation) {
   return (
     <RadioGroup
-      buttonStyle='solid'
+      buttonStyle="solid"
       value={
         props.value.replace(new RegExp('\\/\\d*$'), '') ===
         Routes.experimentDetails
@@ -22,14 +22,12 @@ function ViewRadioNavigation(props: IPropsRadioNavigation) {
           : props.value
       }
       onChange={props.onChange}
-      size='small'
+      size="small"
     >
       <RadioButton value={Routes.observationMatricesManager}>
         Observation Matrices
       </RadioButton>
-      <RadioButton value={Routes.experimentManager}>
-        Experiments
-      </RadioButton>
+      <RadioButton value={Routes.experimentManager}>Experiments</RadioButton>
     </RadioGroup>
   );
 }

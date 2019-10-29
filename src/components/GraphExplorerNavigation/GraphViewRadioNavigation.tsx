@@ -14,10 +14,10 @@ interface IPropsRadioNavigation {
 function GraphViewRadioNavigation(props: IPropsRadioNavigation) {
   return (
     <RadioGroup
-      buttonStyle='solid'
+      buttonStyle="solid"
       value={props.value}
       onChange={props.onChange}
-      size='small'
+      size="small"
     >
       <RadioButton value={Routes.graphExplorerSelection}>Selection</RadioButton>
       <RadioButton value={Routes.graphExplorerAnnotate}>

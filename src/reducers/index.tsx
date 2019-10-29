@@ -4,7 +4,7 @@ import {
   NEW_GRAPH_LAYOUT,
   TOGGLE_FREEZE_LAYOUT,
   REMOVE_NODE,
-  ADD_AVAILABLE_NODES,
+  ADD_AVAILABLE_NODES
 } from '../constants/actions';
 import { StoreState } from '../types';
 import { ID3GraphNode, IAPIGraphNode } from '../types/graphTypes';
@@ -16,24 +16,24 @@ const initialState = {
   availableNodes: [] as IAPIGraphNode[],
   selectedGraph: new Graph(),
   nodes: [] as ID3GraphNode[],
-  doFreeze: true,
+  doFreeze: true
 };
 
 function graphExplorer(
   state = initialState,
-  action: GraphExplorerAction,
+  action: GraphExplorerAction
 ): StoreState {
   switch (action.type) {
     case ADD_AVAILABLE_NODES: {
       return {
         ...state,
-        availableNodes: action.availableNodes,
+        availableNodes: action.availableNodes
       };
     }
     case ADD_NODE: {
       const graph = new Graph(
         state.selectedGraph.nodes,
-        state.selectedGraph.links,
+        state.selectedGraph.links
       );
       graph.addUniqueNodes(action.addNode, action.contextNodes, state.doFreeze);
       graph.addUniqueAPILinks(action.edges);
@@ -42,39 +42,39 @@ function graphExplorer(
         selectedGraph: graph,
         nodes: [
           ...state.nodes,
-          { id: action.addNode.id.toString(), label: action.addNode.name },
-        ],
+          { id: action.addNode.id.toString(), label: action.addNode.name }
+        ]
       };
     }
     case NEW_GRAPH_LAYOUT: {
       const graph = new Graph(
         state.selectedGraph.nodes,
-        state.selectedGraph.links,
+        state.selectedGraph.links
       );
       graph.resetLayout();
       return {
         ...state,
-        selectedGraph: graph,
+        selectedGraph: graph
       };
     }
     case TOGGLE_FREEZE_LAYOUT:
       return {
         ...state,
-        doFreeze: !state.doFreeze,
+        doFreeze: !state.doFreeze
       };
     case REMOVE_NODE: {
       const graph = new Graph(
         state.selectedGraph.nodes,
-        state.selectedGraph.links,
+        state.selectedGraph.links
       );
 
       graph.removeNodeFromFocus(action.node);
       return {
         ...state,
         selectedGraph: graph,
-        nodes: state.nodes.filter((node) =>
-          node.id === action.node.id ? false : true,
-        ),
+        nodes: state.nodes.filter(node =>
+          node.id === action.node.id ? false : true
+        )
       };
     }
     default:

@@ -22,20 +22,20 @@ class PipelineManager extends React.Component<
   constructor(props: RouteComponentProps) {
     super(props);
     this.state = {
-      view: this.props.location.pathname,
+      view: this.props.location.pathname
     };
   }
 
   public render() {
     return (
-      <Layout className='Layout'>
-        <Header className='Header'>
-          <Row gutter={{ xs: 8, sm: 16, md: 24 }} >
+      <Layout className="Layout">
+        <Header className="Header">
+          <Row gutter={{ xs: 8, sm: 16, md: 24 }}>
             <Col md={11} sm={0} xs={0} />
-            <Col md={2} sm={4} xs={2} className='Home'>
-              <Button onClick={this.onHomeClick} icon='home' ghost={true} />
+            <Col md={2} sm={4} xs={2} className="Home">
+              <Button onClick={this.onHomeClick} icon="home" ghost={true} />
             </Col>
-            <Col md={11} sm={20} xs={22} className='Nav-Switch'>
+            <Col md={11} sm={20} xs={22} className="Nav-Switch">
               <ViewRadioNavigation
                 value={this.state.view}
                 onChange={this.onViewChange}
@@ -64,18 +64,18 @@ class PipelineManager extends React.Component<
 
   private onViewChange = (e: RadioChangeEvent) => {
     this.changeView(e.target.value);
-  }
+  };
 
   private onHomeClick = () => {
     this.changeView(Routes.experimentManager);
-  }
+  };
 
   private changeView = (newView: Routes) => {
     this.setState({
-      view: newView,
+      view: newView
     });
     this.props.history.push(newView);
-  }
+  };
 }
 
 export default PipelineManager;

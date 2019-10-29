@@ -7,8 +7,9 @@ import {
   YAxis,
   VerticalRectSeries,
   Hint,
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
-  Highlight,
+  Highlight
 } from 'react-vis';
 
 import 'react-vis/dist/style.css';
@@ -19,9 +20,10 @@ interface IContinousPlotProps {
   plotWidth: number;
   plotHeight: number;
   selectable: boolean;
-  onDataSelection?: (
-    data: { selectionStart: number; selectionEnd: number },
-  ) => void;
+  onDataSelection?: (data: {
+    selectionStart: number;
+    selectionEnd: number;
+  }) => void;
   selection?: { startSelection: number; endSelection: number };
 }
 
@@ -45,7 +47,7 @@ class ContinousPlot extends React.Component<
         : this.props.data!.bin_edges[0],
       selectionEnd: this.props.selection
         ? this.props.selection.endSelection
-        : this.props.data!.bin_edges[this.props.data!.bin_edges.length - 1],
+        : this.props.data!.bin_edges[this.props.data!.bin_edges.length - 1]
     };
   }
 
@@ -57,19 +59,19 @@ class ContinousPlot extends React.Component<
     const updateDragState = (area: any) => {
       this.setState({
         selectionStart: area && area.left,
-        selectionEnd: area && area.right,
+        selectionEnd: area && area.right
       });
     };
 
     const updateDragStateEnd = (area: any) => {
       this.setState({
         selectionStart: area && area.left,
-        selectionEnd: area && area.right,
+        selectionEnd: area && area.right
       });
       if (this.props.onDataSelection) {
         this.props.onDataSelection({
           selectionStart: area && area.left,
-          selectionEnd: area && area.right,
+          selectionEnd: area && area.right
         });
       }
     };
@@ -82,7 +84,7 @@ class ContinousPlot extends React.Component<
           onMouseLeave={() => this.setState({ value: undefined })}
           xDomain={[
             this.props.data!.bin_edges[0],
-            this.props.data!.bin_edges[this.props.data!.bin_edges.length - 1],
+            this.props.data!.bin_edges[this.props.data!.bin_edges.length - 1]
           ]}
           yDomain={[0, maxYValue + 0.1 * maxYValue]}
         >
@@ -90,7 +92,7 @@ class ContinousPlot extends React.Component<
           <HorizontalGridLines />
           <XAxis
             tickValues={ticks}
-            tickFormat={(v) => parseFloat(v).toFixed(1)}
+            tickFormat={v => parseFloat(v).toFixed(1)}
             tickLabelAngle={-45}
           />
           <YAxis />
@@ -103,11 +105,11 @@ class ContinousPlot extends React.Component<
                 x0: this.props.data!.bin_edges[index],
                 x: this.props.data!.bin_edges[index + 1],
                 y: value,
-                y0: 0,
+                y0: 0
               };
             })}
-            colorType='literal'
-            getColor={(d) => {
+            colorType="literal"
+            getColor={d => {
               if (
                 !this.props.selectable ||
                 this.state.selectionStart === null ||
@@ -133,7 +135,7 @@ class ContinousPlot extends React.Component<
           />
           {this.props.selectable ? (
             <Highlight
-              color='#1e96be'
+              color="#1e96be"
               drag={true}
               enableY={false}
               onDrag={updateDragState}
@@ -148,7 +150,7 @@ class ContinousPlot extends React.Component<
 
   private onHover = (value: any) => {
     this.setState({ value });
-  }
+  };
 }
 
 export default ContinousPlot;

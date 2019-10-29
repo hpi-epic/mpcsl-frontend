@@ -8,8 +8,8 @@ describe('<DataDistributinoPlot />', () => {
     const categoricalAPIDataDistribution = {
       categorical: true,
       bins: {
-        1: 10,
-      },
+        1: 10
+      }
     };
     const tree = renderer
       .create(
@@ -20,7 +20,7 @@ describe('<DataDistributinoPlot />', () => {
           data={
             (categoricalAPIDataDistribution as unknown) as IAPIDistributionCategorical
           }
-        />,
+        />
       )
       .toJSON();
     expect(tree).toMatchSnapshot();
@@ -30,7 +30,7 @@ describe('<DataDistributinoPlot />', () => {
     const categoricalAPIDataDistribution = {
       categorical: false,
       bin_edges: [1, 2, 3, 4],
-      bins: [10, 2, 5, 5],
+      bins: [10, 2, 5, 5]
     };
     const tree = renderer
       .create(
@@ -41,7 +41,7 @@ describe('<DataDistributinoPlot />', () => {
           data={
             (categoricalAPIDataDistribution as unknown) as IAPIDistributionCategorical
           }
-        />,
+        />
       )
       .toJSON();
     expect(tree).toMatchSnapshot();

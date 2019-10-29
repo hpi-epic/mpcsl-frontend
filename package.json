@@ -3,62 +3,87 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@blueprintjs/core": "^3.14.0",
-    "@blueprintjs/icons": "^3.6.0",
-    "@dagrejs/graphlib": "^2.1.4",
-    "@types/axios": "^0.14.0",
-    "@types/d3": "^5.0.1",
-    "@types/jest": "23.3.9",
-    "@types/node": "10.12.6",
-    "@types/react": "16.7.3",
-    "@types/react-dom": "16.0.9",
-    "@types/react-lazylog": "^3.1.1",
-    "@types/react-redux": "^6.0.9",
-    "@types/react-router-dom": "^4.3.1",
-    "@types/react-test-renderer": "^16.0.3",
-    "@types/react-virtualized-select": "^3.0.7",
-    "@types/redux": "^3.6.0",
-    "@types/redux-thunk": "^2.1.0",
-    "antd": "^3.10.7",
-    "axios": "^0.18.0",
-    "d3": "^5.7.0",
-    "moment": "^2.23.0",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3",
-    "react-lazylog": "^3.2.0",
-    "react-mosaic-component": "2.0.2",
-    "react-redux": "^5.1.1",
-    "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.1",
-    "react-sizeme": "^2.5.2",
-    "react-test-renderer": "^16.7.0",
+    "@blueprintjs/core": "^3.19.1",
+    "@blueprintjs/icons": "^3.11.0",
+    "antd": "^3.24.3",
+    "axios": "^0.19.0",
+    "d3": "^5.12.0",
+    "moment": "^2.24.0",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
+    "react-lazylog": "^4.4.0",
+    "react-mosaic-component": "3.2.0",
+    "react-redux": "^7.1.1",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.2.0",
+    "react-sizeme": "^2.6.10",
+    "react-test-renderer": "^16.11.0",
     "react-virtualized-select": "^3.1.3",
-    "react-vis": "^1.11.6",
-    "redux": "^4.0.1",
+    "react-vis": "^1.11.7",
+    "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
-    "tslint": "^5.11.0",
-    "tslint-react": "^3.6.0",
-    "typescript": "3.1.6"
+    "typescript": "3.6.4"
+  },
+  "devDependencies": {
+    "@types/d3": "^5.7.2",
+    "@types/jest": "24.0.20",
+    "@types/node": "12.11.7",
+    "@types/react": "16.9.11",
+    "@types/react-dom": "16.9.3",
+    "@types/react-lazylog": "^3.1.1",
+    "@types/react-redux": "^7.1.5",
+    "@types/react-router-dom": "^5.1.0",
+    "@types/react-test-renderer": "^16.9.1",
+    "@types/react-virtualized-select": "^3.0.8",
+    "@typescript-eslint/eslint-plugin": "^2.6.0",
+    "@typescript-eslint/parser": "^2.6.0",
+    "eslint": "6.6.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-plugin-prettier": "^3.1.1",
+    "husky": "^3.0.9",
+    "jest-junit": "^9.0.0",
+    "lint-staged": "^9.4.2",
+    "prettier": "^1.18.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "tslint src/**/*.ts{,x}"
+    "lint": "eslint \"./src/**/*.{ts,tsx}\"",
+    "prettier": "prettier \"**/*.{json,md,scss,yaml,yml}\""
   },
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "proxy": "http://localhost:5000",
-  "devDependencies": {
-    "jest-junit": "^9.0.0"
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{json,md,scss,yaml,yml}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "jest-junit": {
     "outputDirectory": "./reports",

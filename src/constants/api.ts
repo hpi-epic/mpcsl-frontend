@@ -19,11 +19,11 @@ const Endpoints = {
     causeNodeID: string,
     effectNodeID: string,
     factorNodeIDs: string[],
-    causeCondition: string,
+    causeCondition: string
   ) =>
     `${baseApiUrl}/intervention?cause_node_id=${causeNodeID}` +
     `&effect_node_id=${effectNodeID}&factor_node_ids=${factorNodeIDs.join(
-      ',',
+      ','
     )}&cause_condition=${causeCondition}`,
   resultNodes: (resultID: number) => `${baseApiUrl}/result/${resultID}/nodes`,
   nodeContext: (nodeID: number, resultID: number) =>
@@ -34,7 +34,7 @@ const Endpoints = {
     `${baseApiUrl}/result/${resultID}/export?format=${format}`,
   datasources: baseApiUrl + '/datasources',
   confounders: (nodeID: string, resultID: string) =>
-    `${baseApiUrl}/node/${nodeID}/result/${resultID}/confounders`,
+    `${baseApiUrl}/node/${nodeID}/result/${resultID}/confounders`
 };
 
 export default Endpoints;

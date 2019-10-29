@@ -10,23 +10,33 @@ interface IPropsListElementObservationMatrix {
 }
 
 function ListElementObservationMatrix(
-  props: IPropsListElementObservationMatrix,
+  props: IPropsListElementObservationMatrix
 ) {
   const cardTitle = (
     <div>
-      <h2 className='Card-Title'>{props.title}</h2>
+      <h2 className="Card-Title">{props.title}</h2>
     </div>
   );
 
   return (
     <div>
       <List.Item>
-        <Card className='Card' title={cardTitle}>
-          <p className='Card-Content'>{props.content}</p>
-          <Button className='List-Buttons' onClick={props.onDelete} type='danger' ghost={true}>
+        <Card className="Card" title={cardTitle}>
+          <p className="Card-Content">{props.content}</p>
+          <Button
+            className="List-Buttons"
+            onClick={props.onDelete}
+            type="danger"
+            ghost={true}
+          >
             Delete
           </Button>
-          <Button className='List-Buttons' onClick={props.onView} type='primary' ghost={true}>
+          <Button
+            className="List-Buttons"
+            onClick={props.onView}
+            type="primary"
+            ghost={true}
+          >
             View
           </Button>
         </Card>

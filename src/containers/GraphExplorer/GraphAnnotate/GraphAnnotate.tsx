@@ -30,7 +30,7 @@ class GraphAnnotate extends React.Component<
 
     this.state = {
       dataModalVisible: false,
-      selectedNodeDataDistribution: undefined,
+      selectedNodeDataDistribution: undefined
     };
   }
 
@@ -38,7 +38,7 @@ class GraphAnnotate extends React.Component<
     return (
       <div>
         <Layout>
-          <Layout.Sider className='graphSelectionSider'>
+          <Layout.Sider className="graphSelectionSider">
             <GraphNodeList
               nodes={this.props.nodes}
               onNodeClick={this.showDataModal}
@@ -64,24 +64,24 @@ class GraphAnnotate extends React.Component<
 
   private showDataModal = async (node: ID3GraphNode) => {
     const nodeDistribution: IAPIDistribution = await getNodeDataDistribution(
-      String(node.id),
+      String(node.id)
     );
     this.setState({
       dataModalVisible: true,
-      selectedNodeDataDistribution: nodeDistribution,
+      selectedNodeDataDistribution: nodeDistribution
     });
-  }
+  };
 
   private closeDataModal = () => {
     this.setState({
-      dataModalVisible: false,
+      dataModalVisible: false
     });
-  }
+  };
 }
 
 export function mapStateToProps(state: IState) {
   return {
-    nodes: state.graphExplorer!.nodes,
+    nodes: state.graphExplorer!.nodes
   };
 }
 

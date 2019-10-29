@@ -11,7 +11,7 @@ interface IDataDistributionPlotProps {
   onDataSelection?: (
     data:
       | { [bin: string]: number }
-      | { startSelection: number; endSelection: number },
+      | { startSelection: number; endSelection: number }
   ) => void;
   selection?: IDataSelection;
 }

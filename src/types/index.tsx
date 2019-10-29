@@ -27,7 +27,7 @@ export interface IExperiment {
   id?: number;
   name: string;
   description?: string;
-  execution_time_statistics?: {[name: string]: number}; 
+  execution_time_statistics?: { [name: string]: number };
   algorithm_id: number;
   parameters: { [name: string]: any };
   last_job?: {
@@ -144,7 +144,7 @@ export interface IAPINodeContext {
 export enum GraphExportFormat {
   GEXF = 'GEXF',
   GraphML = 'GraphML',
-  GML = 'GML',
+  GML = 'GML'
 }
 
 export interface IAPIConfounders {

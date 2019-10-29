@@ -6,11 +6,11 @@ import { Routes } from '../../constants/routes';
 const routes = [Routes.observationMatricesManager, Routes.experimentManager];
 
 describe('<ViewRadioNavigation />', () => {
-  routes.forEach((route) => {
+  routes.forEach(route => {
     it(`renders correctly for route ${route}`, () => {
       const tree = renderer
         .create(
-          <ViewRadioNavigation value={route} onChange={() => undefined} />,
+          <ViewRadioNavigation value={route} onChange={() => undefined} />
         )
         .toJSON();
 

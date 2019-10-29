@@ -3,8 +3,17 @@ import {
   ID3GraphLink,
   ID3GraphNode,
   IAPIGraphEdges,
-  IAPIGraphNode,
+  IAPIGraphNode
 } from './../types/graphTypes';
+
+function apiNodesToD3Nodes(nodes: IAPIGraphNode[]): ID3GraphNode[] {
+  return nodes.map((node: IAPIGraphNode) => {
+    return {
+      id: node.id.toString(),
+      label: node.name
+    };
+  });
+}
 
 class Graph implements ID3Graph {
   public links: ID3GraphLink[];
@@ -14,7 +23,7 @@ class Graph implements ID3Graph {
     nodes: ID3GraphNode[] = [],
     links:
       | ID3GraphLink[]
-      | Array<{ source: ID3GraphNode; target: ID3GraphNode }> = [],
+      | Array<{ source: ID3GraphNode; target: ID3GraphNode }> = []
   ) {
     this.links = links as ID3GraphLink[];
     this.nodes = nodes;
@@ -23,7 +32,7 @@ class Graph implements ID3Graph {
   public addLink(sourceID: number, targetID: number) {
     this.links.push({
       source: sourceID.toString(),
-      target: targetID.toString(),
+      target: targetID.toString()
     });
   }
 
@@ -33,7 +42,7 @@ class Graph implements ID3Graph {
         this.links.find(
           (existingLink: any) =>
             existingLink.source.id === link.from_node.toString() &&
-            existingLink.target.id === link.to_node.toString(),
+            existingLink.target.id === link.to_node.toString()
         ) === undefined
       ) {
         this.addLink(link.from_node, link.to_node);
@@ -44,11 +53,11 @@ class Graph implements ID3Graph {
   public addUniqueNodes(
     addToFocusNode: IAPIGraphNode,
     addNodes: IAPIGraphNode[],
-    doFreeze: boolean,
+    doFreeze: boolean
   ): void {
     let isAlreadyIn = false;
 
-    this.nodes.forEach((existingNode) => {
+    this.nodes.forEach(existingNode => {
       if (doFreeze) {
         existingNode.fx = existingNode.x;
         existingNode.fy = existingNode.y;
@@ -64,12 +73,12 @@ class Graph implements ID3Graph {
       this.nodes.push({
         id: addToFocusNode.id.toString(),
         isContext: false,
-        label: addToFocusNode.name,
+        label: addToFocusNode.name
       });
     }
 
-    apiNodesToD3Nodes(addNodes).forEach((addNode) => {
-      const contextNodeAlreadyIn = this.nodes.find((n) => n.id === addNode.id);
+    apiNodesToD3Nodes(addNodes).forEach(addNode => {
+      const contextNodeAlreadyIn = this.nodes.find(n => n.id === addNode.id);
       if (contextNodeAlreadyIn === undefined) {
         addNode.isContext = true;
         addNode.contextOf = {};
@@ -87,7 +96,7 @@ class Graph implements ID3Graph {
   }
 
   public resetLayout(): void {
-    this.nodes.forEach((node) => {
+    this.nodes.forEach(node => {
       delete node.fx;
       delete node.fy;
       node.vx = 0;
@@ -127,7 +136,7 @@ class Graph implements ID3Graph {
       // only keep links outgoing/incoming to this node that connect to focused nodes
       if (
         node.contextOf &&
-        Object.keys(node.contextOf!).length < 1 &&
+        Object.keys(node.contextOf).length < 1 &&
         (link.source.id === node.id || link.target.id === node.id)
       ) {
         return false;
@@ -143,15 +152,6 @@ class Graph implements ID3Graph {
     this.nodes = nodes;
     this.links = links;
   }
-}
-
-function apiNodesToD3Nodes(nodes: IAPIGraphNode[]): ID3GraphNode[] {
-  return nodes.map((node: IAPIGraphNode) => {
-    return {
-      id: node.id.toString(),
-      label: node.name,
-    };
-  });
 }
 
 export default Graph;

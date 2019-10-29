@@ -1,10 +1,10 @@
 import React from 'react';
-import { Row, Button, Form} from 'antd';
+import { Row, Button, Form } from 'antd';
 
 import './style.css';
 import NewExperimentModal, {
   IPropsNewExperimentModal,
-  IFormExperiment,
+  IFormExperiment
 } from './NewExperimentModal';
 import { IExperiment, IJob } from '../../types';
 
@@ -12,7 +12,7 @@ import {
   getExperiments,
   deleteExperiment,
   runExperiment,
-  getObservationMatrices,
+  getObservationMatrices
 } from '../../actions/apiRequests';
 
 import ListElementExperiment from '../../components/ListElementExperiment/ListElementExperiment';
@@ -39,7 +39,7 @@ class ExperimentsManager extends React.Component<
     running: 'processing',
     done: 'success',
     error: 'error',
-    cancelled: 'warning',
+    cancelled: 'warning'
   };
 
   constructor(props: RouteComponentProps) {
@@ -52,7 +52,7 @@ class ExperimentsManager extends React.Component<
       clickedExperiment: undefined,
       jobListVisible: false,
       noObservationMatricePresent: true,
-      jobList: [],
+      jobList: []
     };
   }
 
@@ -60,15 +60,15 @@ class ExperimentsManager extends React.Component<
     this.mounted = true;
     this.fetchExperiments();
     this.fetchObservationMatrices();
-  }
+  };
 
   public componentWillUnmount = () => {
     this.mounted = false;
-  }
+  };
 
   public render() {
     const ExperimentModal = Form.create<IPropsNewExperimentModal>()(
-      NewExperimentModal,
+      NewExperimentModal
     );
     const ExperimentList = this.state.experiments.map(
       (experiment: IExperiment) => (
@@ -86,7 +86,6 @@ class ExperimentsManager extends React.Component<
               : experiment.last_job!.status
           }
           executionTimeStatistics={experiment.execution_time_statistics}
-
           content={experiment.description || '-'}
           onDelete={() => this.onDeleteExperiment(experiment)}
           onDuplicate={() => this.onDuplicateExperiment(experiment)}
@@ -97,15 +96,15 @@ class ExperimentsManager extends React.Component<
           onView={() => this.onExperimentClick(experiment)}
           onShowDetails={() => this.showDetails(experiment.id!)}
         />
-      ),
+      )
     );
 
     return (
-      <div className='Content'>
+      <div className="Content">
         <Row>
-          <div className='Experiment-Controls'>
+          <div className="Experiment-Controls">
             <Button
-              type='primary'
+              type="primary"
               onClick={this.onNewExperiment}
               disabled={this.state.noObservationMatricePresent}
             >
@@ -135,7 +134,7 @@ class ExperimentsManager extends React.Component<
     const observationMatrices = await getObservationMatrices();
     if (observationMatrices.length > 0) {
       this.setState({
-        noObservationMatricePresent: false,
+        noObservationMatricePresent: false
       });
     }
   }
@@ -143,28 +142,28 @@ class ExperimentsManager extends React.Component<
   private onNewExperiment = () => {
     this.setState({
       newExperimentModalVisible: true,
-      editExperiment: true,
+      editExperiment: true
     });
-  }
+  };
 
   private onClose = () => {
     this.setState({
       newExperimentModalVisible: false,
       clickedExperiment: undefined,
       editExperiment: true,
-      jobListVisible: false,
+      jobListVisible: false
     });
     this.fetchExperiments();
-  }
+  };
 
   private onDeleteExperiment = (experiment: IExperiment) => {
     deleteExperiment(experiment).then(() => {
       this.fetchExperiments();
     });
-  }
+  };
 
   private onExperimentClick = (experiment: IExperiment) => {
-    const params: {[name: string]: any} = {};
+    const params: { [name: string]: any } = {};
     Object.keys(experiment.parameters).forEach((parameter: any) => {
       params[parameter] = experiment.parameters[parameter];
     });
@@ -176,14 +175,14 @@ class ExperimentsManager extends React.Component<
         description: experiment.description || '-',
         observationMatrix_id: experiment.dataset_id,
         algorithm_id: experiment.algorithm_id,
-        parameters: params,
-      },
+        parameters: params
+      }
     });
-  }
+  };
 
   private showDetails = (experimentId: number) => {
     this.props.history.push(`/manager/experimentdetails/${experimentId}`);
-  }
+  };
 
   private onDuplicateExperiment = (experiment: IExperiment) => {
     const params: { [name: string]: any } = {};
@@ -198,10 +197,10 @@ class ExperimentsManager extends React.Component<
         description: experiment.description || '-',
         observationMatrix_id: experiment.dataset_id,
         algorithm_id: experiment.algorithm_id,
-        parameters: params,
-      },
+        parameters: params
+      }
     });
-  }
+  };
 
   private async onRunExperiment(experiment: IExperiment) {
     await runExperiment(experiment);
@@ -210,7 +209,7 @@ class ExperimentsManager extends React.Component<
 
   private onExploreExperiment = (resultId: number) => {
     this.props.history.push(`/graph-explorer/selection/${resultId}`);
-  }
+  };
 }
 
 export default ExperimentsManager;
