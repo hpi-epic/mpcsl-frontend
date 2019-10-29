@@ -27,6 +27,7 @@ export interface IExperiment {
   id?: number;
   name: string;
   description?: string;
+  avg_execution_time?: number;
   algorithm_id: number;
   parameters: { [name: string]: any };
   last_job?: {
@@ -73,6 +74,8 @@ export interface IJob {
     job_id: number;
     start_time: string;
     end_time: string;
+    execution_time: number;
+    dataset_loading_time: number;
     meta_results: any;
   };
 }

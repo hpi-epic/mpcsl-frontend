@@ -82,9 +82,7 @@ class ExperimentDetails extends React.Component<
                     key={1}
                     type='primary'
                     ghost={true}
-                    onClick={() =>
-                      this.onExploreExperiment(job.result!.id)
-                    }
+                    onClick={() => this.onExploreExperiment(job.result!.id)}
                     disabled={job.status === 'done' ? false : true}
                   >
                     explore
@@ -121,12 +119,26 @@ class ExperimentDetails extends React.Component<
                   description={
                     <div>
                       <i>
-                        {' '}
-                        Starting Time:{' '}
-                        {moment(job.start_time).format(
+                        {` Starting Time: ${moment(job.start_time).format(
                           'dddd, MMMM Do YYYY, h:mm:ss a',
-                        )}
+                        )}`}
                       </i>
+                      <br />
+                      {job.result ? (
+                        <>
+                          <i>
+                            {'Execution Time: ' +
+                              job.result.execution_time +
+                              's'}
+                          </i>
+                          <br />
+                          <i>
+                            {'Dataset Loading Time: ' +
+                              job.result.dataset_loading_time +
+                              's'}
+                          </i>
+                        </>
+                      ) : null}
                     </div>
                   }
                 />

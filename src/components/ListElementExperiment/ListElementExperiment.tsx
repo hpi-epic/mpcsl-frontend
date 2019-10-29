@@ -8,6 +8,7 @@ interface IPropsListElementExperiment {
   status?: BadgeProps['status'];
   statusText?: string;
   content: string;
+  avgExecutionTime?: number;
   onDuplicate: (e: React.MouseEvent<HTMLElement>) => void;
   onDelete: (e: React.MouseEvent<HTMLElement>) => void;
   onRunStart: (e: React.MouseEvent<HTMLElement>) => void;
@@ -20,7 +21,11 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
   const menu = (
     <Menu>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.onShowDetails} key='1'>
+        <Button
+          className='Dropdown-Button'
+          onClick={props.onShowDetails}
+          key='1'
+        >
           View Jobs
         </Button>
       </Menu.Item>
@@ -35,21 +40,35 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
         </Button>
       </Menu.Item>
       <Menu.Item>
-        <Button className='Dropdown-Button' onClick={props.onDelete} type='danger' ghost={true} key='4'>
+        <Button
+          className='Dropdown-Button'
+          onClick={props.onDelete}
+          type='danger'
+          ghost={true}
+          key='4'
+        >
           Delete
         </Button>
       </Menu.Item>
     </Menu>
   );
-
   const cardTitle = (
-    <div>
-      <button className='Card-Title' onClick={props.onShowDetails}>{props.title}</button>
-      <Badge
-        className='Card-Badge'
-        text={props.statusText}
-        status={props.status}
-      />
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ lineHeight: 0.2 }}>
+        <button className='Card-Title' onClick={props.onShowDetails}>
+          {props.title}
+        </button>
+        <Badge
+          className='Card-Badge'
+          text={props.statusText}
+          status={props.status}
+        />
+      </div>
+      {props.avgExecutionTime ? (
+        <i style={{ fontWeight: 'lighter', fontSize: '0.8rem' }}>
+          Average Execution Time: {props.avgExecutionTime}s
+        </i>
+      ) : null}
     </div>
   );
 
@@ -71,7 +90,12 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
             >
               Explore
             </Button>
-            <Button className='List-Buttons' onClick={props.onRunStart} type='primary' ghost={true}>
+            <Button
+              className='List-Buttons'
+              onClick={props.onRunStart}
+              type='primary'
+              ghost={true}
+            >
               Run
             </Button>
           </div>
