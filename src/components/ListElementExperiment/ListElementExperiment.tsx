@@ -67,7 +67,7 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
       </div>
       {props.executionTimeStatistics ? (
         <i style={{ fontWeight: 'lighter', fontSize: '0.8rem' }}>
-          Mean Execution Time: {props.executionTimeStatistics['mean']}s
+          Mean Execution Time: {props.executionTimeStatistics.mean.toFixed(3)}s
         </i>
       ) : null}
     </div>
