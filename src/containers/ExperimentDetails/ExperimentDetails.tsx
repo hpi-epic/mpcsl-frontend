@@ -130,13 +130,13 @@ class ExperimentDetails extends React.Component<
                         <>
                           <i>
                             {'Execution Time: ' +
-                              job.result.execution_time +
+                              job.result.execution_time.toFixed(3) +
                               's'}
                           </i>
                           <br />
                           <i>
                             {'Dataset Loading Time: ' +
-                              job.result.dataset_loading_time +
+                              job.result.dataset_loading_time.toFixed(3) +
                               's'}
                           </i>
                         </>
