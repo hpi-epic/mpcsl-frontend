@@ -3,11 +3,16 @@ import { RouteComponentProps } from 'react-router-dom';
 import { Button, List, Badge, Icon, Modal, Select } from 'antd';
 import { LazyLog as _LazyLog } from 'react-lazylog';
 import moment from 'moment';
-import { IExperiment, IJob, GraphExportFormat } from '../../types';
-import { getJobsForExperiment, getExperiment } from '../../actions/apiRequests';
+import { IExperiment, IJob, GraphExportFormat, BadgeStatus } from '../../types';
+import {
+  getJobsForExperiment,
+  getExperiment,
+  subscribeToJobStatusChanges
+} from '../../actions/apiRequests';
 import Endpoints from '../../constants/api';
 import './style.css';
 import Axios from 'axios';
+import { Subscription } from 'rxjs';
 
 const LazyLog: any = _LazyLog;
 
@@ -31,12 +36,6 @@ class ExperimentDetails extends React.Component<
   IStateJobsManagement
 > {
   public exampleExperimentId = 2;
-  private jobBadgeMap: any = {
-    running: 'processing',
-    done: 'success',
-    error: 'error',
-    cancelled: 'warning'
-  };
 
   constructor(props: RouteComponentProps<IMatchParams>) {
     super(props);
@@ -53,9 +52,23 @@ class ExperimentDetails extends React.Component<
     };
   }
 
+  private sub: Subscription | undefined;
+
   public componentDidMount = () => {
     this.fetchExperiment(Number(this.props.match.params.experiment_id));
+    const obs = subscribeToJobStatusChanges();
+    this.sub = obs.subscribe(() => {
+      if (this.state.experiment) {
+        this.fetchJobs(this.state.experiment);
+      }
+    });
   };
+
+  public componentWillUnmount() {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
+  }
 
   public render() {
     if (this.state.experiment) {
@@ -85,7 +98,7 @@ class ExperimentDetails extends React.Component<
                     type="primary"
                     ghost={true}
                     onClick={() => this.onExploreExperiment(job.result!.id)}
-                    disabled={job.status === 'done' ? false : true}
+                    disabled={job.status !== 'done'}
                   >
                     explore
                   </Button>,
@@ -94,7 +107,7 @@ class ExperimentDetails extends React.Component<
                     type="primary"
                     ghost={true}
                     onClick={() => this.showDownloadModal(job.result!.id)}
-                    disabled={job.status === 'done' ? false : true}
+                    disabled={job.status !== 'done'}
                   >
                     download graph
                   </Button>,
@@ -113,7 +126,7 @@ class ExperimentDetails extends React.Component<
                       {<h3> Job #{job.id}</h3>}
                       <Badge
                         className="Job-Badge"
-                        status={this.jobBadgeMap[job.status]}
+                        status={BadgeStatus[job.status]}
                         text={job.status}
                       />
                     </div>

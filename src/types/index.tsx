@@ -21,6 +21,15 @@ export interface IObservationMatrix {
   time_created?: string;
 }
 
+export type JobStatus = 'running' | 'done' | 'error' | 'cancelled';
+
+export enum BadgeStatus {
+  running = 'processing',
+  done = 'success',
+  error = 'error',
+  cancelled = 'warning'
+}
+
 export interface IExperiment {
   dataset_id: number;
   dataset?: number;
@@ -35,7 +44,7 @@ export interface IExperiment {
     experiment_id: number;
     start_time: string;
     pid: number;
-    status: string;
+    status: JobStatus;
     result?: {
       id: number;
       job_id: number;
@@ -67,7 +76,7 @@ export interface IJob {
   id: number;
   experiment_id: number;
   start_time: string;
-  status: string;
+  status: JobStatus;
   pid?: number;
   result?: {
     id: number;

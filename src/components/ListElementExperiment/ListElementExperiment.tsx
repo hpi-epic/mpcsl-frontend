@@ -1,11 +1,11 @@
 import { Badge, Button, Card, Dropdown, List, Menu } from 'antd';
-import { BadgeProps } from 'antd/lib/badge';
 import React from 'react';
 import './ListElementExperiment.css';
+import { JobStatus, BadgeStatus } from '../../types';
 
 interface IPropsListElementExperiment {
   title: string;
-  status?: BadgeProps['status'];
+  status?: JobStatus;
   statusText?: string;
   content: string;
   executionTimeStatistics?: { [name: string]: number };
@@ -62,7 +62,7 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
         <Badge
           className="Card-Badge"
           text={props.statusText}
-          status={props.status}
+          status={props.status ? BadgeStatus[props.status] : 'default'}
         />
       </div>
       {props.executionTimeStatistics ? (
@@ -87,7 +87,7 @@ function ListElementExperiment(props: IPropsListElementExperiment) {
               onClick={props.onExplore}
               type="primary"
               ghost={true}
-              disabled={props.status === 'success' ? false : true}
+              disabled={props.status !== 'done'}
             >
               Explore
             </Button>
