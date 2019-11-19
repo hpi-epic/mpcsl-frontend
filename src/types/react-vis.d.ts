@@ -874,9 +874,7 @@ declare module 'react-vis' {
     searchPlaceholder?: string;
     searchFn?: Function;
   }
-  export const SearchableDiscreteColorLegend: SFC<
-    SearchableDiscreteColorLegendProps
-  >;
+  export const SearchableDiscreteColorLegend: SFC<SearchableDiscreteColorLegendProps>;
 
   export interface ContinuousColorLegendProps {
     className?: string; //default: ''

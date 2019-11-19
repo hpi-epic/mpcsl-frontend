@@ -180,7 +180,4 @@ export function mapDispatchToProps(
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GraphExplorer);
+export default connect(mapStateToProps, mapDispatchToProps)(GraphExplorer);

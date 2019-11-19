@@ -108,7 +108,8 @@ class GraphCausalExplorer extends React.Component<
       (node: ID3GraphNode) =>
         this.state.effectNode &&
         node.id !== this.state.effectNode!.nodeID &&
-        (this.state.causalNode && node.id !== this.state.causalNode!.nodeID)
+        this.state.causalNode &&
+        node.id !== this.state.causalNode!.nodeID
     );
 
     // add information about whether node distribution was edited
@@ -417,8 +418,9 @@ class GraphCausalExplorer extends React.Component<
 
       if (this.state.isIntervention) {
         if (this.state.causalNode.selection) {
-          const condition = Object.keys(this.state.causalNode
-            .selection as {}).map((bin: string) => bin);
+          const condition = Object.keys(
+            this.state.causalNode.selection as {}
+          ).map((bin: string) => bin);
 
           if (condition.length !== 1) {
             message.error('Select only one category');

@@ -72,9 +72,7 @@ function graphExplorer(
       return {
         ...state,
         selectedGraph: graph,
-        nodes: state.nodes.filter(node =>
-          node.id === action.node.id ? false : true
-        )
+        nodes: state.nodes.filter(node => node.id !== action.node.id)
       };
     }
     default:
