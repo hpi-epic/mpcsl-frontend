@@ -1,5 +1,5 @@
-import { IAPIGraphNode, IAPIGraphEdges, ID3GraphNode } from './graphTypes';
-import { IndepenceTests } from '../constants/experiment';
+import {IAPIGraphEdges, IAPIGraphNode, ID3GraphNode} from './graphTypes';
+import {IndepenceTests} from '../constants/experiment';
 import Graph from '../utils/graph';
 
 export interface IStoreState {
@@ -21,10 +21,11 @@ export interface IObservationMatrix {
   time_created?: string;
 }
 
-export type JobStatus = 'running' | 'done' | 'error' | 'cancelled';
+export type JobStatus = 'running' | 'done' | 'error' | 'cancelled' | 'waiting';
 
 export enum BadgeStatus {
   running = 'processing',
+  waiting = 'processing',
   done = 'success',
   error = 'error',
   cancelled = 'warning'
