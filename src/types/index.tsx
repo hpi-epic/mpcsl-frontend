@@ -1,5 +1,5 @@
-import {IAPIGraphEdges, IAPIGraphNode, ID3GraphNode} from './graphTypes';
-import {IndepenceTests} from '../constants/experiment';
+import { IAPIGraphEdges, IAPIGraphNode, ID3GraphNode } from './graphTypes';
+import { IndepenceTests } from '../constants/experiment';
 import Graph from '../utils/graph';
 
 export interface IStoreState {
