@@ -418,8 +418,9 @@ class GraphCausalExplorer extends React.Component<
 
       if (this.state.isIntervention) {
         if (this.state.causalNode.selection) {
-          const condition = Object.keys(this.state.causalNode
-            .selection as {}).map((bin: string) => bin);
+          const condition = Object.keys(
+            this.state.causalNode.selection as {}
+          ).map((bin: string) => bin);
 
           if (condition.length !== 1) {
             message.error('Select only one category');

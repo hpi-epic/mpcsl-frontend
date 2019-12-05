@@ -42,7 +42,10 @@ describe('Graph', () => {
         { id: '1', label: 'a', fx: 1, fy: 1 },
         { id: '2', label: 'b', fx: 1, fy: 1 }
       ],
-      [{ source: '1', target: '2' }, { source: '2', target: '1' }]
+      [
+        { source: '1', target: '2' },
+        { source: '2', target: '1' }
+      ]
     );
 
     graph.resetLayout();
@@ -52,7 +55,10 @@ describe('Graph', () => {
         { id: '1', label: 'a', vx: 0, vy: 0 },
         { id: '2', label: 'b', vx: 0, vy: 0 }
       ],
-      [{ source: '1', target: '2' }, { source: '2', target: '1' }]
+      [
+        { source: '1', target: '2' },
+        { source: '2', target: '1' }
+      ]
     );
 
     expect(graph).toEqual(expectedGraph);
