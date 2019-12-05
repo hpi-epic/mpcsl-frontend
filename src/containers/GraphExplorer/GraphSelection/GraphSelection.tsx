@@ -63,4 +63,7 @@ export function mapDispatchToProps(
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(GraphSelection);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(GraphSelection);
