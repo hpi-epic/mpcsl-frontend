@@ -51,28 +51,13 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
   }
 
   public render() {
-    const graphSearch = this.props.availableNodes
-      ? this.props.availableNodes.map(node => {
-          if (
-            this.props.nodes.find(n => node.id.toString() === n.id) ===
-            undefined
-          ) {
-            return {
-              value: node.id,
-              label: node.name
-            };
-          }
-          return undefined;
-        })
-      : [];
+    const graphSearch = this.getGraphSearch();
 
     return (
       <Layout className="Layout">
         <Header className="Header">
           <Row>
-            <Col
-              span={this.state.view === '/graph-explorer/selection' ? 10 : 0}
-            >
+            <Col span={this.state.view === '/graph-explorer/selection' ? 9 : 0}>
               <Select
                 key={'a'}
                 onChange={(option: any) => {
@@ -82,14 +67,7 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
                   this.forceUpdate();
                   this.props.onAddNode(option.value);
                 }}
-                options={
-                  graphSearch
-                    ? (graphSearch.filter(n => !!n) as {
-                        value: number;
-                        label: string;
-                      }[])
-                    : []
-                }
+                options={graphSearch}
                 onSelectResetsInput={true}
                 onBlurResetsInput={false}
                 valueKey="value"
@@ -104,6 +82,15 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
                   marginTop: '15px'
                 }}
               />
+            </Col>
+            <Col span={this.state.view === '/graph-explorer/selection' ? 1 : 0}>
+              <Button
+                onClick={this.onSelectAll}
+                className="SelectAll"
+                disabled={!graphSearch.length}
+              >
+                Select all Nodes
+              </Button>
             </Col>
             <Col
               span={this.state.view === '/graph-explorer/selection' ? 0 : 10}
@@ -147,6 +134,30 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
     );
   }
 
+  private getGraphSearch = () => {
+    const graphSearch = this.props.availableNodes
+      ? this.props.availableNodes.map(node => {
+          if (
+            this.props.nodes.find(n => node.id.toString() === n.id) ===
+            undefined
+          ) {
+            return {
+              value: node.id,
+              label: node.name
+            };
+          }
+          return undefined;
+        })
+      : [];
+    const filteredGraphSearch = graphSearch
+      ? (graphSearch.filter(n => !!n) as {
+          value: number;
+          label: string;
+        }[])
+      : [];
+    return filteredGraphSearch;
+  };
+
   private onViewChange = (e: RadioChangeEvent) => {
     const resultID = window.location.href.match(new RegExp('\\/\\d*$'));
     this.changeView(e.target.value, resultID ? resultID[0] : '');
@@ -155,6 +166,10 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
   private onHomeClick = () => {
     this.changeView(Routes.experimentManager, '');
     window.location.reload();
+  };
+
+  private onSelectAll = () => {
+    this.getGraphSearch().forEach(node => this.props.onAddNode(node.value));
   };
 
   private changeView = (newView: string, resultID: string | null) => {
