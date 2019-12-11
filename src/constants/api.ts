@@ -3,6 +3,7 @@ import { GraphExportFormat } from '../types';
 const baseApiUrl = '/api';
 
 const Endpoints = {
+  k8s: baseApiUrl + '/k8s',
   observationMatrix: baseApiUrl + '/dataset',
   observationMatrices: baseApiUrl + '/datasets',
   experiment: baseApiUrl + '/experiment',

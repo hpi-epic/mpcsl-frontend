@@ -188,10 +188,16 @@ type SubJobStatusData = {
 export const subscribeToJobStatusChanges = () =>
   fromEvent<SubJobStatusData>(socket(), 'job_status');
 
-export function runExperiment(experiment: IExperiment): Promise<void> {
+export function runExperiment(
+  experiment: IExperiment,
+  node?: string
+): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     axios
-      .post(`${Endpoints.experiment}/${experiment.id}/start`)
+      .post(
+        `${Endpoints.experiment}/${experiment.id}/start`,
+        node ? { node } : undefined
+      )
       .then(() => {
         resolve();
         message.success('Successfully started Experiment Run!');
@@ -205,6 +211,9 @@ export function runExperiment(experiment: IExperiment): Promise<void> {
       });
   });
 }
+
+const nodes = axios.get<string[]>(`${Endpoints.k8s}/nodes`);
+export const getK8SNodes = async () => nodes;
 
 export function getResult(resultID: number): Promise<void> {
   return new Promise((resolve, reject) => {

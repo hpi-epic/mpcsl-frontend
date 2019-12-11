@@ -90,7 +90,7 @@ class ExperimentsManager extends React.Component<
           onExplore={() =>
             this.onExploreExperiment(experiment.last_job!.result!.id)
           }
-          onRunStart={() => this.onRunExperiment(experiment)}
+          onRunStart={node => this.onRunExperiment(experiment, node)}
           onView={() => this.onExperimentClick(experiment)}
           onShowDetails={() => this.showDetails(experiment.id!)}
         />
@@ -200,8 +200,8 @@ class ExperimentsManager extends React.Component<
     });
   };
 
-  private async onRunExperiment(experiment: IExperiment) {
-    await runExperiment(experiment);
+  private async onRunExperiment(experiment: IExperiment, node?: string) {
+    await runExperiment(experiment, node);
     this.fetchExperiments();
   }
 
