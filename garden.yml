@@ -1,0 +1,15 @@
+kind: Module
+type: exec
+local: true
+name: frontend-deps-installer
+build:
+  command: [yarn, install]
+---
+kind: Module
+type: exec
+local: true
+name: frontend-builder
+build:
+  command: [yarn, build]
+  dependencies:
+    - frontend-deps-installer
