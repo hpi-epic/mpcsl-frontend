@@ -12,12 +12,14 @@ import {
   getExperiments,
   deleteExperiment,
   runExperiment,
-  getObservationMatrices
+  getObservationMatrices,
+  subscribeToJobStatusChanges
 } from '../../actions/apiRequests';
 
 import ListElementExperiment from '../../components/ListElementExperiment/ListElementExperiment';
 
 import { RouteComponentProps } from 'react-router-dom';
+import { Subscription } from 'rxjs';
 
 interface IStateExperimentManagement {
   newExperimentModalVisible: boolean;
@@ -35,13 +37,6 @@ class ExperimentsManager extends React.Component<
 > {
   public mounted = false;
 
-  private jobBadgeMap: any = {
-    running: 'processing',
-    done: 'success',
-    error: 'error',
-    cancelled: 'warning'
-  };
-
   constructor(props: RouteComponentProps) {
     super(props);
 
@@ -56,13 +51,20 @@ class ExperimentsManager extends React.Component<
     };
   }
 
+  private sub: Subscription | undefined;
+
   public componentDidMount = () => {
     this.mounted = true;
     this.fetchExperiments();
     this.fetchObservationMatrices();
+    const obs = subscribeToJobStatusChanges();
+    this.sub = obs.subscribe(() => this.fetchExperiments());
   };
 
   public componentWillUnmount = () => {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
     this.mounted = false;
   };
 
@@ -75,11 +77,7 @@ class ExperimentsManager extends React.Component<
         <ListElementExperiment
           key={experiment.id}
           title={experiment.name}
-          status={
-            experiment.last_job! === null
-              ? 'default'
-              : this.jobBadgeMap[experiment.last_job!.status]
-          }
+          status={experiment.last_job ? experiment.last_job.status : undefined}
           statusText={
             experiment.last_job! === null
               ? 'Experiment was not started yet.'
@@ -92,7 +90,7 @@ class ExperimentsManager extends React.Component<
           onExplore={() =>
             this.onExploreExperiment(experiment.last_job!.result!.id)
           }
-          onRunStart={() => this.onRunExperiment(experiment)}
+          onRunStart={node => this.onRunExperiment(experiment, node)}
           onView={() => this.onExperimentClick(experiment)}
           onShowDetails={() => this.showDetails(experiment.id!)}
         />
@@ -202,8 +200,8 @@ class ExperimentsManager extends React.Component<
     });
   };
 
-  private async onRunExperiment(experiment: IExperiment) {
-    await runExperiment(experiment);
+  private async onRunExperiment(experiment: IExperiment, node?: string) {
+    await runExperiment(experiment, node);
     this.fetchExperiments();
   }
 

@@ -9,9 +9,20 @@ import {
   IAPIDistribution,
   IAPINodeContext,
   IAlgorithm,
-  IAPIConfounders
+  IAPIConfounders,
+  JobStatus
 } from '../types';
 import Endpoints from '../constants/api';
+import { fromEvent } from 'rxjs';
+import io from 'socket.io-client';
+
+let _socket: undefined | SocketIOClient.Socket;
+const socket = () => {
+  if (!_socket) {
+    _socket = io();
+  }
+  return _socket;
+};
 
 export function getObservationMatrices(): Promise<IObservationMatrix[]> {
   return new Promise<IObservationMatrix[]>((resolve, reject) => {
@@ -49,7 +60,7 @@ export function createExperiment(experiment: ICreateExperiment): Promise<void> {
 }
 
 export function createObservationMatrix(
-  observationMatrix: IObservationMatrix
+  observationMatrix: Omit<IObservationMatrix, 'id'>
 ): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     axios
@@ -169,10 +180,24 @@ export function getJobsForExperiment(experiment: IExperiment): Promise<IJob[]> {
   });
 }
 
-export function runExperiment(experiment: IExperiment): Promise<void> {
+type SubJobStatusData = {
+  id: number;
+  status: JobStatus;
+};
+
+export const subscribeToJobStatusChanges = () =>
+  fromEvent<SubJobStatusData>(socket(), 'job_status');
+
+export function runExperiment(
+  experiment: IExperiment,
+  node?: string
+): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     axios
-      .post(`${Endpoints.experiment}/${experiment.id}/start`)
+      .post(
+        `${Endpoints.experiment}/${experiment.id}/start`,
+        node ? { node } : undefined
+      )
       .then(() => {
         resolve();
         message.success('Successfully started Experiment Run!');
@@ -186,6 +211,9 @@ export function runExperiment(experiment: IExperiment): Promise<void> {
       });
   });
 }
+
+const nodes = axios.get<string[]>(`${Endpoints.k8s}/nodes`);
+export const getK8SNodes = async () => nodes;
 
 export function getResult(resultID: number): Promise<void> {
   return new Promise((resolve, reject) => {

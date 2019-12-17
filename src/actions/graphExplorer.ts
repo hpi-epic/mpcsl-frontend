@@ -14,9 +14,12 @@ export interface IFetchAvailableNodes {
   availableNodes: IAPIGraphNode[];
 }
 
-export const fetchAvailableNodes: ActionCreator<
-  ThunkAction<Promise<Action>, IState, void, Action>
-> = (resultID: number) => {
+export const fetchAvailableNodes: ActionCreator<ThunkAction<
+  Promise<Action>,
+  IState,
+  void,
+  Action
+>> = (resultID: number) => {
   return async (dispatch: Dispatch<Action>): Promise<IFetchAvailableNodes> => {
     const result = await getResultNodes(resultID);
     return dispatch({
@@ -33,9 +36,12 @@ export interface IAddNode {
   edges: IAPIGraphEdges[];
 }
 
-export const addNode: ActionCreator<
-  ThunkAction<Promise<Action>, IState, void, Action>
-> = (nodeID: number) => {
+export const addNode: ActionCreator<ThunkAction<
+  Promise<Action>,
+  IState,
+  void,
+  Action
+>> = (nodeID: number) => {
   return async (dispatch: Dispatch<Action>): Promise<IAddNode> => {
     const match = window.location.href.match(new RegExp('\\d*$'));
     if (!match || !match[0]) {

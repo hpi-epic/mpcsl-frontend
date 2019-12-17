@@ -1,56 +1,55 @@
 @import '~antd/dist/antd.css';
 
 .Card {
-	min-width: 100%;
-	margin: 0 auto;
-	border-radius: 8px;
+  min-width: 100%;
+  margin: 0 auto;
+  border-radius: 8px;
 }
 
 .List-Buttons {
-	float: right;
-	margin-right: 5px;
+  float: right;
+  margin-right: 5px;
 }
 
 .Card-Title {
-	float: left;
-	background-color: transparent;
-	border: none;
-	margin-top: 0;
-	margin-bottom: .5em;
-	color: rgba(0, 0, 0, 0.85);
-	font-weight: 500;
-	display: block;
-	font-size: 1em;
-	margin-block-start: 0.83em;
-	margin-block-end: 0.83em;
-	margin-inline-start: 0px;
-	margin-inline-end: 0px;
-	outline: none;
+  float: left;
+  background-color: transparent;
+  border: none;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+  display: block;
+  font-size: 1em;
+  margin-block-start: 0.83em;
+  margin-block-end: 0.83em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  outline: none;
 }
 
 .Card-Badge {
-	float: right;
-	margin-right: 5px;
-	margin-top: 15px;
+  float: right;
+  margin-right: 5px;
+  margin-top: 15px;
 }
 
 .Card-Content.Experiment-Content {
-	float: left;
-	width: 25%;
+  float: left;
+  width: 25%;
 }
 
 .Dropdown-Button {
-	border: none;
-	background-color: transparent;
+  border: none;
+  background-color: transparent;
 }
 
 .Dropdown-Button:hover {
-	border: none;
-	background-color: transparent;
+  border: none;
+  background-color: transparent;
 }
 
 .Go-Back-Button {
-	float: left;
-	margin-right: 20px;
+  float: left;
+  margin-right: 20px;
 }
-

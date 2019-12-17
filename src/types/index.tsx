@@ -1,4 +1,4 @@
-import { IAPIGraphNode, IAPIGraphEdges, ID3GraphNode } from './graphTypes';
+import { IAPIGraphEdges, IAPIGraphNode, ID3GraphNode } from './graphTypes';
 import { IndepenceTests } from '../constants/experiment';
 import Graph from '../utils/graph';
 
@@ -21,6 +21,16 @@ export interface IObservationMatrix {
   time_created?: string;
 }
 
+export type JobStatus = 'running' | 'done' | 'error' | 'cancelled' | 'waiting';
+
+export enum BadgeStatus {
+  running = 'processing',
+  waiting = 'processing',
+  done = 'success',
+  error = 'error',
+  cancelled = 'warning'
+}
+
 export interface IExperiment {
   dataset_id: number;
   dataset?: number;
@@ -35,7 +45,7 @@ export interface IExperiment {
     experiment_id: number;
     start_time: string;
     pid: number;
-    status: string;
+    status: JobStatus;
     result?: {
       id: number;
       job_id: number;
@@ -67,7 +77,7 @@ export interface IJob {
   id: number;
   experiment_id: number;
   start_time: string;
-  status: string;
+  status: JobStatus;
   pid?: number;
   result?: {
     id: number;

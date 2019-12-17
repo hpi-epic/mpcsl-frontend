@@ -40,23 +40,8 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
                   Test Title
                 </button>
                 <span
-                  className="Card-Badge ant-badge ant-badge-status ant-badge-not-a-wrapper"
-                >
-                  <span
-                    className="ant-badge-status-dot ant-badge-status-success"
-                    style={Object {}}
-                  />
-                  <span
-                    className="ant-badge-status-text"
-                    style={
-                      Object {
-                        "color": undefined,
-                      }
-                    }
-                  >
-                    done
-                  </span>
-                </span>
+                  className="Card-Badge ant-badge ant-badge-not-a-wrapper"
+                />
               </div>
             </div>
           </div>
@@ -101,7 +86,7 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
           </button>
           <button
             className="ant-btn List-Buttons ant-btn-primary ant-btn-background-ghost"
-            disabled={false}
+            disabled={true}
             onClick={[Function]}
             type="button"
           >

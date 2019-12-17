@@ -1,15 +1,14 @@
 declare module 'react-vis' {
   import {
     Component,
+    CSSProperties,
+    MouseEvent,
+    MouseEventHandler,
     PureComponent,
     ReactChild,
-    ReactNode,
     SFC,
-    MouseEventHandler,
     TouchEventHandler,
-    WheelEventHandler,
-    MouseEvent,
-    CSSProperties
+    WheelEventHandler
   } from 'react';
 
   export interface AbstractSeriesPoint {
@@ -874,9 +873,7 @@ declare module 'react-vis' {
     searchPlaceholder?: string;
     searchFn?: Function;
   }
-  export const SearchableDiscreteColorLegend: SFC<
-    SearchableDiscreteColorLegendProps
-  >;
+  export const SearchableDiscreteColorLegend: SFC<SearchableDiscreteColorLegendProps>;
 
   export interface ContinuousColorLegendProps {
     className?: string; //default: ''

@@ -304,7 +304,4 @@ export function mapDispatchToProps(
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GraphRenderer);
+export default connect(mapStateToProps, mapDispatchToProps)(GraphRenderer);
