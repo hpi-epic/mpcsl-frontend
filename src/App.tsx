@@ -1,28 +1,40 @@
-import React, { Component } from 'react';
-import { Route, Redirect, Switch, BrowserRouter } from 'react-router-dom';
+import React from 'react';
 import colors from './constants/colors';
-
+import { Switch, Route } from 'react-router-dom';
 import './App.css';
-import GraphExplorer from './containers/GraphExplorer';
-import PipelineManager from './containers/PipelineManager';
-import RuntimeManager from './containers/RuntimeManager';
-import { Routes } from './constants/routes';
+import { Layout, Button } from 'antd';
+import { ObservationMatrixList } from './components/ObservationMatrixList/ObservationMatrixList';
+import { ExperimentsList } from './containers/ExperimentsList/ExperimentsList';
 
-class App extends Component {
-  public render() {
-    return (
-      <div style={{ background: colors.contentBackground }}>
-        <BrowserRouter>
+const { Header, Content } = Layout;
+
+const App = () => {
+  return (
+    <div style={{ background: colors.contentBackground }}>
+      <Layout className="Layout">
+        <Header
+          className="Header"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Button
+            onClick={() => console.log('Home')}
+            icon="home"
+            ghost={true}
+          />
+        </Header>
+        <Content style={{ background: colors.contentBackground }}>
           <Switch>
-            <Route path={Routes.manager} component={PipelineManager} />
-            <Route path={Routes.graphExplorer} component={GraphExplorer} />
-            <Route path={Routes.runtimeManager} component={RuntimeManager} />
-            <Redirect from="/" to={Routes.experimentManager} />
+            <Route path="/:id/experiments" component={ExperimentsList} />
+            <Route path="/" component={ObservationMatrixList} />
           </Switch>
-        </BrowserRouter>
-      </div>
-    );
-  }
-}
+        </Content>
+      </Layout>
+    </div>
+  );
+};
 
 export default App;

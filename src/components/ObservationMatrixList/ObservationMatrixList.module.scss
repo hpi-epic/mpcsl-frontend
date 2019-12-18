@@ -1,0 +1,27 @@
+.ObservationMatrixList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.ObservationMatrixListItem {
+  max-width: 300px;
+  min-width: 300px;
+  margin: 5px !important;
+  flex-grow: 1;
+  // transition: box-shadow .3s;
+  // :hover {
+  //   box-shadow: 0 0 11px rgba(33,33,33,.2);
+  // }
+}
+
+.ObservationMatrixListItemContent {
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  p {
+    flex-grow: 1;
+  }
+}

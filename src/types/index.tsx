@@ -13,7 +13,7 @@ export interface IStoreState {
 export type StoreState = IStoreState | undefined;
 
 export interface IObservationMatrix {
-  id?: number;
+  id: number;
   load_query: string;
   name: string;
   description?: string;
@@ -34,7 +34,7 @@ export enum BadgeStatus {
 export interface IExperiment {
   dataset_id: number;
   dataset?: number;
-  id?: number;
+  id: number;
   name: string;
   description?: string;
   execution_time_statistics?: { [name: string]: number };
