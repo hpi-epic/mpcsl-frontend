@@ -4,7 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import './App.css';
 import { Layout, Button } from 'antd';
 import { ObservationMatrixList } from './components/ObservationMatrixList/ObservationMatrixList';
-import { ExperimentsList } from './containers/ExperimentsList/ExperimentsList';
+import { ExperimentRoutes } from './ExperimentRoutes';
 
 const { Header, Content } = Layout;
 
@@ -28,7 +28,14 @@ const App = () => {
         </Header>
         <Content style={{ background: colors.contentBackground }}>
           <Switch>
-            <Route path="/:id/experiments" component={ExperimentsList} />
+            {/* <Route
+              path="/:datasetId/experiments/:experimentId/explore"
+              component={GraphExplorer}
+            /> */}
+            <Route
+              path="/:datasetId/experiments"
+              component={ExperimentRoutes}
+            />
             <Route path="/" component={ObservationMatrixList} />
           </Switch>
         </Content>

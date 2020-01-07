@@ -28,7 +28,8 @@ interface IStateJobsManagement {
 }
 
 interface IMatchParams {
-  experiment_id: string;
+  experimentId: string;
+  datasetId: string;
 }
 
 class ExperimentDetails extends React.Component<
@@ -55,7 +56,7 @@ class ExperimentDetails extends React.Component<
   private sub: Subscription | undefined;
 
   public componentDidMount = () => {
-    this.fetchExperiment(Number(this.props.match.params.experiment_id));
+    this.fetchExperiment(Number(this.props.match.params.experimentId));
     const obs = subscribeToJobStatusChanges();
     this.sub = obs.subscribe(() => {
       if (this.state.experiment) {
@@ -76,7 +77,7 @@ class ExperimentDetails extends React.Component<
         <div className="Content">
           <Button
             className="Go-Back-Button"
-            onClick={() => this.onGoBack()}
+            onClick={() => this.onGoBack(this.props.match.params.datasetId)}
             type="primary"
             ghost={true}
           >
@@ -281,8 +282,8 @@ class ExperimentDetails extends React.Component<
     this.props.history.push(`/graph-explorer/selection/${resultId}`);
   };
 
-  private onGoBack = () => {
-    this.props.history.push('/manager/experiments');
+  private onGoBack = (datasetId: string) => {
+    this.props.history.push(`/${datasetId}/experiments`);
   };
 }
 

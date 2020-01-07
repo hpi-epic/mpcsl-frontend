@@ -8,6 +8,8 @@ const Endpoints = {
   observationMatrices: baseApiUrl + '/datasets',
   experiment: baseApiUrl + '/experiment',
   allExperiments: baseApiUrl + '/experiments',
+  datasetExperiments: (datasetId: number) =>
+    `${baseApiUrl}/dataset/${datasetId}/experiments`,
   job: baseApiUrl + '/job',
   jobLogs: (jobId: number) => `${baseApiUrl}/job/${String(jobId)}/logs`,
   allJobs: '/jobs',

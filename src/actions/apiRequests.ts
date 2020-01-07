@@ -104,6 +104,18 @@ export function getExperiments(): Promise<IExperiment[]> {
   });
 }
 
+export const getExperimentsForDataset = async (
+  datasetId: number
+): Promise<IExperiment[]> => {
+  try {
+    const response = await axios.get(Endpoints.datasetExperiments(datasetId));
+    return response.data;
+  } catch (e) {
+    message.error('Failed to fetch Experiments');
+    throw e;
+  }
+};
+
 export function getExperiment(experimentId: number): Promise<IExperiment> {
   return new Promise<IExperiment>((resolve, reject) => {
     axios
@@ -185,8 +197,12 @@ type SubJobStatusData = {
   status: JobStatus;
 };
 
-export const subscribeToJobStatusChanges = () =>
-  fromEvent<SubJobStatusData>(socket(), 'job_status');
+const JobChangesObservable = fromEvent<SubJobStatusData>(
+  socket(),
+  'job_status'
+);
+
+export const subscribeToJobStatusChanges = () => JobChangesObservable;
 
 export function runExperiment(
   experiment: IExperiment,
