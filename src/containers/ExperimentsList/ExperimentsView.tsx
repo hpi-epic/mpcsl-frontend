@@ -4,11 +4,23 @@ import {
   getExperimentsForDataset,
   getK8SNodes,
   runExperiment,
-  subscribeToJobStatusChanges
+  subscribeToJobStatusChanges,
+  getObservationMatrices,
+  getObservationMatrix
 } from '../../actions/apiRequests';
-import { IExperiment, BadgeStatus } from '../../types';
-import { Card, Button, Badge, Select, Modal, Menu, Dropdown, Spin } from 'antd';
-import styles from './ExperimentsList.module.scss';
+import { IExperiment, BadgeStatus, IObservationMatrix } from '../../types';
+import {
+  Card,
+  Button,
+  Badge,
+  Select,
+  Modal,
+  Menu,
+  Dropdown,
+  Spin,
+  Row
+} from 'antd';
+import styles from './ExperimentsView.module.scss';
 import { Subscription } from 'rxjs';
 const { Option } = Select;
 
@@ -21,7 +33,9 @@ const ExperimentDropdown = (props: IExperiment) => {
           <Menu.Item>
             <Button
               className={styles.DropdownButton}
-              onClick={() => undefined}
+              onClick={e => {
+                e.stopPropagation();
+              }}
               key="1"
             >
               View Settings
@@ -30,7 +44,9 @@ const ExperimentDropdown = (props: IExperiment) => {
           <Menu.Item>
             <Button
               className={styles.DropdownButton}
-              onClick={() => undefined}
+              onClick={e => {
+                e.stopPropagation();
+              }}
               key="3"
             >
               Duplicate
@@ -39,7 +55,9 @@ const ExperimentDropdown = (props: IExperiment) => {
           <Menu.Item>
             <Button
               className={styles.DropdownButton}
-              onClick={() => undefined}
+              onClick={e => {
+                e.stopPropagation();
+              }}
               type="danger"
               ghost={true}
               key="4"
@@ -51,7 +69,11 @@ const ExperimentDropdown = (props: IExperiment) => {
       }
       placement="bottomLeft"
     >
-      <Button className={styles.ListButton} icon="ellipsis" />
+      <Button
+        className={styles.ListButton}
+        icon="ellipsis"
+        onClick={e => e.stopPropagation()}
+      />
     </Dropdown>
   );
 };
@@ -124,14 +146,21 @@ const ExperimentsListItem = (props: IExperiment) => {
         }
         hoverable
         className={styles.ListItem}
-        // onClick={() => history.push(`/${props.id}/experiments`)}
+        onClick={() =>
+          history.push(
+            `/${props.dataset_id}/experiments/${props.id}/jobs/${props.last_job?.id}`
+          )
+        }
       >
         <div className={styles.ListItemContent}>
           <p>{description}</p>
           <div style={{ alignSelf: 'flex-end' }}>
             <Button
               className={styles.ListButton}
-              onClick={() => setNodeSelectModal(true)}
+              onClick={e => {
+                e.stopPropagation();
+                setNodeSelectModal(true);
+              }}
               type="primary"
               ghost={true}
             >
@@ -139,9 +168,12 @@ const ExperimentsListItem = (props: IExperiment) => {
             </Button>
             <Button
               className={styles.ListButton}
-              onClick={() =>
-                history.push(`${history.location.pathname}/${props.id}/jobs`)
-              }
+              onClick={e => {
+                e.stopPropagation();
+                history.push(
+                  `/${props.dataset_id}/experiments/${props.id}/jobs`
+                );
+              }}
               type="primary"
               ghost={true}
             >
@@ -155,27 +187,24 @@ const ExperimentsListItem = (props: IExperiment) => {
   );
 };
 
-const ExperimentsList = ({
-  match
-}: RouteComponentProps<{ datasetId: string }>) => {
-  const { datasetId } = match.params;
+const ExperimentsList = (props: IObservationMatrix) => {
   const [experiments, setExperiments] = useState<undefined | IExperiment[]>();
   useEffect(() => {
     let sub: Subscription | undefined;
-    if (datasetId) {
-      getExperimentsForDataset(parseInt(datasetId, 10))
+    if (props.id) {
+      getExperimentsForDataset(props.id)
         .then(setExperiments)
         .catch();
       const obs = subscribeToJobStatusChanges();
       sub = obs.subscribe(() => {
-        getExperimentsForDataset(parseInt(datasetId, 10))
+        getExperimentsForDataset(props.id)
           .then(setExperiments)
           .catch();
       });
     }
     return () => sub?.unsubscribe();
-  }, [datasetId]);
-  if (!datasetId) {
+  }, [props.id]);
+  if (!props.id) {
     return <h1>404</h1>;
   }
   if (!experiments) {
@@ -186,7 +215,6 @@ const ExperimentsList = ({
       />
     );
   }
-  console.log(`${match?.path}/:experimentId/jobs`);
   return (
     <div className={styles.List}>
       {experiments.map(experiment => (
@@ -196,4 +224,44 @@ const ExperimentsList = ({
   );
 };
 
-export { ExperimentsList };
+const ExperimentsView = ({
+  match
+}: RouteComponentProps<{ datasetId: string }>) => {
+  const [dataset, setDataset] = useState<undefined | IObservationMatrix>();
+  const { datasetId } = match.params;
+  useEffect(() => {
+    getObservationMatrix(parseInt(datasetId, 10))
+      .then(setDataset)
+      .catch();
+  }, [datasetId]);
+  if (!dataset) {
+    return (
+      <Spin
+        style={{ position: 'absolute', top: '50%', left: '50%' }}
+        size="large"
+      />
+    );
+  }
+  return (
+    <div className="Content">
+      <Row>
+        <div className="Experiment-Controls">
+          <Button type="primary" onClick={() => undefined}>
+            + New Experiment
+          </Button>
+        </div>
+      </Row>
+      <Row>
+        <ExperimentsList {...dataset} />
+      </Row>
+      {/* <ExperimentModal
+          visible={this.state.newExperimentModalVisible}
+          onClose={this.onClose}
+          experiment={this.state.clickedExperiment}
+          editDisabled={!this.state.editExperiment}
+        /> */}
+    </div>
+  );
+};
+
+export { ExperimentsView };

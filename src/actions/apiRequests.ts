@@ -41,6 +41,23 @@ export function getObservationMatrices(): Promise<IObservationMatrix[]> {
   });
 }
 
+export function getObservationMatrix(id: number): Promise<IObservationMatrix> {
+  return new Promise<IObservationMatrix>((resolve, reject) => {
+    axios
+      .get(Endpoints.observationMatrix + `/${id}`)
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        message.error('Failed to fetch Observation Matrix');
+        reject({
+          status: error.response.status,
+          message: 'Failed to fetch Observation Matrix'
+        });
+      });
+  });
+}
+
 export function createExperiment(experiment: ICreateExperiment): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     axios
