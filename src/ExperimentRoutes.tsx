@@ -1,17 +1,17 @@
 import React from 'react';
-import { Switch, Route, RouteComponentProps } from 'react-router-dom';
+import { Switch, Route, RouteComponentProps, Redirect } from 'react-router-dom';
 import ExperimentDetails from './containers/ExperimentDetails/ExperimentDetails';
 import { ExperimentsView } from './containers/ExperimentsList/ExperimentsView';
-import { GraphExplorer } from './containers/GraphExplorer/GraphExplorer';
+import GraphExplorer from './containers/GraphExplorer/';
 
 const ExperimentRoutes = ({
   match
 }: RouteComponentProps<{ datasetId: string }>) => {
   return (
     <Switch>
-      <Route
-        path={`${match?.path}/:experimentId/jobs/:jobId`}
-        component={GraphExplorer}
+      <Redirect
+        from={`${match?.path}/:experimentId/jobs/:resultId`}
+        to={`/graph-explorer/selection/:resultId`}
       />
       <Route
         path={`${match?.path}/:experimentId/jobs`}

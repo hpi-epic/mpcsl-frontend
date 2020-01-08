@@ -146,11 +146,13 @@ const ExperimentsListItem = (props: IExperiment) => {
         }
         hoverable
         className={styles.ListItem}
-        onClick={() =>
-          history.push(
-            `/${props.dataset_id}/experiments/${props.id}/jobs/${props.last_job?.id}`
-          )
-        }
+        onClick={() => {
+          if (props.last_job && props.last_job?.result) {
+            history.push(
+              `/${props.dataset_id}/experiments/${props.id}/jobs/${props.last_job?.result?.id}`
+            );
+          }
+        }}
       >
         <div className={styles.ListItemContent}>
           <p>{description}</p>
