@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Route,
   Switch,
   useHistory,
-  useParams,
-  useLocation
+  RouteComponentProps
 } from 'react-router-dom';
-import { Button, Layout, Col, Row } from 'antd';
-import GraphViewRadioNavigation from './components/GraphExplorerNavigation/GraphViewRadioNavigation';
+import { Button, Layout, Radio } from 'antd';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 import * as actions from './actions/graphExplorer';
@@ -15,11 +13,24 @@ import { IState } from './store';
 import { IGraphExplorerProps } from './containers/GraphExplorer';
 import Select from 'react-virtualized-select';
 
-const GraphExplorerHeader = (props: IGraphExplorerProps) => {
-  const location = useLocation();
-  console.log(location);
-  const graphSearch = props.availableNodes
-    ? props.availableNodes.map(node => {
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
+
+const GraphExplorerHeader = (
+  props: IGraphExplorerProps & RouteComponentProps<{ view: string }>
+) => {
+  const [graphSearch, setGraphSearch] = useState<
+    (
+      | {
+          value: number;
+          label: string;
+        }
+      | undefined
+    )[]
+  >([]);
+  useEffect(() => {
+    if (props.availableNodes) {
+      const result = props.availableNodes.map(node => {
         if (props.nodes.find(n => node.id.toString() === n.id) === undefined) {
           return {
             value: node.id,
@@ -27,11 +38,16 @@ const GraphExplorerHeader = (props: IGraphExplorerProps) => {
           };
         }
         return undefined;
-      })
-    : [];
+      });
+      setGraphSearch(result);
+    } else {
+      setGraphSearch([]);
+    }
+  }, [props.availableNodes, props.nodes]);
+  console.log(props.match);
   return (
-    <Row>
-      <Col span={location.pathname.includes('selection') ? 10 : 0}>
+    <>
+      <div style={{ flexGrow: 10 }}>
         <Select
           key={'a'}
           onChange={(option: any) => {
@@ -50,23 +66,36 @@ const GraphExplorerHeader = (props: IGraphExplorerProps) => {
           valueKey="value"
           labelKey="label"
           closeOnSelect={false}
-          // value={this.state.value}
           removeSelected={true}
           clearable={true}
           placeholder="Select nodes"
           style={{
             lineHeight: '14px',
-            marginTop: '15px'
+            marginTop: '15px',
+            display:
+              props.match.params.view !== 'selection' ? 'none' : undefined
           }}
         />
-      </Col>
-      <Col span={location.pathname.includes('selection') ? 10 : 0} />
-      <Col span={10} className="Nav-Switch">
-        {/* <GraphViewRadioNavigation
-                value={location.pathname}
-              /> */}
-      </Col>
-    </Row>
+      </div>
+      <div
+        style={{ flexGrow: 10, justifyContent: 'flex-end', display: 'flex' }}
+      >
+        <RadioGroup
+          buttonStyle="solid"
+          value={props.match.params.view}
+          onChange={e =>
+            props.history.push(
+              props.match.url.replace(props.match.params.view, e.target.value)
+            )
+          }
+          size="small"
+        >
+          <RadioButton value="selection">Selection</RadioButton>
+          <RadioButton value="annotate">Expl. &#38; Valid.</RadioButton>
+          <RadioButton value="causal-exploration">Causal Inference</RadioButton>
+        </RadioGroup>
+      </div>
+    </>
   );
 };
 
@@ -92,7 +121,6 @@ const GraphExplorerHeaderRedux = connect(
 
 const AppHeader = () => {
   const history = useHistory();
-  const params = useParams<{ resultId: string }>();
   return (
     <Layout.Header
       className="Header"
@@ -102,11 +130,25 @@ const AppHeader = () => {
         justifyContent: 'center'
       }}
     >
-      <Button onClick={() => history.push('/')} icon="home" ghost={true} />
-      <Switch>
-        <Route path="/graph-explorer" component={GraphExplorerHeaderRedux} />
-        <Route />
-      </Switch>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          flexGrow: 1,
+          alignItems: 'baseline'
+        }}
+      >
+        <div style={{ flexGrow: 4 }}>
+          <Button onClick={() => history.push('/')} icon="home" ghost={true} />
+        </div>
+        <Switch>
+          <Route
+            path="/graph-explorer/:view/:resultid"
+            component={GraphExplorerHeaderRedux}
+          />
+          <Route />
+        </Switch>
+      </div>
     </Layout.Header>
   );
 };
