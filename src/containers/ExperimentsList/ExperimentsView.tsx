@@ -4,11 +4,9 @@ import {
   getExperimentsForDataset,
   getK8SNodes,
   runExperiment,
-  subscribeToJobStatusChanges,
-  getObservationMatrices,
-  getObservationMatrix
+  subscribeToJobStatusChanges
 } from '../../actions/apiRequests';
-import { IExperiment, BadgeStatus, IObservationMatrix } from '../../types';
+import { IExperiment, BadgeStatus } from '../../types';
 import {
   Card,
   Button,
@@ -18,10 +16,14 @@ import {
   Menu,
   Dropdown,
   Spin,
-  Row
+  Row,
+  Form
 } from 'antd';
 import styles from './ExperimentsView.module.scss';
 import { Subscription } from 'rxjs';
+import NewExperimentModal, {
+  IPropsNewExperimentModal
+} from '../ExperimentsManager/NewExperimentModal';
 const { Option } = Select;
 
 const ExperimentDropdown = (props: IExperiment) => {
@@ -89,9 +91,7 @@ const ExperimentsListItem = (props: IExperiment) => {
       .catch(() => setK8sNodes([]));
   }, []);
   const { name, description, last_job, execution_time_statistics } = props;
-  const statusText = last_job
-    ? last_job.status
-    : 'Experiment was not started yet.';
+  const statusText = last_job ? last_job.status : 'not started';
   return (
     <>
       <Modal
@@ -189,24 +189,24 @@ const ExperimentsListItem = (props: IExperiment) => {
   );
 };
 
-const ExperimentsList = (props: IObservationMatrix) => {
+const ExperimentsList = (props: { datasetId: number }) => {
   const [experiments, setExperiments] = useState<undefined | IExperiment[]>();
   useEffect(() => {
     let sub: Subscription | undefined;
-    if (props.id) {
-      getExperimentsForDataset(props.id)
+    if (props.datasetId) {
+      getExperimentsForDataset(props.datasetId)
         .then(setExperiments)
         .catch();
       const obs = subscribeToJobStatusChanges();
       sub = obs.subscribe(() => {
-        getExperimentsForDataset(props.id)
+        getExperimentsForDataset(props.datasetId)
           .then(setExperiments)
           .catch();
       });
     }
     return () => sub?.unsubscribe();
-  }, [props.id]);
-  if (!props.id) {
+  }, [props.datasetId]);
+  if (!props.datasetId) {
     return <h1>404</h1>;
   }
   if (!experiments) {
@@ -229,39 +229,29 @@ const ExperimentsList = (props: IObservationMatrix) => {
 const ExperimentsView = ({
   match
 }: RouteComponentProps<{ datasetId: string }>) => {
-  const [dataset, setDataset] = useState<undefined | IObservationMatrix>();
-  const { datasetId } = match.params;
-  useEffect(() => {
-    getObservationMatrix(parseInt(datasetId, 10))
-      .then(setDataset)
-      .catch();
-  }, [datasetId]);
-  if (!dataset) {
-    return (
-      <Spin
-        style={{ position: 'absolute', top: '50%', left: '50%' }}
-        size="large"
-      />
-    );
-  }
+  const [modalVisible, setModalVisible] = useState(false);
+  const datasetId = parseInt(match.params.datasetId, 10);
+  const ExperimentModal = Form.create<IPropsNewExperimentModal>()(
+    NewExperimentModal
+  );
   return (
     <div className="Content">
       <Row>
         <div className="Experiment-Controls">
-          <Button type="primary" onClick={() => undefined}>
+          <Button type="primary" onClick={() => setModalVisible(true)}>
             + New Experiment
           </Button>
         </div>
       </Row>
       <Row>
-        <ExperimentsList {...dataset} />
+        <ExperimentsList datasetId={datasetId} />
       </Row>
-      {/* <ExperimentModal
-          visible={this.state.newExperimentModalVisible}
-          onClose={this.onClose}
-          experiment={this.state.clickedExperiment}
-          editDisabled={!this.state.editExperiment}
-        /> */}
+      <ExperimentModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        experiment={undefined}
+        editDisabled={false}
+      />
     </div>
   );
 };

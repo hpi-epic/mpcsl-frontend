@@ -13,6 +13,10 @@ import { IState } from './store';
 import { IGraphExplorerProps } from './containers/GraphExplorer';
 import Select from 'react-virtualized-select';
 
+import 'react-select/dist/react-select.css';
+import 'react-virtualized/styles.css';
+import 'react-virtualized-select/styles.css';
+
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
