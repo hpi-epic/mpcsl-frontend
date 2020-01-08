@@ -9,12 +9,13 @@
 .ListItem {
   max-width: 300px;
   min-width: 300px;
+  word-wrap: break-word;
   margin: 5px !important;
   flex-grow: 1;
 }
 
 .ListItemContent {
-  height: 100px;
+  height: 150px;
   display: flex;
   flex-direction: column;
   p {
