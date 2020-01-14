@@ -75,14 +75,6 @@ class ExperimentDetails extends React.Component<
     if (this.state.experiment) {
       return (
         <div className="Content">
-          <Button
-            className="Go-Back-Button"
-            onClick={() => this.onGoBack(this.props.match.params.datasetId)}
-            type="primary"
-            ghost={true}
-          >
-            <Icon type="left" />
-          </Button>
           <h2>
             Experiment: <i>{this.state.experiment.name}</i>
           </h2>
