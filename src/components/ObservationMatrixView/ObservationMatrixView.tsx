@@ -8,9 +8,10 @@ import NewObservationMatrixModal, {
   IPropsNewObservationMatrixModal,
   IFormObservationMatrix
 } from '../../containers/ObservationMatricesManager/NewObservationMatrixModal';
-import { Card, Button, Popconfirm, Form, Row } from 'antd';
+import { Card, Button, Popconfirm, Form, Row, Progress, message } from 'antd';
 import styles from './ObservationMatrixView.module.scss';
 import { useHistory } from 'react-router-dom';
+import Axios, { AxiosRequestConfig } from 'axios';
 
 interface IObservationMatrixList {
   onView: (observationMatrix: IObservationMatrix) => void;
@@ -28,6 +29,8 @@ interface IObservationMatrixListElement {
 
 const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
   const { name, description } = props;
+  const [inputRef, setInputRef] = useState<HTMLInputElement>();
+  const [uploadProgress, setUploadProgress] = useState<number | undefined>();
   const history = useHistory();
   return (
     <Card
@@ -39,6 +42,61 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
       <div className={styles.ObservationMatrixListItemContent}>
         <p>{description}</p>
         <div style={{ alignSelf: 'flex-end' }}>
+          <div style={{ width: 170 }}>
+            {uploadProgress ? (
+              <Progress percent={uploadProgress} size="small" />
+            ) : null}
+          </div>
+          <Button
+            className="List-Buttons"
+            type="primary"
+            ghost={true}
+            onClick={e => {
+              e.stopPropagation();
+              if (inputRef) {
+                inputRef.click();
+              }
+            }}
+          >
+            Upload Ground Truth Graph
+          </Button>
+          <input
+            style={{ display: 'none' }}
+            type="file"
+            name="file"
+            id="file"
+            ref={ref => (ref ? setInputRef(ref) : undefined)}
+            accept=".gml"
+            onClick={e => e.stopPropagation()}
+            onChange={e => {
+              const target = e.target;
+              const file =
+                target.files && target.files.length === 1
+                  ? target.files[0]
+                  : undefined;
+              if (file) {
+                const data = new FormData();
+                data.append('graph_file', file);
+
+                const config: AxiosRequestConfig = {
+                  onUploadProgress: progressEvent =>
+                    setUploadProgress(
+                      Math.round(
+                        (progressEvent.loaded * 100) / progressEvent.total
+                      )
+                    )
+                };
+                Axios.post(`/api/dataset/${props.id}/upload`, data, config)
+                  .catch(err => {
+                    message.error(err.response.data.message);
+                  })
+                  .finally(() => {
+                    setTimeout(() => setUploadProgress(undefined), 1000);
+                    target.value = '';
+                  });
+              }
+            }}
+          />
           <Button
             className={styles.ListButton}
             onClick={e => {
