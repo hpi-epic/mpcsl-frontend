@@ -127,7 +127,8 @@ const GraphExplorerHeaderRedux = connect(
 
 const breadcrumbNameMap: { [key: string]: string } = {
   experiments: 'Experiments',
-  jobs: 'Jobs'
+  jobs: 'Jobs',
+  compare: 'Compare'
 };
 
 const AppHeader = withRouter(props => {

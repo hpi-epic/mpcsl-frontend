@@ -30,10 +30,26 @@ const { confirm } = Modal;
 const ExperimentDropdown = (
   props: IExperiment & { onView: () => void; onDuplicate: () => void }
 ) => {
+  const history = useHistory();
   return (
     <Dropdown
       overlay={
         <Menu>
+          <Menu.Item>
+            <Button
+              className={styles.DropdownButton}
+              onClick={e => {
+                e.stopPropagation();
+                history.push(
+                  `/${props.dataset_id}/experiments/${props.id}/jobs`
+                );
+              }}
+              type="primary"
+              ghost={true}
+            >
+              View Jobs
+            </Button>
+          </Menu.Item>
           <Menu.Item>
             <Button
               className={styles.DropdownButton}
@@ -186,16 +202,17 @@ const ExperimentsListItem = (
             </Button>
             <Button
               className={styles.ListButton}
+              disabled={!props.last_job?.result}
               onClick={e => {
                 e.stopPropagation();
                 history.push(
-                  `/${props.dataset_id}/experiments/${props.id}/jobs`
+                  `/${props.dataset_id}/experiments/${props.id}/compare`
                 );
               }}
               type="primary"
               ghost={true}
             >
-              View Jobs
+              Compare
             </Button>
             <ExperimentDropdown
               {...props}
