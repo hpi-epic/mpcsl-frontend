@@ -124,7 +124,7 @@ const ObservationMatrixView = () => {
   return (
     <div className="Content">
       <Row>
-        <div className="ObservationMatrix-Controls">
+        <div className={styles.ObservationMatrixControls}>
           <Button type="primary" onClick={onNewObservationMatrix}>
             + New Observation Matrix
           </Button>

@@ -16,18 +16,14 @@ import {
   Menu,
   Dropdown,
   Spin,
-  Row,
-  Form
+  Row
 } from 'antd';
 import styles from './ExperimentsView.module.scss';
 import { Subscription } from 'rxjs';
-import NewExperimentModal, {
-  IPropsNewExperimentModal
-} from '../ExperimentsManager/NewExperimentModal';
+import { NewExperimentModalForm } from '../ExperimentsManager/NewExperimentModal';
 const { Option } = Select;
 
 const ExperimentDropdown = (props: IExperiment) => {
-  console.log(props.id);
   return (
     <Dropdown
       overlay={
@@ -231,13 +227,10 @@ const ExperimentsView = ({
 }: RouteComponentProps<{ datasetId: string }>) => {
   const [modalVisible, setModalVisible] = useState(false);
   const datasetId = parseInt(match.params.datasetId, 10);
-  const ExperimentModal = Form.create<IPropsNewExperimentModal>()(
-    NewExperimentModal
-  );
   return (
     <div className="Content">
       <Row>
-        <div className="Experiment-Controls">
+        <div className={styles.ExperimentControls}>
           <Button type="primary" onClick={() => setModalVisible(true)}>
             + New Experiment
           </Button>
@@ -246,8 +239,9 @@ const ExperimentsView = ({
       <Row>
         <ExperimentsList datasetId={datasetId} />
       </Row>
-      <ExperimentModal
+      <NewExperimentModalForm
         visible={modalVisible}
+        datasetId={datasetId}
         onClose={() => setModalVisible(false)}
         experiment={undefined}
         editDisabled={false}
