@@ -110,6 +110,7 @@ class NewObservationMatrixModal extends React.Component<
         onCancel={this.props.onClose}
         onOk={this.handleSubmit}
         visible={this.props.visible}
+        okButtonProps={{ disabled: disabled }}
       >
         <Form layout="vertical" className="Modal-Form">
           <Row gutter={16}>
