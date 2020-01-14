@@ -1,11 +1,8 @@
 import React from 'react';
-import { Row, Button, Form } from 'antd';
+import { Row, Button } from 'antd';
 
 import './style.css';
-import NewExperimentModal, {
-  IPropsNewExperimentModal,
-  IFormExperiment
-} from './NewExperimentModal';
+import { IFormExperiment } from './NewExperimentModal';
 import { IExperiment, IJob } from '../../types';
 
 import {
@@ -69,9 +66,6 @@ class ExperimentsManager extends React.Component<
   };
 
   public render() {
-    const ExperimentModal = Form.create<IPropsNewExperimentModal>()(
-      NewExperimentModal
-    );
     const ExperimentList = this.state.experiments.map(
       (experiment: IExperiment) => (
         <ListElementExperiment
@@ -111,12 +105,6 @@ class ExperimentsManager extends React.Component<
           </div>
         </Row>
         <Row>{ExperimentList}</Row>
-        <ExperimentModal
-          visible={this.state.newExperimentModalVisible}
-          onClose={this.onClose}
-          experiment={this.state.clickedExperiment}
-          editDisabled={!this.state.editExperiment}
-        />
       </div>
     );
   }
@@ -144,16 +132,6 @@ class ExperimentsManager extends React.Component<
     });
   };
 
-  private onClose = () => {
-    this.setState({
-      newExperimentModalVisible: false,
-      clickedExperiment: undefined,
-      editExperiment: true,
-      jobListVisible: false
-    });
-    this.fetchExperiments();
-  };
-
   private onDeleteExperiment = (experiment: IExperiment) => {
     deleteExperiment(experiment).then(() => {
       this.fetchExperiments();
@@ -171,7 +149,7 @@ class ExperimentsManager extends React.Component<
       clickedExperiment: {
         name: experiment.name,
         description: experiment.description || '-',
-        observationMatrix_id: experiment.dataset_id,
+        dataset_id: experiment.dataset_id,
         algorithm_id: experiment.algorithm_id,
         parameters: params
       }
@@ -193,7 +171,7 @@ class ExperimentsManager extends React.Component<
       clickedExperiment: {
         name: `${experiment.name} - Copy`,
         description: experiment.description || '-',
-        observationMatrix_id: experiment.dataset_id,
+        dataset_id: experiment.dataset_id,
         algorithm_id: experiment.algorithm_id,
         parameters: params
       }

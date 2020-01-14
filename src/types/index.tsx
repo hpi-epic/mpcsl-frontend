@@ -64,13 +64,34 @@ export interface ICreateExperiment {
   parameters: { [name: string]: any };
 }
 
+interface IRequiredParameter {
+  required?: boolean;
+}
+
+export interface INumberParameter extends IRequiredParameter {
+  type: 'int' | 'float';
+  minimum?: number;
+  maximum?: number;
+  default?: number;
+}
+
+export interface IEnumParameter extends IRequiredParameter {
+  type: 'enum';
+  values: string[];
+  default?: string;
+}
+
+export type IParameter = INumberParameter | IEnumParameter;
+
+export type IParameters = { [name: string]: IParameter };
+
 export interface IAlgorithm {
   id: number;
   name: string;
   script_filename: string;
   backend: string;
   description: string;
-  valid_parameters: { [name: string]: any };
+  valid_parameters: IParameters;
 }
 
 export interface IJob {
