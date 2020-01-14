@@ -412,39 +412,34 @@ export function getConfounders(nodeID: string): Promise<IAPIConfounders> {
   });
 }
 
-export function getAllAlgorithms(): Promise<IAlgorithm[]> {
-  return new Promise<IAlgorithm[]>((resolve, reject) => {
-    axios
-      .get(Endpoints.allAlgorithms)
-      .then(response => {
-        resolve(response.data);
-      })
-      .catch(error => {
-        message.error('Failed to fetch Algorithms');
-        reject({
-          status: error.response.status,
-          message: error.message
-        });
-      });
-  });
-}
+let algorithms: undefined | Promise<IAlgorithm[]>;
 
-export function getAlgorithm(algorithmId: number): Promise<IAlgorithm> {
-  return new Promise<IAlgorithm>((resolve, reject) => {
-    axios
-      .get(Endpoints.algorithm(algorithmId))
-      .then(response => {
-        resolve(response.data);
-      })
-      .catch(error => {
-        message.error('Failed to fetch Algorithm');
-        reject({
-          status: error.response.status,
-          message: error.message
-        });
-      });
-  });
-}
+export const getAllAlgorithms = async (): Promise<IAlgorithm[]> => {
+  if (algorithms) {
+    return algorithms;
+  }
+  try {
+    algorithms = axios
+      .get<IAlgorithm[]>(Endpoints.allAlgorithms)
+      .then(resp => resp.data);
+    return algorithms;
+  } catch (e) {
+    message.error('Failed to fetch Algorithms');
+    throw e;
+  }
+};
+
+export const getAlgorithm = async (
+  algorithmId: number
+): Promise<IAlgorithm> => {
+  const allAlgorithms = await getAllAlgorithms();
+  const alg = allAlgorithms.find(val => val.id === algorithmId);
+  if (!alg) {
+    message.error('Algorithm not found');
+    throw new Error();
+  }
+  return alg;
+};
 
 export function getAllAvailableDataSources(): Promise<[]> {
   return new Promise<[]>((resolve, reject) => {

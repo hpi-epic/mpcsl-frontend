@@ -39,7 +39,7 @@ export interface IExperiment {
   description?: string;
   execution_time_statistics?: { [name: string]: number };
   algorithm_id: number;
-  parameters: { [name: string]: any };
+  parameters: IParameters;
   last_job?: {
     id: number;
     experiment_id: number;

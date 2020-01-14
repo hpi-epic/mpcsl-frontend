@@ -5,7 +5,8 @@ import {
   getK8SNodes,
   runExperiment,
   subscribeToJobStatusChanges,
-  subscribeToExperimentChanges
+  subscribeToExperimentChanges,
+  deleteExperiment
 } from '../../actions/apiRequests';
 import { IExperiment, BadgeStatus } from '../../types';
 import {
@@ -24,7 +25,11 @@ import { Subscription } from 'rxjs';
 import { NewExperimentModalForm } from '../ExperimentsManager/NewExperimentModal';
 const { Option } = Select;
 
-const ExperimentDropdown = (props: IExperiment) => {
+const { confirm } = Modal;
+
+const ExperimentDropdown = (
+  props: IExperiment & { onView: () => void; onDuplicate: () => void }
+) => {
   return (
     <Dropdown
       overlay={
@@ -34,6 +39,7 @@ const ExperimentDropdown = (props: IExperiment) => {
               className={styles.DropdownButton}
               onClick={e => {
                 e.stopPropagation();
+                props.onView();
               }}
               key="1"
             >
@@ -45,6 +51,7 @@ const ExperimentDropdown = (props: IExperiment) => {
               className={styles.DropdownButton}
               onClick={e => {
                 e.stopPropagation();
+                props.onDuplicate();
               }}
               key="3"
             >
@@ -56,6 +63,13 @@ const ExperimentDropdown = (props: IExperiment) => {
               className={styles.DropdownButton}
               onClick={e => {
                 e.stopPropagation();
+                confirm({
+                  title: 'Do you want to delete the following Experiment?',
+                  content: `${props.name} - ${props.description}`,
+                  onOk() {
+                    deleteExperiment(props).catch();
+                  }
+                });
               }}
               type="danger"
               ghost={true}
@@ -77,7 +91,12 @@ const ExperimentDropdown = (props: IExperiment) => {
   );
 };
 
-const ExperimentsListItem = (props: IExperiment) => {
+const ExperimentsListItem = (
+  props: IExperiment & {
+    onView: (experimentId: number) => void;
+    onDuplicate: (experimentId: number) => void;
+  }
+) => {
   const [nodeSelectModal, setNodeSelectModal] = useState(false);
   const [k8sNodes, setK8sNodes] = useState<undefined | string[]>();
   const [selectedNode, setSelectedNode] = useState<undefined | string>();
@@ -178,7 +197,11 @@ const ExperimentsListItem = (props: IExperiment) => {
             >
               View Jobs
             </Button>
-            <ExperimentDropdown {...props} />
+            <ExperimentDropdown
+              {...props}
+              onView={() => props.onView(props.id)}
+              onDuplicate={() => props.onDuplicate(props.id)}
+            />
           </div>
         </div>
       </Card>
@@ -186,7 +209,11 @@ const ExperimentsListItem = (props: IExperiment) => {
   );
 };
 
-const ExperimentsList = (props: { datasetId: number }) => {
+const ExperimentsList = (props: {
+  datasetId: number;
+  onView: (experiment: IExperiment | undefined) => void;
+  onDuplicate: (experiment: IExperiment | undefined) => void;
+}) => {
   const [experiments, setExperiments] = useState<undefined | IExperiment[]>();
   useEffect(() => {
     let subs: Subscription[] | undefined;
@@ -218,7 +245,14 @@ const ExperimentsList = (props: { datasetId: number }) => {
   return (
     <div className={styles.List}>
       {experiments.map(experiment => (
-        <ExperimentsListItem key={experiment.id} {...experiment} />
+        <ExperimentsListItem
+          key={experiment.id}
+          {...experiment}
+          onView={id => props.onView(experiments.find(exp => exp.id === id))}
+          onDuplicate={id =>
+            props.onDuplicate(experiments.find(exp => exp.id === id))
+          }
+        />
       ))}
     </div>
   );
@@ -228,25 +262,50 @@ const ExperimentsView = ({
   match
 }: RouteComponentProps<{ datasetId: string }>) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [editDisabled, setEditDisabled] = useState(false);
+  const [lastExperiment, setLastExperiment] = useState<
+    undefined | IExperiment
+  >();
   const datasetId = parseInt(match.params.datasetId, 10);
   return (
     <div className="Content">
       <Row>
         <div className={styles.ExperimentControls}>
-          <Button type="primary" onClick={() => setModalVisible(true)}>
+          <Button
+            type="primary"
+            onClick={() => {
+              setEditDisabled(false);
+              setLastExperiment(undefined);
+              setModalVisible(true);
+            }}
+          >
             + New Experiment
           </Button>
         </div>
       </Row>
       <Row>
-        <ExperimentsList datasetId={datasetId} />
+        <ExperimentsList
+          datasetId={datasetId}
+          onView={experiment => {
+            setEditDisabled(true);
+            setLastExperiment(experiment);
+            setModalVisible(true);
+          }}
+          onDuplicate={experiment => {
+            setLastExperiment(experiment);
+            setEditDisabled(false);
+            setModalVisible(true);
+          }}
+        />
       </Row>
       <NewExperimentModalForm
         visible={modalVisible}
         datasetId={datasetId}
-        onClose={() => setModalVisible(false)}
-        experiment={undefined}
-        editDisabled={false}
+        onClose={() => {
+          setModalVisible(false);
+        }}
+        experiment={lastExperiment}
+        editDisabled={editDisabled}
       />
     </div>
   );

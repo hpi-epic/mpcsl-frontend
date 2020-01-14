@@ -191,6 +191,13 @@ export type IFormExperiment = Partial<Omit<IExperiment, 'datasetId'>>;
 const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = props => {
   const [algParams, setAlgParams] = useState<IParameters>({});
 
+  useEffect(() => {
+    if (props.experiment && props.experiment.parameters) {
+      setAlgParams(props.experiment.parameters);
+    } else {
+      setAlgParams({});
+    }
+  }, [props.experiment]);
   const ExperimentNameEl = props.form.getFieldDecorator('name', {
     initialValue: props.experiment ? props.experiment.name : undefined,
     rules: [{ required: true, message: 'Enter a Experiment Name' }]
@@ -218,6 +225,7 @@ const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = pr
       onOk={() =>
         handleSubmit(props.form, props.datasetId, algParams, props.onClose)
       }
+      okButtonProps={{ disabled: props.editDisabled }}
       title={
         props.experiment
           ? `Experiment "${props.experiment.name}"`
