@@ -11,35 +11,12 @@ import BreadcrumbItem from 'antd/lib/breadcrumb/BreadcrumbItem';
 
 const { Header, Content } = Layout;
 
-const breadcrumbNameMap: { [key: string]: string } = {
-  experiments: 'Experiments',
-  jobs: 'Jobs'
-};
-
-const App = withRouter(props => {
-  const { location } = props;
-  const pathSnippets = location.pathname.split('/').filter(i => i);
-  const breadcrumbItems = [
-    <Breadcrumb.Item key="datasets">
-      <Link to="/">Observation Matrices</Link>
-    </Breadcrumb.Item>
-  ];
-  pathSnippets.forEach((element, index) => {
-    if (element in breadcrumbNameMap) {
-      const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
-      breadcrumbItems.push(
-        <Breadcrumb.Item key={url}>
-          <Link to={url}>{breadcrumbNameMap[element]}</Link>
-        </Breadcrumb.Item>
-      );
-    }
-  });
+const App = () => {
   return (
     <div style={{ background: colors.contentBackground }}>
       <Layout className="Layout">
         <AppHeader />
         <Content style={{ background: colors.contentBackground }}>
-          <Breadcrumb className="Breadcrumb">{breadcrumbItems}</Breadcrumb>
           <Switch>
             <Route path="/graph-explorer" component={GraphExplorer} />
             <Route
@@ -52,6 +29,6 @@ const App = withRouter(props => {
       </Layout>
     </div>
   );
-});
+};
 
 export default App;

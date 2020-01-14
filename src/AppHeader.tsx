@@ -3,9 +3,11 @@ import {
   Route,
   Switch,
   useHistory,
-  RouteComponentProps
+  RouteComponentProps,
+  withRouter,
+  Link
 } from 'react-router-dom';
-import { Button, Layout, Radio } from 'antd';
+import { Button, Layout, Radio, Breadcrumb, Icon } from 'antd';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 import * as actions from './actions/graphExplorer';
@@ -123,8 +125,34 @@ const GraphExplorerHeaderRedux = connect(
   mapDispatchToProps
 )(GraphExplorerHeader);
 
-const AppHeader = () => {
+const breadcrumbNameMap: { [key: string]: string } = {
+  experiments: 'Experiments',
+  jobs: 'Jobs'
+};
+
+const AppHeader = withRouter(props => {
   const history = useHistory();
+  const { location } = props;
+  const pathSnippets = location.pathname.split('/').filter(i => i);
+  const breadcrumbItems = [
+    <Breadcrumb.Item key="datasets">
+      <Link style={{ color: 'white' }} to="/">
+        <Icon type="home" /> Observation Matrices
+      </Link>
+    </Breadcrumb.Item>
+  ];
+  pathSnippets.forEach((element, index) => {
+    if (element in breadcrumbNameMap) {
+      const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+      breadcrumbItems.push(
+        <Breadcrumb.Item key={url}>
+          <Link style={{ color: 'white' }} to={url}>
+            {breadcrumbNameMap[element]}
+          </Link>
+        </Breadcrumb.Item>
+      );
+    }
+  });
   return (
     <Layout.Header
       className="Header"
@@ -143,7 +171,7 @@ const AppHeader = () => {
         }}
       >
         <div style={{ flexGrow: 4 }}>
-          <Button onClick={() => history.push('/')} icon="home" ghost={true} />
+          <Breadcrumb separator=">">{breadcrumbItems}</Breadcrumb>
         </div>
         <Switch>
           <Route
@@ -155,6 +183,6 @@ const AppHeader = () => {
       </div>
     </Layout.Header>
   );
-};
+});
 
 export { AppHeader };

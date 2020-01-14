@@ -18,12 +18,11 @@
   text-align: right;
 }
 
-.Breadcrumb {
-  margin-top: 5px !important;
-  margin-left: 5px !important;
-}
-
 .Content {
   padding: 24px 50px;
   background: #eff1ef;
+}
+
+.ant-breadcrumb-separator {
+  color: white !important;
 }
