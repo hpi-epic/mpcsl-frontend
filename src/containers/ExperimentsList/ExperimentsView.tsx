@@ -4,7 +4,8 @@ import {
   getExperimentsForDataset,
   getK8SNodes,
   runExperiment,
-  subscribeToJobStatusChanges
+  subscribeToJobStatusChanges,
+  subscribeToExperimentChanges
 } from '../../actions/apiRequests';
 import { IExperiment, BadgeStatus } from '../../types';
 import {
@@ -188,19 +189,20 @@ const ExperimentsListItem = (props: IExperiment) => {
 const ExperimentsList = (props: { datasetId: number }) => {
   const [experiments, setExperiments] = useState<undefined | IExperiment[]>();
   useEffect(() => {
-    let sub: Subscription | undefined;
+    let subs: Subscription[] | undefined;
     if (props.datasetId) {
-      getExperimentsForDataset(props.datasetId)
-        .then(setExperiments)
-        .catch();
-      const obs = subscribeToJobStatusChanges();
-      sub = obs.subscribe(() => {
+      const fetchExperiments = () => {
         getExperimentsForDataset(props.datasetId)
           .then(setExperiments)
           .catch();
-      });
+      };
+      fetchExperiments();
+      subs = [
+        subscribeToJobStatusChanges().subscribe(fetchExperiments),
+        subscribeToExperimentChanges().subscribe(fetchExperiments)
+      ];
     }
-    return () => sub?.unsubscribe();
+    return () => subs?.forEach(sub => sub.unsubscribe());
   }, [props.datasetId]);
   if (!props.datasetId) {
     return <h1>404</h1>;

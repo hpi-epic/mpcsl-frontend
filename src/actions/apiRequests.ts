@@ -214,12 +214,28 @@ type SubJobStatusData = {
   status: JobStatus;
 };
 
-const JobChangesObservable = fromEvent<SubJobStatusData>(
-  socket(),
-  'job_status'
-);
+const JobChangesObservable = fromEvent<SubJobStatusData>(socket(), 'job');
 
 export const subscribeToJobStatusChanges = () => JobChangesObservable;
+
+type SubExperimentData = {
+  id: number;
+};
+
+const ExperimentChangesObservable = fromEvent<SubExperimentData>(
+  socket(),
+  'experiment'
+);
+
+export const subscribeToExperimentChanges = () => ExperimentChangesObservable;
+
+type SubDatasetData = {
+  id: number;
+};
+
+const DatasetChangesObservable = fromEvent<SubDatasetData>(socket(), 'dataset');
+
+export const subscribeToDatasetChanges = () => DatasetChangesObservable;
 
 export function runExperiment(
   experiment: IExperiment,

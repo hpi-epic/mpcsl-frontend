@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { IObservationMatrix } from '../../types';
 import {
   getObservationMatrices,
-  deleteObservationMatrix
+  deleteObservationMatrix,
+  subscribeToDatasetChanges
 } from '../../actions/apiRequests';
 import NewObservationMatrixModal, {
   IPropsNewObservationMatrixModal,
@@ -77,9 +78,14 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
 const ObservationMatrixList = (props: IObservationMatrixList) => {
   const [matrices, setMatrices] = useState<undefined | IObservationMatrix[]>();
   useEffect(() => {
-    getObservationMatrices()
-      .then(setMatrices)
-      .catch();
+    const fetchDatasets = () => {
+      getObservationMatrices()
+        .then(setMatrices)
+        .catch();
+    };
+    fetchDatasets();
+    const sub = subscribeToDatasetChanges().subscribe(fetchDatasets);
+    return () => sub.unsubscribe();
   }, []);
   return matrices ? (
     <div className={styles.ObservationMatrixList}>
