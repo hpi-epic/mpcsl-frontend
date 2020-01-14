@@ -3,7 +3,7 @@ import colors from './constants/colors';
 import { Switch, Route } from 'react-router-dom';
 import './App.css';
 import { Layout, Button } from 'antd';
-import { ObservationMatrixList } from './components/ObservationMatrixList/ObservationMatrixList';
+import { ObservationMatrixView } from './components/ObservationMatrixView/ObservationMatrixView';
 import { ExperimentRoutes } from './ExperimentRoutes';
 import GraphExplorer from './containers/GraphExplorer';
 import { AppHeader } from './AppHeader';
@@ -22,7 +22,7 @@ const App = () => {
               path="/:datasetId/experiments"
               component={ExperimentRoutes}
             />
-            <Route path="/" component={ObservationMatrixList} />
+            <Route path="/" component={ObservationMatrixView} />
           </Switch>
         </Content>
       </Layout>
