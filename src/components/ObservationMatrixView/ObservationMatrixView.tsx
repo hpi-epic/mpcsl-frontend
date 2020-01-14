@@ -40,7 +40,7 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
         <p>{description}</p>
         <div style={{ alignSelf: 'flex-end' }}>
           <Button
-            className="List-Buttons"
+            className={styles.ListButton}
             onClick={e => {
               e.stopPropagation();
               props.onClick();
@@ -61,6 +61,7 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
             <Button
               icon="delete"
               type="danger"
+              className={styles.ListButton}
               ghost={true}
               onClick={e => e.stopPropagation()}
             >
