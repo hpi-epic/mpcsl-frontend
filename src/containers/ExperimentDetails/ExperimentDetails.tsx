@@ -1,6 +1,6 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { Button, List, Badge, Icon, Modal, Select } from 'antd';
+import { Button, List, Badge, Modal, Select } from 'antd';
 import { LazyLog as _LazyLog } from 'react-lazylog';
 import moment from 'moment';
 import { IExperiment, IJob, GraphExportFormat, BadgeStatus } from '../../types';

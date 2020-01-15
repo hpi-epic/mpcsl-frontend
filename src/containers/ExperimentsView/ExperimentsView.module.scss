@@ -1,0 +1,11 @@
+.List {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 20px;
+}
+
+.ExperimentControls {
+  padding-left: 25px;
+}

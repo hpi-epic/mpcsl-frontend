@@ -1,15 +1,14 @@
 import React from 'react';
 import colors from './constants/colors';
-import { Switch, Route, withRouter, Link } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import './App.css';
-import { Layout, Button, Breadcrumb } from 'antd';
-import { ObservationMatrixView } from './components/ObservationMatrixView/ObservationMatrixView';
+import { Layout } from 'antd';
+import { ObservationMatrixView } from './containers/ObservationMatrixView/ObservationMatrixView';
 import { ExperimentRoutes } from './ExperimentRoutes';
 import GraphExplorer from './containers/GraphExplorer';
 import { AppHeader } from './AppHeader';
-import BreadcrumbItem from 'antd/lib/breadcrumb/BreadcrumbItem';
 
-const { Header, Content } = Layout;
+const { Content } = Layout;
 
 const App = () => {
   return (

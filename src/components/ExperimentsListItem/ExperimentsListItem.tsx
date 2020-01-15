@@ -1,30 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory, RouteComponentProps } from 'react-router-dom';
-import {
-  getExperimentsForDataset,
-  getK8SNodes,
-  runExperiment,
-  subscribeToJobStatusChanges,
-  subscribeToExperimentChanges,
-  deleteExperiment
-} from '../../actions/apiRequests';
+import React, { useState, useEffect } from 'react';
+import { Select, Modal, Dropdown, Menu, Button, Card, Badge } from 'antd';
 import { IExperiment, BadgeStatus } from '../../types';
+import { useHistory } from 'react-router-dom';
 import {
-  Card,
-  Button,
-  Badge,
-  Select,
-  Modal,
-  Menu,
-  Dropdown,
-  Spin,
-  Row
-} from 'antd';
-import styles from './ExperimentsView.module.scss';
-import { Subscription } from 'rxjs';
-import { NewExperimentModalForm } from '../ExperimentsManager/NewExperimentModal';
+  deleteExperiment,
+  getK8SNodes,
+  runExperiment
+} from '../../actions/apiRequests';
+import styles from './ExperimentsListItem.module.scss';
 const { Option } = Select;
-
 const { confirm } = Modal;
 
 const ExperimentDropdown = (
@@ -226,106 +210,4 @@ const ExperimentsListItem = (
   );
 };
 
-const ExperimentsList = (props: {
-  datasetId: number;
-  onView: (experiment: IExperiment | undefined) => void;
-  onDuplicate: (experiment: IExperiment | undefined) => void;
-}) => {
-  const [experiments, setExperiments] = useState<undefined | IExperiment[]>();
-  useEffect(() => {
-    let subs: Subscription[] | undefined;
-    if (props.datasetId) {
-      const fetchExperiments = () => {
-        getExperimentsForDataset(props.datasetId)
-          .then(setExperiments)
-          .catch();
-      };
-      fetchExperiments();
-      subs = [
-        subscribeToJobStatusChanges().subscribe(fetchExperiments),
-        subscribeToExperimentChanges().subscribe(fetchExperiments)
-      ];
-    }
-    return () => subs?.forEach(sub => sub.unsubscribe());
-  }, [props.datasetId]);
-  if (!props.datasetId) {
-    return <h1>404</h1>;
-  }
-  if (!experiments) {
-    return (
-      <Spin
-        style={{ position: 'absolute', top: '50%', left: '50%' }}
-        size="large"
-      />
-    );
-  }
-  return (
-    <div className={styles.List}>
-      {experiments.map(experiment => (
-        <ExperimentsListItem
-          key={experiment.id}
-          {...experiment}
-          onView={id => props.onView(experiments.find(exp => exp.id === id))}
-          onDuplicate={id =>
-            props.onDuplicate(experiments.find(exp => exp.id === id))
-          }
-        />
-      ))}
-    </div>
-  );
-};
-
-const ExperimentsView = ({
-  match
-}: RouteComponentProps<{ datasetId: string }>) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [editDisabled, setEditDisabled] = useState(false);
-  const [lastExperiment, setLastExperiment] = useState<
-    undefined | IExperiment
-  >();
-  const datasetId = parseInt(match.params.datasetId, 10);
-  return (
-    <div className="Content">
-      <Row>
-        <div className={styles.ExperimentControls}>
-          <Button
-            type="primary"
-            onClick={() => {
-              setEditDisabled(false);
-              setLastExperiment(undefined);
-              setModalVisible(true);
-            }}
-          >
-            + New Experiment
-          </Button>
-        </div>
-      </Row>
-      <Row>
-        <ExperimentsList
-          datasetId={datasetId}
-          onView={experiment => {
-            setEditDisabled(true);
-            setLastExperiment(experiment);
-            setModalVisible(true);
-          }}
-          onDuplicate={experiment => {
-            setLastExperiment(experiment);
-            setEditDisabled(false);
-            setModalVisible(true);
-          }}
-        />
-      </Row>
-      <NewExperimentModalForm
-        visible={modalVisible}
-        datasetId={datasetId}
-        onClose={() => {
-          setModalVisible(false);
-        }}
-        experiment={lastExperiment}
-        editDisabled={editDisabled}
-      />
-    </div>
-  );
-};
-
-export { ExperimentsView };
+export { ExperimentsListItem };

@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import {
   Route,
   Switch,
-  useHistory,
   RouteComponentProps,
   withRouter,
   Link
 } from 'react-router-dom';
-import { Button, Layout, Radio, Breadcrumb, Icon } from 'antd';
+import { Layout, Radio, Breadcrumb, Icon } from 'antd';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 import * as actions from './actions/graphExplorer';
@@ -132,7 +131,6 @@ const breadcrumbNameMap: { [key: string]: string } = {
 };
 
 const AppHeader = withRouter(props => {
-  const history = useHistory();
   const { location } = props;
   const pathSnippets = location.pathname.split('/').filter(i => i);
   const breadcrumbItems = [

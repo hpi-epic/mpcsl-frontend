@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route, RouteComponentProps, Redirect } from 'react-router-dom';
 import ExperimentDetails from './containers/ExperimentDetails/ExperimentDetails';
-import { ExperimentsView } from './containers/ExperimentsList/ExperimentsView';
+import { ExperimentsView } from './containers/ExperimentsView/ExperimentsView';
 import { ExperimentComparison } from './containers/ExperimentComparison/ExperimentComparison';
 
 const ExperimentRoutes = ({
