@@ -4,6 +4,8 @@ import {
   Switch,
   RouteComponentProps,
   withRouter,
+  useHistory,
+  useLocation,
   Link
 } from 'react-router-dom';
 import { Layout, Radio, Breadcrumb, Icon } from 'antd';
@@ -13,6 +15,9 @@ import * as actions from './actions/graphExplorer';
 import { IState } from './store';
 import { IGraphExplorerProps } from './containers/GraphExplorer';
 import Select from 'react-virtualized-select';
+import { IExperiment } from './types';
+import { IObservationMatrix } from './types';
+import { getExperiment, getObservationMatrix } from './actions/apiRequests';
 
 import 'react-select/dist/react-select.css';
 import 'react-virtualized/styles.css';
@@ -124,15 +129,31 @@ const GraphExplorerHeaderRedux = connect(
   mapDispatchToProps
 )(GraphExplorerHeader);
 
-const breadcrumbNameMap: { [key: string]: string } = {
-  experiments: 'Experiments',
-  jobs: 'Jobs',
-  compare: 'Compare'
-};
-
-const AppHeader = withRouter(props => {
-  const { location } = props;
+const AppHeader = () => {
+  const history = useHistory();
+  const location = useLocation();
   const pathSnippets = location.pathname.split('/').filter(i => i);
+  const [dataset, setDataset] = useState<undefined | IObservationMatrix>();
+  const [experiment, setExperiment] = useState<undefined | IExperiment>();
+  useEffect(() => {
+    if (pathSnippets.includes('experiments')) {
+      getObservationMatrix(parseInt(pathSnippets[0], 10))
+        .then(setDataset)
+        .catch();
+      if (pathSnippets.includes('jobs')) {
+        getExperiment(parseInt(pathSnippets[2], 10))
+          .then(setExperiment)
+          .catch();
+      } else {
+        setExperiment(undefined);
+      }
+    } else {
+      setDataset(undefined);
+    }
+  }, [location]);
+
+  const datasetName = dataset ? dataset.name : '<Loading...>';
+  const experimentName = experiment ? experiment.name : '<Loading...>';
   const breadcrumbItems = [
     <Breadcrumb.Item key="datasets">
       <Link style={{ color: 'white' }} to="/">
@@ -141,15 +162,35 @@ const AppHeader = withRouter(props => {
     </Breadcrumb.Item>
   ];
   pathSnippets.forEach((element, index) => {
-    if (element in breadcrumbNameMap) {
-      const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
-      breadcrumbItems.push(
-        <Breadcrumb.Item key={url}>
-          <Link style={{ color: 'white' }} to={url}>
-            {breadcrumbNameMap[element]}
-          </Link>
-        </Breadcrumb.Item>
-      );
+    const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+    switch (element) {
+      case 'experiments':
+        breadcrumbItems.push(
+          <Breadcrumb.Item key={url}>
+            <Link style={{ color: 'white' }} to={url}>
+              {datasetName}
+            </Link>
+          </Breadcrumb.Item>
+        );
+        break;
+      case 'jobs':
+        breadcrumbItems.push(
+          <Breadcrumb.Item key={url}>
+            <Link style={{ color: 'white' }} to={url}>
+              {experimentName}
+            </Link>
+          </Breadcrumb.Item>
+        );
+        break;
+      case 'compare':
+        breadcrumbItems.push(
+          <Breadcrumb.Item key={url}>
+            <Link style={{ color: 'white' }} to={url}>
+              Compare
+            </Link>
+          </Breadcrumb.Item>
+        );
+        break;
     }
   });
   return (
@@ -182,6 +223,6 @@ const AppHeader = withRouter(props => {
       </div>
     </Layout.Header>
   );
-});
+};
 
 export { AppHeader };
