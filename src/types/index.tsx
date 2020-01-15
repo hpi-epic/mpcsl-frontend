@@ -13,8 +13,11 @@ export interface IStoreState {
 
 export type StoreState = IStoreState | undefined;
 
-export interface IObservationMatrix {
+export interface IIDClass {
   id: number;
+}
+
+export interface IObservationMatrix extends IIDClass {
   load_query: string;
   name: string;
   description?: string;
@@ -32,10 +35,9 @@ export enum BadgeStatus {
   cancelled = 'warning'
 }
 
-export interface IExperiment {
+export interface IExperiment extends IIDClass {
   dataset_id: number;
   dataset?: number;
-  id: number;
   name: string;
   description?: string;
   execution_time_statistics?: { [name: string]: number };
@@ -73,8 +75,7 @@ export type IParameter = INumberParameter | IEnumParameter;
 
 export type IParameters = { [name: string]: IParameter };
 
-export interface IAlgorithm {
-  id: number;
+export interface IAlgorithm extends IIDClass {
   name: string;
   script_filename: string;
   backend: string;
@@ -87,8 +88,7 @@ export interface IErrorType {
   edges: number[][];
 }
 
-export interface IJob {
-  id: number;
+export interface IJob extends IIDClass {
   experiment_id: number;
   start_time: string;
   status: JobStatus;

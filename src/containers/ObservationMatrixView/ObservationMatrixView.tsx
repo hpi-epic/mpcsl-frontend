@@ -25,7 +25,7 @@ const ObservationMatrixList = (props: IObservationMatrixList) => {
         .catch();
     };
     fetchDatasets();
-    const sub = subscribeToDatasetChanges().subscribe(fetchDatasets);
+    const sub = subscribeToDatasetChanges(fetchDatasets);
     return () => sub.unsubscribe();
   }, []);
   return matrices ? (

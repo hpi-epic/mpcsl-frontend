@@ -28,8 +28,8 @@ const ExperimentsList = (props: {
       };
       fetchExperiments();
       subs = [
-        subscribeToJobStatusChanges().subscribe(fetchExperiments),
-        subscribeToExperimentChanges().subscribe(fetchExperiments)
+        subscribeToJobStatusChanges(fetchExperiments),
+        subscribeToExperimentChanges(fetchExperiments)
       ];
     }
     return () => subs?.forEach(sub => sub.unsubscribe());

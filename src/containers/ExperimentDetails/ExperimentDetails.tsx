@@ -57,8 +57,7 @@ class ExperimentDetails extends React.Component<
 
   public componentDidMount = () => {
     this.fetchExperiment(Number(this.props.match.params.experimentId));
-    const obs = subscribeToJobStatusChanges();
-    this.sub = obs.subscribe(() => {
+    this.sub = subscribeToJobStatusChanges(() => {
       if (this.state.experiment) {
         this.fetchJobs(this.state.experiment);
       }
