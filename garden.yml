@@ -2,6 +2,9 @@ kind: Module
 type: exec
 local: true
 name: frontend-deps-installer
+include:
+  - package.json
+  - yarn.lock
 build:
   command: [yarn, install]
 ---
@@ -9,6 +12,9 @@ kind: Module
 type: exec
 local: true
 name: frontend-builder
+include:
+  - src
+  - yarn.lock
 build:
   command: [yarn, build]
   dependencies:
