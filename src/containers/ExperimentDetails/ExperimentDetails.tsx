@@ -10,7 +10,7 @@ import {
   subscribeToJobStatusChanges
 } from '../../actions/apiRequests';
 import Endpoints from '../../constants/api';
-import './style.css';
+import styles from './ExperimentDetails.module.scss';
 import Axios from 'axios';
 import { Subscription } from 'rxjs';
 
@@ -74,13 +74,13 @@ class ExperimentDetails extends React.Component<
   public render() {
     if (this.state.experiment) {
       return (
-        <div className="Content">
+        <div className={styles.Content}>
           <h2>
             Experiment: <i>{this.state.experiment.name}</i>
           </h2>
           <List
             itemLayout="horizontal"
-            className="Job-List"
+            className={styles.JobList}
             header={<h3>Job List</h3>}
             dataSource={this.state.jobList}
             renderItem={(job: IJob) => (
@@ -118,7 +118,6 @@ class ExperimentDetails extends React.Component<
                     <div>
                       {<h3> Job #{job.id}</h3>}
                       <Badge
-                        className="Job-Badge"
                         status={BadgeStatus[job.status]}
                         text={job.status}
                       />

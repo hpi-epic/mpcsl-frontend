@@ -2,7 +2,7 @@
   max-width: 300px;
   min-width: 300px;
   word-wrap: break-word;
-  margin: 5px !important;
+  margin: 5px;
   flex-grow: 1;
 }
 
@@ -16,14 +16,14 @@
 }
 
 .DropdownButton {
-  border: none !important;
-  background-color: transparent !important;
+  border: none;
+  background-color: transparent;
   &hover {
-    border: none !important;
-    background-color: transparent !important;
+    border: none;
+    background-color: transparent;
   }
 }
 
 .ListButton {
-  margin-right: 5px !important;
+  margin-right: 5px;
 }
