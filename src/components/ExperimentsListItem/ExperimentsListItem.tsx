@@ -103,7 +103,7 @@ const ExperimentsListItem = (
   const history = useHistory();
   useEffect(() => {
     getK8SNodes()
-      .then(resp => setK8sNodes(resp.data))
+      .then(setK8sNodes)
       .catch(() => setK8sNodes([]));
   }, []);
   const { name, description, last_job, execution_time_statistics } = props;
