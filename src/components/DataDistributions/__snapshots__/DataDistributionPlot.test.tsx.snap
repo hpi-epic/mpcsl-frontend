@@ -76,8 +76,8 @@ exports[`<DataDistributinoPlot /> works for categorical data 1`] = `
           className="rv-xy-plot__grid-lines__line"
           x1={0}
           x2={50}
-          y1={10}
-          y2={10}
+          y1={9.999999999999998}
+          y2={9.999999999999998}
         />
         <line
           className="rv-xy-plot__grid-lines__line"
@@ -241,7 +241,7 @@ exports[`<DataDistributinoPlot /> works for categorical data 1`] = `
           <g
             className="rv-xy-plot__axis__tick"
             style={Object {}}
-            transform="translate(0, 10)"
+            transform="translate(0, 9.999999999999998)"
           >
             <line
               className="rv-xy-plot__axis__tick__line"
@@ -431,8 +431,8 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           className="rv-xy-plot__grid-lines__line"
           x1={0}
           x2={50}
-          y1={13.636363636363633}
-          y2={13.636363636363633}
+          y1={13.636363636363635}
+          y2={13.636363636363635}
         />
         <line
           className="rv-xy-plot__grid-lines__line"
@@ -665,7 +665,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           <g
             className="rv-xy-plot__axis__tick"
             style={Object {}}
-            transform="translate(0, 13.636363636363633)"
+            transform="translate(0, 13.636363636363635)"
           >
             <line
               className="rv-xy-plot__axis__tick__line"
@@ -749,7 +749,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           y={40.90909090909091}
         />
         <rect
-          height={22.727272727272727}
+          height={22.72727272727273}
           onClick={[Function]}
           onContextMenu={[Function]}
           onMouseOut={[Function]}
@@ -763,10 +763,10 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           }
           width={16.66666666666667}
           x={33.33333333333333}
-          y={27.272727272727273}
+          y={27.27272727272727}
         />
         <rect
-          height={22.727272727272727}
+          height={22.72727272727273}
           onClick={[Function]}
           onContextMenu={[Function]}
           onMouseOut={[Function]}
@@ -780,7 +780,7 @@ exports[`<DataDistributinoPlot /> works for continous data 1`] = `
           }
           width={NaN}
           x={50}
-          y={27.272727272727273}
+          y={27.27272727272727}
         />
       </g>
       <g
