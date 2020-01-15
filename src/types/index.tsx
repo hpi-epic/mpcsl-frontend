@@ -1,6 +1,7 @@
 import { IAPIGraphEdges, IAPIGraphNode, ID3GraphNode } from './graphTypes';
 import { IndepenceTests } from '../constants/experiment';
 import Graph from '../utils/graph';
+import { Interface } from 'readline';
 
 export interface IStoreState {
   resultID?: string; // ID of current graph
@@ -40,20 +41,7 @@ export interface IExperiment {
   execution_time_statistics?: { [name: string]: number };
   algorithm_id: number;
   parameters: IParameters;
-  last_job?: {
-    id: number;
-    experiment_id: number;
-    start_time: string;
-    pid: number;
-    status: JobStatus;
-    result?: {
-      id: number;
-      job_id: number;
-      start_time: string;
-      end_time: string;
-      meta_results: any;
-    };
-  };
+  last_job?: IJob;
 }
 
 export interface ICreateExperiment {
@@ -94,6 +82,11 @@ export interface IAlgorithm {
   valid_parameters: IParameters;
 }
 
+export interface IErrorType {
+  rate: number;
+  edges: number[][];
+}
+
 export interface IJob {
   id: number;
   experiment_id: number;
@@ -108,6 +101,16 @@ export interface IJob {
     execution_time: number;
     dataset_loading_time: number;
     meta_results: any;
+    ground_truth_statistics: {
+      graph_edit_distance: number;
+      mean_jaccard_coefficient: number;
+      error_types: {
+        false_positives: IErrorType;
+        true_positives: IErrorType;
+        false_negatives: IErrorType;
+        true_negatives: IErrorType;
+      };
+    };
   };
 }
 
