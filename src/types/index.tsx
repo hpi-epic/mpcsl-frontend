@@ -101,7 +101,7 @@ export interface IJob extends IIDClass {
     execution_time: number;
     dataset_loading_time: number;
     meta_results: any;
-    ground_truth_statistics: {
+    ground_truth_statistics?: {
       graph_edit_distance: number;
       mean_jaccard_coefficient: number;
       error_types: {

@@ -33,7 +33,7 @@ class CachedApiCall<T extends IIDClass> {
     this.subscribe(() => this.refetchData());
   }
 
-  private refetchData = () => {
+  public refetchData = () => {
     this.cachedData = axios
       .get(this.apiEndpoint)
       .then(response => response.data)
@@ -59,6 +59,31 @@ class CachedApiCall<T extends IIDClass> {
     return this.observable.subscribe(val => callback(val.id));
   };
 }
+
+type SubJobStatusData = {
+  id: number;
+  status: JobStatus;
+};
+
+const JobChangesObservable = fromEvent<SubJobStatusData>(socket(), 'job');
+
+export const subscribeToJobStatusChanges = (callback: () => void) =>
+  JobChangesObservable.subscribe(callback);
+
+class CachedExperiments extends CachedApiCall<IExperiment> {
+  constructor() {
+    super(Endpoints.allExperiments, 'experiment');
+    JobChangesObservable.subscribe(job => {
+      this.getAll().then(data => {
+        if (data.some(exp => exp.last_job?.id === job.id)) {
+          this.refetchData();
+        }
+      });
+    });
+  }
+}
+
+const experimentCache = new CachedExperiments();
 
 const datasetCache = new CachedApiCall<IObservationMatrix>(
   Endpoints.observationMatrices,
@@ -92,11 +117,6 @@ export const createObservationMatrix = async (
     throw e;
   }
 };
-
-const experimentCache = new CachedApiCall<IExperiment>(
-  Endpoints.allExperiments,
-  'experiment'
-);
 
 export const getExperiments = experimentCache.getAll;
 
@@ -153,16 +173,6 @@ export const getJobsForExperiment = async (experiment: IExperiment) => {
     throw e;
   }
 };
-
-type SubJobStatusData = {
-  id: number;
-  status: JobStatus;
-};
-
-const JobChangesObservable = fromEvent<SubJobStatusData>(socket(), 'job');
-
-export const subscribeToJobStatusChanges = (callback: () => void) =>
-  JobChangesObservable.subscribe(callback);
 
 export const subscribeToExperimentChanges = experimentCache.subscribe;
 
