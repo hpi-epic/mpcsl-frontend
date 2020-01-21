@@ -1,23 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { IExperiment, IJob } from '../../types';
+import { IExperiment, IJob, IComparisonStatistics } from '../../types';
 import {
   getExperimentsForDataset,
   getJobsForExperiment,
   getExperiment,
-  getResultNodes
+  getResultNodes,
+  getComparisonStatistics
 } from '../../actions/apiRequests';
-import {
-  Menu,
-  Spin,
-  Row,
-  Col,
-  Descriptions,
-  Empty,
-  Statistic,
-  Card,
-  Collapse
-} from 'antd';
+import { Menu, Spin, Row, Col, Empty, Statistic, Card, Collapse } from 'antd';
 import { IAPIGraphNode } from '../../types/graphTypes';
 
 interface IExperimentJobs {
@@ -28,8 +19,116 @@ interface IExperimentJobs {
 const ExperimentComparisonEach = (props: {
   jobOne: IJob | undefined;
   jobTwo: IJob | undefined;
+  nodes: IAPIGraphNode[] | undefined;
 }) => {
-  return <Empty />;
+  const { jobOne, jobTwo, nodes } = props;
+  const [comparison, setComparison] = useState<
+    undefined | IComparisonStatistics
+  >();
+  const nodeDict: { [key: number]: string } = {};
+  if (nodes) {
+    nodes.forEach(node => {
+      nodeDict[node.id] = node.name;
+    });
+  }
+  useEffect(() => {
+    if (jobOne && jobTwo) {
+      getComparisonStatistics(jobOne.id, jobTwo.id).then(setComparison);
+    }
+  }, [jobOne, jobTwo]);
+  if (!comparison) {
+    return <Empty description="Select a Second Job"></Empty>;
+  }
+  if (!jobOne?.result || !jobTwo?.result) {
+    return <Empty description="No results "></Empty>;
+  }
+  return (
+    <Card title={`Job ${jobOne.id} vs. Job ${jobTwo.id}`} extra="Comparison">
+      <Statistic
+        title={'Graph Edit Distance'}
+        value={comparison.graph_edit_distance}
+      />
+      <Statistic
+        title={'Mean Jaccard Coefficient'}
+        value={comparison.mean_jaccard_coefficient}
+        precision={3}
+      />
+      <Collapse>
+        <Collapse.Panel
+          header={
+            <Statistic
+              title={'True Positive Rate'}
+              value={comparison.error_types.true_positives.rate}
+              precision={3}
+            />
+          }
+          key="1"
+        >
+          {comparison.error_types.true_positives.edges.map((edge: number[]) => (
+            <span key={Math.random()}>
+              {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
+              <br />
+            </span>
+          ))}
+        </Collapse.Panel>
+        <Collapse.Panel
+          header={
+            <Statistic
+              title={'False Positive Rate'}
+              value={comparison.error_types.false_positives.rate}
+              precision={3}
+            />
+          }
+          key="2"
+        >
+          {comparison.error_types.false_positives.edges.map(
+            (edge: number[]) => (
+              <span key={Math.random()}>
+                {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
+                <br />
+              </span>
+            )
+          )}
+        </Collapse.Panel>
+        <Collapse.Panel
+          header={
+            <Statistic
+              title={'True Negative Rate'}
+              value={comparison.error_types.true_negatives.rate}
+              precision={3}
+            />
+          }
+          key="3"
+        >
+          {comparison.error_types.true_negatives.edges.map((edge: number[]) => (
+            <span key={Math.random()}>
+              {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
+              <br />
+            </span>
+          ))}
+        </Collapse.Panel>
+        <Collapse.Panel
+          header={
+            <Statistic
+              title={'False Negative Rate'}
+              value={comparison.error_types.false_negatives.rate}
+              precision={3}
+            />
+          }
+          key="4"
+        >
+          {comparison.error_types.false_negatives.edges.map(
+            (edge: number[]) => (
+              <span key={Math.random()}>
+                {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
+                <br />
+              </span>
+            )
+          )}
+        </Collapse.Panel>
+      </Collapse>
+    </Card>
+  );
 };
 
 const ExperimentComparisonGT = (props: {
@@ -38,6 +137,7 @@ const ExperimentComparisonGT = (props: {
   experiment: IExperiment | undefined;
 }) => {
   const { job, nodes, experiment } = props;
+  console.log(job);
   if (job?.result?.ground_truth_statistics) {
     const nodeDict: { [key: number]: string } = {};
     if (nodes) {
@@ -149,7 +249,7 @@ const ExperimentComparisonGT = (props: {
       </Card>
     );
   } else {
-    return <div>Nothing to show</div>;
+    return null;
   }
 };
 
@@ -265,14 +365,13 @@ const ExperimentComparison = ({
               </Col>
             ) : null}
           </Row>
-          {compareJob ? (
-            <Row>
-              <ExperimentComparisonEach
-                jobOne={experiment.last_job}
-                jobTwo={compareJob}
-              />
-            </Row>
-          ) : null}
+          <Row>
+            <ExperimentComparisonEach
+              jobOne={experiment.last_job}
+              jobTwo={compareJob}
+              nodes={nodes}
+            />
+          </Row>
         </Col>
       </Row>
     );

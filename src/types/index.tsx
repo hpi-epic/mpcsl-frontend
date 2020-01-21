@@ -1,7 +1,6 @@
 import { IAPIGraphEdges, IAPIGraphNode, ID3GraphNode } from './graphTypes';
 import { IndepenceTests } from '../constants/experiment';
 import Graph from '../utils/graph';
-import { Interface } from 'readline';
 
 export interface IStoreState {
   resultID?: string; // ID of current graph
@@ -101,16 +100,18 @@ export interface IJob extends IIDClass {
     execution_time: number;
     dataset_loading_time: number;
     meta_results: any;
-    ground_truth_statistics?: {
-      graph_edit_distance: number;
-      mean_jaccard_coefficient: number;
-      error_types: {
-        false_positives: IErrorType;
-        true_positives: IErrorType;
-        false_negatives: IErrorType;
-        true_negatives: IErrorType;
-      };
-    };
+    ground_truth_statistics?: IComparisonStatistics;
+  };
+}
+
+export interface IComparisonStatistics {
+  graph_edit_distance: number;
+  mean_jaccard_coefficient: number;
+  error_types: {
+    false_positives: IErrorType;
+    true_positives: IErrorType;
+    false_negatives: IErrorType;
+    true_negatives: IErrorType;
   };
 }
 

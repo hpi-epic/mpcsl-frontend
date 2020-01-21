@@ -3,8 +3,6 @@ import {
   Route,
   Switch,
   RouteComponentProps,
-  withRouter,
-  useHistory,
   useLocation,
   Link
 } from 'react-router-dom';
@@ -130,7 +128,6 @@ const GraphExplorerHeaderRedux = connect(
 )(GraphExplorerHeader);
 
 const AppHeader = () => {
-  const history = useHistory();
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').filter(i => i);
   const [dataset, setDataset] = useState<undefined | IObservationMatrix>();
@@ -150,7 +147,7 @@ const AppHeader = () => {
     } else {
       setDataset(undefined);
     }
-  }, [location]);
+  }, [location, pathSnippets]);
 
   const datasetName = dataset ? dataset.name : '<Loading...>';
   const experimentName = experiment ? experiment.name : '<Loading...>';

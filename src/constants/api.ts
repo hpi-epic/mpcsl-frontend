@@ -29,6 +29,8 @@ const Endpoints = {
       ','
     )}&cause_condition=${causeCondition}`,
   resultNodes: (resultID: number) => `${baseApiUrl}/result/${resultID}/nodes`,
+  resultComparison: (resultOneId: number, resultTwoId: number) =>
+    `${baseApiUrl}/result/${resultOneId}/compare/${resultTwoId}`,
   nodeContext: (nodeID: number, resultID: number) =>
     `${baseApiUrl}/node/${nodeID}/result/${resultID}/context`,
   algorithm: (algorithmId: number) => `${baseApiUrl}/algorithms/${algorithmId}`,

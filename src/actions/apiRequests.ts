@@ -11,7 +11,8 @@ import {
   IAPIConfounders,
   JobStatus,
   IIDClass,
-  IJob
+  IJob,
+  IComparisonStatistics
 } from '../types';
 import Endpoints from '../constants/api';
 import { fromEvent, Observable } from 'rxjs';
@@ -127,6 +128,21 @@ export const getExperimentsForDataset = async (
 ): Promise<IExperiment[]> => {
   try {
     const response = await axios.get(Endpoints.datasetExperiments(datasetId));
+    return response.data;
+  } catch (e) {
+    message.error('Failed to fetch Experiments');
+    throw e;
+  }
+};
+
+export const getComparisonStatistics = async (
+  resultOneId: number,
+  resultTwoId: number
+): Promise<IComparisonStatistics> => {
+  try {
+    const response = await axios.get(
+      Endpoints.resultComparison(resultOneId, resultTwoId)
+    );
     return response.data;
   } catch (e) {
     message.error('Failed to fetch Experiments');
