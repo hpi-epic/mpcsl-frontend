@@ -52,7 +52,6 @@ const GraphExplorerHeader = (
       setGraphSearch([]);
     }
   }, [props.availableNodes, props.nodes]);
-  console.log(props.match);
   return (
     <>
       <div style={{ flexGrow: 10 }}>

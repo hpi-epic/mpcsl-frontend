@@ -137,7 +137,6 @@ const ExperimentComparisonGT = (props: {
   experiment: IExperiment | undefined;
 }) => {
   const { job, nodes, experiment } = props;
-  console.log(job);
   if (job?.result?.ground_truth_statistics) {
     const nodeDict: { [key: number]: string } = {};
     if (nodes) {
@@ -256,11 +255,11 @@ const ExperimentComparisonGT = (props: {
 const ExperimentComparisonMenu = (props: {
   experiments: IExperimentJobs[];
   baseJob: IJob | undefined;
-  selectItem: (id: number) => void;
+  selectItem: (id: string) => void;
 }) => {
   return (
     <Menu
-      onSelect={(event: any) => props.selectItem(event.key)}
+      onSelect={event => props.selectItem(event.key)}
       style={{ height: '100%' }}
     >
       {props.experiments.map(experiment => (
@@ -326,15 +325,19 @@ const ExperimentComparison = ({
       fetchExperiments().then(setExperiments);
     }
   }, [match.params.datasetId]);
-  const setCompareJobId = (id: number) => {
-    experiments?.forEach(experiment =>
-      experiment.jobs.forEach(job => {
-        if (job.id == id) {
-          setCompareJob(job);
-          setCompareExperiment(experiment.experiment);
-        }
-      })
-    );
+  const setCompareJobId = (id: string) => {
+    if (!experiments) {
+      return;
+    }
+    const intId = parseInt(id, 10);
+    for (const experiment of experiments) {
+      const job = experiment.jobs.find(job => job.id === intId);
+      if (job) {
+        setCompareJob(job);
+        setCompareExperiment(experiment.experiment);
+        return;
+      }
+    }
   };
   if (experiments && experiment) {
     return (
