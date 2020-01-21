@@ -4,9 +4,11 @@ import { IExperiment, IJob } from '../../types';
 import {
   getExperimentsForDataset,
   getJobsForExperiment,
-  getExperiment
+  getExperiment,
+  getResultNodes
 } from '../../actions/apiRequests';
 import { Menu, Spin, Row, Col, Descriptions, Empty } from 'antd';
+import { IAPIGraphNode } from '../../types/graphTypes';
 
 interface IExperimentJobs {
   jobs: IJob[];
@@ -20,9 +22,18 @@ const ExperimentComparisonEach = (props: {
   return <Empty />;
 };
 
-const ExperimentComparisonGT = (props: { job: IJob | undefined }) => {
-  const { job } = props;
+const ExperimentComparisonGT = (props: {
+  job: IJob | undefined;
+  nodes: IAPIGraphNode[] | undefined;
+}) => {
+  const { job, nodes } = props;
   if (job?.result?.ground_truth_statistics) {
+    const nodeDict: { [key: number]: string } = {};
+    if (nodes) {
+      nodes.forEach(node => {
+        nodeDict[node.id] = node.name;
+      });
+    }
     return (
       <Descriptions
         title={'Job ' + job.id}
@@ -39,7 +50,7 @@ const ExperimentComparisonGT = (props: { job: IJob | undefined }) => {
           {job.result.ground_truth_statistics.error_types.true_positives.edges.map(
             (edge: number[]) => (
               <span key={Math.random()}>
-                {edge[0]} --&gt; {edge[1]}
+                {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
                 <br />
               </span>
             )
@@ -49,7 +60,7 @@ const ExperimentComparisonGT = (props: { job: IJob | undefined }) => {
           {job.result.ground_truth_statistics.error_types.false_positives.edges.map(
             (edge: number[]) => (
               <span key={Math.random()}>
-                {edge[0]} --&gt; {edge[1]}
+                {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
                 <br />
               </span>
             )
@@ -59,7 +70,7 @@ const ExperimentComparisonGT = (props: { job: IJob | undefined }) => {
           {job.result.ground_truth_statistics.error_types.true_negatives.edges.map(
             (edge: number[]) => (
               <span key={Math.random()}>
-                {edge[0]} --&gt; {edge[1]}
+                {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
                 <br />
               </span>
             )
@@ -69,7 +80,7 @@ const ExperimentComparisonGT = (props: { job: IJob | undefined }) => {
           {job.result.ground_truth_statistics.error_types.false_negatives.edges.map(
             (edge: number[]) => (
               <span key={Math.random()}>
-                {edge[0]} --&gt; {edge[1]}
+                {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
                 <br />
               </span>
             )
@@ -121,11 +132,17 @@ const ExperimentComparison = ({
   >();
   const [experiment, setExperiment] = useState<undefined | IExperiment>();
   const [compareJob, setCompareJob] = useState<undefined | IJob>();
+  const [nodes, setNodes] = useState<undefined | IAPIGraphNode[]>();
   useEffect(() => {
     if (match.params.experimentId) {
       getExperiment(parseInt(match.params.experimentId)).then(setExperiment);
     }
   }, [match.params.experimentId]);
+  useEffect(() => {
+    if (experiment?.last_job?.result?.id) {
+      getResultNodes(experiment.last_job.result.id).then(setNodes);
+    }
+  }, [experiment]);
   useEffect(() => {
     if (match.params.datasetId) {
       const fetchExperiments = async () => {
@@ -168,11 +185,11 @@ const ExperimentComparison = ({
         <Col span={20}>
           <Row>
             <Col span={compareJob ? 12 : 24}>
-              <ExperimentComparisonGT job={experiment.last_job} />
+              <ExperimentComparisonGT job={experiment.last_job} nodes={nodes} />
             </Col>
             {compareJob ? (
               <Col span={12}>
-                <ExperimentComparisonGT job={compareJob} />
+                <ExperimentComparisonGT job={compareJob} nodes={nodes} />
               </Col>
             ) : null}
           </Row>
