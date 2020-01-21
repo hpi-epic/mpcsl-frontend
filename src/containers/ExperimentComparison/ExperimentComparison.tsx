@@ -7,7 +7,17 @@ import {
   getExperiment,
   getResultNodes
 } from '../../actions/apiRequests';
-import { Menu, Spin, Row, Col, Descriptions, Empty } from 'antd';
+import {
+  Menu,
+  Spin,
+  Row,
+  Col,
+  Descriptions,
+  Empty,
+  Statistic,
+  Card,
+  Collapse
+} from 'antd';
 import { IAPIGraphNode } from '../../types/graphTypes';
 
 interface IExperimentJobs {
@@ -25,8 +35,9 @@ const ExperimentComparisonEach = (props: {
 const ExperimentComparisonGT = (props: {
   job: IJob | undefined;
   nodes: IAPIGraphNode[] | undefined;
+  experiment: IExperiment | undefined;
 }) => {
-  const { job, nodes } = props;
+  const { job, nodes, experiment } = props;
   if (job?.result?.ground_truth_statistics) {
     const nodeDict: { [key: number]: string } = {};
     if (nodes) {
@@ -35,58 +46,107 @@ const ExperimentComparisonGT = (props: {
       });
     }
     return (
-      <Descriptions
-        title={'Job ' + job.id}
-        bordered
-        column={{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }}
-      >
-        <Descriptions.Item label="Graph Edit Distance">
-          {job.result.ground_truth_statistics.graph_edit_distance}
-        </Descriptions.Item>
-        <Descriptions.Item label="Mean Jaccard Coefficient">
-          {job.result.ground_truth_statistics.mean_jaccard_coefficient}
-        </Descriptions.Item>
-        <Descriptions.Item label="True Positives">
-          {job.result.ground_truth_statistics.error_types.true_positives.edges.map(
-            (edge: number[]) => (
-              <span key={Math.random()}>
-                {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
-                <br />
-              </span>
-            )
-          )}
-        </Descriptions.Item>
-        <Descriptions.Item label="False Positives">
-          {job.result.ground_truth_statistics.error_types.false_positives.edges.map(
-            (edge: number[]) => (
-              <span key={Math.random()}>
-                {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
-                <br />
-              </span>
-            )
-          )}
-        </Descriptions.Item>
-        <Descriptions.Item label="True Negatives">
-          {job.result.ground_truth_statistics.error_types.true_negatives.edges.map(
-            (edge: number[]) => (
-              <span key={Math.random()}>
-                {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
-                <br />
-              </span>
-            )
-          )}
-        </Descriptions.Item>
-        <Descriptions.Item label="False Negatives">
-          {job.result.ground_truth_statistics.error_types.false_negatives.edges.map(
-            (edge: number[]) => (
-              <span key={Math.random()}>
-                {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
-                <br />
-              </span>
-            )
-          )}
-        </Descriptions.Item>
-      </Descriptions>
+      <Card title={experiment?.name} extra={`Job ${job.id}`}>
+        <Statistic
+          title={'Graph Edit Distance'}
+          value={job.result.ground_truth_statistics.graph_edit_distance}
+        />
+        <Statistic
+          title={'Mean Jaccard Coefficient'}
+          value={job.result.ground_truth_statistics.mean_jaccard_coefficient}
+          precision={3}
+        />
+        <Collapse>
+          <Collapse.Panel
+            header={
+              <Statistic
+                title={'True Positive Rate'}
+                value={
+                  job.result.ground_truth_statistics.error_types.true_positives
+                    .rate
+                }
+                precision={3}
+              />
+            }
+            key="1"
+          >
+            {job.result.ground_truth_statistics.error_types.true_positives.edges.map(
+              (edge: number[]) => (
+                <span key={Math.random()}>
+                  {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
+                  <br />
+                </span>
+              )
+            )}
+          </Collapse.Panel>
+          <Collapse.Panel
+            header={
+              <Statistic
+                title={'False Positive Rate'}
+                value={
+                  job.result.ground_truth_statistics.error_types.false_positives
+                    .rate
+                }
+                precision={3}
+              />
+            }
+            key="2"
+          >
+            {job.result.ground_truth_statistics.error_types.false_positives.edges.map(
+              (edge: number[]) => (
+                <span key={Math.random()}>
+                  {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
+                  <br />
+                </span>
+              )
+            )}
+          </Collapse.Panel>
+          <Collapse.Panel
+            header={
+              <Statistic
+                title={'True Negative Rate'}
+                value={
+                  job.result.ground_truth_statistics.error_types.true_negatives
+                    .rate
+                }
+                precision={3}
+              />
+            }
+            key="3"
+          >
+            {job.result.ground_truth_statistics.error_types.true_negatives.edges.map(
+              (edge: number[]) => (
+                <span key={Math.random()}>
+                  {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
+                  <br />
+                </span>
+              )
+            )}
+          </Collapse.Panel>
+          <Collapse.Panel
+            header={
+              <Statistic
+                title={'False Negative Rate'}
+                value={
+                  job.result.ground_truth_statistics.error_types.false_negatives
+                    .rate
+                }
+                precision={3}
+              />
+            }
+            key="4"
+          >
+            {job.result.ground_truth_statistics.error_types.false_negatives.edges.map(
+              (edge: number[]) => (
+                <span key={Math.random()}>
+                  {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
+                  <br />
+                </span>
+              )
+            )}
+          </Collapse.Panel>
+        </Collapse>
+      </Card>
     );
   } else {
     return <div>Nothing to show</div>;
@@ -132,6 +192,9 @@ const ExperimentComparison = ({
   >();
   const [experiment, setExperiment] = useState<undefined | IExperiment>();
   const [compareJob, setCompareJob] = useState<undefined | IJob>();
+  const [compareExperiment, setCompareExperiment] = useState<
+    undefined | IExperiment
+  >();
   const [nodes, setNodes] = useState<undefined | IAPIGraphNode[]>();
   useEffect(() => {
     if (match.params.experimentId) {
@@ -168,6 +231,7 @@ const ExperimentComparison = ({
       experiment.jobs.forEach(job => {
         if (job.id == id) {
           setCompareJob(job);
+          setCompareExperiment(experiment.experiment);
         }
       })
     );
@@ -185,11 +249,19 @@ const ExperimentComparison = ({
         <Col span={20}>
           <Row>
             <Col span={compareJob ? 12 : 24}>
-              <ExperimentComparisonGT job={experiment.last_job} nodes={nodes} />
+              <ExperimentComparisonGT
+                job={experiment.last_job}
+                experiment={experiment}
+                nodes={nodes}
+              />
             </Col>
             {compareJob ? (
               <Col span={12}>
-                <ExperimentComparisonGT job={compareJob} nodes={nodes} />
+                <ExperimentComparisonGT
+                  job={compareJob}
+                  experiment={compareExperiment}
+                  nodes={nodes}
+                />
               </Col>
             ) : null}
           </Row>
