@@ -140,7 +140,7 @@ const AppHeader = () => {
       getObservationMatrix(parseInt(pathSnippets[0], 10))
         .then(setDataset)
         .catch();
-      if (pathSnippets.includes('jobs')) {
+      if (pathSnippets.includes('jobs') || pathSnippets.includes('compare')) {
         getExperiment(parseInt(pathSnippets[2], 10))
           .then(setExperiment)
           .catch();
@@ -183,6 +183,13 @@ const AppHeader = () => {
         );
         break;
       case 'compare':
+        breadcrumbItems.push(
+          <Breadcrumb.Item key={url}>
+            <Link style={{ color: 'white' }} to={url}>
+              {experimentName}
+            </Link>
+          </Breadcrumb.Item>
+        );
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
