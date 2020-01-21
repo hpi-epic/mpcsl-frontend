@@ -202,7 +202,7 @@ class ExperimentDetails extends React.Component<
         </div>
       );
     } else {
-      return <span>Nothing to show</span>;
+      return <span>Loading ...</span>;
     }
   }
   private showModal = (jobId: number) => {

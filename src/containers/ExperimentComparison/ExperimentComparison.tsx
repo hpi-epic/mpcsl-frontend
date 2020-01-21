@@ -6,7 +6,8 @@ import {
   getJobsForExperiment,
   getExperiment,
   getResultNodes,
-  getComparisonStatistics
+  getComparisonStatistics,
+  getGTComparisonStatistics
 } from '../../actions/apiRequests';
 import { Menu, Spin, Row, Col, Empty, Statistic, Card, Collapse } from 'antd';
 import { IAPIGraphNode } from '../../types/graphTypes';
@@ -137,7 +138,17 @@ const ExperimentComparisonGT = (props: {
   experiment: IExperiment | undefined;
 }) => {
   const { job, nodes, experiment } = props;
-  if (job?.result?.ground_truth_statistics) {
+  const [groundTruthStatistics, setGroundTruthStatistics] = useState<
+    IComparisonStatistics | undefined
+  >();
+  useEffect(() => {
+    if (job?.result) {
+      getGTComparisonStatistics(job.result.id).then(result =>
+        setGroundTruthStatistics(result ?? undefined)
+      );
+    }
+  }, [job]);
+  if (job && groundTruthStatistics) {
     const nodeDict: { [key: number]: string } = {};
     if (nodes) {
       nodes.forEach(node => {
@@ -148,11 +159,11 @@ const ExperimentComparisonGT = (props: {
       <Card title={experiment?.name} extra={`Job ${job.id}`}>
         <Statistic
           title={'Graph Edit Distance'}
-          value={job.result.ground_truth_statistics.graph_edit_distance}
+          value={groundTruthStatistics.graph_edit_distance}
         />
         <Statistic
           title={'Mean Jaccard Coefficient'}
-          value={job.result.ground_truth_statistics.mean_jaccard_coefficient}
+          value={groundTruthStatistics.mean_jaccard_coefficient}
           precision={3}
         />
         <Collapse>
@@ -160,16 +171,13 @@ const ExperimentComparisonGT = (props: {
             header={
               <Statistic
                 title={'True Positive Rate'}
-                value={
-                  job.result.ground_truth_statistics.error_types.true_positives
-                    .rate
-                }
+                value={groundTruthStatistics.error_types.true_positives.rate}
                 precision={3}
               />
             }
             key="1"
           >
-            {job.result.ground_truth_statistics.error_types.true_positives.edges.map(
+            {groundTruthStatistics.error_types.true_positives.edges.map(
               (edge: number[]) => (
                 <span key={Math.random()}>
                   {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
@@ -182,16 +190,13 @@ const ExperimentComparisonGT = (props: {
             header={
               <Statistic
                 title={'False Positive Rate'}
-                value={
-                  job.result.ground_truth_statistics.error_types.false_positives
-                    .rate
-                }
+                value={groundTruthStatistics.error_types.false_positives.rate}
                 precision={3}
               />
             }
             key="2"
           >
-            {job.result.ground_truth_statistics.error_types.false_positives.edges.map(
+            {groundTruthStatistics.error_types.false_positives.edges.map(
               (edge: number[]) => (
                 <span key={Math.random()}>
                   {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
@@ -204,16 +209,13 @@ const ExperimentComparisonGT = (props: {
             header={
               <Statistic
                 title={'True Negative Rate'}
-                value={
-                  job.result.ground_truth_statistics.error_types.true_negatives
-                    .rate
-                }
+                value={groundTruthStatistics.error_types.true_negatives.rate}
                 precision={3}
               />
             }
             key="3"
           >
-            {job.result.ground_truth_statistics.error_types.true_negatives.edges.map(
+            {groundTruthStatistics.error_types.true_negatives.edges.map(
               (edge: number[]) => (
                 <span key={Math.random()}>
                   {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
@@ -226,16 +228,13 @@ const ExperimentComparisonGT = (props: {
             header={
               <Statistic
                 title={'False Negative Rate'}
-                value={
-                  job.result.ground_truth_statistics.error_types.false_negatives
-                    .rate
-                }
+                value={groundTruthStatistics.error_types.false_negatives.rate}
                 precision={3}
               />
             }
             key="4"
           >
-            {job.result.ground_truth_statistics.error_types.false_negatives.edges.map(
+            {groundTruthStatistics.error_types.false_negatives.edges.map(
               (edge: number[]) => (
                 <span key={Math.random()}>
                   {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}

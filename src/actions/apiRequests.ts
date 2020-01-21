@@ -145,7 +145,19 @@ export const getComparisonStatistics = async (
     );
     return response.data;
   } catch (e) {
-    message.error('Failed to fetch Experiments');
+    message.error('Failed to fetch Statistics');
+    throw e;
+  }
+};
+
+export const getGTComparisonStatistics = async (
+  resultId: number
+): Promise<IComparisonStatistics | null> => {
+  try {
+    const response = await axios.get(Endpoints.gtComparison(resultId));
+    return response.data;
+  } catch (e) {
+    message.error('Failed to fetch Statistics');
     throw e;
   }
 };
