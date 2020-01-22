@@ -33,8 +33,10 @@ const ExperimentComparisonEach = (props: {
     });
   }
   useEffect(() => {
-    if (jobOne && jobTwo) {
-      getComparisonStatistics(jobOne.id, jobTwo.id).then(setComparison);
+    if (jobOne && jobOne.result && jobTwo && jobTwo.result) {
+      getComparisonStatistics(jobOne.result.id, jobTwo.result.id).then(
+        setComparison
+      );
     }
   }, [jobOne, jobTwo]);
   if (!comparison) {
@@ -44,7 +46,10 @@ const ExperimentComparisonEach = (props: {
     return <Empty description="No results "></Empty>;
   }
   return (
-    <Card title={`Job ${jobOne.id} vs. Job ${jobTwo.id}`} extra="Comparison">
+    <Card
+      title={`Job ${jobOne.id} as Ground Truth compared to Job ${jobTwo.id}`}
+      extra="Comparison"
+    >
       <Statistic
         title={'Graph Edit Distance'}
         value={comparison.graph_edit_distance}
@@ -156,7 +161,10 @@ const ExperimentComparisonGT = (props: {
       });
     }
     return (
-      <Card title={experiment?.name} extra={`Job ${job.id}`}>
+      <Card
+        title={`${experiment?.name} compared to Ground Truth`}
+        extra={`Job ${job.id}`}
+      >
         <Statistic
           title={'Graph Edit Distance'}
           value={groundTruthStatistics.graph_edit_distance}
@@ -268,12 +276,12 @@ const ExperimentComparisonMenu = (props: {
         >
           {experiment.jobs.map(job => (
             <Menu.Item
-              key={job.result?.id}
+              key={job.id}
               disabled={
                 !(job.status === 'done') || job.id === props.baseJob?.id
               }
             >
-              {job.result?.id}
+              {job.id}
             </Menu.Item>
           ))}
         </Menu.ItemGroup>
@@ -311,10 +319,10 @@ const ExperimentComparison = ({
           parseInt(match.params.datasetId)
         );
         const experimentsJobs: IExperimentJobs[] = [];
-        for (const i in experiments) {
-          const jobs: IJob[] = await getJobsForExperiment(experiments[i]);
+        for (const experiment of experiments) {
+          const jobs = await getJobsForExperiment(experiment);
           const experimentJob: IExperimentJobs = {
-            experiment: experiments[i],
+            experiment: experiment,
             jobs: jobs
           };
           experimentsJobs.push(experimentJob);
