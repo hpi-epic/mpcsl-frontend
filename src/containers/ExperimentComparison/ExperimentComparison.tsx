@@ -12,10 +12,9 @@ import {
 import { Menu, Spin, Row, Col, Empty, Statistic, Card, Collapse } from 'antd';
 import { IAPIGraphNode } from '../../types/graphTypes';
 
-interface IExperimentJobs {
+type IExperimentJobs = {
   jobs: IJob[];
-  experiment: IExperiment;
-}
+} & IExperiment;
 
 const ExperimentComparisonEach = (props: {
   jobOne: IJob | undefined;
@@ -70,7 +69,7 @@ const ExperimentComparisonEach = (props: {
           }
           key="1"
         >
-          {comparison.error_types.true_positives.edges.map((edge: number[]) => (
+          {comparison.error_types.true_positives.edges.map(edge => (
             <span key={Math.random()}>
               {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
               <br />
@@ -87,14 +86,12 @@ const ExperimentComparisonEach = (props: {
           }
           key="2"
         >
-          {comparison.error_types.false_positives.edges.map(
-            (edge: number[]) => (
-              <span key={Math.random()}>
-                {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
-                <br />
-              </span>
-            )
-          )}
+          {comparison.error_types.false_positives.edges.map(edge => (
+            <span key={Math.random()}>
+              {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
+              <br />
+            </span>
+          ))}
         </Collapse.Panel>
         <Collapse.Panel
           header={
@@ -106,7 +103,7 @@ const ExperimentComparisonEach = (props: {
           }
           key="3"
         >
-          {comparison.error_types.true_negatives.edges.map((edge: number[]) => (
+          {comparison.error_types.true_negatives.edges.map(edge => (
             <span key={Math.random()}>
               {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
               <br />
@@ -123,14 +120,12 @@ const ExperimentComparisonEach = (props: {
           }
           key="4"
         >
-          {comparison.error_types.false_negatives.edges.map(
-            (edge: number[]) => (
-              <span key={Math.random()}>
-                {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
-                <br />
-              </span>
-            )
-          )}
+          {comparison.error_types.false_negatives.edges.map(edge => (
+            <span key={Math.random()}>
+              {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
+              <br />
+            </span>
+          ))}
         </Collapse.Panel>
       </Collapse>
     </Card>
@@ -138,9 +133,9 @@ const ExperimentComparisonEach = (props: {
 };
 
 const ExperimentComparisonGT = (props: {
-  job: IJob | undefined;
-  nodes: IAPIGraphNode[] | undefined;
-  experiment: IExperiment | undefined;
+  job?: IJob;
+  nodes?: IAPIGraphNode[];
+  experiment?: IExperiment;
 }) => {
   const { job, nodes, experiment } = props;
   const [groundTruthStatistics, setGroundTruthStatistics] = useState<
@@ -186,7 +181,7 @@ const ExperimentComparisonGT = (props: {
             key="1"
           >
             {groundTruthStatistics.error_types.true_positives.edges.map(
-              (edge: number[]) => (
+              edge => (
                 <span key={Math.random()}>
                   {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
                   <br />
@@ -205,7 +200,7 @@ const ExperimentComparisonGT = (props: {
             key="2"
           >
             {groundTruthStatistics.error_types.false_positives.edges.map(
-              (edge: number[]) => (
+              edge => (
                 <span key={Math.random()}>
                   {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
                   <br />
@@ -224,7 +219,7 @@ const ExperimentComparisonGT = (props: {
             key="3"
           >
             {groundTruthStatistics.error_types.true_negatives.edges.map(
-              (edge: number[]) => (
+              edge => (
                 <span key={Math.random()}>
                   {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
                   <br />
@@ -243,7 +238,7 @@ const ExperimentComparisonGT = (props: {
             key="4"
           >
             {groundTruthStatistics.error_types.false_negatives.edges.map(
-              (edge: number[]) => (
+              edge => (
                 <span key={Math.random()}>
                   {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
                   <br />
@@ -270,10 +265,7 @@ const ExperimentComparisonMenu = (props: {
       style={{ height: '100%' }}
     >
       {props.experiments.map(experiment => (
-        <Menu.ItemGroup
-          key={experiment.experiment.id}
-          title={experiment.experiment.name}
-        >
+        <Menu.ItemGroup key={experiment.id} title={experiment.name}>
           {experiment.jobs.map(job => (
             <Menu.Item
               key={job.id}
@@ -322,7 +314,7 @@ const ExperimentComparison = ({
         for (const experiment of experiments) {
           const jobs = await getJobsForExperiment(experiment);
           const experimentJob: IExperimentJobs = {
-            experiment: experiment,
+            ...experiment,
             jobs: jobs
           };
           experimentsJobs.push(experimentJob);
@@ -341,51 +333,12 @@ const ExperimentComparison = ({
       const job = experiment.jobs.find(job => job.id === intId);
       if (job) {
         setCompareJob(job);
-        setCompareExperiment(experiment.experiment);
+        setCompareExperiment(experiment);
         return;
       }
     }
   };
-  if (experiments && experiment) {
-    return (
-      <Row type="flex" justify="start">
-        <Col span={4}>
-          <ExperimentComparisonMenu
-            experiments={experiments}
-            selectItem={setCompareJobId}
-            baseJob={experiment.last_job}
-          />
-        </Col>
-        <Col span={20}>
-          <Row>
-            <Col span={compareJob ? 12 : 24}>
-              <ExperimentComparisonGT
-                job={experiment.last_job}
-                experiment={experiment}
-                nodes={nodes}
-              />
-            </Col>
-            {compareJob ? (
-              <Col span={12}>
-                <ExperimentComparisonGT
-                  job={compareJob}
-                  experiment={compareExperiment}
-                  nodes={nodes}
-                />
-              </Col>
-            ) : null}
-          </Row>
-          <Row>
-            <ExperimentComparisonEach
-              jobOne={experiment.last_job}
-              jobTwo={compareJob}
-              nodes={nodes}
-            />
-          </Row>
-        </Col>
-      </Row>
-    );
-  } else {
+  if (!experiments || !experiment) {
     return (
       <Spin
         style={{ position: 'absolute', top: '50%', left: '50%' }}
@@ -393,6 +346,44 @@ const ExperimentComparison = ({
       />
     );
   }
+  return (
+    <Row type="flex" justify="start">
+      <Col span={4}>
+        <ExperimentComparisonMenu
+          experiments={experiments}
+          selectItem={setCompareJobId}
+          baseJob={experiment.last_job}
+        />
+      </Col>
+      <Col span={20}>
+        <Row>
+          <Col span={compareJob ? 12 : 24}>
+            <ExperimentComparisonGT
+              job={experiment.last_job}
+              experiment={experiment}
+              nodes={nodes}
+            />
+          </Col>
+          {compareJob ? (
+            <Col span={12}>
+              <ExperimentComparisonGT
+                job={compareJob}
+                experiment={compareExperiment}
+                nodes={nodes}
+              />
+            </Col>
+          ) : null}
+        </Row>
+        <Row>
+          <ExperimentComparisonEach
+            jobOne={experiment.last_job}
+            jobTwo={compareJob}
+            nodes={nodes}
+          />
+        </Row>
+      </Col>
+    </Row>
+  );
 };
 
 export { ExperimentComparison };
