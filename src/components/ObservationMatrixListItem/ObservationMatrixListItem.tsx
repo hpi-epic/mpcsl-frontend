@@ -28,7 +28,7 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
       onClick={() => history.push(`/${props.id}/experiments`)}
     >
       <div className={styles.ObservationMatrixListItemContent}>
-        <p>{description}</p>
+        <p className={styles.Description}>{description}</p>
         <div style={{ alignSelf: 'flex-end' }}>
           <div style={{ width: 170 }}>
             {uploadProgress ? (
@@ -36,7 +36,7 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
             ) : null}
           </div>
           <Button
-            className="List-Buttons"
+            className={styles.ListButton}
             type="primary"
             ghost={true}
             onClick={e => {

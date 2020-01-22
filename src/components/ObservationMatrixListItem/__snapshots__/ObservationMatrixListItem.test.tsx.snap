@@ -26,7 +26,9 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
     <div
       className="ObservationMatrixListItemContent"
     >
-      <p />
+      <p
+        className="Description"
+      />
       <div
         style={
           Object {
@@ -42,7 +44,7 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
           }
         />
         <button
-          className="ant-btn List-Buttons ant-btn-primary ant-btn-background-ghost"
+          className="ant-btn ListButton ant-btn-primary ant-btn-background-ghost"
           onClick={[Function]}
           type="button"
         >
