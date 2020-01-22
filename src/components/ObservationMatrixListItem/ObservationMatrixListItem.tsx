@@ -46,7 +46,7 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
               }
             }}
           >
-            Upload Ground Truth Graph
+            Upload Ground Truth
           </Button>
           <input
             style={{ display: 'none' }}
