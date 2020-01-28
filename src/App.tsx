@@ -1,28 +1,33 @@
-import React, { Component } from 'react';
-import { Route, Redirect, Switch, BrowserRouter } from 'react-router-dom';
+import React from 'react';
 import colors from './constants/colors';
-
+import { Switch, Route } from 'react-router-dom';
 import './App.css';
+import { Layout } from 'antd';
+import { ObservationMatrixView } from './containers/ObservationMatrixView/ObservationMatrixView';
+import { ExperimentRoutes } from './ExperimentRoutes';
 import GraphExplorer from './containers/GraphExplorer';
-import PipelineManager from './containers/PipelineManager';
-import RuntimeManager from './containers/RuntimeManager';
-import { Routes } from './constants/routes';
+import { AppHeader } from './AppHeader';
 
-class App extends Component {
-  public render() {
-    return (
-      <div style={{ background: colors.contentBackground }}>
-        <BrowserRouter>
+const { Content } = Layout;
+
+const App = () => {
+  return (
+    <div style={{ background: colors.contentBackground }}>
+      <Layout className="Layout">
+        <AppHeader />
+        <Content style={{ background: colors.contentBackground }}>
           <Switch>
-            <Route path={Routes.manager} component={PipelineManager} />
-            <Route path={Routes.graphExplorer} component={GraphExplorer} />
-            <Route path={Routes.runtimeManager} component={RuntimeManager} />
-            <Redirect from="/" to={Routes.experimentManager} />
+            <Route path="/graph-explorer" component={GraphExplorer} />
+            <Route
+              path="/:datasetId/experiments"
+              component={ExperimentRoutes}
+            />
+            <Route path="/" component={ObservationMatrixView} />
           </Switch>
-        </BrowserRouter>
-      </div>
-    );
-  }
-}
+        </Content>
+      </Layout>
+    </div>
+  );
+};
 
 export default App;

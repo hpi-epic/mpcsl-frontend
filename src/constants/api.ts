@@ -8,6 +8,8 @@ const Endpoints = {
   observationMatrices: baseApiUrl + '/datasets',
   experiment: baseApiUrl + '/experiment',
   allExperiments: baseApiUrl + '/experiments',
+  datasetExperiments: (datasetId: number) =>
+    `${baseApiUrl}/dataset/${datasetId}/experiments`,
   job: baseApiUrl + '/job',
   jobLogs: (jobId: number) => `${baseApiUrl}/job/${String(jobId)}/logs`,
   allJobs: '/jobs',
@@ -27,6 +29,10 @@ const Endpoints = {
       ','
     )}&cause_condition=${causeCondition}`,
   resultNodes: (resultID: number) => `${baseApiUrl}/result/${resultID}/nodes`,
+  resultComparison: (resultOneId: number, resultTwoId: number) =>
+    `${baseApiUrl}/result/${resultOneId}/compare/${resultTwoId}`,
+  gtComparison: (resultId: number) =>
+    `${baseApiUrl}/result/${resultId}/gtcompare`,
   nodeContext: (nodeID: number, resultID: number) =>
     `${baseApiUrl}/node/${nodeID}/result/${resultID}/context`,
   algorithm: (algorithmId: number) => `${baseApiUrl}/algorithms/${algorithmId}`,

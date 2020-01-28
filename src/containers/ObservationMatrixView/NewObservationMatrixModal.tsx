@@ -1,4 +1,4 @@
-import { Drawer, Form, Row, Input, Button, message, Select } from 'antd';
+import { Form, Row, Input, message, Select, Modal } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import React from 'react';
 import {
@@ -105,18 +105,14 @@ class NewObservationMatrixModal extends React.Component<
       : 'Create new Observation Matrix';
 
     return (
-      <Drawer
+      <Modal
         title={title}
-        width={310}
-        placement="right"
-        onClose={this.props.onClose}
+        onCancel={this.props.onClose}
+        onOk={this.handleSubmit}
         visible={this.props.visible}
+        okButtonProps={{ disabled: disabled }}
       >
-        <Form
-          layout="vertical"
-          onSubmit={this.handleSubmit}
-          className="Modal-Form"
-        >
+        <Form layout="vertical" className="Modal-Form">
           <Row gutter={16}>
             <Form.Item label="Name">{observationMatrixNameEl}</Form.Item>
             <Form.Item label="Description">{observationMatrixDescEl}</Form.Item>
@@ -124,18 +120,13 @@ class NewObservationMatrixModal extends React.Component<
               {observationMatrixRemoteDBEl}
             </Form.Item>
             <Form.Item label="Query">{observationMatrixQueryEl}</Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit" disabled={disabled}>
-                Submit
-              </Button>
-            </Form.Item>
           </Row>
         </Form>
-      </Drawer>
+      </Modal>
     );
   }
 
-  private handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  private handleSubmit = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.preventDefault();
     this.props.form.validateFields(
       (err: Error, values: IFormObservationMatrix) => {

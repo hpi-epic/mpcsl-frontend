@@ -1,0 +1,25 @@
+.ObservationMatrixListItem {
+  max-width: 300px;
+  min-width: 300px;
+  margin: 5px;
+  flex-grow: 1;
+}
+
+.ObservationMatrixListItemContent {
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  p {
+    flex-grow: 1;
+  }
+}
+
+.Description {
+  height: 152px;
+  overflow: hidden;
+}
+
+.ListButton {
+  // margin-right: 5px;
+  margin: 5px;
+}

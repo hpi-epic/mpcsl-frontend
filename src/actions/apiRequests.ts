@@ -4,16 +4,18 @@ import axios from 'axios';
 import {
   IObservationMatrix,
   IExperiment,
-  IJob,
   ICreateExperiment,
   IAPIDistribution,
   IAPINodeContext,
   IAlgorithm,
   IAPIConfounders,
-  JobStatus
+  JobStatus,
+  IIDClass,
+  IJob,
+  IComparisonStatistics
 } from '../types';
 import Endpoints from '../constants/api';
-import { fromEvent } from 'rxjs';
+import { fromEvent, Observable } from 'rxjs';
 import io from 'socket.io-client';
 
 let _socket: undefined | SocketIOClient.Socket;
@@ -24,160 +26,39 @@ const socket = () => {
   return _socket;
 };
 
-export function getObservationMatrices(): Promise<IObservationMatrix[]> {
-  return new Promise<IObservationMatrix[]>((resolve, reject) => {
-    axios
-      .get(Endpoints.observationMatrices)
-      .then(response => {
-        resolve(response.data);
-      })
-      .catch(error => {
-        message.error('Failed to fetch Observation Matrices');
-        reject({
-          status: error.response.status,
-          message: 'Failed to fetch Observation Matrices'
-        });
-      });
-  });
-}
+class CachedApiCall<T extends IIDClass> {
+  private cachedData: undefined | Promise<T[]>;
+  private observable: Observable<IIDClass>;
+  constructor(private apiEndpoint: string, subIdentifier: string) {
+    this.observable = fromEvent(socket(), subIdentifier);
+    this.subscribe(() => this.refetchData());
+  }
 
-export function createExperiment(experiment: ICreateExperiment): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
-    axios
-      .post(Endpoints.allExperiments, experiment)
-      .then(() => {
-        message.success(`Successfully created Experiment ${experiment.name}`);
-        resolve();
-      })
-      .catch(error => {
-        message.error('Failed to create Experiment');
-        reject({
-          status: error.response.status,
-          message: error.message
-        });
+  public refetchData = () => {
+    this.cachedData = axios
+      .get(this.apiEndpoint)
+      .then(response => response.data)
+      .catch(e => {
+        message.error('Network Error');
+        throw e;
       });
-  });
-}
+  };
 
-export function createObservationMatrix(
-  observationMatrix: Omit<IObservationMatrix, 'id'>
-): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
-    axios
-      .post(Endpoints.observationMatrices, observationMatrix)
-      .then(() => {
-        message.success(
-          `Successfully created Observation Matrix ${observationMatrix.name}`
-        );
-        resolve();
-      })
-      .catch(error => {
-        if (error.response.status === 400) {
-          message.error(
-            `${error.response.data.message}. Please enter a valid query!`
-          );
-        } else {
-          message.error('Failed to create Observation Matrix');
-        }
-        reject({
-          status: error.response.status,
-          message: error.message
-        });
-      });
-  });
-}
+  public getAll = async () => {
+    if (!this.cachedData) {
+      this.refetchData();
+    }
+    return this.cachedData as Promise<T[]>;
+  };
 
-export function getExperiments(): Promise<IExperiment[]> {
-  return new Promise<IExperiment[]>((resolve, reject) => {
-    axios
-      .get(Endpoints.allExperiments)
-      .then(response => {
-        resolve(response.data);
-      })
-      .catch(error => {
-        message.error('Failed to fetch Experiments');
-        reject({
-          status: error.response.status,
-          message: error.message
-        });
-      });
-  });
-}
+  public getOne = async (id: number) => {
+    const data = await this.getAll();
+    return data.find(datum => datum.id === id);
+  };
 
-export function getExperiment(experimentId: number): Promise<IExperiment> {
-  return new Promise<IExperiment>((resolve, reject) => {
-    axios
-      .get(`${Endpoints.experiment}/${experimentId}`)
-      .then(response => {
-        resolve(response.data);
-      })
-      .catch(error => {
-        message.error(`Failed to fetch Experiment #${experimentId}`);
-        reject({
-          status: error.response.status,
-          message: error.message
-        });
-      });
-  });
-}
-
-export function deleteExperiment(experiment: IExperiment): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
-    axios
-      .delete(`${Endpoints.experiment}/${experiment.id}`)
-      .then(() => {
-        message.success(`Successfully deleted Experiment ${experiment.name}!`);
-        resolve();
-      })
-      .catch(error => {
-        message.error(`Failed to delete Experiment ${experiment.name}!`);
-        reject({
-          status: error.response.status,
-          message: error.message
-        });
-      });
-  });
-}
-
-export function deleteObservationMatrix(
-  observationMatrix: IObservationMatrix
-): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
-    axios
-      .delete(`${Endpoints.observationMatrix}/${observationMatrix.id}`)
-      .then(() => {
-        resolve();
-        message.success(
-          `Successfully deleted Observation Matrix ${observationMatrix.name}!`
-        );
-      })
-      .catch(error => {
-        message.error(
-          `Failed to delete Observation Matrix ${observationMatrix.name}!`
-        );
-        reject({
-          status: error.response.status,
-          message: error.message
-        });
-      });
-  });
-}
-
-export function getJobsForExperiment(experiment: IExperiment): Promise<IJob[]> {
-  return new Promise<IJob[]>((resolve, reject) => {
-    axios
-      .get(`${Endpoints.experiment}/${experiment.id}${Endpoints.allJobs}`)
-      .then(response => {
-        resolve(response.data);
-      })
-      .catch(error => {
-        message.error('Failed to fetch Jobs');
-        reject({
-          status: error.response.status,
-          message: error.message
-        });
-      });
-  });
+  public subscribe = (callback: (id: number) => void) => {
+    return this.observable.subscribe(val => callback(val.id));
+  };
 }
 
 type SubJobStatusData = {
@@ -185,8 +66,145 @@ type SubJobStatusData = {
   status: JobStatus;
 };
 
-export const subscribeToJobStatusChanges = () =>
-  fromEvent<SubJobStatusData>(socket(), 'job_status');
+const JobChangesObservable = fromEvent<SubJobStatusData>(socket(), 'job');
+
+export const subscribeToJobStatusChanges = (callback: () => void) =>
+  JobChangesObservable.subscribe(callback);
+
+class CachedExperiments extends CachedApiCall<IExperiment> {
+  constructor() {
+    super(Endpoints.allExperiments, 'experiment');
+    JobChangesObservable.subscribe(job => {
+      this.getAll().then(data => {
+        if (data.some(exp => exp.last_job?.id === job.id)) {
+          this.refetchData();
+        }
+      });
+    });
+  }
+}
+
+const experimentCache = new CachedExperiments();
+
+const datasetCache = new CachedApiCall<IObservationMatrix>(
+  Endpoints.observationMatrices,
+  'dataset'
+);
+
+export const getObservationMatrices = datasetCache.getAll;
+
+export const getObservationMatrix = datasetCache.getOne;
+
+export const createExperiment = async (experiment: ICreateExperiment) => {
+  try {
+    await axios.post(Endpoints.allExperiments, experiment);
+    message.success(`Successfully created Experiment ${experiment.name}`);
+  } catch (e) {
+    message.error('Failed to create Experiment');
+    throw e;
+  }
+};
+
+export const createObservationMatrix = async (
+  observationMatrix: Omit<IObservationMatrix, 'id'>
+) => {
+  try {
+    await axios.post(Endpoints.observationMatrices, observationMatrix);
+    message.success(
+      `Successfully created Observation Matrix ${observationMatrix.name}`
+    );
+  } catch (e) {
+    message.error('Failed to create Observation Matrix');
+    throw e;
+  }
+};
+
+export const getExperiments = experimentCache.getAll;
+
+export const getExperiment = experimentCache.getOne;
+
+export const getExperimentsForDataset = async (
+  datasetId: number
+): Promise<IExperiment[]> => {
+  try {
+    const response = await axios.get(Endpoints.datasetExperiments(datasetId));
+    return response.data;
+  } catch (e) {
+    message.error('Failed to fetch Experiments');
+    throw e;
+  }
+};
+
+export const getComparisonStatistics = async (
+  resultOneId: number,
+  resultTwoId: number
+): Promise<IComparisonStatistics> => {
+  try {
+    const response = await axios.get(
+      Endpoints.resultComparison(resultOneId, resultTwoId)
+    );
+    return response.data;
+  } catch (e) {
+    message.error('Failed to fetch Statistics');
+    throw e;
+  }
+};
+
+export const getGTComparisonStatistics = async (
+  resultId: number
+): Promise<IComparisonStatistics | null> => {
+  try {
+    const response = await axios.get(Endpoints.gtComparison(resultId));
+    return response.data;
+  } catch (e) {
+    message.error('Failed to fetch Statistics');
+    throw e;
+  }
+};
+
+export const deleteExperiment = async (experiment: IExperiment) => {
+  try {
+    await axios.delete(`${Endpoints.experiment}/${experiment.id}`);
+    message.success(`Successfully deleted Experiment ${experiment.name}!`);
+  } catch (e) {
+    message.error(`Failed to delete Experiment ${experiment.name}!`);
+    throw e;
+  }
+};
+
+export const deleteObservationMatrix = async (
+  observationMatrix: IObservationMatrix
+) => {
+  try {
+    await axios.delete(
+      `${Endpoints.observationMatrix}/${observationMatrix.id}`
+    );
+    message.success(
+      `Successfully deleted Observation Matrix ${observationMatrix.name}!`
+    );
+  } catch (e) {
+    message.error(
+      `Failed to delete Observation Matrix ${observationMatrix.name}!`
+    );
+    throw e;
+  }
+};
+
+export const getJobsForExperiment = async (experiment: IExperiment) => {
+  try {
+    const response = await axios.get<IJob[]>(
+      `${Endpoints.experiment}/${experiment.id}${Endpoints.allJobs}`
+    );
+    return response.data;
+  } catch (e) {
+    message.error('Failed to fetch Jobs');
+    throw e;
+  }
+};
+
+export const subscribeToExperimentChanges = experimentCache.subscribe;
+
+export const subscribeToDatasetChanges = datasetCache.subscribe;
 
 export function runExperiment(
   experiment: IExperiment,
@@ -213,7 +231,7 @@ export function runExperiment(
 }
 
 const nodes = axios.get<string[]>(`${Endpoints.k8s}/nodes`);
-export const getK8SNodes = async () => nodes;
+export const getK8SNodes = async () => (await nodes).data;
 
 export function getResult(resultID: number): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -363,39 +381,34 @@ export function getConfounders(nodeID: string): Promise<IAPIConfounders> {
   });
 }
 
-export function getAllAlgorithms(): Promise<IAlgorithm[]> {
-  return new Promise<IAlgorithm[]>((resolve, reject) => {
-    axios
-      .get(Endpoints.allAlgorithms)
-      .then(response => {
-        resolve(response.data);
-      })
-      .catch(error => {
-        message.error('Failed to fetch Algorithms');
-        reject({
-          status: error.response.status,
-          message: error.message
-        });
-      });
-  });
-}
+let algorithms: undefined | Promise<IAlgorithm[]>;
 
-export function getAlgorithm(algorithmId: number): Promise<IAlgorithm> {
-  return new Promise<IAlgorithm>((resolve, reject) => {
-    axios
-      .get(Endpoints.algorithm(algorithmId))
-      .then(response => {
-        resolve(response.data);
-      })
-      .catch(error => {
-        message.error('Failed to fetch Algorithm');
-        reject({
-          status: error.response.status,
-          message: error.message
-        });
-      });
-  });
-}
+export const getAllAlgorithms = async (): Promise<IAlgorithm[]> => {
+  if (algorithms) {
+    return algorithms;
+  }
+  try {
+    algorithms = axios
+      .get<IAlgorithm[]>(Endpoints.allAlgorithms)
+      .then(resp => resp.data);
+    return algorithms;
+  } catch (e) {
+    message.error('Failed to fetch Algorithms');
+    throw e;
+  }
+};
+
+export const getAlgorithm = async (
+  algorithmId: number
+): Promise<IAlgorithm> => {
+  const allAlgorithms = await getAllAlgorithms();
+  const alg = allAlgorithms.find(val => val.id === algorithmId);
+  if (!alg) {
+    message.error('Algorithm not found');
+    throw new Error();
+  }
+  return alg;
+};
 
 export function getAllAvailableDataSources(): Promise<[]> {
   return new Promise<[]>((resolve, reject) => {
