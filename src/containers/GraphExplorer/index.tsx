@@ -44,23 +44,29 @@ class GraphExplorer extends React.Component<IGraphExplorerProps, any> {
       <Switch>
         <Route
           key="selection"
-          path={`${Routes.graphExplorerSelection}/:result_id`}
+          path={
+            '/:datasetId/experiments/:experimentId/jobs/:resultId/selection'
+          }
           component={GraphSelection}
         />
         <Route
           key="annotate"
-          path={`${Routes.graphExplorerAnnotate}/:result_id`}
+          path={
+            '/:datasetId/experiments/:experimentId/jobs/:resultId/annotation'
+          }
           component={GraphAnnotate}
         />
         <Route
           key="explorer"
-          path={`${Routes.graphExplorerCausalExploration}/:result_id`}
+          path={
+            '/:datasetId/experiments/:experimentId/jobs/:resultId/exploration'
+          }
           component={GraphCausalExplorer}
         />
         <Redirect
           exact={true}
-          from={Routes.graphExplorer}
-          to={Routes.graphExplorerSelection}
+          from={'/:datasetId/experiments/:experimentId/jobs/:resultId'}
+          to={'/:datasetId/experiments/:experimentId/jobs/:resultId/selection'}
         />
       </Switch>
     );

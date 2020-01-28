@@ -98,8 +98,8 @@ const GraphExplorerHeader = (
           size="small"
         >
           <RadioButton value="selection">Selection</RadioButton>
-          <RadioButton value="annotate">Expl. &#38; Valid.</RadioButton>
-          <RadioButton value="causal-exploration">Causal Inference</RadioButton>
+          <RadioButton value="annotation">Expl. &#38; Valid.</RadioButton>
+          <RadioButton value="exploration">Causal Inference</RadioButton>
         </RadioGroup>
       </div>
     </>
@@ -187,6 +187,36 @@ const AppHeader = () => {
           </Breadcrumb.Item>
         );
         break;
+      case 'selection':
+        breadcrumbItems.pop();
+        breadcrumbItems.push(
+          <Breadcrumb.Item key={url}>
+            <Link style={{ color: 'white' }} to={url}>
+              Selection of {experimentName}
+            </Link>
+          </Breadcrumb.Item>
+        );
+        break;
+      case 'annotation':
+        breadcrumbItems.pop();
+        breadcrumbItems.push(
+          <Breadcrumb.Item key={url}>
+            <Link style={{ color: 'white' }} to={url}>
+              Annotation of {experimentName}
+            </Link>
+          </Breadcrumb.Item>
+        );
+        break;
+      case 'exploration':
+        breadcrumbItems.pop();
+        breadcrumbItems.push(
+          <Breadcrumb.Item key={url}>
+            <Link style={{ color: 'white' }} to={url}>
+              Exploration of {experimentName}
+            </Link>
+          </Breadcrumb.Item>
+        );
+        break;
     }
   });
   return (
@@ -211,7 +241,7 @@ const AppHeader = () => {
         </div>
         <Switch>
           <Route
-            path="/graph-explorer/:view/:resultid"
+            path="/:datasetId/experiments/:experimentId/jobs/:resultId/:view"
             component={GraphExplorerHeaderRedux}
           />
           <Route />

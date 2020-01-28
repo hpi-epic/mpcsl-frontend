@@ -269,7 +269,9 @@ class ExperimentDetails extends React.Component<
   }
 
   private onExploreExperiment = (resultId: number) => {
-    this.props.history.push(`/graph-explorer/selection/${resultId}`);
+    this.props.history.push(
+      `/${this.props.match.params.datasetId}/experiments/${this.props.match.params.experimentId}/jobs/${resultId}`
+    );
   };
 
   private onGoBack = (datasetId: string) => {
