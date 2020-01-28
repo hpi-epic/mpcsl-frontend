@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Select, Modal, Dropdown, Menu, Button, Card, Badge } from 'antd';
+import {
+  Select,
+  Modal,
+  Dropdown,
+  Menu,
+  Button,
+  Card,
+  Badge,
+  InputNumber,
+  Switch,
+  Form
+} from 'antd';
 import { IExperiment, BadgeStatus } from '../../types';
 import { useHistory } from 'react-router-dom';
 import {
@@ -100,6 +111,8 @@ const ExperimentsListItem = (
   const [nodeSelectModal, setNodeSelectModal] = useState(false);
   const [k8sNodes, setK8sNodes] = useState<undefined | string[]>();
   const [selectedNode, setSelectedNode] = useState<undefined | string>();
+  const [runs, setRuns] = useState<undefined | number>(1);
+  const [parallel, setParallel] = useState(true);
   const history = useHistory();
   useEffect(() => {
     getK8SNodes()
@@ -114,30 +127,51 @@ const ExperimentsListItem = (
         title="Select Machine to Start Job"
         visible={nodeSelectModal}
         onOk={() => {
-          runExperiment(props, selectedNode);
+          runExperiment(props, selectedNode, runs, parallel);
           setNodeSelectModal(false);
         }}
         onCancel={() => setNodeSelectModal(false)}
         bodyStyle={{ display: 'flex' }}
       >
-        <Select
-          defaultValue="_none"
-          onChange={(val: string) =>
-            val !== '_none' ? setSelectedNode(val) : setSelectedNode(undefined)
-          }
-          style={{ flexGrow: 1 }}
-        >
-          <Option value="_none" style={{ fontStyle: 'italic' }}>
-            Default
-          </Option>
-          {k8sNodes
-            ? k8sNodes.map(node => (
-                <Option key={node} value={node}>
-                  {node}
-                </Option>
-              ))
-            : null}
-        </Select>
+        <Form layout="vertical">
+          <Form.Item label="Set Execution Parameters">
+            <Select
+              defaultValue="_none"
+              onChange={(val: string) =>
+                val !== '_none'
+                  ? setSelectedNode(val)
+                  : setSelectedNode(undefined)
+              }
+              style={{ flexGrow: 1 }}
+            >
+              <Option value="_none" style={{ fontStyle: 'italic' }}>
+                Default
+              </Option>
+              {k8sNodes
+                ? k8sNodes.map(node => (
+                    <Option key={node} value={node}>
+                      {node}
+                    </Option>
+                  ))
+                : null}
+            </Select>
+          </Form.Item>
+          <Form.Item label="Number of Jobs">
+            <InputNumber
+              min={1}
+              defaultValue={runs}
+              onChange={value => setRuns(value)}
+            ></InputNumber>
+          </Form.Item>
+          <Form.Item label="Run mode">
+            <Switch
+              checkedChildren="Parallel"
+              unCheckedChildren="Sequential"
+              defaultChecked={parallel}
+              onChange={checked => setParallel(checked)}
+            ></Switch>
+          </Form.Item>
+        </Form>
       </Modal>
       <Card
         title={
