@@ -1,0 +1,126 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ListElementExperiment /> renders correctly 1`] = `
+<div
+  className="ant-card ListItem ant-card-bordered ant-card-hoverable"
+  onClick={[Function]}
+>
+  <div
+    className="ant-card-head"
+    style={Object {}}
+  >
+    <div
+      className="ant-card-head-wrapper"
+    >
+      <div
+        className="ant-card-head-title"
+      >
+        <div
+          style={
+            Object {
+              "display": "flex",
+              "flexDirection": "column",
+              "height": 50,
+            }
+          }
+        >
+          <div
+            style={
+              Object {
+                "display": "flex",
+                "justifyContent": "space-between",
+              }
+            }
+          >
+            <p>
+              test
+            </p>
+            <span
+              className="Card-Badge ant-badge ant-badge-status ant-badge-not-a-wrapper"
+            >
+              <span
+                className="ant-badge-status-dot ant-badge-status-default"
+                style={Object {}}
+              />
+              <span
+                className="ant-badge-status-text"
+                style={
+                  Object {
+                    "color": undefined,
+                  }
+                }
+              >
+                not started
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="ant-card-body"
+    style={Object {}}
+  >
+    <div
+      className="ListItemContent"
+    >
+      <p />
+      <div
+        style={
+          Object {
+            "alignSelf": "flex-end",
+          }
+        }
+      >
+        <button
+          className="ant-btn ListButton ant-btn-primary ant-btn-background-ghost"
+          onClick={[Function]}
+          type="button"
+        >
+          <span>
+            Run
+          </span>
+        </button>
+        <button
+          className="ant-btn ListButton ant-btn-primary ant-btn-background-ghost"
+          disabled={true}
+          onClick={[Function]}
+          type="button"
+        >
+          <span>
+            Compare
+          </span>
+        </button>
+        <button
+          className="ant-btn ListButton ant-dropdown-trigger ant-btn-icon-only"
+          onClick={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          type="button"
+        >
+          <i
+            aria-label="icon: ellipsis"
+            className="anticon anticon-ellipsis"
+          >
+            <svg
+              aria-hidden="true"
+              className=""
+              data-icon="ellipsis"
+              fill="currentColor"
+              focusable="false"
+              height="1em"
+              viewBox="64 64 896 896"
+              width="1em"
+            >
+              <path
+                d="M176 511a56 56 0 1 0 112 0 56 56 0 1 0-112 0zm280 0a56 56 0 1 0 112 0 56 56 0 1 0-112 0zm280 0a56 56 0 1 0 112 0 56 56 0 1 0-112 0z"
+              />
+            </svg>
+          </i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

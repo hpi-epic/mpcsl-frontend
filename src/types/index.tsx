@@ -12,8 +12,11 @@ export interface IStoreState {
 
 export type StoreState = IStoreState | undefined;
 
-export interface IObservationMatrix {
-  id?: number;
+export interface IIDClass {
+  id: number;
+}
+
+export interface IObservationMatrix extends IIDClass {
   load_query: string;
   name: string;
   description?: string;
@@ -31,29 +34,15 @@ export enum BadgeStatus {
   cancelled = 'warning'
 }
 
-export interface IExperiment {
+export interface IExperiment extends IIDClass {
   dataset_id: number;
   dataset?: number;
-  id?: number;
   name: string;
   description?: string;
   execution_time_statistics?: { [name: string]: number };
   algorithm_id: number;
-  parameters: { [name: string]: any };
-  last_job?: {
-    id: number;
-    experiment_id: number;
-    start_time: string;
-    pid: number;
-    status: JobStatus;
-    result?: {
-      id: number;
-      job_id: number;
-      start_time: string;
-      end_time: string;
-      meta_results: any;
-    };
-  };
+  parameters: IParameters;
+  last_job?: IJob;
 }
 
 export interface ICreateExperiment {
@@ -64,17 +53,41 @@ export interface ICreateExperiment {
   parameters: { [name: string]: any };
 }
 
-export interface IAlgorithm {
-  id: number;
+interface IRequiredParameter {
+  required?: boolean;
+}
+
+export interface INumberParameter extends IRequiredParameter {
+  type: 'int' | 'float';
+  minimum?: number;
+  maximum?: number;
+  default?: number;
+}
+
+export interface IEnumParameter extends IRequiredParameter {
+  type: 'enum';
+  values: string[];
+  default?: string;
+}
+
+export type IParameter = INumberParameter | IEnumParameter;
+
+export type IParameters = { [name: string]: IParameter };
+
+export interface IAlgorithm extends IIDClass {
   name: string;
   script_filename: string;
   backend: string;
   description: string;
-  valid_parameters: { [name: string]: any };
+  valid_parameters: IParameters;
 }
 
-export interface IJob {
-  id: number;
+export interface IErrorType {
+  rate: number;
+  edges: number[][];
+}
+
+export interface IJob extends IIDClass {
   experiment_id: number;
   start_time: string;
   status: JobStatus;
@@ -87,6 +100,17 @@ export interface IJob {
     execution_time: number;
     dataset_loading_time: number;
     meta_results: any;
+  };
+}
+
+export interface IComparisonStatistics {
+  graph_edit_distance: number;
+  mean_jaccard_coefficient: number;
+  error_types: {
+    false_positives: IErrorType;
+    true_positives: IErrorType;
+    false_negatives: IErrorType;
+    true_negatives: IErrorType;
   };
 }
 

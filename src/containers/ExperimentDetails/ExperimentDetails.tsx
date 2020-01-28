@@ -1,6 +1,6 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { Button, List, Badge, Icon, Modal, Select } from 'antd';
+import { Button, List, Badge, Modal, Select } from 'antd';
 import { LazyLog as _LazyLog } from 'react-lazylog';
 import moment from 'moment';
 import { IExperiment, IJob, GraphExportFormat, BadgeStatus } from '../../types';
@@ -10,7 +10,7 @@ import {
   subscribeToJobStatusChanges
 } from '../../actions/apiRequests';
 import Endpoints from '../../constants/api';
-import './style.css';
+import styles from './ExperimentDetails.module.scss';
 import Axios from 'axios';
 import { Subscription } from 'rxjs';
 
@@ -28,7 +28,8 @@ interface IStateJobsManagement {
 }
 
 interface IMatchParams {
-  experiment_id: string;
+  experimentId: string;
+  datasetId: string;
 }
 
 class ExperimentDetails extends React.Component<
@@ -55,9 +56,8 @@ class ExperimentDetails extends React.Component<
   private sub: Subscription | undefined;
 
   public componentDidMount = () => {
-    this.fetchExperiment(Number(this.props.match.params.experiment_id));
-    const obs = subscribeToJobStatusChanges();
-    this.sub = obs.subscribe(() => {
+    this.fetchExperiment(Number(this.props.match.params.experimentId));
+    this.sub = subscribeToJobStatusChanges(() => {
       if (this.state.experiment) {
         this.fetchJobs(this.state.experiment);
       }
@@ -73,21 +73,13 @@ class ExperimentDetails extends React.Component<
   public render() {
     if (this.state.experiment) {
       return (
-        <div className="Content">
-          <Button
-            className="Go-Back-Button"
-            onClick={() => this.onGoBack()}
-            type="primary"
-            ghost={true}
-          >
-            <Icon type="left" />
-          </Button>
+        <div className={styles.Content}>
           <h2>
             Experiment: <i>{this.state.experiment.name}</i>
           </h2>
           <List
             itemLayout="horizontal"
-            className="Job-List"
+            className={styles.JobList}
             header={<h3>Job List</h3>}
             dataSource={this.state.jobList}
             renderItem={(job: IJob) => (
@@ -125,7 +117,6 @@ class ExperimentDetails extends React.Component<
                     <div>
                       {<h3> Job #{job.id}</h3>}
                       <Badge
-                        className="Job-Badge"
                         status={BadgeStatus[job.status]}
                         text={job.status}
                       />
@@ -211,7 +202,7 @@ class ExperimentDetails extends React.Component<
         </div>
       );
     } else {
-      return <span>Nothing to show</span>;
+      return <span>Loading ...</span>;
     }
   }
   private showModal = (jobId: number) => {
@@ -281,8 +272,8 @@ class ExperimentDetails extends React.Component<
     this.props.history.push(`/graph-explorer/selection/${resultId}`);
   };
 
-  private onGoBack = () => {
-    this.props.history.push('/manager/experiments');
+  private onGoBack = (datasetId: string) => {
+    this.props.history.push(`/${datasetId}/experiments`);
   };
 }
 

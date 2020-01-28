@@ -1,0 +1,29 @@
+.ListItem {
+  max-width: 300px;
+  min-width: 300px;
+  word-wrap: break-word;
+  margin: 5px;
+  flex-grow: 1;
+}
+
+.ListItemContent {
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  p {
+    flex-grow: 1;
+  }
+}
+
+.DropdownButton {
+  border: none;
+  background-color: transparent;
+  &hover {
+    border: none;
+    background-color: transparent;
+  }
+}
+
+.ListButton {
+  margin-right: 5px;
+}
