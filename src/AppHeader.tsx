@@ -153,7 +153,7 @@ const AppHeader = () => {
   const breadcrumbItems = [
     <Breadcrumb.Item key="datasets">
       <Link style={{ color: 'white' }} to="/">
-        <Icon type="home" /> Observation Matrices
+        <Icon type="home" /> Home
       </Link>
     </Breadcrumb.Item>
   ];
@@ -164,7 +164,7 @@ const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              {datasetName}
+              Experiments of {datasetName}
             </Link>
           </Breadcrumb.Item>
         );
@@ -173,7 +173,7 @@ const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              {experimentName}
+              Jobs of {experimentName}
             </Link>
           </Breadcrumb.Item>
         );
@@ -182,14 +182,7 @@ const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              {experimentName}
-            </Link>
-          </Breadcrumb.Item>
-        );
-        breadcrumbItems.push(
-          <Breadcrumb.Item key={url}>
-            <Link style={{ color: 'white' }} to={url}>
-              Compare
+              Comparison of {experimentName}
             </Link>
           </Breadcrumb.Item>
         );
