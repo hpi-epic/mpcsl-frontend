@@ -121,6 +121,14 @@ const mapDispatchToProps = (
   };
 };
 
+const shorten = (s: string) => {
+  if (s.length < 25) {
+    return s;
+  } else {
+    return s.substr(0, 22) + '...';
+  }
+};
+
 const GraphExplorerHeaderRedux = connect(
   mapStateToProps,
   mapDispatchToProps
@@ -164,7 +172,7 @@ const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              Experiments of {datasetName}
+              Experiments of {shorten(datasetName)}
             </Link>
           </Breadcrumb.Item>
         );
@@ -173,7 +181,7 @@ const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              Jobs of {experimentName}
+              Jobs of {shorten(experimentName)}
             </Link>
           </Breadcrumb.Item>
         );
@@ -182,7 +190,7 @@ const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              Comparison of {experimentName}
+              Comparison of {shorten(experimentName)}
             </Link>
           </Breadcrumb.Item>
         );
@@ -192,7 +200,7 @@ const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              Selection of {experimentName}
+              Selection of {shorten(experimentName)}
             </Link>
           </Breadcrumb.Item>
         );
@@ -202,7 +210,7 @@ const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              Annotation of {experimentName}
+              Annotation of {shorten(experimentName)}
             </Link>
           </Breadcrumb.Item>
         );
@@ -212,7 +220,7 @@ const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              Exploration of {experimentName}
+              Exploration of {shorten(experimentName)}
             </Link>
           </Breadcrumb.Item>
         );
