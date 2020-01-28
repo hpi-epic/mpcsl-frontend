@@ -75,7 +75,6 @@ export type IParameter = INumberParameter | IEnumParameter;
 export type IParameters = { [name: string]: IParameter };
 
 export interface IAlgorithm extends IIDClass {
-  id: number;
   package: string;
   function: string;
   script_filename: string;

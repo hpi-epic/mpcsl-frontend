@@ -49,7 +49,7 @@ const AlgorithmsSelect = (
     >
       {algorithms.map(algorithm => (
         <Select.Option value={algorithm.id} key={String(algorithm.id)}>
-          {algorithm.name}
+          {algorithm.function} from {algorithm.package}
         </Select.Option>
       ))}
     </Select>
