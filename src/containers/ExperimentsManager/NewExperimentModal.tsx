@@ -85,7 +85,7 @@ class NewExperimentModal extends React.Component<
       >
         {this.state.algorithms.map((algorithm: IAlgorithm) => (
           <Select.Option value={algorithm.id} key={String(algorithm.id)}>
-            {algorithm.name}
+            {algorithm.function}
           </Select.Option>
         ))}
       </Select>

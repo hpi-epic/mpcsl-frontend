@@ -66,7 +66,8 @@ export interface ICreateExperiment {
 
 export interface IAlgorithm {
   id: number;
-  name: string;
+  package: string;
+  function: string;
   script_filename: string;
   backend: string;
   description: string;
