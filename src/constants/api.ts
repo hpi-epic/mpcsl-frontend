@@ -5,6 +5,8 @@ const baseApiUrl = '/api';
 const Endpoints = {
   k8s: baseApiUrl + '/k8s',
   observationMatrix: baseApiUrl + '/dataset',
+  observationMatrixMetadata: (datasetID: number) =>
+    `${baseApiUrl}/dataset/${datasetID}/metadata`,
   observationMatrices: baseApiUrl + '/datasets',
   experiment: baseApiUrl + '/experiment',
   allExperiments: baseApiUrl + '/experiments',
