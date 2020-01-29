@@ -208,14 +208,17 @@ export const subscribeToDatasetChanges = datasetCache.subscribe;
 
 export function runExperiment(
   experiment: IExperiment,
-  node?: string
+  node?: string,
+  runs?: number,
+  parallel?: boolean
 ): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     axios
-      .post(
-        `${Endpoints.experiment}/${experiment.id}/start`,
-        node ? { node } : undefined
-      )
+      .post(`${Endpoints.experiment}/${experiment.id}/start`, {
+        node: node,
+        runs: runs,
+        parallel: parallel
+      })
       .then(() => {
         resolve();
         message.success('Successfully started Experiment Run!');
