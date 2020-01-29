@@ -8,7 +8,6 @@ import {
   Card,
   Badge,
   InputNumber,
-  Switch,
   Form
 } from 'antd';
 import { IExperiment, BadgeStatus } from '../../types';
