@@ -43,11 +43,13 @@ export const addNode: ActionCreator<ThunkAction<
   Action
 >> = (nodeID: number) => {
   return async (dispatch: Dispatch<Action>): Promise<IAddNode> => {
-    const match = window.location.href.match(new RegExp('\\d*$'));
+    const match = window.location.href.match(
+      new RegExp('\\d*/(selection|annotation|exploration)$')
+    );
     if (!match || !match[0]) {
       throw new Error();
     }
-    const resultID = match[0];
+    const resultID = match[0].split('/')[0];
     const result = await getNodeContext(nodeID, Number(resultID));
     return dispatch({
       type: constants.ADD_NODE as constants.ADD_NODE,

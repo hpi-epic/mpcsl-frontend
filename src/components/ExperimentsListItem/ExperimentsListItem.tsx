@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Select, Modal, Dropdown, Menu, Button, Card, Badge } from 'antd';
+import {
+  Select,
+  Modal,
+  Dropdown,
+  Menu,
+  Button,
+  Card,
+  Badge,
+  InputNumber,
+  Form
+} from 'antd';
 import { IExperiment, BadgeStatus } from '../../types';
 import { useHistory } from 'react-router-dom';
 import {
@@ -8,6 +18,7 @@ import {
   runExperiment
 } from '../../actions/apiRequests';
 import styles from './ExperimentsListItem.module.scss';
+import { FormComponentProps } from 'antd/lib/form';
 const { Option } = Select;
 const { confirm } = Modal;
 
@@ -91,6 +102,87 @@ const ExperimentDropdown = (
   );
 };
 
+type RunExperimentModalProps = FormComponentProps & {
+  experiment: IExperiment;
+  visible: boolean;
+  onClose: () => void;
+};
+
+const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = props => {
+  const { getFieldDecorator } = props.form;
+  const [k8sNodes, setK8sNodes] = useState<undefined | string[]>();
+  useEffect(() => {
+    getK8SNodes()
+      .then(setK8sNodes)
+      .catch(() => setK8sNodes([]));
+  }, []);
+  return (
+    <Modal
+      title="Select Machine to Start Job"
+      visible={props.visible}
+      onOk={() => {
+        props.form.validateFields(
+          (
+            err: Error,
+            values: {
+              node: string;
+              runs: number;
+              parallelismMode: 'parallel' | 'sequential';
+            }
+          ) => {
+            if (!err) {
+              runExperiment(
+                props.experiment,
+                values.node === '_none' ? undefined : values.node,
+                values.runs,
+                values.parallelismMode === 'parallel'
+              );
+              props.onClose();
+            }
+          }
+        );
+      }}
+      onCancel={() => props.onClose()}
+    >
+      <Form layout="vertical">
+        <Form.Item label="Set Execution Parameters">
+          {getFieldDecorator('node', { initialValue: '_none' })(
+            <Select>
+              <Option value="_none" style={{ fontStyle: 'italic' }}>
+                Default
+              </Option>
+              {k8sNodes
+                ? k8sNodes.map(node => (
+                    <Option key={node} value={node}>
+                      {node}
+                    </Option>
+                  ))
+                : null}
+            </Select>
+          )}
+        </Form.Item>
+        <Form.Item label="Number of Jobs">
+          {getFieldDecorator('runs', { initialValue: 1 })(
+            <InputNumber min={1} style={{ width: '100%' }} />
+          )}
+        </Form.Item>
+        <Form.Item label="Run mode">
+          {getFieldDecorator('parallelismMode', { initialValue: 'parallel' })(
+            <Select>
+              <Option value="parallel">Parallel</Option>
+              <Option value="sequential">Sequential</Option>
+            </Select>
+          )}
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+};
+
+const RunExperimentModalForm = Form.create<RunExperimentModalProps>()(
+  RunExperimentModal
+);
+
 const ExperimentsListItem = (
   props: IExperiment & {
     onView: (experimentId: number) => void;
@@ -98,47 +190,16 @@ const ExperimentsListItem = (
   }
 ) => {
   const [nodeSelectModal, setNodeSelectModal] = useState(false);
-  const [k8sNodes, setK8sNodes] = useState<undefined | string[]>();
-  const [selectedNode, setSelectedNode] = useState<undefined | string>();
   const history = useHistory();
-  useEffect(() => {
-    getK8SNodes()
-      .then(setK8sNodes)
-      .catch(() => setK8sNodes([]));
-  }, []);
   const { name, description, last_job, execution_time_statistics } = props;
   const statusText = last_job ? last_job.status : 'not started';
   return (
     <>
-      <Modal
-        title="Select Machine to Start Job"
+      <RunExperimentModalForm
+        onClose={() => setNodeSelectModal(false)}
         visible={nodeSelectModal}
-        onOk={() => {
-          runExperiment(props, selectedNode);
-          setNodeSelectModal(false);
-        }}
-        onCancel={() => setNodeSelectModal(false)}
-        bodyStyle={{ display: 'flex' }}
-      >
-        <Select
-          defaultValue="_none"
-          onChange={(val: string) =>
-            val !== '_none' ? setSelectedNode(val) : setSelectedNode(undefined)
-          }
-          style={{ flexGrow: 1 }}
-        >
-          <Option value="_none" style={{ fontStyle: 'italic' }}>
-            Default
-          </Option>
-          {k8sNodes
-            ? k8sNodes.map(node => (
-                <Option key={node} value={node}>
-                  {node}
-                </Option>
-              ))
-            : null}
-        </Select>
-      </Modal>
+        experiment={props}
+      />
       <Card
         title={
           <div style={{ display: 'flex', flexDirection: 'column', height: 50 }}>

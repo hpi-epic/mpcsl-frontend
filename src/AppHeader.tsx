@@ -98,8 +98,8 @@ const GraphExplorerHeader = (
           size="small"
         >
           <RadioButton value="selection">Selection</RadioButton>
-          <RadioButton value="annotate">Expl. &#38; Valid.</RadioButton>
-          <RadioButton value="causal-exploration">Causal Inference</RadioButton>
+          <RadioButton value="annotation">Expl. &#38; Valid.</RadioButton>
+          <RadioButton value="exploration">Causal Inference</RadioButton>
         </RadioGroup>
       </div>
     </>
@@ -119,6 +119,14 @@ const mapDispatchToProps = (
   return {
     onAddNode: (nodeID: number) => dispatch(actions.addNode(nodeID))
   };
+};
+
+const shorten = (s: string) => {
+  if (s.length < 25) {
+    return s;
+  } else {
+    return s.substr(0, 22) + '...';
+  }
 };
 
 const GraphExplorerHeaderRedux = connect(
@@ -153,7 +161,7 @@ const AppHeader = () => {
   const breadcrumbItems = [
     <Breadcrumb.Item key="datasets">
       <Link style={{ color: 'white' }} to="/">
-        <Icon type="home" /> Observation Matrices
+        <Icon type="home" /> Home
       </Link>
     </Breadcrumb.Item>
   ];
@@ -164,7 +172,7 @@ const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              {datasetName}
+              Experiments of {shorten(datasetName)}
             </Link>
           </Breadcrumb.Item>
         );
@@ -173,7 +181,7 @@ const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              {experimentName}
+              Jobs of {shorten(experimentName)}
             </Link>
           </Breadcrumb.Item>
         );
@@ -182,14 +190,37 @@ const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              {experimentName}
+              Comparison of {shorten(experimentName)}
             </Link>
           </Breadcrumb.Item>
         );
+        break;
+      case 'selection':
+        breadcrumbItems.pop();
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              Compare
+              Selection of {shorten(experimentName)}
+            </Link>
+          </Breadcrumb.Item>
+        );
+        break;
+      case 'annotation':
+        breadcrumbItems.pop();
+        breadcrumbItems.push(
+          <Breadcrumb.Item key={url}>
+            <Link style={{ color: 'white' }} to={url}>
+              Annotation of {shorten(experimentName)}
+            </Link>
+          </Breadcrumb.Item>
+        );
+        break;
+      case 'exploration':
+        breadcrumbItems.pop();
+        breadcrumbItems.push(
+          <Breadcrumb.Item key={url}>
+            <Link style={{ color: 'white' }} to={url}>
+              Exploration of {shorten(experimentName)}
             </Link>
           </Breadcrumb.Item>
         );
@@ -218,7 +249,7 @@ const AppHeader = () => {
         </div>
         <Switch>
           <Route
-            path="/graph-explorer/:view/:resultid"
+            path="/:datasetId/experiments/:experimentId/jobs/:resultId/:view"
             component={GraphExplorerHeaderRedux}
           />
           <Route />

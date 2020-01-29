@@ -13,11 +13,11 @@ import { ThunkDispatch } from 'redux-thunk';
 import { ID3GraphNode, IAPIGraphNode } from '../../../types/graphTypes';
 
 interface IMatchParams {
-  result_id: string;
+  resultId: string;
 }
 
 interface IGraphSelectionProps extends RouteComponentProps<IMatchParams> {
-  fecthAvailableNodes: (resultID: number) => void;
+  fetchAvailableNodes: (resultID: number) => void;
   onRemoveNode: (node: ID3GraphNode) => void;
   nodes: ID3GraphNode[];
   availableNodes: IAPIGraphNode[];
@@ -26,7 +26,7 @@ interface IGraphSelectionProps extends RouteComponentProps<IMatchParams> {
 
 class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
   public componentDidMount() {
-    this.props.fecthAvailableNodes(Number(this.props.match.params.result_id));
+    this.props.fetchAvailableNodes(Number(this.props.match.params.resultId));
   }
 
   public render() {
@@ -57,7 +57,7 @@ export function mapDispatchToProps(
   dispatch: ThunkDispatch<IState, void, actions.GraphExplorerAction>
 ) {
   return {
-    fecthAvailableNodes: (resultID: number) =>
+    fetchAvailableNodes: (resultID: number) =>
       dispatch(actions.fetchAvailableNodes(resultID)),
     onRemoveNode: (node: ID3GraphNode) => dispatch(actions.removeNode(node))
   };
