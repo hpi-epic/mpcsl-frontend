@@ -105,6 +105,20 @@ export const createExperiment = async (experiment: ICreateExperiment) => {
   }
 };
 
+export const getObservationMatrixMetadata = async (
+  observationMatrixID: number
+) => {
+  try {
+    const response = await axios.get(
+      Endpoints.observationMatrixMetadata(observationMatrixID)
+    );
+    return response.data;
+  } catch (e) {
+    message.error('Failed to create Observation Matrix Metadata');
+    throw e;
+  }
+};
+
 export const createObservationMatrix = async (
   observationMatrix: Omit<IObservationMatrix, 'id'>
 ) => {
