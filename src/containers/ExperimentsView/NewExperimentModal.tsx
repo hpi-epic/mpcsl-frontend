@@ -22,7 +22,7 @@ export interface IPropsNewExperimentModal extends FormComponentProps {
   datasetId: number;
 }
 
-const AlgorithmsSelect = (
+/*const AlgorithmsSelect = (
   props: {
     editDisabled: boolean;
     onAlgoSelected: (algoParameters: IParameters) => void;
@@ -54,7 +54,7 @@ const AlgorithmsSelect = (
       ))}
     </Select>
   );
-};
+};*/
 
 const createInputElement = (
   key: string,
@@ -189,6 +189,18 @@ const handleSubmit = (
 export type IFormExperiment = Partial<Omit<IExperiment, 'datasetId'>>;
 
 const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = props => {
+  const [algorithms, setAlgorithms] = useState<IAlgorithm[]>([]);
+  useEffect(() => {
+    getAllAlgorithms().then(result => setAlgorithms(result));
+  }, []);
+
+  const [packages, setPackages] = useState<string[]>([]);
+  useEffect(() => {
+    setPackages(Array.from(new Set(algorithms.map(algo => algo.package))));
+  }, [algorithms]);
+
+  const [algoFunctions, setAlgoFunctions] = useState<string[]>([]);
+
   const [algParams, setAlgParams] = useState<IParameters>({});
 
   useEffect(() => {
@@ -209,14 +221,43 @@ const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = pr
   })(
     <Input disabled={props.editDisabled} placeholder="Experiment Description" />
   );
-  const AlgorithmsEl = props.form.getFieldDecorator('algorithm_id', {
+
+  const PackagesEl = props.form.getFieldDecorator('package_id', {
     initialValue: props.experiment ? props.experiment.algorithm_id : undefined,
+    rules: [
+      { required: true, message: 'Select a Package' },
+      {
+        validator: (rule: any, value: any, callback: () => void) => {
+          setAlgoFunctions(
+            algorithms
+              .filter(algo => algo.package === value.toString())
+              .map(algo => algo.function)
+          );
+          callback();
+        }
+      }
+    ]
+  })(
+    <Select disabled={props.editDisabled}>
+      {packages.map(p => (
+        <Select.Option value={p} key={p}>
+          {p}
+        </Select.Option>
+      ))}
+    </Select>
+  );
+
+  const FunctionsEl = props.form.getFieldDecorator('algorithm_id', {
+    initialValue: algoFunctions ? algoFunctions[0] : undefined,
     rules: [{ required: true, message: 'Select a Algorithm' }]
   })(
-    <AlgorithmsSelect
-      editDisabled={props.editDisabled}
-      onAlgoSelected={setAlgParams}
-    />
+    <Select disabled={props.editDisabled} defaultActiveFirstOption>
+      {algoFunctions.map(func => (
+        <Select.Option value={func} key={func}>
+          {func}
+        </Select.Option>
+      ))}
+    </Select>
   );
   return (
     <Modal
@@ -239,19 +280,25 @@ const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = pr
         <Form.Item label="Experiment Description" hasFeedback={true}>
           {ExperimentDescEl}
         </Form.Item>
-        <Form.Item label="Algorithm Selection" hasFeedback={true}>
-          {AlgorithmsEl}
+        <Form.Item label="Package Selection" hasFeedback={true}>
+          {PackagesEl}
         </Form.Item>
-        <ParameterForms
+        <Form.Item label="Function Selection" hasFeedback={true}>
+          {FunctionsEl}
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+};
+
+/*
+<ParameterForms
           parameters={algParams}
           form={props.form}
           editDisabled={props.editDisabled}
           experimentParameters={props.experiment?.parameters}
         />
-      </Form>
-    </Modal>
-  );
-};
+*/
 
 const NewExperimentModalForm = Form.create<IPropsNewExperimentModal>()(
   NewExperimentModal
