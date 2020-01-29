@@ -46,10 +46,7 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
     IObservationMatrixMetadata | undefined
   >();
   useEffect(() => {
-    getObservationMatrixMetadata(props?.id).then(data => {
-      console.log(data);
-      setMetadata(data);
-    });
+    getObservationMatrixMetadata(props?.id).then(setMetadata);
   }, [props]);
   const history = useHistory();
   return (
