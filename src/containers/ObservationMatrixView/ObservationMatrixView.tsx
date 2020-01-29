@@ -8,7 +8,7 @@ import NewObservationMatrixModal, {
   IPropsNewObservationMatrixModal,
   IFormObservationMatrix
 } from './NewObservationMatrixModal';
-import { Button, Form, Row } from 'antd';
+import { Button, Form } from 'antd';
 import styles from './ObservationMatrixView.module.scss';
 import { ObservationMatrixListItem } from '../../components/ObservationMatrixListItem/ObservationMatrixListItem';
 
@@ -16,32 +16,7 @@ interface IObservationMatrixList {
   onView: (observationMatrix: IObservationMatrix) => void;
 }
 
-const ObservationMatrixList = (props: IObservationMatrixList) => {
-  const [matrices, setMatrices] = useState<undefined | IObservationMatrix[]>();
-  useEffect(() => {
-    const fetchDatasets = () => {
-      getObservationMatrices()
-        .then(setMatrices)
-        .catch();
-    };
-    fetchDatasets();
-    const sub = subscribeToDatasetChanges(fetchDatasets);
-    return () => sub.unsubscribe();
-  }, []);
-  return matrices ? (
-    <div className={styles.ObservationMatrixList}>
-      {matrices.map(matrix => (
-        <ObservationMatrixListItem
-          onClick={() => props.onView(matrix)}
-          key={matrix.id}
-          {...matrix}
-        />
-      ))}
-    </div>
-  ) : null;
-};
-
-const ObservationMatrixView = () => {
+const NewObservationMatrixButton = () => {
   const ObservationMatrixModal = Form.create<IPropsNewObservationMatrixModal>()(
     NewObservationMatrixModal
   );
@@ -49,13 +24,35 @@ const ObservationMatrixView = () => {
     observationMatrixModalVisible,
     setObservationMatrixModalVisible
   ] = useState<boolean>(false);
+  const onNewObservationMatrix = () => {
+    setObservationMatrixModalVisible(true);
+  };
+  return (
+    <>
+      <Button type="primary" onClick={onNewObservationMatrix}>
+        + New Observation Matrix
+      </Button>
+      <ObservationMatrixModal
+        visible={observationMatrixModalVisible}
+        onClose={() => setObservationMatrixModalVisible(false)}
+        observationMatrix={undefined}
+      />
+    </>
+  );
+};
+
+const ObservationMatrixView = () => {
+  const ObservationMatrixModal = Form.create<IPropsNewObservationMatrixModal>()(
+    NewObservationMatrixModal
+  );
+  const [matrices, setMatrices] = useState<undefined | IObservationMatrix[]>();
+  const [
+    observationMatrixModalVisible,
+    setObservationMatrixModalVisible
+  ] = useState<boolean>(false);
   const [currentObservationMatrix, setCurrentObservationMatrix] = useState<
     undefined | IFormObservationMatrix
   >();
-  const onNewObservationMatrix = () => {
-    setObservationMatrixModalVisible(true);
-    setCurrentObservationMatrix(undefined);
-  };
   const onClose = () => {
     setObservationMatrixModalVisible(false);
     setCurrentObservationMatrix(undefined);
@@ -69,27 +66,36 @@ const ObservationMatrixView = () => {
     });
     setObservationMatrixModalVisible(true);
   };
+  useEffect(() => {
+    const fetchDatasets = () => {
+      getObservationMatrices()
+        .then(setMatrices)
+        .catch();
+    };
+    fetchDatasets();
+    const sub = subscribeToDatasetChanges(fetchDatasets);
+    return () => sub.unsubscribe();
+  }, []);
   return (
-    <div className="Content">
-      <Row>
-        <div className={styles.ObservationMatrixControls}>
-          <Button type="primary" onClick={onNewObservationMatrix}>
-            + New Observation Matrix
-          </Button>
+    <>
+      {matrices ? (
+        <div className={styles.ObservationMatrixList}>
+          {matrices.map(matrix => (
+            <ObservationMatrixListItem
+              onClick={() => OnViewObservationMatrix(matrix)}
+              key={matrix.id}
+              {...matrix}
+            />
+          ))}
         </div>
-      </Row>
-      <Row>
-        <ObservationMatrixList
-          onView={OnViewObservationMatrix}
-        ></ObservationMatrixList>
-      </Row>
+      ) : null}
       <ObservationMatrixModal
         visible={observationMatrixModalVisible}
         onClose={onClose}
         observationMatrix={currentObservationMatrix}
       />
-    </div>
+    </>
   );
 };
 
-export { ObservationMatrixView };
+export { ObservationMatrixView, NewObservationMatrixButton };
