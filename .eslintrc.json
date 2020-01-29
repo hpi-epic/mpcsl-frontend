@@ -20,7 +20,8 @@
     "@typescript-eslint/camelcase": 0,
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/no-empty-interface": 0,
-    "@typescript-eslint/no-non-null-assertion": 0
+    "@typescript-eslint/no-non-null-assertion": 0,
+    "react/prop-types": 0
   },
   "settings": {
     "react": {

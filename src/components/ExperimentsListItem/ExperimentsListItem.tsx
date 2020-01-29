@@ -19,6 +19,7 @@ import {
   runExperiment
 } from '../../actions/apiRequests';
 import styles from './ExperimentsListItem.module.scss';
+import { FormComponentProps } from 'antd/lib/form';
 const { Option } = Select;
 const { confirm } = Modal;
 
@@ -102,48 +103,52 @@ const ExperimentDropdown = (
   );
 };
 
-const ExperimentsListItem = (
-  props: IExperiment & {
-    onView: (experimentId: number) => void;
-    onDuplicate: (experimentId: number) => void;
-  }
-) => {
-  const [nodeSelectModal, setNodeSelectModal] = useState(false);
+type RunExperimentModalProps = FormComponentProps & {
+  experiment: IExperiment;
+  visible: boolean;
+  onClose: () => void;
+};
+
+const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = props => {
+  const { getFieldDecorator } = props.form;
   const [k8sNodes, setK8sNodes] = useState<undefined | string[]>();
-  const [selectedNode, setSelectedNode] = useState<undefined | string>();
-  const [runs, setRuns] = useState<undefined | number>(1);
-  const [parallel, setParallel] = useState(true);
-  const history = useHistory();
   useEffect(() => {
     getK8SNodes()
       .then(setK8sNodes)
       .catch(() => setK8sNodes([]));
   }, []);
-  const { name, description, last_job, execution_time_statistics } = props;
-  const statusText = last_job ? last_job.status : 'not started';
   return (
-    <>
-      <Modal
-        title="Select Machine to Start Job"
-        visible={nodeSelectModal}
-        onOk={() => {
-          runExperiment(props, selectedNode, runs, parallel);
-          setNodeSelectModal(false);
-        }}
-        onCancel={() => setNodeSelectModal(false)}
-        bodyStyle={{ display: 'flex' }}
-      >
-        <Form layout="vertical">
-          <Form.Item label="Set Execution Parameters">
-            <Select
-              defaultValue="_none"
-              onChange={(val: string) =>
-                val !== '_none'
-                  ? setSelectedNode(val)
-                  : setSelectedNode(undefined)
-              }
-              style={{ flexGrow: 1 }}
-            >
+    <Modal
+      title="Select Machine to Start Job"
+      visible={props.visible}
+      onOk={() => {
+        props.form.validateFields(
+          (
+            err: Error,
+            values: {
+              node: string;
+              runs: number;
+              parallelismMode: 'parallel' | 'sequential';
+            }
+          ) => {
+            if (!err) {
+              runExperiment(
+                props.experiment,
+                values.node === '_none' ? undefined : values.node,
+                values.runs,
+                values.parallelismMode === 'parallel'
+              );
+              props.onClose();
+            }
+          }
+        );
+      }}
+      onCancel={() => props.onClose()}
+    >
+      <Form layout="vertical">
+        <Form.Item label="Set Execution Parameters">
+          {getFieldDecorator('node', { initialValue: '_none' })(
+            <Select>
               <Option value="_none" style={{ fontStyle: 'italic' }}>
                 Default
               </Option>
@@ -155,24 +160,47 @@ const ExperimentsListItem = (
                   ))
                 : null}
             </Select>
-          </Form.Item>
-          <Form.Item label="Number of Jobs">
-            <InputNumber
-              min={1}
-              defaultValue={runs}
-              onChange={value => setRuns(value)}
-            ></InputNumber>
-          </Form.Item>
-          <Form.Item label="Run mode">
-            <Switch
-              checkedChildren="Parallel"
-              unCheckedChildren="Sequential"
-              defaultChecked={parallel}
-              onChange={checked => setParallel(checked)}
-            ></Switch>
-          </Form.Item>
-        </Form>
-      </Modal>
+          )}
+        </Form.Item>
+        <Form.Item label="Number of Jobs">
+          {getFieldDecorator('runs', { initialValue: 1 })(
+            <InputNumber min={1} style={{ width: '100%' }} />
+          )}
+        </Form.Item>
+        <Form.Item label="Run mode">
+          {getFieldDecorator('parallelismMode', { initialValue: 'parallel' })(
+            <Select>
+              <Option value="parallel">Parallel</Option>
+              <Option value="sequential">Sequential</Option>
+            </Select>
+          )}
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+};
+
+const RunExperimentModalForm = Form.create<RunExperimentModalProps>()(
+  RunExperimentModal
+);
+
+const ExperimentsListItem = (
+  props: IExperiment & {
+    onView: (experimentId: number) => void;
+    onDuplicate: (experimentId: number) => void;
+  }
+) => {
+  const [nodeSelectModal, setNodeSelectModal] = useState(false);
+  const history = useHistory();
+  const { name, description, last_job, execution_time_statistics } = props;
+  const statusText = last_job ? last_job.status : 'not started';
+  return (
+    <>
+      <RunExperimentModalForm
+        onClose={() => setNodeSelectModal(false)}
+        visible={nodeSelectModal}
+        experiment={props}
+      />
       <Card
         title={
           <div style={{ display: 'flex', flexDirection: 'column', height: 50 }}>
