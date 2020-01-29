@@ -81,6 +81,7 @@ export interface IAlgorithm extends IIDClass {
   backend: string;
   description: string;
   valid_parameters: IParameters;
+  needs_gpu?: boolean;
 }
 
 export interface IErrorType {

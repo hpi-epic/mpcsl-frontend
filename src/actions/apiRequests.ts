@@ -210,14 +210,16 @@ export function runExperiment(
   experiment: IExperiment,
   node?: string,
   runs?: number,
-  parallel?: boolean
+  parallel?: boolean,
+  needsGpu?: boolean
 ): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     axios
       .post(`${Endpoints.experiment}/${experiment.id}/start`, {
-        node: node,
-        runs: runs,
-        parallel: parallel
+        node,
+        runs,
+        parallel,
+        needsGpu
       })
       .then(() => {
         resolve();

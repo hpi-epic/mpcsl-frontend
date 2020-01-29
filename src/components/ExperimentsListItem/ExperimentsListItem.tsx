@@ -15,7 +15,8 @@ import { useHistory } from 'react-router-dom';
 import {
   deleteExperiment,
   getK8SNodes,
-  runExperiment
+  runExperiment,
+  getAlgorithm
 } from '../../actions/apiRequests';
 import styles from './ExperimentsListItem.module.scss';
 import { FormComponentProps } from 'antd/lib/form';
@@ -111,15 +112,22 @@ type RunExperimentModalProps = FormComponentProps & {
 const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = props => {
   const { getFieldDecorator } = props.form;
   const [k8sNodes, setK8sNodes] = useState<undefined | string[]>();
+  const [needsGPU, setNeedsGPU] = useState<undefined | boolean>();
   useEffect(() => {
     getK8SNodes()
       .then(setK8sNodes)
       .catch(() => setK8sNodes([]));
   }, []);
+  useEffect(() => {
+    getAlgorithm(props.experiment.algorithm_id).then(alg =>
+      setNeedsGPU(!!alg.needs_gpu)
+    );
+  }, [props.experiment]);
   return (
     <Modal
       title="Select Machine to Start Job"
       visible={props.visible}
+      confirmLoading={needsGPU === undefined}
       onOk={() => {
         props.form.validateFields(
           (
@@ -128,6 +136,7 @@ const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = pro
               node: string;
               runs: number;
               parallelismMode: 'parallel' | 'sequential';
+              gpus?: number;
             }
           ) => {
             if (!err) {
@@ -135,7 +144,8 @@ const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = pro
                 props.experiment,
                 values.node === '_none' ? undefined : values.node,
                 values.runs,
-                values.parallelismMode === 'parallel'
+                values.parallelismMode === 'parallel',
+                needsGPU ? values.gpus : undefined
               );
               props.onClose();
             }
@@ -174,6 +184,13 @@ const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = pro
             </Select>
           )}
         </Form.Item>
+        {needsGPU ? (
+          <Form.Item label="GPU Count">
+            {getFieldDecorator('gpus', { initialValue: 1 })(
+              <InputNumber min={1} style={{ width: '100%' }} />
+            )}
+          </Form.Item>
+        ) : null}
       </Form>
     </Modal>
   );
