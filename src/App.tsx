@@ -5,7 +5,6 @@ import './App.css';
 import { Layout } from 'antd';
 import { ObservationMatrixView } from './containers/ObservationMatrixView/ObservationMatrixView';
 import { ExperimentRoutes } from './ExperimentRoutes';
-import GraphExplorer from './containers/GraphExplorer';
 import { AppHeader } from './AppHeader';
 
 const { Content } = Layout;
@@ -17,7 +16,6 @@ const App = () => {
         <AppHeader />
         <Content style={{ background: colors.contentBackground }}>
           <Switch>
-            <Route path="/graph-explorer" component={GraphExplorer} />
             <Route
               path="/:datasetId/experiments"
               component={ExperimentRoutes}
