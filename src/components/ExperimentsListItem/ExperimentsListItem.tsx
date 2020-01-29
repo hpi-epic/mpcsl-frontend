@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Select, Modal, Dropdown, Menu, Button, Card, Badge } from 'antd';
+import {
+  Select,
+  Modal,
+  Dropdown,
+  Menu,
+  Button,
+  Card,
+  Badge,
+  Icon,
+  Tooltip
+} from 'antd';
 import { IExperiment, BadgeStatus } from '../../types';
 import { useHistory } from 'react-router-dom';
 import {
@@ -82,11 +92,7 @@ const ExperimentDropdown = (
       }
       placement="bottomLeft"
     >
-      <Button
-        className={styles.ListButton}
-        icon="ellipsis"
-        onClick={e => e.stopPropagation()}
-      />
+      <Icon type="ellipsis" onClick={e => e.stopPropagation()} />
     </Dropdown>
   );
 };
@@ -160,6 +166,34 @@ const ExperimentsListItem = (
             ) : null}
           </div>
         }
+        actions={[
+          <Tooltip key="run" title="Run Experiment">
+            <Icon
+              type="play-circle"
+              onClick={e => {
+                e.stopPropagation();
+                setNodeSelectModal(true);
+              }}
+            />
+          </Tooltip>,
+          <Tooltip key="compare" title="Compare Experiment">
+            <Icon
+              type="compare"
+              onClick={e => {
+                e.stopPropagation();
+                history.push(
+                  `/${props.dataset_id}/experiments/${props.id}/compare`
+                );
+              }}
+            />
+          </Tooltip>,
+          <ExperimentDropdown
+            key="dropdown"
+            {...props}
+            onView={() => props.onView(props.id)}
+            onDuplicate={() => props.onDuplicate(props.id)}
+          />
+        ]}
         hoverable
         className={styles.ListItem}
         onClick={() => {
@@ -172,38 +206,6 @@ const ExperimentsListItem = (
       >
         <div className={styles.ListItemContent}>
           <p>{description}</p>
-          <div style={{ alignSelf: 'flex-end' }}>
-            <Button
-              className={styles.ListButton}
-              onClick={e => {
-                e.stopPropagation();
-                setNodeSelectModal(true);
-              }}
-              type="primary"
-              ghost={true}
-            >
-              Run
-            </Button>
-            <Button
-              className={styles.ListButton}
-              disabled={!props.last_job?.result}
-              onClick={e => {
-                e.stopPropagation();
-                history.push(
-                  `/${props.dataset_id}/experiments/${props.id}/compare`
-                );
-              }}
-              type="primary"
-              ghost={true}
-            >
-              Compare
-            </Button>
-            <ExperimentDropdown
-              {...props}
-              onView={() => props.onView(props.id)}
-              onDuplicate={() => props.onDuplicate(props.id)}
-            />
-          </div>
         </div>
       </Card>
     </>
