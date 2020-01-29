@@ -6,23 +6,55 @@ import {
   subscribeToExperimentChanges
 } from '../../actions/apiRequests';
 import { IExperiment } from '../../types';
-import { Button, Spin, Row } from 'antd';
+import { Button, Spin } from 'antd';
 import styles from './ExperimentsView.module.scss';
 import { Subscription } from 'rxjs';
 import { NewExperimentModalForm } from './NewExperimentModal';
 import { ExperimentsListItem } from '../../components/ExperimentsListItem/ExperimentsListItem';
 
-const ExperimentsList = (props: {
-  datasetId: number;
-  onView: (experiment: IExperiment | undefined) => void;
-  onDuplicate: (experiment: IExperiment | undefined) => void;
-}) => {
+const NewExperimentButton = ({
+  match
+}: RouteComponentProps<{ datasetId: string }>) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const datasetId = parseInt(match.params.datasetId, 10);
+  return (
+    <>
+      <Button
+        type="primary"
+        onClick={() => {
+          setModalVisible(true);
+        }}
+      >
+        + New Experiment
+      </Button>
+      <NewExperimentModalForm
+        visible={modalVisible}
+        datasetId={datasetId}
+        onClose={() => {
+          setModalVisible(false);
+        }}
+        experiment={undefined}
+        editDisabled={false}
+      />
+    </>
+  );
+};
+
+const ExperimentsView = ({
+  match
+}: RouteComponentProps<{ datasetId: string }>) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [editDisabled, setEditDisabled] = useState(false);
+  const [lastExperiment, setLastExperiment] = useState<
+    undefined | IExperiment
+  >();
+  const datasetId = parseInt(match.params.datasetId, 10);
   const [experiments, setExperiments] = useState<undefined | IExperiment[]>();
   useEffect(() => {
     let subs: Subscription[] | undefined;
-    if (props.datasetId) {
+    if (datasetId) {
       const fetchExperiments = () => {
-        getExperimentsForDataset(props.datasetId)
+        getExperimentsForDataset(datasetId)
           .then(setExperiments)
           .catch();
       };
@@ -33,8 +65,8 @@ const ExperimentsList = (props: {
       ];
     }
     return () => subs?.forEach(sub => sub.unsubscribe());
-  }, [props.datasetId]);
-  if (!props.datasetId) {
+  }, [datasetId]);
+  if (!datasetId) {
     return <h1>404</h1>;
   }
   if (!experiments) {
@@ -51,56 +83,18 @@ const ExperimentsList = (props: {
         <ExperimentsListItem
           key={experiment.id}
           {...experiment}
-          onView={id => props.onView(experiments.find(exp => exp.id === id))}
-          onDuplicate={id =>
-            props.onDuplicate(experiments.find(exp => exp.id === id))
-          }
-        />
-      ))}
-    </div>
-  );
-};
-
-const ExperimentsView = ({
-  match
-}: RouteComponentProps<{ datasetId: string }>) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [editDisabled, setEditDisabled] = useState(false);
-  const [lastExperiment, setLastExperiment] = useState<
-    undefined | IExperiment
-  >();
-  const datasetId = parseInt(match.params.datasetId, 10);
-  return (
-    <div className="Content">
-      <Row>
-        <div className={styles.ExperimentControls}>
-          <Button
-            type="primary"
-            onClick={() => {
-              setEditDisabled(false);
-              setLastExperiment(undefined);
-              setModalVisible(true);
-            }}
-          >
-            + New Experiment
-          </Button>
-        </div>
-      </Row>
-      <Row>
-        <ExperimentsList
-          datasetId={datasetId}
-          onView={experiment => {
+          onView={id => {
             setEditDisabled(true);
-            setLastExperiment(experiment);
+            setLastExperiment(experiments.find(exp => exp.id === id));
             setModalVisible(true);
           }}
-          onDuplicate={experiment => {
-            setLastExperiment(experiment);
+          onDuplicate={id => {
+            setLastExperiment(experiments.find(exp => exp.id === id));
             setEditDisabled(false);
             setModalVisible(true);
           }}
         />
-      </Row>
+      ))}
       <NewExperimentModalForm
         visible={modalVisible}
         datasetId={datasetId}
@@ -114,4 +108,4 @@ const ExperimentsView = ({
   );
 };
 
-export { ExperimentsView };
+export { ExperimentsView, NewExperimentButton };

@@ -20,6 +20,8 @@ import { getExperiment, getObservationMatrix } from './actions/apiRequests';
 import 'react-select/dist/react-select.css';
 import 'react-virtualized/styles.css';
 import 'react-virtualized-select/styles.css';
+import { NewExperimentButton } from './containers/ExperimentsView/ExperimentsView';
+import { NewObservationMatrixButton } from './containers/ObservationMatrixView/ObservationMatrixView';
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -252,6 +254,11 @@ const AppHeader = () => {
             path="/:datasetId/experiments/:experimentId/jobs/:resultId/:view"
             component={GraphExplorerHeaderRedux}
           />
+          <Route
+            path="/:datasetId/experiments"
+            component={NewExperimentButton}
+          />
+          <Route exact path="" component={NewObservationMatrixButton} />
           <Route />
         </Switch>
       </div>
