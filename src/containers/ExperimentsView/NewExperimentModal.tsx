@@ -228,11 +228,13 @@ const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = pr
       { required: true, message: 'Select a Package' },
       {
         validator: (rule: any, value: any, callback: () => void) => {
-          setAlgoFunctions(
-            algorithms
-              .filter(algo => algo.package === value.toString())
-              .map(algo => algo.function)
-          );
+          const algoFncs = algorithms
+            .filter(algo => algo.package === value.toString())
+            .map(algo => algo.function);
+          setAlgoFunctions(algoFncs);
+          console.log(algorithms);
+          props.form.setFieldsValue({ function_id: algoFncs });
+          props.form.validateFields(['function_id']);
           callback();
         }
       }
@@ -247,9 +249,21 @@ const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = pr
     </Select>
   );
 
-  const FunctionsEl = props.form.getFieldDecorator('algorithm_id', {
-    initialValue: algoFunctions ? algoFunctions[0] : undefined,
-    rules: [{ required: true, message: 'Select a Algorithm' }]
+  const FunctionsEl = props.form.getFieldDecorator('function_id', {
+    rules: [
+      { required: true, message: 'Select a Function' },
+      {
+        validator: (rule: any, value: any, callback: () => void) => {
+          const selectedAlgorithm = algorithms.filter(
+            algo =>
+              algo.function === value.toString() &&
+              algo.package === props.form.getFieldValue('package_id')
+          );
+          setAlgParams(selectedAlgorithm[0].valid_parameters);
+          callback();
+        }
+      }
+    ]
   })(
     <Select disabled={props.editDisabled} defaultActiveFirstOption>
       {algoFunctions.map(func => (
@@ -286,19 +300,16 @@ const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = pr
         <Form.Item label="Function Selection" hasFeedback={true}>
           {FunctionsEl}
         </Form.Item>
-      </Form>
-    </Modal>
-  );
-};
-
-/*
-<ParameterForms
+        <ParameterForms
           parameters={algParams}
           form={props.form}
           editDisabled={props.editDisabled}
           experimentParameters={props.experiment?.parameters}
         />
-*/
+      </Form>
+    </Modal>
+  );
+};
 
 const NewExperimentModalForm = Form.create<IPropsNewExperimentModal>()(
   NewExperimentModal
