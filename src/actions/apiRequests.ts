@@ -9,10 +9,10 @@ import {
   IAPINodeContext,
   IAlgorithm,
   IAPIConfounders,
-  JobStatus,
   IIDClass,
   IJob,
-  IComparisonStatistics
+  IComparisonStatistics,
+  JobErrorCode
 } from '../types';
 import Endpoints from '../constants/api';
 import { fromEvent, Observable } from 'rxjs';
@@ -63,13 +63,14 @@ class CachedApiCall<T extends IIDClass> {
 
 type SubJobStatusData = {
   id: number;
-  status: JobStatus;
+  error_code?: JobErrorCode;
 };
 
 const JobChangesObservable = fromEvent<SubJobStatusData>(socket(), 'job');
 
-export const subscribeToJobStatusChanges = (callback: () => void) =>
-  JobChangesObservable.subscribe(callback);
+export const subscribeToJobStatusChanges = (
+  callback: (value: SubJobStatusData) => void
+) => JobChangesObservable.subscribe(callback);
 
 class CachedExperiments extends CachedApiCall<IExperiment> {
   constructor() {
