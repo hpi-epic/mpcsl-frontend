@@ -10,8 +10,6 @@ import {
   INumberParameter
 } from '../../types';
 import { createExperiment, getAllAlgorithms } from '../../actions/apiRequests';
-import { isNumber } from 'util';
-import { SelectProps } from 'antd/lib/select';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 
 export interface IPropsNewExperimentModal extends FormComponentProps {

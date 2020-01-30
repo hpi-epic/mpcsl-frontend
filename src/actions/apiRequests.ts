@@ -9,7 +9,6 @@ import {
   IAPINodeContext,
   IAlgorithm,
   IAPIConfounders,
-  JobStatus,
   IIDClass,
   IJob,
   IComparisonStatistics,
