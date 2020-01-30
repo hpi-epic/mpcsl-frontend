@@ -26,6 +26,12 @@ export interface IObservationMatrix extends IIDClass {
 
 export type JobStatus = 'running' | 'done' | 'error' | 'cancelled' | 'waiting';
 
+export enum JobErrorCode {
+  UNSCHEDULABLE = -1,
+  IMAGE_NOT_FOUND = -2,
+  UNKNOWN = -127
+}
+
 export enum BadgeStatus {
   running = 'processing',
   waiting = 'processing',
