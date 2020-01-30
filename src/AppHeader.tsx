@@ -20,9 +20,8 @@ import { getExperiment, getObservationMatrix } from './actions/apiRequests';
 import 'react-select/dist/react-select.css';
 import 'react-virtualized/styles.css';
 import 'react-virtualized-select/styles.css';
-
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
+import { NewExperimentButton } from './containers/ExperimentsView/ExperimentsView';
+import { NewObservationMatrixButton } from './containers/ObservationMatrixView/ObservationMatrixView';
 
 const GraphExplorerHeader = (
   props: IGraphExplorerProps & RouteComponentProps<{ view: string }>
@@ -78,7 +77,6 @@ const GraphExplorerHeader = (
           placeholder="Select nodes"
           style={{
             lineHeight: '14px',
-            marginTop: '15px',
             display:
               props.match.params.view !== 'selection' ? 'none' : undefined
           }}
@@ -87,20 +85,19 @@ const GraphExplorerHeader = (
       <div
         style={{ flexGrow: 10, justifyContent: 'flex-end', display: 'flex' }}
       >
-        <RadioGroup
-          buttonStyle="solid"
+        <Radio.Group
           value={props.match.params.view}
           onChange={e =>
             props.history.push(
               props.match.url.replace(props.match.params.view, e.target.value)
             )
           }
-          size="small"
+          buttonStyle="solid"
         >
-          <RadioButton value="selection">Selection</RadioButton>
-          <RadioButton value="annotation">Expl. &#38; Valid.</RadioButton>
-          <RadioButton value="exploration">Causal Inference</RadioButton>
-        </RadioGroup>
+          <Radio.Button value="selection">Selection</Radio.Button>
+          <Radio.Button value="annotation">Expl. &#38; Valid.</Radio.Button>
+          <Radio.Button value="exploration">Causal Inference</Radio.Button>
+        </Radio.Group>
       </div>
     </>
   );
@@ -252,6 +249,11 @@ const AppHeader = () => {
             path="/:datasetId/experiments/:experimentId/jobs/:resultId/:view"
             component={GraphExplorerHeaderRedux}
           />
+          <Route
+            path="/:datasetId/experiments"
+            component={NewExperimentButton}
+          />
+          <Route exact path="" component={NewObservationMatrixButton} />
           <Route />
         </Switch>
       </div>

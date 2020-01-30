@@ -1,9 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Card, Progress, Button, message, Popconfirm } from 'antd';
+import {
+  Card,
+  Progress,
+  message,
+  Icon,
+  Modal,
+  Tooltip,
+  Descriptions
+} from 'antd';
 import Axios, { AxiosRequestConfig } from 'axios';
 import styles from './ObservationMatrixListItem.module.scss';
-import { deleteObservationMatrix } from '../../actions/apiRequests';
+import {
+  deleteObservationMatrix,
+  getObservationMatrixMetadata
+} from '../../actions/apiRequests';
+
+const { confirm } = Modal;
 
 interface IObservationMatrixListElement {
   id: number;
@@ -15,39 +28,110 @@ interface IObservationMatrixListElement {
   onClick: () => void;
 }
 
+interface IObservationMatrixMetadata {
+  variables: number;
+  load_query: string;
+  time_created: number;
+  observations: number;
+  data_source: string;
+  query: string;
+  has_ground_truth: boolean;
+}
+
 const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
   const { name, description } = props;
   const [inputRef, setInputRef] = useState<HTMLInputElement>();
   const [uploadProgress, setUploadProgress] = useState<number | undefined>();
+  const [metadata, setMetadata] = useState<
+    IObservationMatrixMetadata | undefined
+  >();
+  useEffect(() => {
+    getObservationMatrixMetadata(props?.id).then(setMetadata);
+  }, [props]);
   const history = useHistory();
   return (
     <Card
-      title={name}
+      title={
+        <>
+          {name}
+          {metadata?.has_ground_truth ? (
+            <Tooltip title="Observation Matrix has Ground Truth Graph">
+              <Icon
+                type="check-circle"
+                theme="twoTone"
+                twoToneColor="#52c41a"
+              />
+            </Tooltip>
+          ) : null}
+        </>
+      }
       hoverable
       className={styles.ObservationMatrixListItem}
       onClick={() => history.push(`/${props.id}/experiments`)}
-    >
-      <div className={styles.ObservationMatrixListItemContent}>
-        <p className={styles.Description}>{description}</p>
-        <div style={{ alignSelf: 'flex-end' }}>
-          <div style={{ width: 170 }}>
-            {uploadProgress ? (
-              <Progress percent={uploadProgress} size="small" />
-            ) : null}
-          </div>
-          <Button
-            className={styles.ListButton}
-            type="primary"
-            ghost={true}
+      actions={[
+        <Tooltip key="upload" title="Upload Ground Truth Graph">
+          <Icon
+            type="upload"
             onClick={e => {
               e.stopPropagation();
               if (inputRef) {
                 inputRef.click();
               }
             }}
-          >
-            Upload Ground Truth
-          </Button>
+          />
+        </Tooltip>,
+        <Tooltip key="details" title="Show Details">
+          <Icon
+            onClick={e => {
+              e.stopPropagation();
+              props.onClick();
+            }}
+            type="info-circle"
+          />
+        </Tooltip>,
+        <Tooltip key="delete" title="Delete Experiment">
+          <Icon
+            type="delete"
+            onClick={e => {
+              e?.stopPropagation();
+              confirm({
+                title: 'Do you want to delete the following Dataset?',
+                content: `${props.name} - ${props.description}`,
+                onOk() {
+                  deleteObservationMatrix(props).catch();
+                }
+              });
+            }}
+          />
+        </Tooltip>
+      ]}
+    >
+      <div className={styles.ObservationMatrixListItemContent}>
+        <Descriptions size="small" column={1}>
+          <Descriptions.Item label="Description">
+            {description}
+          </Descriptions.Item>
+          {metadata ? (
+            <>
+              <Descriptions.Item label="Variables">
+                {metadata.variables}
+              </Descriptions.Item>
+              <Descriptions.Item label="Observations">
+                {metadata.observations}
+              </Descriptions.Item>
+              <Descriptions.Item label="Time created:">
+                {new Date(metadata.time_created * 1000).toLocaleString()}
+              </Descriptions.Item>
+            </>
+          ) : null}
+        </Descriptions>
+        <div style={{ alignSelf: 'flex-end' }}>
+          <div style={{ width: 170 }}>
+            {uploadProgress ? (
+              <Progress percent={uploadProgress} size="small" />
+            ) : null}
+          </div>
+
           <input
             style={{ display: 'none' }}
             type="file"
@@ -85,35 +169,6 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
               }
             }}
           />
-          <Button
-            className={styles.ListButton}
-            onClick={e => {
-              e.stopPropagation();
-              props.onClick();
-            }}
-            type="primary"
-            ghost={true}
-          >
-            View
-          </Button>
-          <Popconfirm
-            title="Delete Matrix?"
-            onConfirm={e => {
-              e?.stopPropagation();
-              deleteObservationMatrix(props);
-            }}
-            onCancel={e => e?.stopPropagation()}
-          >
-            <Button
-              icon="delete"
-              type="danger"
-              className={styles.ListButton}
-              ghost={true}
-              onClick={e => e.stopPropagation()}
-            >
-              Delete
-            </Button>
-          </Popconfirm>
         </div>
       </div>
     </Card>
