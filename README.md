@@ -15,9 +15,9 @@ There are 3 different views:
 
 In the project directory, you can run (you could also use `npm` instead of `yarn`):
 
-#### Installation
+#### Module Installation
 
-`yarn install`
+`yarn`
 
 #### Start Development Server (with hot reloading)
 
@@ -65,11 +65,11 @@ The project structure is based on [Redux's recommended code structure](https://r
 
 #### Linter
 
-This project uses `tslint`. Please consider the use of a linter extension in your IDE. (e.g. [Visual Studio Code Tslint](https://marketplace.visualstudio.com/items?itemName=eg2.tslint))
+This project uses `eslint`. Please consider the use of a linter extension in your IDE. (e.g. [Visual Studio Code ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint))
 
-The configuration is placed in `tslint.json`.
+The configuration is placed in `.eslintrc.json`.
 
-Consider to use a formatting extensions like [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to format the files automatically. To format the files using the tslint-configuration in the project directory set `prettier.tslintIntegration` to `true`. You need to install (globally) [prettier-tslint](https://github.com/azz/prettier-tslint).
+Consider to use a formatting extensions like [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to format the files automatically.
 
 #### Redux
 
