@@ -205,6 +205,7 @@ export type IFormExperiment = Partial<Omit<IExperiment, 'datasetId'>>;
 
 const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = props => {
   const [algorithms, setAlgorithms] = useState<IAlgorithm[]>([]);
+  const [selectedPackage, setSelectedPackage] = useState<string | undefined>();
   useEffect(() => {
     getAllAlgorithms().then(result => setAlgorithms(result));
   }, []);
@@ -243,13 +244,16 @@ const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = pr
       { required: true, message: 'Select a Package' },
       {
         validator: (rule: any, value: any, callback: () => void) => {
-          const algoFncs = algorithms
-            .filter(algo => algo.package === value.toString())
-            .map(algo => algo.function);
-          setAlgoFunctions(algoFncs);
-          console.log(algorithms);
-          props.form.setFieldsValue({ function_id: algoFncs[0] });
-          props.form.validateFields(['function_id']);
+          if (selectedPackage !== value) {
+            const algoFncs = algorithms
+              .filter(algo => algo.package === value)
+              .map(algo => algo.function);
+            setAlgoFunctions(algoFncs);
+            props.form.setFieldsValue({ function_id: algoFncs[0] });
+            props.form.validateFields(['function_id']);
+            setSelectedPackage(value);
+          }
+
           callback();
         }
       }
