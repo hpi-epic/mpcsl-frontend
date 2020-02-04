@@ -75,7 +75,8 @@ const ExperimentComparisonEach = (props: {
         <Collapse.Panel
           header={
             <Statistic
-              title={'True Positive Rate'}
+              title={`Edges in Job ${jobTwo.id} that also exist in Job ${jobOne.id}`}
+              prefix="Rate: "
               value={comparison.error_types.true_positives.rate}
               precision={3}
             />
@@ -92,7 +93,8 @@ const ExperimentComparisonEach = (props: {
         <Collapse.Panel
           header={
             <Statistic
-              title={'False Positive Rate'}
+              title={`Edges in Job ${jobTwo.id} that do not exist in Job ${jobOne.id}`}
+              prefix="Rate: "
               value={comparison.error_types.false_positives.rate}
               precision={3}
             />
@@ -109,7 +111,8 @@ const ExperimentComparisonEach = (props: {
         <Collapse.Panel
           header={
             <Statistic
-              title={'True Negative Rate'}
+              title={`Edges not existing in Job ${jobTwo.id} that do not exist in Job ${jobOne.id}`}
+              prefix="Rate: "
               value={comparison.error_types.true_negatives.rate}
               precision={3}
             />
@@ -126,7 +129,8 @@ const ExperimentComparisonEach = (props: {
         <Collapse.Panel
           header={
             <Statistic
-              title={'False Negative Rate'}
+              title={`Edges not existing in Job ${jobTwo.id} that do exist in Job ${jobOne.id}`}
+              prefix="Rate: "
               value={comparison.error_types.false_negatives.rate}
               precision={3}
             />
