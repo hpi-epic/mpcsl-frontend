@@ -67,10 +67,10 @@ const createInputElement = (
       ? experimentParameters[key]
       : parameter.required
       ? null
-      : parameter.minimum !== undefined
-      ? parameter.minimum
       : parameter.default !== undefined
       ? parameter.default
+      : parameter.minimum !== undefined
+      ? parameter.minimum
       : 0,
     rules: parameter.required
       ? [{ required: parameter.required, message: `Enter ${key} value` }]
