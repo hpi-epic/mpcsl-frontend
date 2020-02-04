@@ -231,7 +231,7 @@ const ExperimentsListItem = (
           </Tooltip>,
           <Tooltip key="compare" title="Compare Experiment">
             <Icon
-              type="compare"
+              type="interaction"
               onClick={e => {
                 e.stopPropagation();
                 history.push(

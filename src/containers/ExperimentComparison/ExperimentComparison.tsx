@@ -292,6 +292,37 @@ const ExperimentComparisonGT = (props: {
   }
 };
 
+const ExperimentComparisonSubMenuTitle = (props: {
+  experiment: IExperiment;
+  baseJob: IJob | undefined;
+}) => {
+  const { experiment, baseJob } = props;
+  const [comparison, setComparison] = useState<
+    IComparisonStatistics | undefined
+  >();
+  useEffect(() => {
+    if (
+      experiment.last_job &&
+      experiment.last_job.result &&
+      baseJob &&
+      baseJob.result
+    ) {
+      getComparisonStatistics(
+        experiment.last_job.result.id,
+        baseJob.result.id
+      ).then(setComparison);
+    }
+  }, [experiment, baseJob]);
+  if (comparison) {
+    return (
+      <Tooltip
+        title={`${experiment.name} (Graph Edit Distance: ${comparison.graph_edit_distance})`}
+      >{`${experiment.name} (GED: ${comparison.graph_edit_distance})`}</Tooltip>
+    );
+  }
+  return <Tooltip title={experiment.name}>{experiment.name}</Tooltip>;
+};
+
 const ExperimentComparisonMenu = (props: {
   experiments: IExperimentJobs[];
   baseJob: IJob | undefined;
@@ -307,8 +338,14 @@ const ExperimentComparisonMenu = (props: {
       {props.experiments.map(experiment => (
         <SubMenu
           key={experiment.id}
-          title={experiment.name}
+          title={
+            <ExperimentComparisonSubMenuTitle
+              experiment={experiment}
+              baseJob={props.baseJob}
+            />
+          }
           disabled={experiment.jobs.length === 0}
+          onTitleClick={() => console.log('click')}
         >
           {experiment.jobs.map(job => {
             if (job.status !== 'done') {
