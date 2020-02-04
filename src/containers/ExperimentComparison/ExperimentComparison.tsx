@@ -9,8 +9,21 @@ import {
   getComparisonStatistics,
   getGTComparisonStatistics
 } from '../../actions/apiRequests';
-import { Menu, Spin, Row, Col, Empty, Statistic, Card, Collapse } from 'antd';
+import {
+  Menu,
+  Spin,
+  Row,
+  Col,
+  Empty,
+  Statistic,
+  Card,
+  Collapse,
+  Icon,
+  Tooltip
+} from 'antd';
 import { IAPIGraphNode } from '../../types/graphTypes';
+import SubMenu from 'antd/lib/menu/SubMenu';
+import { NewExperimentModalForm } from '../ExperimentsView/NewExperimentModal';
 
 type IExperimentJobs = {
   jobs: IJob[];
@@ -62,7 +75,8 @@ const ExperimentComparisonEach = (props: {
         <Collapse.Panel
           header={
             <Statistic
-              title={'True Positive Rate'}
+              title={`Edges in Job ${jobTwo.id} that also exist in Job ${jobOne.id}`}
+              prefix="Rate: "
               value={comparison.error_types.true_positives.rate}
               precision={3}
             />
@@ -79,7 +93,8 @@ const ExperimentComparisonEach = (props: {
         <Collapse.Panel
           header={
             <Statistic
-              title={'False Positive Rate'}
+              title={`Edges in Job ${jobTwo.id} that do not exist in Job ${jobOne.id}`}
+              prefix="Rate: "
               value={comparison.error_types.false_positives.rate}
               precision={3}
             />
@@ -96,7 +111,8 @@ const ExperimentComparisonEach = (props: {
         <Collapse.Panel
           header={
             <Statistic
-              title={'True Negative Rate'}
+              title={`Edges not existing in Job ${jobTwo.id} that do not exist in Job ${jobOne.id}`}
+              prefix="Rate: "
               value={comparison.error_types.true_negatives.rate}
               precision={3}
             />
@@ -113,7 +129,8 @@ const ExperimentComparisonEach = (props: {
         <Collapse.Panel
           header={
             <Statistic
-              title={'False Negative Rate'}
+              title={`Edges not existing in Job ${jobTwo.id} that do exist in Job ${jobOne.id}`}
+              prefix="Rate: "
               value={comparison.error_types.false_negatives.rate}
               precision={3}
             />
@@ -141,6 +158,7 @@ const ExperimentComparisonGT = (props: {
   const [groundTruthStatistics, setGroundTruthStatistics] = useState<
     IComparisonStatistics | undefined
   >();
+  const [modalVisible, setModalVisible] = useState(false);
   useEffect(() => {
     if (job?.result) {
       getGTComparisonStatistics(job.result.id).then(result =>
@@ -156,102 +174,157 @@ const ExperimentComparisonGT = (props: {
       });
     }
     return (
-      <Card
-        title={`${experiment?.name} compared to Ground Truth`}
-        extra={`Job ${job.id}`}
-      >
-        <Statistic
-          title={'Graph Edit Distance'}
-          value={groundTruthStatistics.graph_edit_distance}
+      <>
+        <Card
+          title={
+            <div>
+              {`${experiment?.name} compared to Ground Truth `}
+              <Tooltip title="Show Experiment Details">
+                <Icon
+                  onClick={e => {
+                    e.stopPropagation();
+                    setModalVisible(true);
+                  }}
+                  type="info-circle"
+                />
+              </Tooltip>
+            </div>
+          }
+          extra={`Job ${job.id}`}
+        >
+          <Statistic
+            title={'Graph Edit Distance'}
+            value={groundTruthStatistics.graph_edit_distance}
+          />
+          <Statistic
+            title={'Mean Jaccard Coefficient'}
+            value={groundTruthStatistics.mean_jaccard_coefficient}
+            precision={3}
+          />
+          <Collapse>
+            <Collapse.Panel
+              header={
+                <Statistic
+                  title={'True Positive Rate'}
+                  value={groundTruthStatistics.error_types.true_positives.rate}
+                  precision={3}
+                />
+              }
+              key="1"
+            >
+              {groundTruthStatistics.error_types.true_positives.edges.map(
+                edge => (
+                  <span key={Math.random()}>
+                    {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
+                    <br />
+                  </span>
+                )
+              )}
+            </Collapse.Panel>
+            <Collapse.Panel
+              header={
+                <Statistic
+                  title={'False Positive Rate'}
+                  value={groundTruthStatistics.error_types.false_positives.rate}
+                  precision={3}
+                />
+              }
+              key="2"
+            >
+              {groundTruthStatistics.error_types.false_positives.edges.map(
+                edge => (
+                  <span key={Math.random()}>
+                    {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
+                    <br />
+                  </span>
+                )
+              )}
+            </Collapse.Panel>
+            <Collapse.Panel
+              header={
+                <Statistic
+                  title={'True Negative Rate'}
+                  value={groundTruthStatistics.error_types.true_negatives.rate}
+                  precision={3}
+                />
+              }
+              key="3"
+            >
+              {groundTruthStatistics.error_types.true_negatives.edges.map(
+                edge => (
+                  <span key={Math.random()}>
+                    {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
+                    <br />
+                  </span>
+                )
+              )}
+            </Collapse.Panel>
+            <Collapse.Panel
+              header={
+                <Statistic
+                  title={'False Negative Rate'}
+                  value={groundTruthStatistics.error_types.false_negatives.rate}
+                  precision={3}
+                />
+              }
+              key="4"
+            >
+              {groundTruthStatistics.error_types.false_negatives.edges.map(
+                edge => (
+                  <span key={Math.random()}>
+                    {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
+                    <br />
+                  </span>
+                )
+              )}
+            </Collapse.Panel>
+          </Collapse>
+        </Card>
+        <NewExperimentModalForm
+          visible={modalVisible}
+          datasetId={experiment?.dataset_id || 0}
+          onClose={() => {
+            setModalVisible(false);
+          }}
+          experiment={experiment}
+          editDisabled={true}
         />
-        <Statistic
-          title={'Mean Jaccard Coefficient'}
-          value={groundTruthStatistics.mean_jaccard_coefficient}
-          precision={3}
-        />
-        <Collapse>
-          <Collapse.Panel
-            header={
-              <Statistic
-                title={'True Positive Rate'}
-                value={groundTruthStatistics.error_types.true_positives.rate}
-                precision={3}
-              />
-            }
-            key="1"
-          >
-            {groundTruthStatistics.error_types.true_positives.edges.map(
-              edge => (
-                <span key={Math.random()}>
-                  {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
-                  <br />
-                </span>
-              )
-            )}
-          </Collapse.Panel>
-          <Collapse.Panel
-            header={
-              <Statistic
-                title={'False Positive Rate'}
-                value={groundTruthStatistics.error_types.false_positives.rate}
-                precision={3}
-              />
-            }
-            key="2"
-          >
-            {groundTruthStatistics.error_types.false_positives.edges.map(
-              edge => (
-                <span key={Math.random()}>
-                  {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
-                  <br />
-                </span>
-              )
-            )}
-          </Collapse.Panel>
-          <Collapse.Panel
-            header={
-              <Statistic
-                title={'True Negative Rate'}
-                value={groundTruthStatistics.error_types.true_negatives.rate}
-                precision={3}
-              />
-            }
-            key="3"
-          >
-            {groundTruthStatistics.error_types.true_negatives.edges.map(
-              edge => (
-                <span key={Math.random()}>
-                  {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
-                  <br />
-                </span>
-              )
-            )}
-          </Collapse.Panel>
-          <Collapse.Panel
-            header={
-              <Statistic
-                title={'False Negative Rate'}
-                value={groundTruthStatistics.error_types.false_negatives.rate}
-                precision={3}
-              />
-            }
-            key="4"
-          >
-            {groundTruthStatistics.error_types.false_negatives.edges.map(
-              edge => (
-                <span key={Math.random()}>
-                  {nodeDict[edge[0]]} --&gt; {nodeDict[edge[1]]}
-                  <br />
-                </span>
-              )
-            )}
-          </Collapse.Panel>
-        </Collapse>
-      </Card>
+      </>
     );
   } else {
     return null;
   }
+};
+
+const ExperimentComparisonSubMenuTitle = (props: {
+  experiment: IExperiment;
+  baseJob: IJob | undefined;
+}) => {
+  const { experiment, baseJob } = props;
+  const [comparison, setComparison] = useState<
+    IComparisonStatistics | undefined
+  >();
+  useEffect(() => {
+    if (
+      experiment.last_job &&
+      experiment.last_job.result &&
+      baseJob &&
+      baseJob.result
+    ) {
+      getComparisonStatistics(
+        experiment.last_job.result.id,
+        baseJob.result.id
+      ).then(setComparison);
+    }
+  }, [experiment, baseJob]);
+  if (comparison) {
+    return (
+      <Tooltip
+        title={`${experiment.name} (Graph Edit Distance: ${comparison.graph_edit_distance})`}
+      >{`${experiment.name} (GED: ${comparison.graph_edit_distance})`}</Tooltip>
+    );
+  }
+  return <Tooltip title={experiment.name}>{experiment.name}</Tooltip>;
 };
 
 const ExperimentComparisonMenu = (props: {
@@ -263,20 +336,32 @@ const ExperimentComparisonMenu = (props: {
     <Menu
       onSelect={event => props.selectItem(event.key)}
       style={{ height: '100%' }}
+      mode="inline"
+      theme="dark"
     >
       {props.experiments.map(experiment => (
-        <Menu.ItemGroup key={experiment.id} title={experiment.name}>
-          {experiment.jobs.map(job => (
-            <Menu.Item
-              key={job.id}
-              disabled={
-                !(job.status === 'done') || job.id === props.baseJob?.id
-              }
-            >
-              {job.id}
-            </Menu.Item>
-          ))}
-        </Menu.ItemGroup>
+        <SubMenu
+          key={experiment.id}
+          title={
+            <ExperimentComparisonSubMenuTitle
+              experiment={experiment}
+              baseJob={props.baseJob}
+            />
+          }
+          disabled={experiment.jobs.length === 0}
+          onTitleClick={() => console.log('click')}
+        >
+          {experiment.jobs.map(job => {
+            if (job.status !== 'done') {
+              return null;
+            }
+            return (
+              <Menu.Item key={job.id} disabled={job.id === props.baseJob?.id}>
+                Job {job.id}
+              </Menu.Item>
+            );
+          })}
+        </SubMenu>
       ))}
     </Menu>
   );
