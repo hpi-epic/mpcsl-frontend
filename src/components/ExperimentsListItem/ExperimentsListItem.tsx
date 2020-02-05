@@ -10,14 +10,17 @@ import {
   Icon,
   Tooltip,
   InputNumber,
-  Form
+  Form,
+  Descriptions
 } from 'antd';
-import { IExperiment, BadgeStatus } from '../../types';
+import { IExperiment, BadgeStatus, IAlgorithm } from '../../types';
 import { useHistory } from 'react-router-dom';
 import {
   deleteExperiment,
   getK8SNodes,
-  runExperiment
+  runExperiment,
+  getAlgorithm,
+  getJobsForExperiment
 } from '../../actions/apiRequests';
 import styles from './ExperimentsListItem.module.scss';
 import { FormComponentProps } from 'antd/lib/form';
@@ -109,15 +112,22 @@ type RunExperimentModalProps = FormComponentProps & {
 const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = props => {
   const { getFieldDecorator } = props.form;
   const [k8sNodes, setK8sNodes] = useState<undefined | string[]>();
+  const [needsGPU, setNeedsGPU] = useState<undefined | boolean>();
   useEffect(() => {
     getK8SNodes()
       .then(setK8sNodes)
       .catch(() => setK8sNodes([]));
   }, []);
+  useEffect(() => {
+    getAlgorithm(props.experiment.algorithm_id).then(alg =>
+      setNeedsGPU(!!alg.needs_gpu)
+    );
+  }, [props.experiment]);
   return (
     <Modal
       title="Select Machine to Start Job"
       visible={props.visible}
+      confirmLoading={needsGPU === undefined}
       onOk={() => {
         props.form.validateFields(
           (
@@ -126,6 +136,7 @@ const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = pro
               node: string;
               runs: number;
               parallelismMode: 'parallel' | 'sequential';
+              gpus?: number;
             }
           ) => {
             if (!err) {
@@ -133,7 +144,8 @@ const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = pro
                 props.experiment,
                 values.node === '_none' ? undefined : values.node,
                 values.runs,
-                values.parallelismMode === 'parallel'
+                values.parallelismMode === 'parallel',
+                needsGPU ? values.gpus : undefined
               );
               props.onClose();
             }
@@ -172,6 +184,13 @@ const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = pro
             </Select>
           )}
         </Form.Item>
+        {needsGPU ? (
+          <Form.Item label="GPU Count">
+            {getFieldDecorator('gpus', { initialValue: 1 })(
+              <InputNumber min={1} style={{ width: '100%' }} />
+            )}
+          </Form.Item>
+        ) : null}
       </Form>
     </Modal>
   );
@@ -188,7 +207,15 @@ const ExperimentsListItem = (
   }
 ) => {
   const [nodeSelectModal, setNodeSelectModal] = useState(false);
+  const [algorithm, setAlgorithm] = useState<undefined | IAlgorithm>();
+  const [jobCount, setJobCount] = useState<undefined | number>();
   const history = useHistory();
+  useEffect(() => {
+    getAlgorithm(props.algorithm_id).then(setAlgorithm);
+  }, [props.algorithm_id]);
+  useEffect(() => {
+    getJobsForExperiment(props.id).then(jobs => setJobCount(jobs.length));
+  }, [props.id]);
   const { name, description, last_job, execution_time_statistics } = props;
   const statusText = last_job ? last_job.status : 'not started';
   return (
@@ -222,6 +249,7 @@ const ExperimentsListItem = (
         actions={[
           <Tooltip key="run" title="Run Experiment">
             <Icon
+              style={{ fontSize: 20 }}
               type="play-circle"
               onClick={e => {
                 e.stopPropagation();
@@ -231,6 +259,7 @@ const ExperimentsListItem = (
           </Tooltip>,
           <Tooltip key="compare" title="Compare Experiment">
             <Icon
+              style={{ fontSize: 20 }}
               type="interaction"
               onClick={e => {
                 e.stopPropagation();
@@ -260,7 +289,44 @@ const ExperimentsListItem = (
         }}
       >
         <div className={styles.ListItemContent}>
-          <p>{description}</p>
+          <Descriptions size="small" column={2}>
+            <Descriptions.Item
+              className={styles.Description}
+              span={2}
+              label="Description"
+            >
+              <p
+                style={{
+                  height: 84,
+                  overflow: 'hidden',
+                  width: 250,
+                  overflowWrap: 'break-word'
+                }}
+              >
+                {description}
+              </p>
+            </Descriptions.Item>
+            {algorithm ? (
+              <>
+                <Descriptions.Item label="Package">
+                  {algorithm.package}
+                </Descriptions.Item>
+                <Descriptions.Item label="Function">
+                  {algorithm.function}
+                </Descriptions.Item>
+              </>
+            ) : null}
+            {props.last_job ? (
+              <Descriptions.Item span={2} label="Last Job run at">
+                {new Date(props.last_job.start_time).toLocaleString()}
+              </Descriptions.Item>
+            ) : null}
+            {props.last_job ? (
+              <Descriptions.Item label="Job Count">
+                {jobCount ? jobCount : 'Loading...'}
+              </Descriptions.Item>
+            ) : null}
+          </Descriptions>
         </div>
       </Card>
     </>

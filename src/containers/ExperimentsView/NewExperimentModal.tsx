@@ -7,11 +7,10 @@ import {
   IExperiment,
   IParameters,
   IEnumParameter,
-  INumberParameter
+  INumberParameter,
+  IStrParameter
 } from '../../types';
 import { createExperiment, getAllAlgorithms } from '../../actions/apiRequests';
-import { isNumber } from 'util';
-import { SelectProps } from 'antd/lib/select';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 
 export interface IPropsNewExperimentModal extends FormComponentProps {
@@ -22,41 +21,26 @@ export interface IPropsNewExperimentModal extends FormComponentProps {
   datasetId: number;
 }
 
-const AlgorithmsSelect = (
-  props: {
-    editDisabled: boolean;
-    onAlgoSelected: (algoParameters: IParameters) => void;
-  } & SelectProps<number>
+const createInputElement = (
+  key: string,
+  parameter: IStrParameter,
+  form: WrappedFormUtils<any>,
+  editDisabled: boolean
 ) => {
-  const [algorithms, setAlgorithms] = useState<IAlgorithm[]>([]);
-  useEffect(() => {
-    getAllAlgorithms().then(result => setAlgorithms(result));
-  }, []);
-  return (
-    <Select<number>
-      disabled={props.editDisabled}
-      onSelect={algId => {
-        if (isNumber(algId)) {
-          const algorithm = algorithms.find(alg => alg.id === algId);
-          if (!algorithm) {
-            return;
-          }
-          props.onAlgoSelected(algorithm.valid_parameters);
-        }
-      }}
-      style={{ width: '100%' }}
-      {...props}
-    >
-      {algorithms.map(algorithm => (
-        <Select.Option value={algorithm.id} key={String(algorithm.id)}>
-          {algorithm.name}
-        </Select.Option>
-      ))}
-    </Select>
+  const { getFieldDecorator } = form;
+  return getFieldDecorator(key, {
+    rules: parameter.required
+      ? [{ required: parameter.required, message: `Enter ${key} value` }]
+      : []
+  })(
+    <Input
+      disabled={editDisabled}
+      placeholder="param1=[VALUE1],param2=[VALUE],..."
+    ></Input>
   );
 };
 
-const createInputElement = (
+const createNumberInputElement = (
   key: string,
   parameter: INumberParameter,
   form: WrappedFormUtils<any>,
@@ -69,10 +53,10 @@ const createInputElement = (
       ? experimentParameters[key]
       : parameter.required
       ? null
-      : parameter.minimum !== undefined
-      ? parameter.minimum
       : parameter.default !== undefined
       ? parameter.default
+      : parameter.minimum !== undefined
+      ? parameter.minimum
       : 0,
     rules: parameter.required
       ? [{ required: parameter.required, message: `Enter ${key} value` }]
@@ -132,7 +116,9 @@ const ParameterForms = (props: {
                   editDisabled,
                   experimentParameters
                 )
-              : createInputElement(
+              : parameter.type === 'str'
+              ? createInputElement(key, parameter, form, editDisabled)
+              : createNumberInputElement(
                   key,
                   parameter,
                   form,
@@ -157,14 +143,14 @@ const submitExperiment = (
   keyList.forEach(key => {
     params[key] = (values as any)[key];
   });
-  if (!values.name || !values.description || !values.algorithm_id) {
+  if (!values.name || !values.algorithm_id) {
     message.error('Set required Values!');
     return;
   }
   createExperiment({
     dataset_id: datasetId,
     name: values.name,
-    description: values.description,
+    description: values.description ? values.description : '',
     algorithm_id: values.algorithm_id,
     parameters: params
   });
@@ -175,11 +161,26 @@ const handleSubmit = (
   form: WrappedFormUtils<any>,
   datasetId: number,
   validParameters: IParameters,
-  onClose: () => void
+  onClose: () => void,
+  algorithms: IAlgorithm[]
 ) => {
-  form.validateFields((err: Error, values: IFormExperiment) => {
+  form.validateFields((err: Error, values: any) => {
     if (!err) {
-      submitExperiment(values, datasetId, validParameters, onClose);
+      const algorithm = algorithms.find(
+        alg =>
+          alg.package === values.package_id &&
+          alg.function === values.function_id
+      );
+      if (!algorithm) {
+        message.error('Algorithm not found!');
+        return;
+      }
+      submitExperiment(
+        { ...values, algorithm_id: algorithm?.id },
+        datasetId,
+        validParameters,
+        onClose
+      );
     } else {
       message.error('Set required Values!');
     }
@@ -189,6 +190,19 @@ const handleSubmit = (
 export type IFormExperiment = Partial<Omit<IExperiment, 'datasetId'>>;
 
 const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = props => {
+  const [algorithms, setAlgorithms] = useState<IAlgorithm[]>([]);
+  const [selectedPackage, setSelectedPackage] = useState<string | undefined>();
+  useEffect(() => {
+    getAllAlgorithms().then(result => setAlgorithms(result));
+  }, []);
+
+  const [packages, setPackages] = useState<string[]>([]);
+  useEffect(() => {
+    setPackages(Array.from(new Set(algorithms.map(algo => algo.package))));
+  }, [algorithms]);
+
+  const [algoFunctions, setAlgoFunctions] = useState<string[]>([]);
+
   const [algParams, setAlgParams] = useState<IParameters>({});
 
   useEffect(() => {
@@ -209,21 +223,75 @@ const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = pr
   })(
     <Input disabled={props.editDisabled} placeholder="Experiment Description" />
   );
-  const AlgorithmsEl = props.form.getFieldDecorator('algorithm_id', {
+
+  const PackagesEl = props.form.getFieldDecorator('package_id', {
     initialValue: props.experiment ? props.experiment.algorithm_id : undefined,
-    rules: [{ required: true, message: 'Select a Algorithm' }]
+    rules: [
+      { required: true, message: 'Select a Package' },
+      {
+        validator: (rule: any, value: any, callback: () => void) => {
+          if (selectedPackage !== value) {
+            const algoFncs = algorithms
+              .filter(algo => algo.package === value)
+              .map(algo => algo.function);
+            setAlgoFunctions(algoFncs);
+            props.form.setFieldsValue({ function_id: algoFncs[0] });
+            props.form.validateFields(['function_id']);
+            setSelectedPackage(value);
+          }
+
+          callback();
+        }
+      }
+    ]
   })(
-    <AlgorithmsSelect
-      editDisabled={props.editDisabled}
-      onAlgoSelected={setAlgParams}
-    />
+    <Select disabled={props.editDisabled}>
+      {packages.map(p => (
+        <Select.Option value={p} key={p}>
+          {p}
+        </Select.Option>
+      ))}
+    </Select>
+  );
+
+  const FunctionsEl = props.form.getFieldDecorator('function_id', {
+    rules: [
+      { required: true, message: 'Select a Function' },
+      {
+        validator: (rule: any, value: any, callback: () => void) => {
+          const selectedAlgorithm = algorithms.find(
+            algo =>
+              algo.function === value &&
+              algo.package === props.form.getFieldValue('package_id')
+          );
+          setAlgParams(
+            selectedAlgorithm ? selectedAlgorithm.valid_parameters : {}
+          );
+          callback();
+        }
+      }
+    ]
+  })(
+    <Select disabled={props.editDisabled}>
+      {algoFunctions.map(func => (
+        <Select.Option value={func} key={func}>
+          {func}
+        </Select.Option>
+      ))}
+    </Select>
   );
   return (
     <Modal
       visible={props.visible}
       onCancel={props.onClose}
       onOk={() =>
-        handleSubmit(props.form, props.datasetId, algParams, props.onClose)
+        handleSubmit(
+          props.form,
+          props.datasetId,
+          algParams,
+          props.onClose,
+          algorithms
+        )
       }
       okButtonProps={{ disabled: props.editDisabled }}
       title={
@@ -239,8 +307,11 @@ const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = pr
         <Form.Item label="Experiment Description" hasFeedback={true}>
           {ExperimentDescEl}
         </Form.Item>
-        <Form.Item label="Algorithm Selection" hasFeedback={true}>
-          {AlgorithmsEl}
+        <Form.Item label="Package Selection" hasFeedback={true}>
+          {PackagesEl}
+        </Form.Item>
+        <Form.Item label="Function Selection" hasFeedback={true}>
+          {FunctionsEl}
         </Form.Item>
         <ParameterForms
           parameters={algParams}

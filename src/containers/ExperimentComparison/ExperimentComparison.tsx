@@ -396,7 +396,7 @@ const ExperimentComparison = ({
         );
         const experimentsJobs: IExperimentJobs[] = [];
         for (const experiment of experiments) {
-          const jobs = await getJobsForExperiment(experiment);
+          const jobs = await getJobsForExperiment(experiment.id);
           const experimentJob: IExperimentJobs = {
             ...experiment,
             jobs: jobs

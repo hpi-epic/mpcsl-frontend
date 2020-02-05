@@ -15,6 +15,7 @@ import {
   deleteObservationMatrix,
   getObservationMatrixMetadata
 } from '../../actions/apiRequests';
+import { IObservationMatrixMetadata } from '../../types';
 
 const { confirm } = Modal;
 
@@ -26,16 +27,6 @@ interface IObservationMatrixListElement {
   data_source?: string;
   time_created?: string;
   onClick: () => void;
-}
-
-interface IObservationMatrixMetadata {
-  variables: number;
-  load_query: string;
-  time_created: number;
-  observations: number;
-  data_source: string;
-  query: string;
-  has_ground_truth: boolean;
 }
 
 const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
@@ -63,6 +54,7 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
           {metadata?.has_ground_truth ? (
             <Tooltip title="Observation Matrix has Ground Truth Graph">
               <Icon
+                style={{ fontSize: 20 }}
                 type="check-circle"
                 theme="twoTone"
                 twoToneColor="#52c41a"
@@ -77,6 +69,7 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
       actions={[
         <Tooltip key="upload" title="Upload Ground Truth Graph">
           <Icon
+            style={{ fontSize: 20 }}
             type="upload"
             onClick={e => {
               e.stopPropagation();
@@ -88,6 +81,7 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
         </Tooltip>,
         <Tooltip key="details" title="Show Details">
           <Icon
+            style={{ fontSize: 20 }}
             onClick={e => {
               e.stopPropagation();
               props.onClick();
@@ -97,6 +91,7 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
         </Tooltip>,
         <Tooltip key="delete" title="Delete Experiment">
           <Icon
+            style={{ fontSize: 20 }}
             type="delete"
             onClick={e => {
               e?.stopPropagation();
@@ -114,8 +109,17 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
     >
       <div className={styles.ObservationMatrixListItemContent}>
         <Descriptions size="small" column={1}>
-          <Descriptions.Item label="Description">
-            {description}
+          <Descriptions.Item className={styles.Description} label="Description">
+            <p
+              style={{
+                height: 64,
+                overflow: 'hidden',
+                width: 250,
+                overflowWrap: 'break-word'
+              }}
+            >
+              {description}
+            </p>
           </Descriptions.Item>
           {metadata ? (
             <>
@@ -125,7 +129,7 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
               <Descriptions.Item label="Observations">
                 {metadata.observations}
               </Descriptions.Item>
-              <Descriptions.Item label="Time created:">
+              <Descriptions.Item label="Time created">
                 {new Date(metadata.time_created * 1000).toLocaleString()}
               </Descriptions.Item>
             </>

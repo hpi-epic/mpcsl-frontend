@@ -6,10 +6,14 @@ import {
   useLocation,
   Link
 } from 'react-router-dom';
-import { Layout, Radio, Breadcrumb, Icon } from 'antd';
+import { Layout, Radio, Breadcrumb, Icon, Tooltip } from 'antd';
 import { IExperiment } from './types';
 import { IObservationMatrix } from './types';
-import { getExperiment, getObservationMatrix } from './actions/apiRequests';
+import {
+  getExperiment,
+  getObservationMatrix,
+  getObservationMatrixMetadata
+} from './actions/apiRequests';
 
 import 'react-select/dist/react-select.css';
 import 'react-virtualized/styles.css';
@@ -43,6 +47,37 @@ const shorten = (s: string) => {
   } else {
     return s.substr(0, 22) + '...';
   }
+};
+
+const ExperimentsListHeader = (
+  props: RouteComponentProps<{ datasetId: string }>
+) => {
+  const { datasetId } = props.match.params;
+  const [isGroundTruth, setIsGroundTruth] = useState<boolean | undefined>();
+  useEffect(() => {
+    if (datasetId) {
+      getObservationMatrixMetadata(parseInt(datasetId)).then(val =>
+        setIsGroundTruth(val.has_ground_truth)
+      );
+    } else {
+      setIsGroundTruth(undefined);
+    }
+  }, [datasetId]);
+  return (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      {isGroundTruth ? (
+        <Tooltip title="Observation Matrix has Ground Truth Graph">
+          <Icon
+            type="check-circle"
+            theme="twoTone"
+            style={{ marginRight: 10, fontSize: 20 }}
+            twoToneColor="#52c41a"
+          />
+        </Tooltip>
+      ) : null}
+      <NewExperimentButton {...props} />
+    </div>
+  );
 };
 
 const AppHeader = () => {
@@ -152,7 +187,7 @@ const AppHeader = () => {
           display: 'flex',
           justifyContent: 'space-between',
           flexGrow: 1,
-          alignItems: 'baseline'
+          alignItems: 'center'
         }}
       >
         <div style={{ flexGrow: 4 }}>
@@ -165,7 +200,7 @@ const AppHeader = () => {
           />
           <Route
             path="/:datasetId/experiments"
-            component={NewExperimentButton}
+            component={ExperimentsListHeader}
           />
           <Route exact path="" component={NewObservationMatrixButton} />
           <Route />

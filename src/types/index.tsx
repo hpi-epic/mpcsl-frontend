@@ -24,7 +24,22 @@ export interface IObservationMatrix extends IIDClass {
   time_created?: string;
 }
 
+export interface IObservationMatrixMetadata {
+  variables: number;
+  time_created: number;
+  observations: number;
+  data_source: string;
+  query: string;
+  has_ground_truth: boolean;
+}
+
 export type JobStatus = 'running' | 'done' | 'error' | 'cancelled' | 'waiting';
+
+export enum JobErrorCode {
+  UNSCHEDULABLE = -1,
+  IMAGE_NOT_FOUND = -2,
+  UNKNOWN = -127
+}
 
 export enum BadgeStatus {
   running = 'processing',
@@ -70,16 +85,24 @@ export interface IEnumParameter extends IRequiredParameter {
   default?: string;
 }
 
-export type IParameter = INumberParameter | IEnumParameter;
+export interface IStrParameter extends IRequiredParameter {
+  type: 'str';
+  value: string;
+  default?: string;
+}
+
+export type IParameter = INumberParameter | IEnumParameter | IStrParameter;
 
 export type IParameters = { [name: string]: IParameter };
 
 export interface IAlgorithm extends IIDClass {
-  name: string;
+  package: string;
+  function: string;
   script_filename: string;
   backend: string;
   description: string;
   valid_parameters: IParameters;
+  needs_gpu?: boolean;
 }
 
 export interface IErrorType {
