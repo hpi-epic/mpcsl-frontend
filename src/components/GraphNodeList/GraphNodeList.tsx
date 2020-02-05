@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Tooltip, Icon, Menu, Col, Popconfirm, Row } from 'antd';
+import { Tooltip, Icon, Menu, Col, Popconfirm } from 'antd';
 import { ID3GraphNode, IAPIGraphNode } from '../../types/graphTypes';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 import * as actions from '../../actions/graphExplorer';
 import { IState } from '../../store';
 import Select from 'react-virtualized-select';
+import { isArray } from 'util';
 
 interface IPropsGraphNodeList {
   nodes: ID3GraphNode[];
@@ -37,44 +38,44 @@ const mapDispatchToProps = (
 
 const GraphExplorerSelect = (props: IGraphExplorerProps) => {
   const [graphSearch, setGraphSearch] = useState<
-    (
-      | {
-          value: number;
-          label: string;
-        }
-      | undefined
-    )[]
+    {
+      value: number;
+      label: string;
+    }[]
   >([]);
   useEffect(() => {
     if (props.availableNodes) {
-      const result = props.availableNodes.map(node => {
-        if (props.nodes.find(n => node.id.toString() === n.id) === undefined) {
-          return {
-            value: node.id,
-            label: node.name
-          };
-        }
-        return undefined;
-      });
+      const result = props.availableNodes
+        .filter(node => !props.nodes.some(n => node.id.toString() === n.id))
+        .map(node => ({
+          value: node.id,
+          label: node.name
+        }));
       setGraphSearch(result);
     } else {
       setGraphSearch([]);
     }
   }, [props.availableNodes, props.nodes]);
   return (
-    <Row
+    <div
       style={{
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-evenly'
       }}
     >
-      <Col span={18}>
+      <span
+        style={{
+          width: '70%'
+        }}
+      >
         <Select
-          key={'a'}
-          onChange={(option: any) => {
-            props.onAddNode(option.value);
-          }}
+          key="a"
+          onChange={option =>
+            option && !isArray(option) && option.value
+              ? props.onAddNode(option.value)
+              : null
+          }
           options={
             graphSearch
               ? (graphSearch.filter(n => !!n) as {
@@ -91,33 +92,26 @@ const GraphExplorerSelect = (props: IGraphExplorerProps) => {
           removeSelected={true}
           clearable={true}
           placeholder="Select nodes"
-          style={{
-            marginLeft: '5%',
-            marginRight: '5%',
-            width: '90%'
-          }}
         />
-      </Col>
-      <Col span={4} offset={2}>
-        <Tooltip title="Load all nodes">
-          <Popconfirm
-            title="Are you sure that you want to load all nodes?"
-            onConfirm={() => {
-              for (const node of graphSearch) {
-                if (node) {
-                  props.onAddNode(node.value);
-                }
+      </span>
+      <Tooltip title="Load all nodes">
+        <Popconfirm
+          title="Are you sure that you want to load all nodes?"
+          onConfirm={() => {
+            for (const node of graphSearch) {
+              if (node) {
+                props.onAddNode(node.value);
               }
-            }}
-          >
-            <Icon
-              style={{ color: 'rgba(255, 255, 255, 0.65)', fontSize: 20 }}
-              type="plus-circle"
-            />
-          </Popconfirm>
-        </Tooltip>
-      </Col>
-    </Row>
+            }
+          }}
+        >
+          <Icon
+            style={{ color: 'rgba(255, 255, 255, 0.65)', fontSize: 20 }}
+            type="plus-circle"
+          />
+        </Popconfirm>
+      </Tooltip>
+    </div>
   );
 };
 
