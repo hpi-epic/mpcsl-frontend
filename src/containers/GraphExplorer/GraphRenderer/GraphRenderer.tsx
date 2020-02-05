@@ -119,7 +119,11 @@ class GraphRenderer extends React.Component<
     );
 
     const menu = (
-      <Row type="flex" justify="start">
+      <Row
+        type="flex"
+        justify="start"
+        style={{ marginTop: '5px', marginLeft: '5px' }}
+      >
         <Col span={3}>
           <Button onClick={this.onReLayout}>Re-Layout</Button>
         </Col>
@@ -133,12 +137,12 @@ class GraphRenderer extends React.Component<
     );
 
     return (
-      <div>
+      <div style={{ width: '100%', height: '100%' }}>
         {this.props.showMenu ? menu : null}
         <svg
           ref={svg => (this.svg = d3.select(svg))}
-          width={this.state.width}
-          height={this.state.height}
+          height={this.props.showMenu ? '95%' : '100%'}
+          width="100%"
         >
           {defs}
           <g ref={graph => (this.graph = d3.select(graph))} />

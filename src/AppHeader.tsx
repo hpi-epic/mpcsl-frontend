@@ -7,12 +7,6 @@ import {
   Link
 } from 'react-router-dom';
 import { Layout, Radio, Breadcrumb, Icon } from 'antd';
-import { ThunkDispatch } from 'redux-thunk';
-import { connect } from 'react-redux';
-import * as actions from './actions/graphExplorer';
-import { IState } from './store';
-import { IGraphExplorerProps } from './containers/GraphExplorer';
-import Select from 'react-virtualized-select';
 import { IExperiment } from './types';
 import { IObservationMatrix } from './types';
 import { getExperiment, getObservationMatrix } from './actions/apiRequests';
@@ -23,99 +17,24 @@ import 'react-virtualized-select/styles.css';
 import { NewExperimentButton } from './containers/ExperimentsView/ExperimentsView';
 import { NewObservationMatrixButton } from './containers/ObservationMatrixView/ObservationMatrixView';
 
-const GraphExplorerHeader = (
-  props: IGraphExplorerProps & RouteComponentProps<{ view: string }>
-) => {
-  const [graphSearch, setGraphSearch] = useState<
-    (
-      | {
-          value: number;
-          label: string;
-        }
-      | undefined
-    )[]
-  >([]);
-  useEffect(() => {
-    if (props.availableNodes) {
-      const result = props.availableNodes.map(node => {
-        if (props.nodes.find(n => node.id.toString() === n.id) === undefined) {
-          return {
-            value: node.id,
-            label: node.name
-          };
-        }
-        return undefined;
-      });
-      setGraphSearch(result);
-    } else {
-      setGraphSearch([]);
-    }
-  }, [props.availableNodes, props.nodes]);
+const GraphExplorerHeader = (props: RouteComponentProps<{ view: string }>) => {
   return (
-    <>
-      <div style={{ flexGrow: 10 }}>
-        <Select
-          key={'a'}
-          onChange={(option: any) => {
-            props.onAddNode(option.value);
-          }}
-          options={
-            graphSearch
-              ? (graphSearch.filter(n => !!n) as {
-                  value: number;
-                  label: string;
-                }[])
-              : []
-          }
-          onSelectResetsInput={true}
-          onBlurResetsInput={false}
-          valueKey="value"
-          labelKey="label"
-          closeOnSelect={false}
-          removeSelected={true}
-          clearable={true}
-          placeholder="Select nodes"
-          style={{
-            lineHeight: '14px',
-            display:
-              props.match.params.view !== 'selection' ? 'none' : undefined
-          }}
-        />
-      </div>
-      <div
-        style={{ flexGrow: 10, justifyContent: 'flex-end', display: 'flex' }}
+    <div style={{ flexGrow: 10, justifyContent: 'flex-end', display: 'flex' }}>
+      <Radio.Group
+        value={props.match.params.view}
+        onChange={e =>
+          props.history.push(
+            props.match.url.replace(props.match.params.view, e.target.value)
+          )
+        }
+        buttonStyle="solid"
       >
-        <Radio.Group
-          value={props.match.params.view}
-          onChange={e =>
-            props.history.push(
-              props.match.url.replace(props.match.params.view, e.target.value)
-            )
-          }
-          buttonStyle="solid"
-        >
-          <Radio.Button value="selection">Selection</Radio.Button>
-          <Radio.Button value="annotation">Expl. &#38; Valid.</Radio.Button>
-          <Radio.Button value="exploration">Causal Inference</Radio.Button>
-        </Radio.Group>
-      </div>
-    </>
+        <Radio.Button value="selection">Selection</Radio.Button>
+        <Radio.Button value="annotation">Annotation</Radio.Button>
+        <Radio.Button value="exploration">Exploration</Radio.Button>
+      </Radio.Group>
+    </div>
   );
-};
-
-const mapStateToProps = (state: IState) => {
-  return {
-    availableNodes: state.graphExplorer!.availableNodes,
-    nodes: state.graphExplorer!.nodes
-  };
-};
-
-const mapDispatchToProps = (
-  dispatch: ThunkDispatch<IState, void, actions.GraphExplorerAction>
-) => {
-  return {
-    onAddNode: (nodeID: number) => dispatch(actions.addNode(nodeID))
-  };
 };
 
 const shorten = (s: string) => {
@@ -125,11 +44,6 @@ const shorten = (s: string) => {
     return s.substr(0, 22) + '...';
   }
 };
-
-const GraphExplorerHeaderRedux = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GraphExplorerHeader);
 
 const AppHeader = () => {
   const location = useLocation();
@@ -247,7 +161,7 @@ const AppHeader = () => {
         <Switch>
           <Route
             path="/:datasetId/experiments/:experimentId/jobs/:resultId/:view"
-            component={GraphExplorerHeaderRedux}
+            component={GraphExplorerHeader}
           />
           <Route
             path="/:datasetId/experiments"
