@@ -10,15 +10,17 @@ import {
   Icon,
   Tooltip,
   InputNumber,
-  Form
+  Form,
+  Descriptions
 } from 'antd';
-import { IExperiment, BadgeStatus } from '../../types';
+import { IExperiment, BadgeStatus, IAlgorithm } from '../../types';
 import { useHistory } from 'react-router-dom';
 import {
   deleteExperiment,
   getK8SNodes,
   runExperiment,
-  getAlgorithm
+  getAlgorithm,
+  getJobsForExperiment
 } from '../../actions/apiRequests';
 import styles from './ExperimentsListItem.module.scss';
 import { FormComponentProps } from 'antd/lib/form';
@@ -205,7 +207,15 @@ const ExperimentsListItem = (
   }
 ) => {
   const [nodeSelectModal, setNodeSelectModal] = useState(false);
+  const [algorithm, setAlgorithm] = useState<undefined | IAlgorithm>();
+  const [jobCount, setJobCount] = useState<undefined | number>();
   const history = useHistory();
+  useEffect(() => {
+    getAlgorithm(props.algorithm_id).then(setAlgorithm);
+  }, [props.algorithm_id]);
+  useEffect(() => {
+    getJobsForExperiment(props.id).then(jobs => setJobCount(jobs.length));
+  }, [props.id]);
   const { name, description, last_job, execution_time_statistics } = props;
   const statusText = last_job ? last_job.status : 'not started';
   return (
@@ -239,6 +249,7 @@ const ExperimentsListItem = (
         actions={[
           <Tooltip key="run" title="Run Experiment">
             <Icon
+              style={{ fontSize: 20 }}
               type="play-circle"
               onClick={e => {
                 e.stopPropagation();
@@ -248,6 +259,7 @@ const ExperimentsListItem = (
           </Tooltip>,
           <Tooltip key="compare" title="Compare Experiment">
             <Icon
+              style={{ fontSize: 20 }}
               type="compare"
               onClick={e => {
                 e.stopPropagation();
@@ -275,7 +287,37 @@ const ExperimentsListItem = (
         }}
       >
         <div className={styles.ListItemContent}>
-          <p>{description}</p>
+          <Descriptions size="small" column={2}>
+            <Descriptions.Item
+              className={styles.Description}
+              span={2}
+              label="Description"
+            >
+              <p style={{ height: 80, overflow: 'auto', width: 250 }}>
+                {description}
+              </p>
+            </Descriptions.Item>
+            {algorithm ? (
+              <>
+                <Descriptions.Item label="Package">
+                  {algorithm.package}
+                </Descriptions.Item>
+                <Descriptions.Item label="Function">
+                  {algorithm.function}
+                </Descriptions.Item>
+              </>
+            ) : null}
+            {props.last_job ? (
+              <Descriptions.Item span={2} label="Last Job run at">
+                {new Date(props.last_job.start_time).toLocaleString()}
+              </Descriptions.Item>
+            ) : null}
+            {props.last_job ? (
+              <Descriptions.Item label="Job Count">
+                {jobCount ? jobCount : 'Loading...'}
+              </Descriptions.Item>
+            ) : null}
+          </Descriptions>
         </div>
       </Card>
     </>
