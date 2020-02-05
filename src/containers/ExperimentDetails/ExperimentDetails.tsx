@@ -258,7 +258,7 @@ class ExperimentDetails extends React.Component<
   };
 
   private async fetchJobs(experiment: IExperiment) {
-    const jobList = await getJobsForExperiment(experiment);
+    const jobList = await getJobsForExperiment(experiment.id);
     this.setState({ jobList });
   }
 

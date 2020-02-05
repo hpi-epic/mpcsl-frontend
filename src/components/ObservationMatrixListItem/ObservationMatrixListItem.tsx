@@ -108,8 +108,10 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
     >
       <div className={styles.ObservationMatrixListItemContent}>
         <Descriptions size="small" column={1}>
-          <Descriptions.Item label="Description">
-            {description}
+          <Descriptions.Item className={styles.Description} label="Description">
+            <p style={{ height: 50, overflow: 'auto', width: 250 }}>
+              {description}
+            </p>
           </Descriptions.Item>
           {metadata ? (
             <>
@@ -119,7 +121,7 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
               <Descriptions.Item label="Observations">
                 {metadata.observations}
               </Descriptions.Item>
-              <Descriptions.Item label="Time created:">
+              <Descriptions.Item label="Time created">
                 {new Date(metadata.time_created * 1000).toLocaleString()}
               </Descriptions.Item>
             </>

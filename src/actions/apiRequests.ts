@@ -29,9 +29,14 @@ const socket = () => {
 class CachedApiCall<T extends IIDClass> {
   private cachedData: undefined | Promise<T[]>;
   private observable: Observable<IIDClass>;
+  private changeObs: Observable<number>;
   constructor(private apiEndpoint: string, subIdentifier: string) {
     this.observable = fromEvent(socket(), subIdentifier);
-    this.subscribe(() => this.refetchData());
+    this.changeObs = new Observable(observer => {
+      this.observable.subscribe(val => {
+        this.refetchData().then(() => observer.next(val.id));
+      });
+    });
   }
 
   public refetchData = () => {
@@ -42,6 +47,7 @@ class CachedApiCall<T extends IIDClass> {
         message.error('Network Error');
         throw e;
       });
+    return this.cachedData;
   };
 
   public getAll = async () => {
@@ -57,7 +63,7 @@ class CachedApiCall<T extends IIDClass> {
   };
 
   public subscribe = (callback: (id: number) => void) => {
-    return this.observable.subscribe(val => callback(val.id));
+    return this.changeObs.subscribe(callback);
   };
 }
 
@@ -68,24 +74,10 @@ type SubJobStatusData = {
 
 const JobChangesObservable = fromEvent<SubJobStatusData>(socket(), 'job');
 
-export const subscribeToJobStatusChanges = (
-  callback: (value: SubJobStatusData) => void
-) => JobChangesObservable.subscribe(callback);
-
-class CachedExperiments extends CachedApiCall<IExperiment> {
-  constructor() {
-    super(Endpoints.allExperiments, 'experiment');
-    JobChangesObservable.subscribe(job => {
-      this.getAll().then(data => {
-        if (data.some(exp => exp.last_job?.id === job.id)) {
-          this.refetchData();
-        }
-      });
-    });
-  }
-}
-
-const experimentCache = new CachedExperiments();
+const experimentCache = new CachedApiCall<IExperiment>(
+  Endpoints.allExperiments,
+  'experiment'
+);
 
 const datasetCache = new CachedApiCall<IObservationMatrix>(
   Endpoints.observationMatrices,
@@ -137,18 +129,6 @@ export const createObservationMatrix = async (
 export const getExperiments = experimentCache.getAll;
 
 export const getExperiment = experimentCache.getOne;
-
-export const getExperimentsForDataset = async (
-  datasetId: number
-): Promise<IExperiment[]> => {
-  try {
-    const response = await axios.get(Endpoints.datasetExperiments(datasetId));
-    return response.data;
-  } catch (e) {
-    message.error('Failed to fetch Experiments');
-    throw e;
-  }
-};
 
 export const getComparisonStatistics = async (
   resultOneId: number,
@@ -205,11 +185,43 @@ export const deleteObservationMatrix = async (
   }
 };
 
-export const getJobsForExperiment = async (experiment: IExperiment) => {
+let cachedJobs: {
+  [id: string]: IJob[] | undefined;
+} = {};
+
+const jobChangesObservable = new Observable<SubJobStatusData>(observer => {
+  JobChangesObservable.subscribe(e => {
+    for (const id of Object.keys(cachedJobs)) {
+      const cache = cachedJobs[id];
+      if (cache && cache.some(job => job.id === e.id)) {
+        cachedJobs[id] = undefined;
+        observer.next(e);
+        return;
+      }
+    }
+    cachedJobs = {};
+    observer.next(e);
+    return;
+  });
+});
+
+export const subscribeToJobStatusChanges = (
+  callback: (value: SubJobStatusData) => void
+) => jobChangesObservable.subscribe(callback);
+
+export const getJobsForExperiment = async (
+  experimentId: number
+): Promise<IJob[]> => {
+  const experimentIdStr = experimentId.toString();
+  const cache = cachedJobs[experimentIdStr];
+  if (cache) {
+    return cache;
+  }
   try {
     const response = await axios.get<IJob[]>(
-      `${Endpoints.experiment}/${experiment.id}${Endpoints.allJobs}`
+      `${Endpoints.experiment}/${experimentIdStr}${Endpoints.allJobs}`
     );
+    cachedJobs[experimentIdStr] = response.data;
     return response.data;
   } catch (e) {
     message.error('Failed to fetch Jobs');
@@ -217,9 +229,46 @@ export const getJobsForExperiment = async (experiment: IExperiment) => {
   }
 };
 
-export const subscribeToExperimentChanges = experimentCache.subscribe;
-
 export const subscribeToDatasetChanges = datasetCache.subscribe;
+
+let cachedExperiments: {
+  [id: string]: IExperiment[] | undefined;
+} = {};
+const experimentChangesObservable = new Observable<number>(observer => {
+  experimentCache.subscribe(expId => {
+    for (const id of Object.keys(cachedExperiments)) {
+      const cache = cachedExperiments[id];
+      if (cache && cache.some(exp => exp.id === expId)) {
+        cachedExperiments[id] = undefined;
+        observer.next(expId);
+        return;
+      }
+    }
+    cachedExperiments = {};
+    observer.next(expId);
+    return;
+  });
+});
+
+export const subscribeToExperimentChanges = (callback: (id: number) => void) =>
+  experimentChangesObservable.subscribe(callback);
+
+export const getExperimentsForDataset = async (
+  datasetId: number
+): Promise<IExperiment[]> => {
+  const cache = cachedExperiments[datasetId];
+  if (cache) {
+    return cache;
+  }
+  try {
+    const response = await axios.get(Endpoints.datasetExperiments(datasetId));
+    cachedExperiments[datasetId] = response.data;
+    return response.data;
+  } catch (e) {
+    message.error('Failed to fetch Experiments');
+    throw e;
+  }
+};
 
 export function runExperiment(
   experiment: IExperiment,

@@ -7,7 +7,7 @@
 }
 
 .ListItemContent {
-  height: 150px;
+  height: 200px;
   display: flex;
   flex-direction: column;
   p {
@@ -26,4 +26,8 @@
 
 .ListButton {
   margin-right: 5px;
+}
+
+.Description {
+  width: 100%;
 }
