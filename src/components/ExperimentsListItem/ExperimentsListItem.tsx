@@ -249,6 +249,7 @@ const ExperimentsListItem = (
         actions={[
           <Tooltip key="run" title="Run Experiment">
             <Icon
+              style={{ fontSize: 20 }}
               type="play-circle"
               onClick={e => {
                 e.stopPropagation();
@@ -258,6 +259,7 @@ const ExperimentsListItem = (
           </Tooltip>,
           <Tooltip key="compare" title="Compare Experiment">
             <Icon
+              style={{ fontSize: 20 }}
               type="compare"
               onClick={e => {
                 e.stopPropagation();

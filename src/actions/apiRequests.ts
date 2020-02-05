@@ -12,7 +12,8 @@ import {
   IIDClass,
   IJob,
   IComparisonStatistics,
-  JobErrorCode
+  JobErrorCode,
+  IObservationMatrixMetadata
 } from '../types';
 import Endpoints from '../constants/api';
 import { fromEvent, Observable } from 'rxjs';
@@ -100,7 +101,7 @@ export const createExperiment = async (experiment: ICreateExperiment) => {
 
 export const getObservationMatrixMetadata = async (
   observationMatrixID: number
-) => {
+): Promise<IObservationMatrixMetadata> => {
   try {
     const response = await axios.get(
       Endpoints.observationMatrixMetadata(observationMatrixID)

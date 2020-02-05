@@ -24,6 +24,15 @@ export interface IObservationMatrix extends IIDClass {
   time_created?: string;
 }
 
+export interface IObservationMatrixMetadata {
+  variables: number;
+  time_created: number;
+  observations: number;
+  data_source: string;
+  query: string;
+  has_ground_truth: boolean;
+}
+
 export type JobStatus = 'running' | 'done' | 'error' | 'cancelled' | 'waiting';
 
 export enum JobErrorCode {
