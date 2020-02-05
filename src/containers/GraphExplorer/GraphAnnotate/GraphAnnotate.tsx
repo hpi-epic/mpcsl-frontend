@@ -3,7 +3,7 @@ import React from 'react';
 import GraphRenderer from '../GraphRenderer/GraphRenderer';
 import GraphNodeList from '../../../components/GraphNodeList/GraphNodeList';
 
-import { Layout } from 'antd';
+import { Row, Col } from 'antd';
 
 import { ID3GraphNode } from '../../../types/graphTypes';
 import { connect } from 'react-redux';
@@ -36,15 +36,15 @@ class GraphAnnotate extends React.Component<
 
   public render() {
     return (
-      <div>
-        <Layout>
-          <Layout.Sider className="graphSelectionSider">
-            <GraphNodeList
-              nodes={this.props.nodes}
-              onNodeClick={this.showDataModal}
-              isSelectionMode={false}
-            />
-          </Layout.Sider>
+      <Row style={{ height: '100%' }}>
+        <Col span={4} style={{ height: 'inherit' }}>
+          <GraphNodeList
+            nodes={this.props.nodes}
+            onNodeClick={this.showDataModal}
+            isSelectionMode={false}
+          />
+        </Col>
+        <Col span={20} style={{ height: 'inherit' }}>
           <GraphDataModal
             resizable={true}
             visible={this.state.dataModalVisible}
@@ -57,8 +57,8 @@ class GraphAnnotate extends React.Component<
             isSelectionMode={false}
             onNodeClick={this.showDataModal}
           />
-        </Layout>
-      </div>
+        </Col>
+      </Row>
     );
   }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout } from 'antd';
+import { Col, Row } from 'antd';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 
@@ -31,16 +31,18 @@ class GraphSelection extends React.Component<IGraphSelectionProps, {}> {
 
   public render() {
     return (
-      <Layout>
-        <Layout.Sider className="graphSelectionSider">
+      <Row style={{ height: '100%' }}>
+        <Col span={4} style={{ height: 'inherit' }}>
           <GraphNodeList
             nodes={this.props.nodes}
             onRemoveNode={this.props.onRemoveNode}
             isSelectionMode={true}
           />
-        </Layout.Sider>
-        <GraphRenderer showMenu={true} isSelectionMode={true} />
-      </Layout>
+        </Col>
+        <Col span={20} style={{ height: 'inherit' }}>
+          <GraphRenderer showMenu={true} isSelectionMode={true} />
+        </Col>
+      </Row>
     );
   }
 }

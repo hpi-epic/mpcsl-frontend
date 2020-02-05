@@ -349,7 +349,6 @@ const ExperimentComparisonMenu = (props: {
             />
           }
           disabled={experiment.jobs.length === 0}
-          onTitleClick={() => console.log('click')}
         >
           {experiment.jobs.map(job => {
             if (job.status !== 'done') {
@@ -432,7 +431,7 @@ const ExperimentComparison = ({
     );
   }
   return (
-    <Row type="flex" justify="start">
+    <Row type="flex" justify="start" style={{ height: '100%' }}>
       <Col span={4}>
         <ExperimentComparisonMenu
           experiments={experiments}
