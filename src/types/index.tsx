@@ -76,7 +76,13 @@ export interface IEnumParameter extends IRequiredParameter {
   default?: string;
 }
 
-export type IParameter = INumberParameter | IEnumParameter;
+export interface IStrParameter extends IRequiredParameter {
+  type: 'str';
+  value: string;
+  default?: string;
+}
+
+export type IParameter = INumberParameter | IEnumParameter | IStrParameter;
 
 export type IParameters = { [name: string]: IParameter };
 

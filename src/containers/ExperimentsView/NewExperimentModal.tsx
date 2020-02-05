@@ -7,7 +7,8 @@ import {
   IExperiment,
   IParameters,
   IEnumParameter,
-  INumberParameter
+  INumberParameter,
+  IStrParameter
 } from '../../types';
 import { createExperiment, getAllAlgorithms } from '../../actions/apiRequests';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -20,41 +21,26 @@ export interface IPropsNewExperimentModal extends FormComponentProps {
   datasetId: number;
 }
 
-/*const AlgorithmsSelect = (
-  props: {
-    editDisabled: boolean;
-    onAlgoSelected: (algoParameters: IParameters) => void;
-  } & SelectProps<number>
-) => {
-  const [algorithms, setAlgorithms] = useState<IAlgorithm[]>([]);
-  useEffect(() => {
-    getAllAlgorithms().then(result => setAlgorithms(result));
-  }, []);
-  return (
-    <Select<number>
-      disabled={props.editDisabled}
-      onSelect={algId => {
-        if (isNumber(algId)) {
-          const algorithm = algorithms.find(alg => alg.id === algId);
-          if (!algorithm) {
-            return;
-          }
-          props.onAlgoSelected(algorithm.valid_parameters);
-        }
-      }}
-      style={{ width: '100%' }}
-      {...props}
-    >
-      {algorithms.map(algorithm => (
-        <Select.Option value={algorithm.id} key={String(algorithm.id)}>
-          {algorithm.function} from {algorithm.package}
-        </Select.Option>
-      ))}
-    </Select>
-  );
-};*/
-
 const createInputElement = (
+  key: string,
+  parameter: IStrParameter,
+  form: WrappedFormUtils<any>,
+  editDisabled: boolean
+) => {
+  const { getFieldDecorator } = form;
+  return getFieldDecorator(key, {
+    rules: parameter.required
+      ? [{ required: parameter.required, message: `Enter ${key} value` }]
+      : []
+  })(
+    <Input
+      disabled={editDisabled}
+      placeholder="param1=[VALUE1];param2=[VALUE];..."
+    ></Input>
+  );
+};
+
+const createNumberInputElement = (
   key: string,
   parameter: INumberParameter,
   form: WrappedFormUtils<any>,
@@ -130,7 +116,9 @@ const ParameterForms = (props: {
                   editDisabled,
                   experimentParameters
                 )
-              : createInputElement(
+              : parameter.type === 'str'
+              ? createInputElement(key, parameter, form, editDisabled)
+              : createNumberInputElement(
                   key,
                   parameter,
                   form,
