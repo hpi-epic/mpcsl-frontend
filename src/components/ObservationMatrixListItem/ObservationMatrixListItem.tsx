@@ -43,7 +43,13 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
   return (
     <Card
       title={
-        <>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
           {name}
           {metadata?.has_ground_truth ? (
             <Tooltip title="Observation Matrix has Ground Truth Graph">
@@ -55,7 +61,7 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
               />
             </Tooltip>
           ) : null}
-        </>
+        </div>
       }
       hoverable
       className={styles.ObservationMatrixListItem}

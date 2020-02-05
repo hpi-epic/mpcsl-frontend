@@ -15,7 +15,17 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
       <div
         className="ant-card-head-title"
       >
-        test
+        <div
+          style={
+            Object {
+              "alignItems": "center",
+              "display": "flex",
+              "justifyContent": "space-between",
+            }
+          }
+        >
+          test
+        </div>
       </div>
     </div>
   </div>

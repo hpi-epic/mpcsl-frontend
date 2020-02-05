@@ -260,12 +260,14 @@ const ExperimentsListItem = (
           <Tooltip key="compare" title="Compare Experiment">
             <Icon
               style={{ fontSize: 20 }}
-              type="compare"
+              type="interaction"
               onClick={e => {
                 e.stopPropagation();
-                history.push(
-                  `/${props.dataset_id}/experiments/${props.id}/compare`
-                );
+                if (last_job) {
+                  history.push(
+                    `/${props.dataset_id}/experiments/${props.id}/compare`
+                  );
+                }
               }}
             />
           </Tooltip>,
