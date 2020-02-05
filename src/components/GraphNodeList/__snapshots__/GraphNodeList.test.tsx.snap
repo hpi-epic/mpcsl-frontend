@@ -2,87 +2,106 @@
 
 exports[`<GraphNodeList /> renders correctly 1`] = `
 <div
-  className="ant-list Node-List-Item ant-list-sm ant-list-split"
+  style={
+    Object {
+      "backgroundColor": "#001529",
+      "height": "100%",
+    }
+  }
 >
-  <div
-    className="ant-list-header"
+  <ul
+    className="ant-menu ant-menu-dark ant-menu-root ant-menu-vertical"
+    onMouseEnter={[Function]}
+    onTransitionEnd={[Function]}
+    role="menu"
+    style={Object {}}
   >
-    <span
-      style={
-        Object {
-          "fontWeight": "bold",
-          "padding": "14px",
-        }
-      }
+    <li
+      className=" ant-menu-item-group"
     >
-      Focused Nodes:
-    </span>
-  </div>
-  <div
-    className="ant-spin-nested-loading"
-  >
-    <div
-      className="ant-spin-container"
-    >
+      <div
+        className="ant-menu-item-group-title"
+        title="Focused Nodes:"
+      >
+        Focused Nodes:
+      </div>
       <ul
-        className="ant-list-items"
+        className="ant-menu-item-group-list"
       >
         <li
-          className="ant-list-item Node-List-Item"
+          className="ant-menu-item"
+          onClick={[Function]}
           onMouseEnter={[Function]}
           onMouseLeave={[Function]}
-          style={
-            Object {
-              "paddingBottom": "4px",
-              "paddingLeft": "14px",
-              "paddingTop": "4px",
-            }
-          }
+          role="menuitem"
+          style={Object {}}
         >
           <div
-            onClick={[Function]}
+            className="ant-col ant-col-18"
+            style={
+              Object {
+                "overflow": "hidden",
+              }
+            }
           >
-            node1
+            <span
+              onMouseEnter={[Function]}
+              onMouseLeave={[Function]}
+            >
+              node1
+            </span>
           </div>
         </li>
         <li
-          className="ant-list-item Node-List-Item"
+          className="ant-menu-item"
+          onClick={[Function]}
           onMouseEnter={[Function]}
           onMouseLeave={[Function]}
-          style={
-            Object {
-              "paddingBottom": "4px",
-              "paddingLeft": "14px",
-              "paddingTop": "4px",
-            }
-          }
+          role="menuitem"
+          style={Object {}}
         >
           <div
-            onClick={[Function]}
+            className="ant-col ant-col-18"
+            style={
+              Object {
+                "overflow": "hidden",
+              }
+            }
           >
-            node2
+            <span
+              onMouseEnter={[Function]}
+              onMouseLeave={[Function]}
+            >
+              node2
+            </span>
           </div>
         </li>
         <li
-          className="ant-list-item Node-List-Item"
+          className="ant-menu-item"
+          onClick={[Function]}
           onMouseEnter={[Function]}
           onMouseLeave={[Function]}
-          style={
-            Object {
-              "paddingBottom": "4px",
-              "paddingLeft": "14px",
-              "paddingTop": "4px",
-            }
-          }
+          role="menuitem"
+          style={Object {}}
         >
           <div
-            onClick={[Function]}
+            className="ant-col ant-col-18"
+            style={
+              Object {
+                "overflow": "hidden",
+              }
+            }
           >
-            node3
+            <span
+              onMouseEnter={[Function]}
+              onMouseLeave={[Function]}
+            >
+              node3
+            </span>
           </div>
         </li>
       </ul>
-    </div>
-  </div>
+    </li>
+  </ul>
 </div>
 `;
