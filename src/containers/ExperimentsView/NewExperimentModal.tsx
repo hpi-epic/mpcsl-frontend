@@ -35,7 +35,7 @@ const createInputElement = (
   })(
     <Input
       disabled={editDisabled}
-      placeholder="param1=[VALUE1];param2=[VALUE];..."
+      placeholder="param1=[VALUE1],param2=[VALUE],..."
     ></Input>
   );
 };
