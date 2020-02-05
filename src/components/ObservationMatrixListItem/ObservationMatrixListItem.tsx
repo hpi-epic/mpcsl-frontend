@@ -110,7 +110,14 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
       <div className={styles.ObservationMatrixListItemContent}>
         <Descriptions size="small" column={1}>
           <Descriptions.Item className={styles.Description} label="Description">
-            <p style={{ height: 50, overflow: 'auto', width: 250 }}>
+            <p
+              style={{
+                height: 64,
+                overflow: 'hidden',
+                width: 250,
+                overflowWrap: 'break-word'
+              }}
+            >
               {description}
             </p>
           </Descriptions.Item>

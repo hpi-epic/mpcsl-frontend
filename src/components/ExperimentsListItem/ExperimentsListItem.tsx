@@ -295,7 +295,14 @@ const ExperimentsListItem = (
               span={2}
               label="Description"
             >
-              <p style={{ height: 80, overflow: 'auto', width: 250 }}>
+              <p
+                style={{
+                  height: 84,
+                  overflow: 'hidden',
+                  width: 250,
+                  overflowWrap: 'break-word'
+                }}
+              >
                 {description}
               </p>
             </Descriptions.Item>
