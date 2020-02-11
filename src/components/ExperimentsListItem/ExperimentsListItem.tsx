@@ -207,24 +207,24 @@ const ExperimentsListItem = (props: {
   onView: (experimentId: number) => void;
   onDuplicate: (experimentId: number) => void;
 }) => {
-  const [nodeSelectModal, setNodeSelectModal] = useState(false);
-  const [algorithm, setAlgorithm] = useState<undefined | IAlgorithm>();
-  const [jobCount, setJobCount] = useState<undefined | number>();
-  const history = useHistory();
-  useEffect(() => {
-    getAlgorithm(props.experiment.algorithm_id).then(setAlgorithm);
-  }, [props.experiment.algorithm_id]);
-  useEffect(() => {
-    getJobsForExperiment(props.experiment.id).then(jobs =>
-      setJobCount(jobs.length)
-    );
-  }, [props.experiment.id, props.experiment.last_job]);
   const {
+    id,
+    algorithm_id,
     name,
     description,
     last_job,
     execution_time_statistics
   } = props.experiment;
+  const [nodeSelectModal, setNodeSelectModal] = useState(false);
+  const [algorithm, setAlgorithm] = useState<undefined | IAlgorithm>();
+  const [jobCount, setJobCount] = useState<undefined | number>();
+  const history = useHistory();
+  useEffect(() => {
+    getAlgorithm(algorithm_id).then(setAlgorithm);
+  }, [algorithm_id]);
+  useEffect(() => {
+    getJobsForExperiment(id).then(jobs => setJobCount(jobs.length));
+  }, [id, last_job]);
   const statusText = last_job ? last_job.status : 'not started';
   return (
     <>
