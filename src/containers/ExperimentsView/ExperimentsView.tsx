@@ -82,7 +82,7 @@ const ExperimentsView = ({
       {experiments.map(experiment => (
         <ExperimentsListItem
           key={experiment.id}
-          {...experiment}
+          experiment={experiment}
           onView={id => {
             setEditDisabled(true);
             setLastExperiment(experiments.find(exp => exp.id === id));
