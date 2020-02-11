@@ -218,7 +218,7 @@ const ExperimentsListItem = (props: {
     getJobsForExperiment(props.experiment.id).then(jobs =>
       setJobCount(jobs.length)
     );
-  }, [props.experiment.id]);
+  }, [props.experiment.id, props.experiment.last_job]);
   const {
     name,
     description,
@@ -325,8 +325,8 @@ const ExperimentsListItem = (props: {
               </>
             ) : null}
             {last_job ? (
-              <Descriptions.Item span={2} label="Last Job run at">
-                {new Date(last_job.start_time).toLocaleString()}
+              <Descriptions.Item span={2} label="Last Job run">
+                {new Date(last_job.start_time).toLocaleString('de-DE')}
               </Descriptions.Item>
             ) : null}
             {last_job ? (
