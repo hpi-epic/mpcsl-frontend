@@ -20,16 +20,7 @@ const Endpoints = {
   nodeDistribution: (nodeID: string) => `${baseApiUrl}/node/${nodeID}/marginal`,
   conditionalNodeDistribution: (nodeID: string) =>
     `${baseApiUrl}/node/${nodeID}/conditional`,
-  interventionalNodeDistribution: (
-    causeNodeID: string,
-    effectNodeID: string,
-    factorNodeIDs: string[],
-    causeCondition: string
-  ) =>
-    `${baseApiUrl}/intervention?cause_node_id=${causeNodeID}` +
-    `&effect_node_id=${effectNodeID}&factor_node_ids=${factorNodeIDs.join(
-      ','
-    )}&cause_condition=${causeCondition}`,
+  interventionalNodeDistribution: () => `${baseApiUrl}/intervention`,
   resultNodes: (resultID: number) => `${baseApiUrl}/result/${resultID}/nodes`,
   resultComparison: (resultOneId: number, resultTwoId: number) =>
     `${baseApiUrl}/result/${resultOneId}/compare/${resultTwoId}`,

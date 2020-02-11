@@ -418,30 +418,25 @@ class GraphCausalExplorer extends React.Component<
 
       if (this.state.isIntervention) {
         if (this.state.causalNode.selection) {
-          const condition = Object.keys(
-            this.state.causalNode.selection as {}
-          ).map((bin: string) => bin);
+          const distributions: { [nodeID: string]: ISelectionAPITypes } = {};
+          const condition = getApiCondition(this.state.causalNode);
 
-          if (condition.length !== 1) {
-            message.error('Select only one category');
-          } else {
-            const confounders = await getConfounders(
-              this.state.causalNode.nodeID
-            );
-            distribution = await getInterventionNodeDataDistribution(
-              this.state.causalNode.nodeID,
-              this.state.effectNode.nodeID,
-              confounders.confounders[0],
-              condition[0]
-            );
-            const effectNode = this.state.effectNode;
-            this.setState({
-              effectNode: {
-                ...effectNode,
-                distribution
-              }
-            });
-          }
+          const confounders = await getConfounders(
+            this.state.causalNode.nodeID
+          );
+          distribution = await getInterventionNodeDataDistribution(
+            +this.state.causalNode.nodeID,
+            +this.state.effectNode.nodeID,
+            confounders.confounders[0].map(x=>+x),
+            condition
+          );
+          const effectNode = this.state.effectNode;
+          this.setState({
+            effectNode: {
+              ...effectNode,
+              distribution
+            }
+          });
         } else {
           message.info('Please select a category');
         }
