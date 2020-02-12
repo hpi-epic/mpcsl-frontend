@@ -27,9 +27,11 @@ import { FormComponentProps } from 'antd/lib/form';
 const { Option } = Select;
 const { confirm } = Modal;
 
-const ExperimentDropdown = (
-  props: IExperiment & { onView: () => void; onDuplicate: () => void }
-) => {
+const ExperimentDropdown = (props: {
+  experiment: IExperiment;
+  onView: () => void;
+  onDuplicate: () => void;
+}) => {
   const history = useHistory();
   return (
     <Dropdown
@@ -41,7 +43,7 @@ const ExperimentDropdown = (
               onClick={e => {
                 e.stopPropagation();
                 history.push(
-                  `/${props.dataset_id}/experiments/${props.id}/jobs`
+                  `/${props.experiment.dataset_id}/experiments/${props.experiment.id}/jobs`
                 );
               }}
               type="primary"
@@ -81,9 +83,9 @@ const ExperimentDropdown = (
                 e.stopPropagation();
                 confirm({
                   title: 'Do you want to delete the following Experiment?',
-                  content: `${props.name} - ${props.description}`,
+                  content: `${props.experiment.name} - ${props.experiment.description}`,
                   onOk() {
-                    deleteExperiment(props).catch();
+                    deleteExperiment(props.experiment).catch();
                   }
                 });
               }}
@@ -125,7 +127,7 @@ const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = pro
   }, [props.experiment]);
   return (
     <Modal
-      title="Select Machine to Start Job"
+      title="Set Execution Parameters"
       visible={props.visible}
       confirmLoading={needsGPU === undefined}
       onOk={() => {
@@ -155,7 +157,7 @@ const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = pro
       onCancel={() => props.onClose()}
     >
       <Form layout="vertical">
-        <Form.Item label="Set Execution Parameters">
+        <Form.Item label="Select Machine to Start Job">
           {getFieldDecorator('node', { initialValue: '_none' })(
             <Select>
               <Option value="_none" style={{ fontStyle: 'italic' }}>
@@ -200,30 +202,36 @@ const RunExperimentModalForm = Form.create<RunExperimentModalProps>()(
   RunExperimentModal
 );
 
-const ExperimentsListItem = (
-  props: IExperiment & {
-    onView: (experimentId: number) => void;
-    onDuplicate: (experimentId: number) => void;
-  }
-) => {
+const ExperimentsListItem = (props: {
+  experiment: IExperiment;
+  onView: (experimentId: number) => void;
+  onDuplicate: (experimentId: number) => void;
+}) => {
+  const {
+    id,
+    algorithm_id,
+    name,
+    description,
+    last_job,
+    execution_time_statistics
+  } = props.experiment;
   const [nodeSelectModal, setNodeSelectModal] = useState(false);
   const [algorithm, setAlgorithm] = useState<undefined | IAlgorithm>();
   const [jobCount, setJobCount] = useState<undefined | number>();
   const history = useHistory();
   useEffect(() => {
-    getAlgorithm(props.algorithm_id).then(setAlgorithm);
-  }, [props.algorithm_id]);
+    getAlgorithm(algorithm_id).then(setAlgorithm);
+  }, [algorithm_id]);
   useEffect(() => {
-    getJobsForExperiment(props.id).then(jobs => setJobCount(jobs.length));
-  }, [props.id]);
-  const { name, description, last_job, execution_time_statistics } = props;
+    getJobsForExperiment(id).then(jobs => setJobCount(jobs.length));
+  }, [id, last_job]);
   const statusText = last_job ? last_job.status : 'not started';
   return (
     <>
       <RunExperimentModalForm
         onClose={() => setNodeSelectModal(false)}
         visible={nodeSelectModal}
-        experiment={props}
+        experiment={props.experiment}
       />
       <Card
         title={
@@ -265,7 +273,7 @@ const ExperimentsListItem = (
                 e.stopPropagation();
                 if (last_job) {
                   history.push(
-                    `/${props.dataset_id}/experiments/${props.id}/compare`
+                    `/${props.experiment.dataset_id}/experiments/${props.experiment.id}/compare`
                   );
                 }
               }}
@@ -273,17 +281,17 @@ const ExperimentsListItem = (
           </Tooltip>,
           <ExperimentDropdown
             key="dropdown"
-            {...props}
-            onView={() => props.onView(props.id)}
-            onDuplicate={() => props.onDuplicate(props.id)}
+            experiment={props.experiment}
+            onView={() => props.onView(props.experiment.id)}
+            onDuplicate={() => props.onDuplicate(props.experiment.id)}
           />
         ]}
         hoverable
         className={styles.ListItem}
         onClick={() => {
-          if (props.last_job && props.last_job?.result) {
+          if (last_job && last_job?.result) {
             history.push(
-              `/${props.dataset_id}/experiments/${props.id}/jobs/${props.last_job?.result?.id}`
+              `/${props.experiment.dataset_id}/experiments/${props.experiment.id}/jobs/${last_job?.result?.id}`
             );
           }
         }}
@@ -316,12 +324,12 @@ const ExperimentsListItem = (
                 </Descriptions.Item>
               </>
             ) : null}
-            {props.last_job ? (
-              <Descriptions.Item span={2} label="Last Job run at">
-                {new Date(props.last_job.start_time).toLocaleString()}
+            {last_job ? (
+              <Descriptions.Item span={2} label="Last Job run">
+                {new Date(last_job.start_time).toLocaleString('de-DE')}
               </Descriptions.Item>
             ) : null}
-            {props.last_job ? (
+            {last_job ? (
               <Descriptions.Item label="Job Count">
                 {jobCount ? jobCount : 'Loading...'}
               </Descriptions.Item>

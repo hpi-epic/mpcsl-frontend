@@ -131,7 +131,7 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
                 {metadata.observations}
               </Descriptions.Item>
               <Descriptions.Item label="Time created">
-                {new Date(metadata.time_created * 1000).toLocaleString()}
+                {new Date(metadata.time_created * 1000).toLocaleString('de-DE')}
               </Descriptions.Item>
             </>
           ) : null}

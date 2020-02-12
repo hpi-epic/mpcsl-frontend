@@ -9,11 +9,13 @@ describe('<ListElementExperiment />', () => {
       .create(
         <MemoryRouter>
           <ExperimentsListItem
-            dataset_id={0}
-            id={0}
-            name="test"
-            algorithm_id={0}
-            parameters={{}}
+            experiment={{
+              dataset_id: 0,
+              id: 0,
+              name: 'test',
+              algorithm_id: 0,
+              parameters: {}
+            }}
             onDuplicate={() => undefined}
             onView={() => undefined}
           />
