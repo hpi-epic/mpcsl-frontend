@@ -127,7 +127,7 @@ const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = pro
   }, [props.experiment]);
   return (
     <Modal
-      title="Select Machine to Start Job"
+      title="Set Execution Parameters"
       visible={props.visible}
       confirmLoading={needsGPU === undefined}
       onOk={() => {
@@ -157,7 +157,7 @@ const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = pro
       onCancel={() => props.onClose()}
     >
       <Form layout="vertical">
-        <Form.Item label="Set Execution Parameters">
+        <Form.Item label="Select Machine to Start Job">
           {getFieldDecorator('node', { initialValue: '_none' })(
             <Select>
               <Option value="_none" style={{ fontStyle: 'italic' }}>
