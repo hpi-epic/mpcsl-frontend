@@ -229,7 +229,7 @@ const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = pr
         }
       }
     }
-  }, [props.experiment, algorithms]);
+  }, [props.experiment, algorithms, props.form]);
 
   const ExperimentNameEl = props.form.getFieldDecorator('name', {
     initialValue: props.experiment ? props.experiment.name : undefined,
