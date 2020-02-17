@@ -251,7 +251,7 @@ class GraphCausalExplorer extends React.Component<
             ) : null}
           </h3>
           <div>
-            Intervention <i>(only categorical data)</i>:
+            Intervention:
             <Checkbox onChange={this.toggleIntervention} />
           </div>
           <div style={{ flexGrow: 1 }}>
