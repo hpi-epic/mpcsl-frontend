@@ -418,7 +418,6 @@ class GraphCausalExplorer extends React.Component<
 
       if (this.state.isIntervention) {
         if (this.state.causalNode.selection) {
-          const distributions: { [nodeID: string]: ISelectionAPITypes } = {};
           const condition = getApiCondition(this.state.causalNode);
 
           const confounders = await getConfounders(

@@ -408,12 +408,11 @@ export function getInterventionNodeDataDistribution(
 ): Promise<IAPIDistribution> {
   return new Promise<IAPIDistribution>((resolve, reject) => {
     axios
-      .post(
-        Endpoints.interventionalNodeDistribution(), {
-          cause_node_id: causeNodeID,
-          effect_node_id: effectNodeID,
-          factor_node_ids: factorNodeIDs,
-          cause_condition: causeCondition
+      .post(Endpoints.interventionalNodeDistribution(), {
+        cause_node_id: causeNodeID,
+        effect_node_id: effectNodeID,
+        factor_node_ids: factorNodeIDs,
+        cause_condition: causeCondition
       })
       .then(response => {
         resolve(response.data);
