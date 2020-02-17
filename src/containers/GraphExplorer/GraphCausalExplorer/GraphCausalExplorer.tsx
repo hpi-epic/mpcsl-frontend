@@ -426,7 +426,7 @@ class GraphCausalExplorer extends React.Component<
           distribution = await getInterventionNodeDataDistribution(
             +this.state.causalNode.nodeID,
             +this.state.effectNode.nodeID,
-            confounders.confounders[0].map(x=>+x),
+            confounders.confounders[0].map(x => +x),
             condition
           );
           const effectNode = this.state.effectNode;
