@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import {
   getExperimentsForDataset,
-  subscribeToJobStatusChanges,
   subscribeToExperimentChanges
 } from '../../actions/apiRequests';
 import { IExperiment } from '../../types';
@@ -51,7 +50,7 @@ const ExperimentsView = ({
   const datasetId = parseInt(match.params.datasetId, 10);
   const [experiments, setExperiments] = useState<undefined | IExperiment[]>();
   useEffect(() => {
-    let subs: Subscription[] | undefined;
+    let sub: Subscription | undefined;
     if (datasetId) {
       const fetchExperiments = () => {
         getExperimentsForDataset(datasetId)
@@ -59,12 +58,9 @@ const ExperimentsView = ({
           .catch();
       };
       fetchExperiments();
-      subs = [
-        subscribeToJobStatusChanges(fetchExperiments),
-        subscribeToExperimentChanges(fetchExperiments)
-      ];
+      sub = subscribeToExperimentChanges(fetchExperiments);
     }
-    return () => subs?.forEach(sub => sub.unsubscribe());
+    return () => sub?.unsubscribe();
   }, [datasetId]);
   if (!datasetId) {
     return <h1>404</h1>;
@@ -82,7 +78,7 @@ const ExperimentsView = ({
       {experiments.map(experiment => (
         <ExperimentsListItem
           key={experiment.id}
-          {...experiment}
+          experiment={experiment}
           onView={id => {
             setEditDisabled(true);
             setLastExperiment(experiments.find(exp => exp.id === id));

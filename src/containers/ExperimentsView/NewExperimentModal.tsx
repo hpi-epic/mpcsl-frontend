@@ -212,6 +212,25 @@ const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = pr
       setAlgParams({});
     }
   }, [props.experiment]);
+
+  useEffect(() => {
+    if (props.experiment && props.experiment.algorithm_id && algorithms) {
+      const expAlgo = algorithms.find(
+        algo => algo.id === props.experiment?.algorithm_id
+      );
+      if (expAlgo) {
+        if (props.form.getFieldValue('package_id') !== expAlgo.package) {
+          props.form.setFieldsValue({ package_id: expAlgo.package });
+          setSelectedPackage(expAlgo.package);
+        }
+        if (props.form.getFieldValue('function_id') !== expAlgo.function) {
+          props.form.setFieldsValue({ function_id: expAlgo.function });
+          props.form.validateFields(['function_id']);
+        }
+      }
+    }
+  }, [props.experiment, algorithms, props.form]);
+
   const ExperimentNameEl = props.form.getFieldDecorator('name', {
     initialValue: props.experiment ? props.experiment.name : undefined,
     rules: [{ required: true, message: 'Enter a Experiment Name' }]

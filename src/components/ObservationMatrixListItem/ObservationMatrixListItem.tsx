@@ -89,14 +89,15 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
             type="info-circle"
           />
         </Tooltip>,
-        <Tooltip key="delete" title="Delete Experiment">
+        <Tooltip key="delete" title="Delete Observation Matrix">
           <Icon
             style={{ fontSize: 20 }}
             type="delete"
             onClick={e => {
               e?.stopPropagation();
               confirm({
-                title: 'Do you want to delete the following Dataset?',
+                title:
+                  'Do you want to delete the following Observation Matrix?',
                 content: `${props.name} - ${props.description}`,
                 onOk() {
                   deleteObservationMatrix(props).catch();
@@ -130,7 +131,7 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
                 {metadata.observations}
               </Descriptions.Item>
               <Descriptions.Item label="Time created">
-                {new Date(metadata.time_created * 1000).toLocaleString()}
+                {new Date(metadata.time_created * 1000).toLocaleString('de-DE')}
               </Descriptions.Item>
             </>
           ) : null}
