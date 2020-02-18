@@ -401,21 +401,19 @@ export function getConditionalNodeDataDistribution(
 }
 
 export function getInterventionNodeDataDistribution(
-  causeNodeID: string,
-  effectNodeID: string,
-  factorNodeIDs: string[],
-  causeCondition: string
+  causeNodeID: number,
+  effectNodeID: number,
+  factorNodeIDs: number[],
+  causeCondition: any
 ): Promise<IAPIDistribution> {
   return new Promise<IAPIDistribution>((resolve, reject) => {
     axios
-      .get(
-        Endpoints.interventionalNodeDistribution(
-          causeNodeID,
-          effectNodeID,
-          factorNodeIDs,
-          causeCondition
-        )
-      )
+      .post(Endpoints.interventionalNodeDistribution(), {
+        cause_node_id: causeNodeID,
+        effect_node_id: effectNodeID,
+        factor_node_ids: factorNodeIDs,
+        cause_condition: causeCondition
+      })
       .then(response => {
         resolve(response.data);
       })
@@ -431,11 +429,11 @@ export function getInterventionNodeDataDistribution(
 
 export function getConfounders(nodeID: string): Promise<IAPIConfounders> {
   return new Promise<IAPIConfounders>((resolve, reject) => {
-    const match = window.location.href.match(new RegExp('\\d*$'));
-    if (!match || !match[0]) {
+    const match = window.location.href.match(new RegExp('(\\d+)/exploration'));
+    if (!match || !match[1]) {
       throw Error();
     }
-    const resultID = match[0];
+    const resultID = match[1];
     axios
       .get(Endpoints.confounders(nodeID, resultID))
       .then(response => {
