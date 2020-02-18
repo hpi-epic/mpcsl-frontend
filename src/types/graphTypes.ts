@@ -15,7 +15,7 @@ export interface ID3GraphNode {
   vx?: number;
   vy?: number;
   isContext?: boolean;
-  contextOf?: { [node: string]: boolean };
+  contextOf?: string[];
 }
 
 export interface ID3GraphLink {

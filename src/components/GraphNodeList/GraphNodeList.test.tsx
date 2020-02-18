@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import GraphNodeList from './GraphNodeList';
+import { GraphNodeList } from './GraphNodeList';
 
 describe('<GraphNodeList />', () => {
   it('renders correctly', () => {

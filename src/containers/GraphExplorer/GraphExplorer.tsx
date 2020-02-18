@@ -3,26 +3,12 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import GraphSelection from './GraphSelection/GraphSelection';
 import GraphAnnotate from './GraphAnnotate/GraphAnnotate';
 import GraphCausalExplorer from './GraphCausalExplorer/GraphCausalExplorer';
-import { ThunkDispatch } from 'redux-thunk';
-import * as actions from '../../actions/graphExplorer';
-import { IState } from '../../store';
-import { connect } from 'react-redux';
+import { GraphSingleton } from '../../graph/graph';
 
-const mapDispatchToProps = (
-  dispatch: ThunkDispatch<IState, void, actions.GraphExplorerAction>
-) => {
-  return {
-    reset: () => dispatch(actions.reset())
-  };
-};
-
-const GraphExplorer = (props: ReturnType<typeof mapDispatchToProps>) => {
-  const { reset } = props;
+const GraphExplorer = () => {
   useEffect(() => {
-    return (): void => {
-      reset();
-    };
-  }, [reset]);
+    GraphSingleton.resetGraph();
+  }, []);
   return (
     <Switch>
       <Route
@@ -51,6 +37,4 @@ const GraphExplorer = (props: ReturnType<typeof mapDispatchToProps>) => {
   );
 };
 
-const GraphExplorerRedux = connect(null, mapDispatchToProps)(GraphExplorer);
-
-export { GraphExplorerRedux };
+export { GraphExplorer };
