@@ -276,7 +276,8 @@ export function runExperiment(
   node?: string,
   runs?: number,
   parallel?: boolean,
-  gpus?: number
+  gpus?: number,
+  enforce_cpus?: boolean
 ): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     axios
@@ -284,7 +285,8 @@ export function runExperiment(
         node,
         runs,
         parallel,
-        gpus
+        gpus,
+        enforce_cpus
       })
       .then(() => {
         resolve();
