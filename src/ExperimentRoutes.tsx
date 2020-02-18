@@ -3,7 +3,7 @@ import { Switch, Route, RouteComponentProps } from 'react-router-dom';
 import ExperimentDetails from './containers/ExperimentDetails/ExperimentDetails';
 import { ExperimentsView } from './containers/ExperimentsView/ExperimentsView';
 import { ExperimentComparison } from './containers/ExperimentComparison/ExperimentComparison';
-import GraphExplorer from './containers/GraphExplorer';
+import { GraphExplorerRedux } from './containers/GraphExplorer/GraphExplorer';
 
 const ExperimentRoutes = ({
   match
@@ -12,7 +12,7 @@ const ExperimentRoutes = ({
     <Switch>
       <Route
         from={`${match?.path}/:experimentId/jobs/:resultId`}
-        component={GraphExplorer}
+        component={GraphExplorerRedux}
       />
       <Route
         path={`${match?.path}/:experimentId/jobs`}

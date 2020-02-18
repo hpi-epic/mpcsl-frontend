@@ -76,6 +76,16 @@ export interface INewLayout {
   type: constants.NEW_GRAPH_LAYOUT;
 }
 
+export interface IResetGraph {
+  type: constants.RESET;
+}
+
+export function reset(): IResetGraph {
+  return {
+    type: constants.RESET
+  };
+}
+
 export function newLayout(): INewLayout {
   return {
     type: constants.NEW_GRAPH_LAYOUT
@@ -97,4 +107,5 @@ export type GraphExplorerAction =
   | IAddNode
   | INewLayout
   | IRemoveNode
-  | IToggleFreezeLayout;
+  | IToggleFreezeLayout
+  | IResetGraph;

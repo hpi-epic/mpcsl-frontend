@@ -4,7 +4,8 @@ import {
   NEW_GRAPH_LAYOUT,
   TOGGLE_FREEZE_LAYOUT,
   REMOVE_NODE,
-  ADD_AVAILABLE_NODES
+  ADD_AVAILABLE_NODES,
+  RESET
 } from '../constants/actions';
 import { StoreState } from '../types';
 import { ID3GraphNode, IAPIGraphNode } from '../types/graphTypes';
@@ -73,6 +74,12 @@ function graphExplorer(
         ...state,
         selectedGraph: graph,
         nodes: state.nodes.filter(node => node.id !== action.node.id)
+      };
+    }
+    case RESET: {
+      return {
+        ...initialState,
+        selectedGraph: new Graph()
       };
     }
     default:
