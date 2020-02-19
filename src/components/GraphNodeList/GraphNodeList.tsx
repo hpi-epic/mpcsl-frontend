@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 import { filter } from 'rxjs/operators';
 
 const GraphExplorerSelect = () => {
-  const params = useParams<{ resultId: string }>();
+  const { resultId } = useParams<{ resultId: string }>();
   const [graphSearch, setGraphSearch] = useState<
     {
       value: number;
@@ -30,7 +30,7 @@ const GraphExplorerSelect = () => {
             .filter(
               aNode =>
                 !GraphSingleton.nodes.some(
-                  node => node.id === aNode.id.toString()
+                  node => !node.isContext && node.id === aNode.id.toString()
                 )
             )
             .map(node => ({
@@ -61,7 +61,7 @@ const GraphExplorerSelect = () => {
           key="a"
           onChange={option =>
             option && !isArray(option) && option.value
-              ? GraphSingleton.addNode(option.value, parseInt(params.resultId))
+              ? GraphSingleton.addNode(option.value, parseInt(resultId))
               : null
           }
           options={
@@ -88,7 +88,7 @@ const GraphExplorerSelect = () => {
           onConfirm={() => {
             GraphSingleton.addNodes(
               graphSearch.map(node => node.value),
-              parseInt(params.resultId)
+              parseInt(resultId)
             );
           }}
         >
@@ -120,21 +120,23 @@ const GraphNodeList = (props: IPropsGraphNodeList) => {
       {props.isSelectionMode ? <GraphExplorerSelect /> : null}
       <Menu theme="dark" selectable={false}>
         <Menu.ItemGroup title="Focused Nodes:">
-          {props.nodes.map(node => (
-            <Menu.Item key={node.id}>
-              <Col span={18} style={{ overflow: 'hidden' }}>
-                <Tooltip title={node.label}>{node.label}</Tooltip>
-              </Col>
-              {props.isSelectionMode ? (
-                <Col span={4} offset={2}>
-                  <Icon
-                    type="close"
-                    onClick={() => props.onRemoveNode!(node)}
-                  />
+          {props.nodes
+            .filter(node => !node.isContext)
+            .map(node => (
+              <Menu.Item key={node.id}>
+                <Col span={18} style={{ overflow: 'hidden' }}>
+                  <Tooltip title={node.label}>{node.label}</Tooltip>
                 </Col>
-              ) : null}
-            </Menu.Item>
-          ))}
+                {props.isSelectionMode ? (
+                  <Col span={4} offset={2}>
+                    <Icon
+                      type="close"
+                      onClick={() => props.onRemoveNode!(node)}
+                    />
+                  </Col>
+                ) : null}
+              </Menu.Item>
+            ))}
         </Menu.ItemGroup>
       </Menu>
     </div>

@@ -522,7 +522,7 @@ const ConnectedGraphCausalExplorer = () => {
           setAvailableNodes(GraphSingleton.availableNodes);
           break;
         case GraphChanges.NodesChanged:
-          setNodes(GraphSingleton.nodes);
+          setNodes(GraphSingleton.nodes.filter(node => !node.isContext));
           break;
       }
     });

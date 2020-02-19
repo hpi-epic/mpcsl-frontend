@@ -8,7 +8,7 @@ describe('Graph', () => {
 
   it('addLink() adds a link correctly', () => {
     GraphSingleton.resetGraph();
-    GraphSingleton.addLink(1, 2);
+    (GraphSingleton as any).addLink(1, 2);
     expect(GraphSingleton.links).toEqual([{ source: '1', target: '2' }]);
   });
 
@@ -77,7 +77,6 @@ describe('Graph', () => {
     });
 
     expect(GraphSingleton.nodes).toEqual([
-      { id: '1', label: 'a', isContext: true, contextOf: ['2'] },
       { id: '3', label: 'c', isContext: false }
     ]);
   });

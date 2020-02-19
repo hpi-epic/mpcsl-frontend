@@ -7,6 +7,7 @@ import {
 } from '../types/graphTypes';
 import { Subject } from 'rxjs';
 import { getNodeContext, getResultNodes } from '../actions/apiRequests';
+import { isString } from 'util';
 
 const apiNodesToD3Nodes = (nodes: IAPIGraphNode[]): ID3GraphNode[] =>
   nodes.map(node => ({
@@ -38,12 +39,11 @@ class Graph implements ID3Graph {
   public subscribeToGraphChanges = (callback: (event: GraphChanges) => void) =>
     this.subject.subscribe(callback);
 
-  public addLink = (sourceID: number, targetID: number) => {
-    this.links = this.links.concat({
+  private addLink = (sourceID: number, targetID: number) => {
+    this.links.push({
       source: sourceID.toString(),
       target: targetID.toString()
     });
-    this.subject.next();
   };
 
   public addNode = async (
@@ -59,16 +59,16 @@ class Graph implements ID3Graph {
     }
     this.links = this.links.slice();
     this.nodes = this.nodes.slice();
-    this.subject.next(GraphChanges.LinksChanged);
     this.subject.next(GraphChanges.NodesChanged);
+    this.subject.next(GraphChanges.LinksChanged);
   };
 
   public addNodes = async (nodeIDs: number[], resultID: number) => {
     await Promise.all(nodeIDs.map(id => this.addNode(id, resultID, false)));
     this.links = this.links.slice();
     this.nodes = this.nodes.slice();
-    this.subject.next(GraphChanges.LinksChanged);
     this.subject.next(GraphChanges.NodesChanged);
+    this.subject.next(GraphChanges.LinksChanged);
   };
 
   private addUniqueAPILinks = (links: IAPIGraphEdges[]) => {
@@ -80,8 +80,10 @@ class Graph implements ID3Graph {
       if (
         !this.links.some(
           oldLink =>
-            oldLink.source === convLink.from_node &&
-            oldLink.target === convLink.to_node
+            (isString(oldLink.source) ? oldLink.source : oldLink.source.id) ===
+              convLink.from_node &&
+            (isString(oldLink.target) ? oldLink.target : oldLink.target.id) ===
+              convLink.to_node
         )
       ) {
         this.addLink(link.from_node, link.to_node);
@@ -124,7 +126,13 @@ class Graph implements ID3Graph {
         this.nodes.push(d3Node);
       } else if (contextNodeAlreadyIn.id !== addToFocusNode.id.toString()) {
         if (contextNodeAlreadyIn.contextOf) {
-          contextNodeAlreadyIn.contextOf.push(addToFocusNode.id.toString());
+          if (
+            !contextNodeAlreadyIn.contextOf.includes(
+              addToFocusNode.id.toString()
+            )
+          ) {
+            contextNodeAlreadyIn.contextOf.push(addToFocusNode.id.toString());
+          }
         } else {
           contextNodeAlreadyIn.contextOf = [addToFocusNode.id.toString()];
         }
@@ -135,8 +143,8 @@ class Graph implements ID3Graph {
   public resetGraph = () => {
     this.nodes = [];
     this.links = [];
-    this.subject.next(GraphChanges.LinksChanged);
     this.subject.next(GraphChanges.NodesChanged);
+    this.subject.next(GraphChanges.LinksChanged);
   };
 
   public resetLayout = () => {
@@ -162,12 +170,14 @@ class Graph implements ID3Graph {
   };
 
   public removeNodeFromFocus = (node: ID3GraphNode) => {
-    let links = this.links;
     const nodes: ID3GraphNode[] = [];
     for (const existingNode of this.nodes) {
       if (existingNode.id !== node.id) {
         // delete node in contextOf for all other nodes
-        if (existingNode.contextOf && node.id in existingNode.contextOf) {
+        if (
+          existingNode.contextOf &&
+          existingNode.contextOf.includes(node.id)
+        ) {
           existingNode.contextOf = existingNode.contextOf.filter(
             exNodeID => exNodeID !== node.id
           );
@@ -177,29 +187,35 @@ class Graph implements ID3Graph {
         } else {
           nodes.push(existingNode);
         }
-      } else if (!existingNode.isContext && existingNode.contextOf) {
+      } else if (
+        !existingNode.isContext &&
+        existingNode.contextOf &&
+        existingNode.contextOf.length > 0
+      ) {
         // keep node as context node if it is in context of other node(s)
         existingNode.isContext = true;
         nodes.push(existingNode);
       }
     }
 
-    links = links.filter(link => {
+    const links = this.links.filter(link => {
+      const source = isString(link.source) ? link.source : link.source.id;
+      const target = isString(link.target) ? link.target : link.target.id;
       // only keep links outgoing/incoming to this node that connect to focused nodes
       if (
         node.contextOf &&
         node.contextOf.length < 1 &&
-        (link.source === node.id || link.target === node.id)
+        (source === node.id || target === node.id)
       ) {
         return false;
       } else if (
-        link.source === node.id &&
-        this.nodes.find(exNode => link.target === exNode.id)?.isContext
+        source === node.id &&
+        this.nodes.find(exNode => target === exNode.id)?.isContext
       ) {
         return false;
       } else if (
-        link.target === node.id &&
-        this.nodes.find(exNode => link.source === exNode.id)?.isContext
+        target === node.id &&
+        this.nodes.find(exNode => source === exNode.id)?.isContext
       ) {
         return false;
       } else {
@@ -209,8 +225,8 @@ class Graph implements ID3Graph {
 
     this.nodes = nodes;
     this.links = links;
-    this.subject.next(GraphChanges.LinksChanged);
     this.subject.next(GraphChanges.NodesChanged);
+    this.subject.next(GraphChanges.LinksChanged);
   };
 }
 const GraphSingleton = new Graph();

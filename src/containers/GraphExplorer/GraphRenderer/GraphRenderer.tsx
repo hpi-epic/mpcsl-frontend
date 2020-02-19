@@ -3,6 +3,8 @@ import * as d3 from 'd3';
 import { Row, Col, Button, Checkbox } from 'antd';
 import { GraphSingleton, GraphChanges } from '../../../graph/graph';
 import { ID3GraphNode, ID3GraphLink } from '../../../types/graphTypes';
+import { useParams } from 'react-router-dom';
+import styles from './GraphRenderer.module.scss';
 
 /**
  * Settings for the D3 graph rendering
@@ -96,7 +98,7 @@ const enterNodes = (
     .text(d => {
       return d.label.length > 20 ? d.label.slice(0, 20) + '...' : d.label;
     })
-    .attr('class', 'Node-Label');
+    .attr('class', styles.NodeLabel);
 };
 
 const enterLinks = (selection: d3.Selection<any, any, any, any>) => {
@@ -136,7 +138,7 @@ const GraphMenu = () => {
       <Col span={3}>
         <Button onClick={GraphSingleton.resetLayout}>Re-Layout</Button>
       </Col>
-      <Col span={4} className="GraphRenderer-Menu">
+      <Col span={4} className={styles.GraphRendererMenu}>
         <Checkbox defaultChecked={true} onChange={GraphSingleton.toggleFreeze}>
           Freeze Layout
         </Checkbox>
@@ -161,6 +163,7 @@ const GraphRenderer = (props: IProps) => {
   const [d3Graph, setD3Graph] = useState<undefined | D3Graph>();
   const [d3SVG, setD3SVG] = useState<undefined | D3SVG>();
   const [tooltip, setTooltip] = useState<undefined | Tooltip>();
+  const { resultId } = useParams<{ resultId: string }>();
   useEffect(() => {
     if (d3Graph) {
       force.on('tick', () => updateGraph(d3Graph));
@@ -183,7 +186,7 @@ const GraphRenderer = (props: IProps) => {
         d3
           .select('body')
           .append('div')
-          .attr('class', 'tooltip')
+          .attr('class', styles.Tooltip)
           .style('opacity', 0)
       );
     } else {
@@ -204,7 +207,9 @@ const GraphRenderer = (props: IProps) => {
         enterNodes(
           nodes.enter(),
           d => {
-            if (!isSelectionMode && onNodeClick) {
+            if (isSelectionMode) {
+              GraphSingleton.addNode(parseInt(d.id), parseInt(resultId));
+            } else if (onNodeClick) {
               onNodeClick(d);
             }
           },
@@ -218,8 +223,7 @@ const GraphRenderer = (props: IProps) => {
         enterLinks(links.enter().insert('line', '.node'));
         links.exit().remove();
         updateLinks(links);
-      };
-      const updateForce = () => {
+        // Update and reapply forces
         force.nodes(GraphSingleton.nodes).force(
           'links',
           d3
@@ -231,23 +235,16 @@ const GraphRenderer = (props: IProps) => {
       };
       updateAllNodes();
       updateAllLinks();
-      updateForce();
       const sub = GraphSingleton.subscribeToGraphChanges(e => {
         if (e === GraphChanges.NodesChanged) {
           updateAllNodes();
         } else if (e === GraphChanges.LinksChanged) {
           updateAllLinks();
         }
-        if (
-          e === GraphChanges.LinksChanged ||
-          e === GraphChanges.NodesChanged
-        ) {
-          updateForce();
-        }
       });
       return () => sub.unsubscribe();
     }
-  }, [d3Graph, tooltip, isSelectionMode, onNodeClick]);
+  }, [d3Graph, tooltip, isSelectionMode, onNodeClick, resultId]);
   return (
     <div style={{ width: '100%', height: '100%' }}>
       {props.showMenu ? <GraphMenu /> : null}
