@@ -14,7 +14,7 @@ import {
   IComparisonStatistics,
   JobErrorCode,
   IObservationMatrixMetadata
-} from '../types';
+} from '../types/types';
 import Endpoints from '../constants/api';
 import { fromEvent, Observable } from 'rxjs';
 import io from 'socket.io-client';

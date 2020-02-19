@@ -1,4 +1,4 @@
-import { GraphExportFormat } from '../types';
+import { GraphExportFormat } from '../types/types';
 
 const baseApiUrl = '/api';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import DataDistributionPlot from './DataDistributionPlot';
-import { IAPIDistributionCategorical } from '../../types';
+import { IAPIDistributionCategorical } from '../../types/types';
 
 describe('<DataDistributinoPlot />', () => {
   it('works for categorical data', () => {

@@ -15,7 +15,7 @@ import {
   deleteObservationMatrix,
   getObservationMatrixMetadata
 } from '../../actions/apiRequests';
-import { IObservationMatrixMetadata } from '../../types';
+import { IObservationMatrixMetadata } from '../../types/types';
 
 const { confirm } = Modal;
 

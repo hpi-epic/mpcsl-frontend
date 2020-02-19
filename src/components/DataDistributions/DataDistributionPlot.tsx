@@ -1,6 +1,6 @@
 import React from 'react';
 import ContinousPlot from './ContinousPlot';
-import { IAPIDistribution } from '../../types';
+import { IAPIDistribution } from '../../types/types';
 import CategoricalPlot from './CategoricalPlot';
 
 interface IDataDistributionPlotProps {

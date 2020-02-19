@@ -8,7 +8,7 @@ export interface IExternalFactorNode extends ID3GraphNode {
   edited: boolean;
 }
 
-const ExternalFactorList = (props: {
+export const ExternalFactorList = (props: {
   externalFactorsNodes: IExternalFactorNode[];
   onExternalFactorClick: (nodeID: string) => void;
 }) => {
@@ -57,5 +57,3 @@ const ExternalFactorList = (props: {
     </div>
   );
 };
-
-export default ExternalFactorList;
