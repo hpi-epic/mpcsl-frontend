@@ -3,7 +3,7 @@ import { Switch, Route, RouteComponentProps } from 'react-router-dom';
 import ExperimentDetails from './containers/ExperimentDetails/ExperimentDetails';
 import { ExperimentsView } from './containers/ExperimentsView/ExperimentsView';
 import { ExperimentComparison } from './containers/ExperimentComparison/ExperimentComparison';
-import GraphExplorer from './containers/GraphExplorer';
+import { GraphExplorer } from './containers/GraphExplorer/GraphExplorer';
 
 const ExperimentRoutes = ({
   match

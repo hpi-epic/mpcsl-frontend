@@ -1,16 +1,5 @@
-import { IAPIGraphEdges, IAPIGraphNode, ID3GraphNode } from './graphTypes';
+import { IAPIGraphEdges, IAPIGraphNode } from './graphTypes';
 import { IndepenceTests } from '../constants/experiment';
-import Graph from '../utils/graph';
-
-export interface IStoreState {
-  resultID?: string; // ID of current graph
-  selectedGraph: Graph;
-  nodes: ID3GraphNode[];
-  doFreeze: boolean;
-  availableNodes: IAPIGraphNode[];
-}
-
-export type StoreState = IStoreState | undefined;
 
 export interface IIDClass {
   id: number;

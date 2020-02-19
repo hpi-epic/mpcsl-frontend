@@ -1,42 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Tooltip, Icon, Menu, Col, Popconfirm } from 'antd';
-import { ID3GraphNode, IAPIGraphNode } from '../../types/graphTypes';
-import { ThunkDispatch } from 'redux-thunk';
-import { connect } from 'react-redux';
-import * as actions from '../../actions/graphExplorer';
-import { IState } from '../../store';
+import { ID3GraphNode } from '../../types/graphTypes';
 import Select from 'react-virtualized-select';
 import { isArray } from 'util';
+import { GraphSingleton, GraphChanges } from '../../graph/graph';
+import { useParams } from 'react-router-dom';
+import { filter } from 'rxjs/operators';
 
-interface IPropsGraphNodeList {
-  nodes: ID3GraphNode[];
-  onNodeClick?: (node: ID3GraphNode) => void;
-  onRemoveNode?: (nodeID: ID3GraphNode) => void;
-  isSelectionMode: boolean;
-}
-
-interface IGraphExplorerProps {
-  onAddNode: (nodeID: number) => void;
-  availableNodes: IAPIGraphNode[];
-  nodes: ID3GraphNode[];
-}
-
-const mapStateToProps = (state: IState) => {
-  return {
-    availableNodes: state.graphExplorer!.availableNodes,
-    nodes: state.graphExplorer!.nodes
-  };
-};
-
-const mapDispatchToProps = (
-  dispatch: ThunkDispatch<IState, void, actions.GraphExplorerAction>
-) => {
-  return {
-    onAddNode: (nodeID: number) => dispatch(actions.addNode(nodeID))
-  };
-};
-
-const GraphExplorerSelect = (props: IGraphExplorerProps) => {
+const GraphExplorerSelect = () => {
+  const { resultId } = useParams<{ resultId: string }>();
   const [graphSearch, setGraphSearch] = useState<
     {
       value: number;
@@ -44,18 +16,34 @@ const GraphExplorerSelect = (props: IGraphExplorerProps) => {
     }[]
   >([]);
   useEffect(() => {
-    if (props.availableNodes) {
-      const result = props.availableNodes
-        .filter(node => !props.nodes.some(n => node.id.toString() === n.id))
-        .map(node => ({
-          value: node.id,
-          label: node.name
-        }));
-      setGraphSearch(result);
-    } else {
-      setGraphSearch([]);
-    }
-  }, [props.availableNodes, props.nodes]);
+    const sub = GraphSingleton.subject
+      .pipe(
+        filter(
+          e =>
+            e === GraphChanges.AvailableNodeChanged ||
+            e === GraphChanges.NodesChanged
+        )
+      )
+      .subscribe(() => {
+        if (GraphSingleton.availableNodes) {
+          const result = GraphSingleton.availableNodes
+            .filter(
+              aNode =>
+                !GraphSingleton.nodes.some(
+                  node => !node.isContext && node.id === aNode.id.toString()
+                )
+            )
+            .map(node => ({
+              value: node.id,
+              label: node.name
+            }));
+          setGraphSearch(result);
+        } else {
+          setGraphSearch([]);
+        }
+      });
+    return () => sub.unsubscribe();
+  }, []);
   return (
     <div
       style={{
@@ -73,7 +61,7 @@ const GraphExplorerSelect = (props: IGraphExplorerProps) => {
           key="a"
           onChange={option =>
             option && !isArray(option) && option.value
-              ? props.onAddNode(option.value)
+              ? GraphSingleton.addNode(option.value, parseInt(resultId))
               : null
           }
           options={
@@ -98,11 +86,10 @@ const GraphExplorerSelect = (props: IGraphExplorerProps) => {
         <Popconfirm
           title="Are you sure that you want to load all nodes?"
           onConfirm={() => {
-            for (const node of graphSearch) {
-              if (node) {
-                props.onAddNode(node.value);
-              }
-            }
+            GraphSingleton.addNodes(
+              graphSearch.map(node => node.value),
+              parseInt(resultId)
+            );
           }}
         >
           <Icon
@@ -115,12 +102,14 @@ const GraphExplorerSelect = (props: IGraphExplorerProps) => {
   );
 };
 
-const GraphExplorerSelectRedux = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GraphExplorerSelect);
+interface IPropsGraphNodeList {
+  nodes: ID3GraphNode[];
+  onNodeClick?: (node: ID3GraphNode) => void;
+  onRemoveNode?: (nodeID: ID3GraphNode) => void;
+  isSelectionMode: boolean;
+}
 
-function GraphNodeList(props: IPropsGraphNodeList) {
+const GraphNodeList = (props: IPropsGraphNodeList) => {
   return (
     <div
       style={{
@@ -128,28 +117,40 @@ function GraphNodeList(props: IPropsGraphNodeList) {
         height: '100%'
       }}
     >
-      {props.isSelectionMode ? <GraphExplorerSelectRedux /> : null}
+      {props.isSelectionMode ? <GraphExplorerSelect /> : null}
       <Menu theme="dark" selectable={false}>
         <Menu.ItemGroup title="Focused Nodes:">
-          {props.nodes.map(node => (
-            <Menu.Item key={node.id}>
-              <Col span={18} style={{ overflow: 'hidden' }}>
-                <Tooltip title={node.label}>{node.label}</Tooltip>
-              </Col>
-              {props.isSelectionMode ? (
-                <Col span={4} offset={2}>
-                  <Icon
-                    type="close"
-                    onClick={() => props.onRemoveNode!(node)}
-                  />
+          {props.nodes
+            .filter(node => !node.isContext)
+            .map(node => (
+              <Menu.Item key={node.id}>
+                <Col
+                  span={18}
+                  style={{ overflow: 'hidden' }}
+                  onClick={() =>
+                    props.onNodeClick ? props.onNodeClick(node) : undefined
+                  }
+                >
+                  <Tooltip title={node.label}>{node.label}</Tooltip>
                 </Col>
-              ) : null}
-            </Menu.Item>
-          ))}
+                {props.isSelectionMode ? (
+                  <Col span={4} offset={2}>
+                    <Icon
+                      type="close"
+                      onClick={() =>
+                        props.onRemoveNode
+                          ? props.onRemoveNode(node)
+                          : undefined
+                      }
+                    />
+                  </Col>
+                ) : null}
+              </Menu.Item>
+            ))}
         </Menu.ItemGroup>
       </Menu>
     </div>
   );
-}
+};
 
-export default GraphNodeList;
+export { GraphNodeList };

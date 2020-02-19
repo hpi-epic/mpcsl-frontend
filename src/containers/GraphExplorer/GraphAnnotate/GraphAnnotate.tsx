@@ -1,88 +1,62 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
-import GraphRenderer from '../GraphRenderer/GraphRenderer';
-import GraphNodeList from '../../../components/GraphNodeList/GraphNodeList';
+import { GraphRenderer } from '../GraphRenderer/GraphRenderer';
+import { GraphNodeList } from '../../../components/GraphNodeList/GraphNodeList';
 
 import { Row, Col } from 'antd';
 
 import { ID3GraphNode } from '../../../types/graphTypes';
-import { connect } from 'react-redux';
-import { IState } from '../../../store';
 import { IAPIDistribution } from '../../../types';
 import { getNodeDataDistribution } from '../../../actions/apiRequests';
 import GraphDataModal from '../GraphDataModal';
+import { GraphSingleton, GraphChanges } from '../../../graph/graph';
+import { filter } from 'rxjs/operators';
 
-interface IGraphExplorationProps {
-  nodes: ID3GraphNode[];
-}
+const GraphAnnotate = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedDistribution, setSelectedDistribution] = useState<
+    IAPIDistribution | undefined
+  >();
+  const [nodes, setNodes] = useState(GraphSingleton.nodes);
+  const showDataModal = useCallback(
+    async (node: ID3GraphNode) => {
+      const nodeDistribution = await getNodeDataDistribution(node.id);
+      setSelectedDistribution(nodeDistribution);
+      setModalVisible(true);
+    },
+    [setSelectedDistribution, setModalVisible]
+  );
+  useEffect(() => {
+    const sub = GraphSingleton.subject
+      .pipe(filter(e => e === GraphChanges.NodesChanged))
+      .subscribe(() => setNodes(GraphSingleton.nodes));
+    return () => sub.unsubscribe();
+  }, []);
+  return (
+    <Row style={{ height: '100%' }}>
+      <Col span={4} style={{ height: 'inherit' }}>
+        <GraphNodeList
+          nodes={nodes}
+          onNodeClick={showDataModal}
+          isSelectionMode={false}
+        />
+      </Col>
+      <Col span={20} style={{ height: 'inherit' }}>
+        <GraphDataModal
+          resizable={true}
+          visible={modalVisible}
+          data={selectedDistribution}
+          onClose={() => setModalVisible(false)}
+          position={{ bottom: 0, right: 0, type: 'fixed' }}
+        />
+        <GraphRenderer
+          showMenu={false}
+          isSelectionMode={false}
+          onNodeClick={showDataModal}
+        />
+      </Col>
+    </Row>
+  );
+};
 
-interface IGraphExplorationState {
-  dataModalVisible: boolean;
-  selectedNodeDataDistribution: IAPIDistribution | undefined;
-}
-
-class GraphAnnotate extends React.Component<
-  IGraphExplorationProps,
-  IGraphExplorationState
-> {
-  constructor(props: IGraphExplorationProps) {
-    super(props);
-
-    this.state = {
-      dataModalVisible: false,
-      selectedNodeDataDistribution: undefined
-    };
-  }
-
-  public render() {
-    return (
-      <Row style={{ height: '100%' }}>
-        <Col span={4} style={{ height: 'inherit' }}>
-          <GraphNodeList
-            nodes={this.props.nodes}
-            onNodeClick={this.showDataModal}
-            isSelectionMode={false}
-          />
-        </Col>
-        <Col span={20} style={{ height: 'inherit' }}>
-          <GraphDataModal
-            resizable={true}
-            visible={this.state.dataModalVisible}
-            data={this.state.selectedNodeDataDistribution}
-            onClose={this.closeDataModal}
-            position={{ bottom: 0, right: 0, type: 'fixed' }}
-          />
-          <GraphRenderer
-            showMenu={false}
-            isSelectionMode={false}
-            onNodeClick={this.showDataModal}
-          />
-        </Col>
-      </Row>
-    );
-  }
-
-  private showDataModal = async (node: ID3GraphNode) => {
-    const nodeDistribution: IAPIDistribution = await getNodeDataDistribution(
-      String(node.id)
-    );
-    this.setState({
-      dataModalVisible: true,
-      selectedNodeDataDistribution: nodeDistribution
-    });
-  };
-
-  private closeDataModal = () => {
-    this.setState({
-      dataModalVisible: false
-    });
-  };
-}
-
-export function mapStateToProps(state: IState) {
-  return {
-    nodes: state.graphExplorer!.nodes
-  };
-}
-
-export default connect(mapStateToProps)(GraphAnnotate);
+export default GraphAnnotate;

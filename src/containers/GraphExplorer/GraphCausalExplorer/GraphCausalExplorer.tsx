@@ -1,14 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Mosaic } from 'react-mosaic-component';
 
 import 'react-mosaic-component/react-mosaic-component.css';
-import GraphRenderer from '../GraphRenderer/GraphRenderer';
-import { connect } from 'react-redux';
+import { GraphRenderer } from '../GraphRenderer/GraphRenderer';
 import './GraphCausalExplorer.css';
-import { IState } from '../../../store';
 import { IAPIGraphNode, ID3GraphNode } from '../../../types/graphTypes';
 import { Card, Checkbox, message } from 'antd';
-import Graph from '../../../utils/graph';
 import { NodeSelection } from './NodeSearch';
 import { IAPIDistribution } from '../../../types';
 
@@ -26,11 +23,11 @@ import GraphDataModal from '../GraphDataModal';
 import ExternalFactorList, {
   IExternalFactorNode
 } from '../../../components/GraphCausalExplorer/ExternalFactorsList';
+import { GraphSingleton, GraphChanges } from '../../../graph/graph';
 
 interface IGraphCausalExplorerProps {
   nodes: ID3GraphNode[];
   availableNodes: IAPIGraphNode[];
-  selectedGraph: Graph;
 }
 
 interface INode {
@@ -104,7 +101,7 @@ class GraphCausalExplorer extends React.Component<
     };
   }
   public render() {
-    const externalFactorsNodes = this.props.selectedGraph.nodes.filter(
+    const externalFactorsNodes = this.props.nodes.filter(
       (node: ID3GraphNode) =>
         this.state.effectNode &&
         node.id !== this.state.effectNode!.nodeID &&
@@ -217,7 +214,7 @@ class GraphCausalExplorer extends React.Component<
             {!this.state.causalNode ? (
               <NodeSelection
                 onNodeSelection={this.onCausalNodeClick}
-                nodes={this.props.selectedGraph.nodes.filter(
+                nodes={this.props.nodes.filter(
                   (node: ID3GraphNode) =>
                     !node.isContext &&
                     ((this.state.effectNode &&
@@ -258,7 +255,7 @@ class GraphCausalExplorer extends React.Component<
             {!this.state.effectNode ? (
               <NodeSelection
                 onNodeSelection={this.onEffectNodeClick}
-                nodes={this.props.selectedGraph.nodes.filter(
+                nodes={this.props.nodes.filter(
                   (node: ID3GraphNode) =>
                     !node.isContext &&
                     ((this.state.causalNode &&
@@ -513,12 +510,25 @@ class GraphCausalExplorer extends React.Component<
   };
 }
 
-export function mapStateToProps(state: IState) {
-  return {
-    nodes: state.graphExplorer!.nodes,
-    availableNodes: state.graphExplorer!.availableNodes,
-    selectedGraph: state.graphExplorer!.selectedGraph
-  };
-}
+const ConnectedGraphCausalExplorer = () => {
+  const [availableNodes, setAvailableNodes] = useState(
+    GraphSingleton.availableNodes
+  );
+  const [nodes, setNodes] = useState(GraphSingleton.nodes);
+  useEffect(() => {
+    const sub = GraphSingleton.subscribeToGraphChanges(e => {
+      switch (e) {
+        case GraphChanges.AvailableNodeChanged:
+          setAvailableNodes(GraphSingleton.availableNodes);
+          break;
+        case GraphChanges.NodesChanged:
+          setNodes(GraphSingleton.nodes.filter(node => !node.isContext));
+          break;
+      }
+    });
+    return () => sub.unsubscribe();
+  }, []);
+  return <GraphCausalExplorer nodes={nodes} availableNodes={availableNodes} />;
+};
 
-export default connect(mapStateToProps)(GraphCausalExplorer);
+export default ConnectedGraphCausalExplorer;

@@ -6,8 +6,6 @@ import App from './App';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 
-import store from './store';
-import { Provider } from 'react-redux';
 import { subscribeToJobStatusChanges } from './actions/apiRequests';
 import { notification } from 'antd';
 import { JobErrorCode } from './types';
@@ -33,11 +31,9 @@ subscribeToJobStatusChanges(value => {
 });
 
 ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>,
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
   document.getElementById('root')
 );
 
