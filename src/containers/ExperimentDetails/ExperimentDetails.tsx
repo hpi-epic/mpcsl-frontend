@@ -168,6 +168,9 @@ class ExperimentDetails extends React.Component<
               }
               stream={true}
               follow={true}
+              fetchOptions={{
+                credentials: 'include'
+              }}
               width={772}
               height={500}
               onError={this.handleError}
