@@ -223,7 +223,8 @@ const GraphRenderer = (props: IProps) => {
         enterLinks(links.enter().insert('line', '.node'));
         links.exit().remove();
         updateLinks(links);
-        // Update and reapply forces
+      };
+      const resetForce = () => {
         force.nodes(GraphSingleton.nodes).force(
           'links',
           d3
@@ -235,11 +236,18 @@ const GraphRenderer = (props: IProps) => {
       };
       updateAllNodes();
       updateAllLinks();
+      resetForce();
       const sub = GraphSingleton.subscribeToGraphChanges(e => {
         if (e === GraphChanges.NodesChanged) {
           updateAllNodes();
         } else if (e === GraphChanges.LinksChanged) {
           updateAllLinks();
+        }
+        if (
+          e === GraphChanges.NodesChanged ||
+          e === GraphChanges.LinksChanged
+        ) {
+          resetForce();
         }
       });
       return () => sub.unsubscribe();
