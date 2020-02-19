@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import 'react-select/dist/react-select.css';
 import 'react-virtualized-select/styles.css';
 import 'react-virtualized/styles.css';
-import { getObservationMatrixMetadata } from '../../actions/apiRequests';
+import { getObservationMatrixMetadata } from '../../restAPI/apiRequests';
 import { NewExperimentButton } from '../ExperimentsView/ExperimentsView';
 
 export const ExperimentsListHeader = (

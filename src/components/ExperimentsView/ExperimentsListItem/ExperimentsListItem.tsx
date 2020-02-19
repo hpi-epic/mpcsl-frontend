@@ -1,8 +1,11 @@
 import { Badge, Card, Descriptions, Icon, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { getAlgorithm, getJobsForExperiment } from '../../actions/apiRequests';
-import { BadgeStatus, IAlgorithm, IExperiment } from '../../types/types';
+import {
+  getAlgorithm,
+  getJobsForExperiment
+} from '../../../restAPI/apiRequests';
+import { BadgeStatus, IAlgorithm, IExperiment } from '../../../types/types';
 import { ExperimentDropdown } from './ExperimentDropdown';
 import styles from './ExperimentsListItem.module.scss';
 import { RunExperimentModalForm } from './RunExperimentModal';

@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import {
   getObservationMatrices,
   subscribeToDatasetChanges
-} from '../../actions/apiRequests';
+} from '../../restAPI/apiRequests';
 import { IObservationMatrix } from '../../types/types';
-import { ObservationMatrixListItem } from '../ObservationMatrixListItem/ObservationMatrixListItem';
+import { ObservationMatrixListItem } from './ObservationMatrixListItem/ObservationMatrixListItem';
 import NewObservationMatrixModal, {
   IFormObservationMatrix,
   IPropsNewObservationMatrixModal

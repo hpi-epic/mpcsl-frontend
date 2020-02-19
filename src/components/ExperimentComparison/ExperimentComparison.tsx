@@ -6,7 +6,7 @@ import {
   getExperimentsForDataset,
   getJobsForExperiment,
   getResultNodes
-} from '../../actions/apiRequests';
+} from '../../restAPI/apiRequests';
 import { IAPIGraphNode } from '../../types/graphTypes';
 import { IExperiment, IJob, IExperimentJobs } from '../../types/types';
 import { ExperimentComparisonEach } from './ExperimentComparisonEach';

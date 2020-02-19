@@ -4,7 +4,7 @@ import { Link, Route, Switch, useLocation } from 'react-router-dom';
 import 'react-select/dist/react-select.css';
 import 'react-virtualized-select/styles.css';
 import 'react-virtualized/styles.css';
-import { getExperiment, getObservationMatrix } from '../../actions/apiRequests';
+import { getExperiment, getObservationMatrix } from '../../restAPI/apiRequests';
 import { IExperiment, IObservationMatrix } from '../../types/types';
 import { NewObservationMatrixButton } from '../ObservationMatrixView/NewObservationMatrixButton';
 import { GraphExplorerHeader } from './GraphExplorerHeader';

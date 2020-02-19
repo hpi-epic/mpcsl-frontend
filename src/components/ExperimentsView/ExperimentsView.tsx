@@ -3,13 +3,13 @@ import { RouteComponentProps } from 'react-router-dom';
 import {
   getExperimentsForDataset,
   subscribeToExperimentChanges
-} from '../../actions/apiRequests';
+} from '../../restAPI/apiRequests';
 import { IExperiment } from '../../types/types';
 import { Button, Spin } from 'antd';
 import styles from './ExperimentsView.module.scss';
 import { Subscription } from 'rxjs';
 import { NewExperimentModalForm } from './NewExperimentModal';
-import { ExperimentsListItem } from '../ExperimentsListItem/ExperimentsListItem';
+import { ExperimentsListItem } from './ExperimentsListItem/ExperimentsListItem';
 
 const NewExperimentButton = ({
   match

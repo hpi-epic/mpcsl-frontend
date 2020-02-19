@@ -1,6 +1,6 @@
 import { Card, Collapse, Empty, Statistic } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { getComparisonStatistics } from '../../actions/apiRequests';
+import { getComparisonStatistics } from '../../restAPI/apiRequests';
 import { IAPIGraphNode } from '../../types/graphTypes';
 import { IComparisonStatistics, IJob } from '../../types/types';
 

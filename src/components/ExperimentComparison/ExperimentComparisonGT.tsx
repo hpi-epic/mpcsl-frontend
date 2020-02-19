@@ -1,6 +1,6 @@
 import { Card, Collapse, Icon, Statistic, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { getGTComparisonStatistics } from '../../actions/apiRequests';
+import { getGTComparisonStatistics } from '../../restAPI/apiRequests';
 import { IAPIGraphNode } from '../../types/graphTypes';
 import { IComparisonStatistics, IExperiment, IJob } from '../../types/types';
 import { NewExperimentModalForm } from '../ExperimentsView/NewExperimentModal';

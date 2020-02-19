@@ -1,5 +1,5 @@
 import { JobErrorCode } from '../types/types';
-import { subscribeToJobStatusChanges } from '../actions/apiRequests';
+import { subscribeToJobStatusChanges } from '../restAPI/apiRequests';
 import { notification } from 'antd';
 
 const getJobErrorDescription = (errorCode: JobErrorCode): string => {

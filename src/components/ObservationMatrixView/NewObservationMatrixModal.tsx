@@ -4,7 +4,7 @@ import React from 'react';
 import {
   createObservationMatrix,
   getAllAvailableDataSources
-} from '../../actions/apiRequests';
+} from '../../restAPI/apiRequests';
 import TextArea from 'antd/lib/input/TextArea';
 
 export interface IPropsNewObservationMatrixModal extends FormComponentProps {

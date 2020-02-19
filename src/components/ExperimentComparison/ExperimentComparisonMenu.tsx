@@ -1,7 +1,7 @@
 import { Menu, Tooltip } from 'antd';
 import SubMenu from 'antd/lib/menu/SubMenu';
 import React, { useEffect, useState } from 'react';
-import { getComparisonStatistics } from '../../actions/apiRequests';
+import { getComparisonStatistics } from '../../restAPI/apiRequests';
 import {
   IComparisonStatistics,
   IExperiment,

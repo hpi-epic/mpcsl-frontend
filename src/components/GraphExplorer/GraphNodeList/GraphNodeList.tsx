@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Tooltip, Icon, Menu, Col, Popconfirm } from 'antd';
-import { ID3GraphNode } from '../../types/graphTypes';
+import { ID3GraphNode } from '../../../types/graphTypes';
 import Select from 'react-virtualized-select';
 import { isArray } from 'util';
-import { GraphSingleton, GraphChanges } from '../../graph/graph';
+import { GraphSingleton, GraphChanges } from '../../../graph/graph';
 import { useParams } from 'react-router-dom';
 import { filter } from 'rxjs/operators';
 

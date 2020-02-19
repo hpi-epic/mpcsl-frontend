@@ -3,7 +3,7 @@ import { Col, Row } from 'antd';
 import { useParams } from 'react-router-dom';
 
 import { GraphRenderer } from '../GraphRenderer/GraphRenderer';
-import { GraphNodeList } from '../../GraphNodeList/GraphNodeList';
+import { GraphNodeList } from '../GraphNodeList/GraphNodeList';
 
 import './GraphSelection.css';
 import { GraphSingleton, GraphChanges } from '../../../graph/graph';

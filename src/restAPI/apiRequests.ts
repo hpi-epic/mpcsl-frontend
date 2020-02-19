@@ -1,4 +1,4 @@
-import { IAPIGraphNode } from './../types/graphTypes';
+import { IAPIGraphNode } from '../types/graphTypes';
 import { message } from 'antd';
 import axios from 'axios';
 import {
@@ -15,7 +15,7 @@ import {
   JobErrorCode,
   IObservationMatrixMetadata
 } from '../types/types';
-import Endpoints from '../constants/api';
+import Endpoints from './api';
 import { fromEvent, Observable } from 'rxjs';
 import io from 'socket.io-client';
 

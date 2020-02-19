@@ -1,8 +1,8 @@
 import React from 'react';
 import { List, Tooltip, Icon, Col, Row } from 'antd';
-import { ID3GraphNode } from '../../types/graphTypes';
+import { ID3GraphNode } from '../../../types/graphTypes';
 
-import './ExternalFactorsList.css';
+import './ExternalFactorsList.scss';
 
 export interface IExternalFactorNode extends ID3GraphNode {
   edited: boolean;

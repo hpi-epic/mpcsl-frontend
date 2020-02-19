@@ -10,7 +10,7 @@ import {
   INumberParameter,
   IStrParameter
 } from '../../types/types';
-import { createExperiment, getAllAlgorithms } from '../../actions/apiRequests';
+import { createExperiment, getAllAlgorithms } from '../../restAPI/apiRequests';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 
 export interface IPropsNewExperimentModal extends FormComponentProps {

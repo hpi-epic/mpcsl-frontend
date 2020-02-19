@@ -14,8 +14,8 @@ import styles from './ObservationMatrixListItem.module.scss';
 import {
   deleteObservationMatrix,
   getObservationMatrixMetadata
-} from '../../actions/apiRequests';
-import { IObservationMatrixMetadata } from '../../types/types';
+} from '../../../restAPI/apiRequests';
+import { IObservationMatrixMetadata } from '../../../types/types';
 
 const { confirm } = Modal;
 

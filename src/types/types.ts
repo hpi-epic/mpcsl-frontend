@@ -1,6 +1,4 @@
 import { IAPIGraphEdges, IAPIGraphNode } from './graphTypes';
-import { IndepenceTests } from '../constants/experiment';
-import { FormComponentProps } from 'antd/lib/form';
 
 export interface IIDClass {
   id: number;
@@ -127,33 +125,14 @@ export interface IComparisonStatistics {
   };
 }
 
-export interface IAPIMetaResults {
-  alpha: number;
-  api_host: string;
-  cores: number;
-  dataset_id: string;
-  fixed_edges: 'FALSE' | 'TRUE';
-  fixed_graps: 'FALSE' | 'TRUE';
-  help: boolean;
-  independence_test: IndepenceTests;
-  job_id: string;
-}
-
-export interface IAPIResult {
-  nodes: IAPIGraphNode[];
-  edges: IAPIGraphEdges[];
-  meta_results: IAPIMetaResults;
-  sepset: any[];
-}
-
 interface IAPIDistributionBase {
   dataset: {
     time_created: string;
     id: number;
-    description: string | undefined;
+    description?: string;
     name: string;
-    data_source: string | undefined;
-    load_query: string | undefined;
+    data_source?: string;
+    load_query?: string;
   };
   node: {
     result: number;
@@ -178,12 +157,6 @@ export interface IAPIDistributionCategorical extends IAPIDistributionBase {
   bins: ICategoricalBin;
 }
 
-export type RunExperimentModalProps = FormComponentProps & {
-  experiment: IExperiment;
-  visible: boolean;
-  onClose: () => void;
-};
-
 export type IAPIDistribution =
   | IAPIDistributionCategorical
   | IAPIDistributionContinous;
@@ -200,19 +173,15 @@ export enum GraphExportFormat {
   GML = 'GML'
 }
 
-export interface IObservationMatrixList {
-  onView: (observationMatrix: IObservationMatrix) => void;
-}
-
 export interface IStateJobsManagement {
   modalVisible: boolean;
   downloadModalVisible: boolean;
   extraLines: number; // necessary for linux support
-  currentJobId: number | undefined;
+  currentJobId?: number;
   jobList: IJob[];
-  experiment: IExperiment | undefined;
+  experiment?: IExperiment;
   format: GraphExportFormat;
-  currentResultID: number | undefined;
+  currentResultID?: number;
 }
 
 export interface IMatchParams {

@@ -3,7 +3,7 @@ import { Mosaic } from 'react-mosaic-component';
 
 import 'react-mosaic-component/react-mosaic-component.css';
 import { GraphRenderer } from '../GraphRenderer/GraphRenderer';
-import './GraphCausalExplorer.css';
+import './GraphCausalExplorer.scss';
 import { IAPIGraphNode, ID3GraphNode } from '../../../types/graphTypes';
 import { Card, Checkbox, message } from 'antd';
 import { NodeSelection } from './NodeSearch';
@@ -14,7 +14,7 @@ import {
   getConditionalNodeDataDistribution,
   getInterventionNodeDataDistribution,
   getConfounders
-} from '../../../actions/apiRequests';
+} from '../../../restAPI/apiRequests';
 import DataDistributionPlot from '../../DataDistributions/DataDistributionPlot';
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
@@ -23,7 +23,7 @@ import GraphDataModal from '../GraphDataModal';
 import {
   ExternalFactorList,
   IExternalFactorNode
-} from '../../GraphCausalExplorer/ExternalFactorsList';
+} from '../ExternalFactorsList/ExternalFactorsList';
 import { GraphSingleton, GraphChanges } from '../../../graph/graph';
 
 interface IGraphCausalExplorerProps {

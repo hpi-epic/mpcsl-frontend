@@ -4,11 +4,19 @@ import {
   getAlgorithm,
   getK8SNodes,
   runExperiment
-} from '../../actions/apiRequests';
-import { RunExperimentModalProps } from '../../types/types';
+} from '../../../restAPI/apiRequests';
+import { IExperiment } from '../../../types/types';
+import { FormComponentProps } from 'antd/lib/form';
+
 const { Option } = Select;
 
-const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = props => {
+type IProps = FormComponentProps & {
+  experiment: IExperiment;
+  visible: boolean;
+  onClose: () => void;
+};
+
+const RunExperimentModal: React.FunctionComponent<IProps> = props => {
   const { getFieldDecorator } = props.form;
   const [k8sNodes, setK8sNodes] = useState<undefined | string[]>();
   const [needsGPU, setNeedsGPU] = useState<undefined | boolean>();
@@ -105,6 +113,4 @@ const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = pro
   );
 };
 
-export const RunExperimentModalForm = Form.create<RunExperimentModalProps>()(
-  RunExperimentModal
-);
+export const RunExperimentModalForm = Form.create<IProps>()(RunExperimentModal);

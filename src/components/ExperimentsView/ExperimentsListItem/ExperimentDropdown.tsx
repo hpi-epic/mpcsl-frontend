@@ -1,8 +1,8 @@
 import { Button, Dropdown, Icon, Menu, Modal } from 'antd';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { deleteExperiment } from '../../actions/apiRequests';
-import { IExperiment } from '../../types/types';
+import { deleteExperiment } from '../../../restAPI/apiRequests';
+import { IExperiment } from '../../../types/types';
 import styles from './ExperimentsListItem.module.scss';
 const { confirm } = Modal;
 

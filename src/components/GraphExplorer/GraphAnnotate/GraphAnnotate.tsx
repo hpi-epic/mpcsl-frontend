@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { GraphRenderer } from '../GraphRenderer/GraphRenderer';
-import { GraphNodeList } from '../../GraphNodeList/GraphNodeList';
+import { GraphNodeList } from '../GraphNodeList/GraphNodeList';
 
 import { Row, Col } from 'antd';
 
 import { ID3GraphNode } from '../../../types/graphTypes';
 import { IAPIDistribution } from '../../../types/types';
-import { getNodeDataDistribution } from '../../../actions/apiRequests';
+import { getNodeDataDistribution } from '../../../restAPI/apiRequests';
 import GraphDataModal from '../GraphDataModal';
 import { GraphSingleton, GraphChanges } from '../../../graph/graph';
 import { filter } from 'rxjs/operators';
+import './GraphAnnotate.scss';
 
 const GraphAnnotate = () => {
   const [modalVisible, setModalVisible] = useState(false);
