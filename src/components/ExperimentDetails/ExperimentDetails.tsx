@@ -16,7 +16,7 @@ import {
   getExperiment,
   subscribeToJobStatusChanges
 } from '../../restAPI/apiRequests';
-import Endpoints from '../../restAPI/api';
+import Endpoints from '../../restAPI/apiEndpoints';
 import styles from './ExperimentDetails.module.scss';
 import Axios from 'axios';
 import { Subscription } from 'rxjs';

@@ -15,7 +15,7 @@ import {
   JobErrorCode,
   IObservationMatrixMetadata
 } from '../types/types';
-import Endpoints from './api';
+import Endpoints from './apiEndpoints';
 import { fromEvent, Observable } from 'rxjs';
 import io from 'socket.io-client';
 
