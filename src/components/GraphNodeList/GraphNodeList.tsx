@@ -124,14 +124,24 @@ const GraphNodeList = (props: IPropsGraphNodeList) => {
             .filter(node => !node.isContext)
             .map(node => (
               <Menu.Item key={node.id}>
-                <Col span={18} style={{ overflow: 'hidden' }}>
+                <Col
+                  span={18}
+                  style={{ overflow: 'hidden' }}
+                  onClick={() =>
+                    props.onNodeClick ? props.onNodeClick(node) : undefined
+                  }
+                >
                   <Tooltip title={node.label}>{node.label}</Tooltip>
                 </Col>
                 {props.isSelectionMode ? (
                   <Col span={4} offset={2}>
                     <Icon
                       type="close"
-                      onClick={() => props.onRemoveNode!(node)}
+                      onClick={() =>
+                        props.onRemoveNode
+                          ? props.onRemoveNode(node)
+                          : undefined
+                      }
                     />
                   </Col>
                 ) : null}
