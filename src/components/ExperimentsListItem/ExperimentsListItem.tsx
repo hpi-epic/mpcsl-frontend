@@ -138,6 +138,7 @@ const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = pro
               node: string;
               runs: number;
               parallelismMode: 'parallel' | 'sequential';
+              enforceCpus: boolean;
               gpus?: number;
             }
           ) => {
@@ -147,7 +148,8 @@ const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = pro
                 values.node === '_none' ? undefined : values.node,
                 values.runs,
                 values.parallelismMode === 'parallel',
-                needsGPU ? values.gpus : undefined
+                needsGPU ? values.gpus : undefined,
+                values.enforceCpus
               );
               props.onClose();
             }
@@ -178,11 +180,19 @@ const RunExperimentModal: React.FunctionComponent<RunExperimentModalProps> = pro
             <InputNumber min={1} style={{ width: '100%' }} />
           )}
         </Form.Item>
-        <Form.Item label="Run mode">
+        <Form.Item label="Run Mode">
           {getFieldDecorator('parallelismMode', { initialValue: 'parallel' })(
             <Select>
               <Option value="parallel">Parallel</Option>
               <Option value="sequential">Sequential</Option>
+            </Select>
+          )}
+        </Form.Item>
+        <Form.Item label="Enforce CPU Requests">
+          {getFieldDecorator('enforceCpus', { initialValue: 1 })(
+            <Select>
+              <Option value={1}>Yes</Option>
+              <Option value={0}>No</Option>
             </Select>
           )}
         </Form.Item>
