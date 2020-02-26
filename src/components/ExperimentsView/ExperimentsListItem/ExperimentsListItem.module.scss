@@ -17,7 +17,8 @@
 
 .DropdownButton {
   border: none;
-  background-color: transparent;
+  background-color: transparent !important;
+  box-shadow: none;
   &hover {
     border: none;
     background-color: transparent;

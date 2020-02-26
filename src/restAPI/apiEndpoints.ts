@@ -28,6 +28,8 @@ const Endpoints = {
     `${baseApiUrl}/result/${resultId}/gtcompare`,
   nodeContext: (nodeID: number, resultID: number) =>
     `${baseApiUrl}/node/${nodeID}/result/${resultID}/context`,
+  allNodesContext: (resultID: number) =>
+    `${baseApiUrl}/result/${resultID}/context`,
   algorithm: (algorithmId: number) => `${baseApiUrl}/algorithms/${algorithmId}`,
   allAlgorithms: baseApiUrl + '/algorithms',
   resultExport: (resultID: number, format: GraphExportFormat) =>

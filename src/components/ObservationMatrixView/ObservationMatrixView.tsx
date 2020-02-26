@@ -33,7 +33,8 @@ export const ObservationMatrixView = () => {
       observationMatrixName: observationMatrix.name,
       observationMatrixDescription: observationMatrix.description || '-',
       query: observationMatrix.load_query,
-      dataSource: observationMatrix.data_source || '-'
+      dataSource: observationMatrix.data_source || '-',
+      id: observationMatrix.id
     });
     setObservationMatrixModalVisible(true);
   };
