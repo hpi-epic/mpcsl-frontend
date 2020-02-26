@@ -201,6 +201,27 @@ export const deleteObservationMatrix = async (
   }
 };
 
+export const updateObservationMatrix = async (observationMatrix: {
+  id: IObservationMatrix['id'];
+  name: IObservationMatrix['name'];
+  description: IObservationMatrix['description'];
+}) => {
+  try {
+    await axios.put(
+      `${Endpoints.observationMatrix}/${observationMatrix.id}`,
+      observationMatrix
+    );
+    message.success(
+      `Successfully updated Observation Matrix ${observationMatrix.name}!`
+    );
+  } catch (e) {
+    message.error(
+      `Failed to update Observation Matrix ${observationMatrix.name}!`
+    );
+    throw e;
+  }
+};
+
 let cachedJobs: {
   [id: string]: IJob[] | undefined;
 } = {};
