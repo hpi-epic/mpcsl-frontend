@@ -7,7 +7,6 @@ import {
 import { IExperiment } from '../../types/types';
 import { Button, Spin } from 'antd';
 import styles from './ExperimentsView.module.scss';
-import { Subscription } from 'rxjs';
 import { NewExperimentModalForm } from './NewExperimentModal';
 import { ExperimentsListItem } from './ExperimentsListItem/ExperimentsListItem';
 
@@ -50,7 +49,6 @@ const ExperimentsView = ({
   const datasetId = parseInt(match.params.datasetId, 10);
   const [experiments, setExperiments] = useState<undefined | IExperiment[]>();
   useEffect(() => {
-    let sub: Subscription | undefined;
     if (datasetId) {
       const fetchExperiments = () => {
         getExperimentsForDataset(datasetId)
@@ -58,9 +56,9 @@ const ExperimentsView = ({
           .catch();
       };
       fetchExperiments();
-      sub = subscribeToExperimentChanges(fetchExperiments);
+      const sub = subscribeToExperimentChanges(fetchExperiments);
+      return () => sub.unsubscribe();
     }
-    return () => sub?.unsubscribe();
   }, [datasetId]);
   if (!datasetId) {
     return <h1>404</h1>;
@@ -96,6 +94,7 @@ const ExperimentsView = ({
         datasetId={datasetId}
         onClose={() => {
           setModalVisible(false);
+          setLastExperiment(undefined);
         }}
         experiment={lastExperiment}
         editDisabled={editDisabled}

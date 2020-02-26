@@ -192,25 +192,26 @@ export type IFormExperiment = Partial<Omit<IExperiment, 'datasetId'>>;
 const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = props => {
   const [algorithms, setAlgorithms] = useState<IAlgorithm[]>([]);
   const [selectedPackage, setSelectedPackage] = useState<string | undefined>();
+  const [packages, setPackages] = useState<string[]>([]);
+  const [algoFunctions, setAlgoFunctions] = useState<string[]>([]);
+  const [algParams, setAlgParams] = useState<IParameters>({});
+
   useEffect(() => {
     getAllAlgorithms().then(result => setAlgorithms(result));
   }, []);
-
-  const [packages, setPackages] = useState<string[]>([]);
   useEffect(() => {
     setPackages(Array.from(new Set(algorithms.map(algo => algo.package))));
   }, [algorithms]);
-
-  const [algoFunctions, setAlgoFunctions] = useState<string[]>([]);
-
-  const [algParams, setAlgParams] = useState<IParameters>({});
 
   useEffect(() => {
     if (props.experiment && props.experiment.parameters) {
       setAlgParams(props.experiment.parameters);
     } else {
       setAlgParams({});
+      setSelectedPackage(undefined);
+      props.form.resetFields();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.experiment]);
 
   useEffect(() => {
@@ -229,7 +230,8 @@ const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = pr
         }
       }
     }
-  }, [props.experiment, algorithms, props.form]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.experiment, algorithms]);
 
   const ExperimentNameEl = props.form.getFieldDecorator('name', {
     initialValue: props.experiment ? props.experiment.name : undefined,
