@@ -211,6 +211,7 @@ const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = pr
       setSelectedPackage(undefined);
       props.form.resetFields();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.experiment]);
 
   useEffect(() => {
@@ -229,7 +230,8 @@ const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = pr
         }
       }
     }
-  }, [props.experiment, algorithms, props.form]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.experiment, algorithms]);
 
   const ExperimentNameEl = props.form.getFieldDecorator('name', {
     initialValue: props.experiment ? props.experiment.name : undefined,
