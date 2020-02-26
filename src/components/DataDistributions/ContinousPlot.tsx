@@ -13,7 +13,7 @@ import {
 } from 'react-vis';
 
 import 'react-vis/dist/style.css';
-import { IAPIDistributionContinous } from '../../types';
+import { IAPIDistributionContinous } from '../../types/types';
 
 interface IContinousPlotProps {
   data: IAPIDistributionContinous | undefined;

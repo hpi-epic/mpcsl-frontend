@@ -16,7 +16,7 @@ import {
 } from 'react-vis';
 
 import 'react-vis/dist/style.css';
-import { IAPIDistributionCategorical } from '../../types';
+import { IAPIDistributionCategorical } from '../../types/types';
 
 interface ICategoricalPlotProps {
   data: IAPIDistributionCategorical;

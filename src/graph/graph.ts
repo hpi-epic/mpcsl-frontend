@@ -6,7 +6,7 @@ import {
   IAPIGraphNode
 } from '../types/graphTypes';
 import { Subject } from 'rxjs';
-import { getNodeContext, getResultNodes } from '../actions/apiRequests';
+import { getNodeContext, getResultNodes } from '../restAPI/apiRequests';
 import { isString } from 'util';
 
 const apiNodesToD3Nodes = (nodes: IAPIGraphNode[]): ID3GraphNode[] =>

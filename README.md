@@ -1,19 +1,13 @@
 # MPCI UI
 
-There are 3 different views:
+[![CircleCI](https://circleci.com/gh/hpi-epic/mpci-frontend/tree/master.svg?style=svg&circle-token=29ae717f575398c83c5ad5b652124e2c41ea31fe)](https://circleci.com/gh/hpi-epic/mpci-frontend/tree/master)
 
-- **Observation Matrices Management View**: Create/Delete/View observation matrices/datasets needed for experiment creation.
-- **Experiment Management View**: Create/Delete/View/Start experiments with specific parameters and observation matrices. An experiment run is called job. The jobs and the status can be viewed in this view, explored in the result exploration view.
-- **Result Exploration**:
-  - **Graph Selection**: A subgraph can be selected. The visible graph is defined by the selection of focus nodes and their neighbors (context nodes).
-  - **Graph Exploration and Validation**: Node data distributions can be viewed here by clicking on a node.
-  - **Causal Inference View**: Interventions and (in the future) causal effects can be explored here.
+### Getting started
 
-## Implementation
+#### Requirements
 
-### Available Scripts
-
-In the project directory, you can run (you could also use `npm` instead of `yarn`):
+- [NodeJS](https://nodejs.org/en/)
+- [Yarn](https://classic.yarnpkg.com/en/docs/install)
 
 #### Module Installation
 
@@ -23,7 +17,8 @@ In the project directory, you can run (you could also use `npm` instead of `yarn
 
 `yarn start`
 
-Will start a development server on port `:3000`.
+Will start a development server on `localhost:3000` if available.
+API requests will be proxied to `localhost:5000`.
 
 #### Run Tests
 
@@ -31,35 +26,39 @@ Will start a development server on port `:3000`.
 
 #### Run Linter
 
-`yarn run lint`
+`yarn lint`
 
 #### Create a Production Build
 
-`yarn run build`
+`yarn build`
 
 ### Project Structure and Implementation Notes
 
-The project structure is based on [Redux's recommended code structure](https://redux.js.org/faq/code-structure)
-
-- `src/actions`:
-  - `apiRequests.ts`: API requests
-  - `graphExplorer.ts`: Redux actions
-- `src/components`: React components that are unaware of Redux and any other logic like API requests.
-- `src/containers`: React components that are connected to Redux, React-Router, or communicate with the backend.
-  - `GraphRenderer`: D3 rendering of force graph layout. Connected to the Redux state. Will render changes on `selectedGraph` in Redux state.
-- `src/reducers`: Define state on different Redux actions.
-- `src/constants`:
-  - `api.ts`: Backend endpoints are defined here.
-  - `routes.ts`: Routes for React-Router are defined here.
+- `src/components`: React components, nested to represent their usage.
+  - `/GraphExplorer`: D3 rendering of force graph layout and UI to modify the rendering.
+  - `/ObservationMatrixView`: Card list view of available datasets.
+  - `/ExperimentsView`: Card list view of available experiments for a dataset.
+  - `/ExperimentsDetails`: Experiment details and job list for an experiment.
+  - `/ExperimentsComparison`: Comparison view for experiments.
+  - `/Header`: Different headers for views.
+- `src/restAPI`:
+  - `apiEndpoints.ts`: Backend endpoints are defined here.
+  - `apiRequests.ts`: API request functions and caching mechanisms are defined here.
 - `src/types`:
-  - `graphTypes`: We implemented two types of graphs:
+  - `graphTypes.ts`: Holding types for two different graphs:
     - API Graph: The graph structure that is returned by the API.
-    - ID3Graph: The graph structure that is needed by D3.
-- `src/utils`:
-  - `graph.ts`: The graph (inherits from ID3Graph) that is stored in redux state which consists of the following logic:
+    - ID3Graph: The graph structure that is used by D3.
+  - `types.ts`: Types used across the project.
+- `src/errorHandling`:
+  - `errorHandler.ts`: Listener for backend error messages.
+- `src/graph`:
+  - `graph.ts`: The graph (inherits from ID3Graph) which consists of the following logic:
     - Handles conversions from API Graph to ID3Graph (marked with **api**).
     - Add unique edges and nodes to context and focus.
     - Deletion of nodes from focus.
+    - Holds graph data for d3 rendering
+    - Emits graph changes to components
+    - Singleton instance
 
 ### Additional Notes
 
@@ -70,12 +69,3 @@ This project uses `eslint`. Please consider the use of a linter extension in you
 The configuration is placed in `.eslintrc.json`.
 
 Consider to use a formatting extensions like [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to format the files automatically.
-
-#### Redux
-
-The project can be used with [Redux DevTools](https://github.com/zalmoxisus/redux-devtools-extension) in Chrome.
-
-## Future Work
-
-- Annotations and prior knowledge
-- Causal Effect
