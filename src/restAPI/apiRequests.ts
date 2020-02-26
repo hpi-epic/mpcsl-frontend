@@ -169,6 +169,20 @@ export const deleteExperiment = async (experiment: IExperiment) => {
   }
 };
 
+export const updateExperiment = async (experiment: {
+  id: IExperiment['id'];
+  description: IExperiment['description'];
+  name?: IExperiment['name'];
+}) => {
+  try {
+    await axios.put(`${Endpoints.experiment}/${experiment.id}`, experiment);
+    message.success(`Successfully update Experiment ${experiment.name}!`);
+  } catch (e) {
+    message.error(`Failed to update Experiment ${experiment.name}!`);
+    throw e;
+  }
+};
+
 export const deleteObservationMatrix = async (
   observationMatrix: IObservationMatrix
 ) => {

@@ -10,7 +10,11 @@ import {
   INumberParameter,
   IStrParameter
 } from '../../types/types';
-import { createExperiment, getAllAlgorithms } from '../../restAPI/apiRequests';
+import {
+  createExperiment,
+  getAllAlgorithms,
+  updateExperiment
+} from '../../restAPI/apiRequests';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 
 export interface IPropsNewExperimentModal extends FormComponentProps {
@@ -162,29 +166,52 @@ const handleSubmit = (
   datasetId: number,
   validParameters: IParameters,
   onClose: () => void,
-  algorithms: IAlgorithm[]
+  algorithms: IAlgorithm[],
+  update: boolean,
+  experiment?: Partial<IExperiment>
 ) => {
-  form.validateFields((err: Error, values: any) => {
-    if (!err) {
-      const algorithm = algorithms.find(
-        alg =>
-          alg.package === values.package_id &&
-          alg.function === values.function_id
-      );
-      if (!algorithm) {
-        message.error('Algorithm not found!');
-        return;
-      }
-      submitExperiment(
-        { ...values, algorithm_id: algorithm?.id },
-        datasetId,
-        validParameters,
-        onClose
-      );
-    } else {
-      message.error('Set required Values!');
+  if (update) {
+    if (!experiment || !experiment.id) {
+      message.error('Experiment invalid!');
     }
-  });
+    form.validateFields(
+      ['description'],
+      (err: Error, values: { description?: string }) => {
+        if (!err && experiment && experiment.id) {
+          const expUpdate = {
+            id: experiment.id,
+            name: experiment.name,
+            description: values.description
+          };
+          updateExperiment(expUpdate).then(() => onClose());
+        } else {
+          message.error('Description invalid!');
+        }
+      }
+    );
+  } else {
+    form.validateFields((err: Error, values: any) => {
+      if (!err) {
+        const algorithm = algorithms.find(
+          alg =>
+            alg.package === values.package_id &&
+            alg.function === values.function_id
+        );
+        if (!algorithm) {
+          message.error('Algorithm not found!');
+          return;
+        }
+        submitExperiment(
+          { ...values, algorithm_id: algorithm?.id },
+          datasetId,
+          validParameters,
+          onClose
+        );
+      } else {
+        message.error('Set required Values!');
+      }
+    });
+  }
 };
 
 export type IFormExperiment = Partial<Omit<IExperiment, 'datasetId'>>;
@@ -241,9 +268,7 @@ const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = pr
   const ExperimentDescEl = props.form.getFieldDecorator('description', {
     initialValue: props.experiment ? props.experiment.description : undefined,
     rules: [{ required: false, message: 'Enter a Experiment Description' }]
-  })(
-    <Input disabled={props.editDisabled} placeholder="Experiment Description" />
-  );
+  })(<Input placeholder="Experiment Description" />);
 
   const PackagesEl = props.form.getFieldDecorator('package_id', {
     initialValue: props.experiment ? props.experiment.algorithm_id : undefined,
@@ -311,10 +336,12 @@ const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = pr
           props.datasetId,
           algParams,
           props.onClose,
-          algorithms
+          algorithms,
+          props.editDisabled,
+          props.experiment
         )
       }
-      okButtonProps={{ disabled: props.editDisabled }}
+      okText={props.editDisabled ? 'Update Description' : undefined}
       title={
         props.experiment
           ? `Experiment "${props.experiment.name}"`
