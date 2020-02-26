@@ -105,15 +105,14 @@ export const ExperimentsListItem = (props: {
         }}
       >
         <div className={styles.ListItemContent}>
-          <Descriptions size="small" column={2}>
+          <Descriptions size="small" column={1}>
             <Descriptions.Item
               className={styles.Description}
-              span={2}
               label="Description"
             >
               <p
                 style={{
-                  height: 84,
+                  height: 58,
                   overflow: 'hidden',
                   width: 250,
                   overflowWrap: 'break-word'
@@ -133,7 +132,7 @@ export const ExperimentsListItem = (props: {
               </>
             ) : null}
             {last_job ? (
-              <Descriptions.Item span={2} label="Last Job run">
+              <Descriptions.Item label="Last Job run">
                 {new Date(last_job.start_time).toLocaleString('de-DE')}
               </Descriptions.Item>
             ) : null}
