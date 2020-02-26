@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Tooltip, Icon, Menu, Col, Popconfirm } from 'antd';
-import { ID3GraphNode } from '../../../types/graphTypes';
-import Select from 'react-virtualized-select';
-import { isArray } from 'util';
-import { GraphSingleton, GraphChanges } from '../../../graph/graph';
+import { Col, Icon, Menu, Popconfirm, Tooltip } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import Select from 'react-virtualized-select';
 import { filter } from 'rxjs/operators';
+import { isArray } from 'util';
+import { GraphChanges, GraphSingleton } from '../../../graph/graph';
+import { ID3GraphNode } from '../../../types/graphTypes';
+import { shorten } from '../../../helper/helper';
 
 const GraphExplorerSelect = () => {
   const { resultId } = useParams<{ resultId: string }>();
@@ -66,10 +67,12 @@ const GraphExplorerSelect = () => {
           }
           options={
             graphSearch
-              ? (graphSearch.filter(n => !!n) as {
-                  value: number;
-                  label: string;
-                }[])
+              ? graphSearch
+                  .filter(n => !!n)
+                  .map(({ value, label }) => ({
+                    value,
+                    label: shorten(label, 25)
+                  }))
               : []
           }
           onSelectResetsInput={true}

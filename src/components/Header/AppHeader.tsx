@@ -9,14 +9,7 @@ import { IExperiment, IObservationMatrix } from '../../types/types';
 import { NewObservationMatrixButton } from '../ObservationMatrixView/NewObservationMatrixButton';
 import { GraphExplorerHeader } from './GraphExplorerHeader';
 import { ExperimentsListHeader } from './ExperimentListHeader';
-
-const shorten = (s: string) => {
-  if (s.length < 25) {
-    return s;
-  } else {
-    return s.substr(0, 22) + '...';
-  }
-};
+import { shorten } from '../../helper/helper';
 
 export const AppHeader = () => {
   const location = useLocation();
@@ -56,7 +49,7 @@ export const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              Experiments of {shorten(datasetName)}
+              Experiments of {shorten(datasetName, 25)}
             </Link>
           </Breadcrumb.Item>
         );
@@ -65,7 +58,7 @@ export const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              Jobs of {shorten(experimentName)}
+              Jobs of {shorten(experimentName, 25)}
             </Link>
           </Breadcrumb.Item>
         );
@@ -74,7 +67,7 @@ export const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              Comparison of {shorten(experimentName)}
+              Comparison of {shorten(experimentName, 25)}
             </Link>
           </Breadcrumb.Item>
         );
@@ -84,7 +77,7 @@ export const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              Selection of {shorten(experimentName)}
+              Selection of {shorten(experimentName, 25)}
             </Link>
           </Breadcrumb.Item>
         );
@@ -94,7 +87,7 @@ export const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              Annotation of {shorten(experimentName)}
+              Annotation of {shorten(experimentName, 25)}
             </Link>
           </Breadcrumb.Item>
         );
@@ -104,7 +97,7 @@ export const AppHeader = () => {
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
-              Exploration of {shorten(experimentName)}
+              Exploration of {shorten(experimentName, 25)}
             </Link>
           </Breadcrumb.Item>
         );
