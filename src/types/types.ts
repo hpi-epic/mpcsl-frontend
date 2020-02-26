@@ -167,6 +167,10 @@ export interface IAPINodeContext {
   main_node: IAPIGraphNode;
 }
 
+export type IAPIAllNodesContext = {
+  node_contexts: IAPINodeContext[];
+};
+
 export enum GraphExportFormat {
   GEXF = 'GEXF',
   GraphML = 'GraphML',

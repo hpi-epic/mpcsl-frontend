@@ -6,8 +6,13 @@ import {
   IAPIGraphNode
 } from '../types/graphTypes';
 import { Subject } from 'rxjs';
-import { getNodeContext, getResultNodes } from '../restAPI/apiRequests';
+import {
+  getNodeContext,
+  getResultNodes,
+  getAllNodesContext
+} from '../restAPI/apiRequests';
 import { isString } from 'util';
+import { IAPINodeContext } from '../types/types';
 
 const apiNodesToD3Nodes = (nodes: IAPIGraphNode[]): ID3GraphNode[] =>
   nodes.map(node => ({
@@ -49,9 +54,10 @@ class Graph implements ID3Graph {
   public addNode = async (
     nodeID: number,
     resultID: number,
-    emitChange?: boolean
+    emitChange?: boolean,
+    context?: IAPINodeContext
   ) => {
-    const result = await getNodeContext(nodeID, resultID);
+    const result = context ? context : await getNodeContext(nodeID, resultID);
     this.addUniqueNodes(result.main_node, result.context_nodes);
     this.addUniqueAPILinks(result.edges);
     if (emitChange === false) {
@@ -64,7 +70,17 @@ class Graph implements ID3Graph {
   };
 
   public addNodes = async (nodeIDs: number[], resultID: number) => {
-    await Promise.all(nodeIDs.map(id => this.addNode(id, resultID, false)));
+    const contexts = await getAllNodesContext(resultID);
+    await Promise.all(
+      nodeIDs.map(id =>
+        this.addNode(
+          id,
+          resultID,
+          false,
+          contexts.node_contexts.find(node => node.main_node.id === id)
+        )
+      )
+    );
     this.links = this.links.slice();
     this.nodes = this.nodes.slice();
     this.subject.next(GraphChanges.NodesChanged);

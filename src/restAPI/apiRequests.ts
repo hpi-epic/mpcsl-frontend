@@ -13,7 +13,8 @@ import {
   IJob,
   IComparisonStatistics,
   JobErrorCode,
-  IObservationMatrixMetadata
+  IObservationMatrixMetadata,
+  IAPIAllNodesContext
 } from '../types/types';
 import Endpoints from './apiEndpoints';
 import { fromEvent, Observable } from 'rxjs';
@@ -322,25 +323,36 @@ export function getResult(resultID: number): Promise<void> {
   });
 }
 
-export function getNodeContext(
+export const getNodeContext = async (
   nodeID: number,
   resultID: number
-): Promise<IAPINodeContext> {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(Endpoints.nodeContext(nodeID, resultID))
-      .then(response => {
-        resolve(response.data);
-      })
-      .catch(error => {
-        message.error(`Failed to fetch Context for Node with ID: ${nodeID}`);
-        reject({
-          status: error.response.status,
-          message: error.message
-        });
-      });
-  });
-}
+): Promise<IAPINodeContext> => {
+  try {
+    const response = await axios.get<IAPINodeContext>(
+      Endpoints.nodeContext(nodeID, resultID)
+    );
+    return response.data;
+  } catch (e) {
+    message.error(`Failed to fetch Context for Node with ID: ${nodeID}`);
+    throw e;
+  }
+};
+
+export const getAllNodesContext = async (
+  resultID: number
+): Promise<IAPIAllNodesContext> => {
+  try {
+    const response = await axios.get<IAPIAllNodesContext>(
+      Endpoints.allNodesContext(resultID)
+    );
+    return response.data;
+  } catch (e) {
+    message.error(
+      `Failed to fetch Context for all Nodes of result: ${resultID}`
+    );
+    throw e;
+  }
+};
 
 export function getResultNodes(resultID: number): Promise<IAPIGraphNode[]> {
   return new Promise((resolve, reject) => {
