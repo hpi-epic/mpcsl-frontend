@@ -117,11 +117,22 @@ const GraphNodeList = (props: IPropsGraphNodeList) => {
     <div
       style={{
         backgroundColor: '#001529',
-        height: '100%'
+        height: window.innerHeight - 64
       }}
     >
-      {props.isSelectionMode ? <GraphExplorerSelect /> : null}
-      <Menu theme="dark" selectable={false}>
+      {props.isSelectionMode ? (
+        <div style={{ height: '7%' }}>
+          <GraphExplorerSelect />
+        </div>
+      ) : null}
+      <Menu
+        theme="dark"
+        selectable={false}
+        style={{
+          overflow: 'scroll',
+          height: props.isSelectionMode ? '93%' : '100%'
+        }}
+      >
         <Menu.ItemGroup title="Focused Nodes:">
           {props.nodes
             .filter(node => !node.isContext)
