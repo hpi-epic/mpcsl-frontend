@@ -65,13 +65,9 @@ export class ExperimentDetails extends React.Component<
     if (this.state.experiment) {
       return (
         <div className={styles.Content}>
-          <h2>
-            Experiment: <i>{this.state.experiment.name}</i>
-          </h2>
           <List
             itemLayout="horizontal"
             className={styles.JobList}
-            header={<h3>Job List</h3>}
             dataSource={this.state.jobList}
             renderItem={(job: IJob) => (
               <List.Item

@@ -12,25 +12,30 @@ export const ExperimentDropdown = (props: {
   onDuplicate: () => void;
 }) => {
   const history = useHistory();
+  const { experiment } = props;
   return (
     <Dropdown
       overlay={
         <Menu>
-          <Menu.Item>
-            <Button
-              className={styles.DropdownButton}
-              onClick={e => {
-                e.stopPropagation();
-                history.push(
-                  `/${props.experiment.dataset_id}/experiments/${props.experiment.id}/jobs`
-                );
-              }}
-              type="primary"
-              ghost={true}
-            >
-              View Jobs
-            </Button>
-          </Menu.Item>
+          {experiment.last_job && experiment.last_job?.result ? (
+            <Menu.Item>
+              <Button
+                className={styles.DropdownButton}
+                onClick={e => {
+                  e.stopPropagation();
+                  if (experiment.last_job && experiment.last_job?.result) {
+                    history.push(
+                      `/${experiment.dataset_id}/experiments/${experiment.id}/jobs/${experiment.last_job?.result?.id}`
+                    );
+                  }
+                }}
+                type="primary"
+                ghost={true}
+              >
+                View Last Result
+              </Button>
+            </Menu.Item>
+          ) : null}
           <Menu.Item>
             <Button
               className={styles.DropdownButton}

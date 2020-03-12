@@ -96,12 +96,11 @@ export const ExperimentsListItem = (props: {
         ]}
         hoverable
         className={styles.ListItem}
-        onClick={() => {
-          if (last_job && last_job?.result) {
-            history.push(
-              `/${props.experiment.dataset_id}/experiments/${props.experiment.id}/jobs/${last_job?.result?.id}`
-            );
-          }
+        onClick={e => {
+          e.stopPropagation();
+          history.push(
+            `/${props.experiment.dataset_id}/experiments/${props.experiment.id}/jobs`
+          );
         }}
       >
         <div className={styles.ListItemContent}>
