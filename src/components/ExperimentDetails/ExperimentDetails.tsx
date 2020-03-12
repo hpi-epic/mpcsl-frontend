@@ -1,6 +1,6 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { Button, List, Badge, Modal, Select } from 'antd';
+import { Button, List, Badge, Modal, Select, Spin } from 'antd';
 import { LazyLog as _LazyLog } from 'react-lazylog';
 import moment from 'moment';
 import {
@@ -192,7 +192,12 @@ export class ExperimentDetails extends React.Component<
         </div>
       );
     } else {
-      return <span>Loading ...</span>;
+      return (
+        <Spin
+          style={{ position: 'absolute', top: '50%', left: '50%' }}
+          size="large"
+        />
+      );
     }
   }
   private showModal = (jobId: number) => {
