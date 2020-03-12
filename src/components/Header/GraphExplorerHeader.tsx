@@ -20,8 +20,8 @@ export const GraphExplorerHeader = (
         buttonStyle="solid"
       >
         <Radio.Button value="selection">Selection</Radio.Button>
-        <Radio.Button value="annotation">Annotation</Radio.Button>
         <Radio.Button value="exploration">Exploration</Radio.Button>
+        <Radio.Button value="inference">Inference</Radio.Button>
       </Radio.Group>
     </div>
   );

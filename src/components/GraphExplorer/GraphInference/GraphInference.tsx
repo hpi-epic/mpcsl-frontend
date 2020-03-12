@@ -3,7 +3,7 @@ import { Mosaic } from 'react-mosaic-component';
 
 import 'react-mosaic-component/react-mosaic-component.css';
 import { GraphRenderer } from '../GraphRenderer/GraphRenderer';
-import './GraphCausalExplorer.scss';
+import './GraphInference.scss';
 import { IAPIGraphNode, ID3GraphNode } from '../../../types/graphTypes';
 import { Card, Checkbox, message } from 'antd';
 import { NodeSelection } from './NodeSearch';
@@ -26,7 +26,7 @@ import {
 } from '../ExternalFactorsList/ExternalFactorsList';
 import { GraphSingleton, GraphChanges } from '../../../graph/graph';
 
-interface IGraphCausalExplorerProps {
+interface IGraphInferenceProps {
   nodes: ID3GraphNode[];
   availableNodes: IAPIGraphNode[];
 }
@@ -45,7 +45,7 @@ export type ISelectionAPITypes =
   | { categorical: boolean; values: string[] }
   | { categorical: boolean; from_value: number; to_value: number };
 
-interface IGraphCausalExplorerState {
+interface IGraphInferenceState {
   conditions: {};
   effectNode: INode | undefined;
   causalNode: INode | undefined;
@@ -83,11 +83,11 @@ const getApiCondition = (node: INode): ISelectionAPITypes | undefined => {
   }
 };
 
-class GraphCausalExplorer extends React.Component<
-  IGraphCausalExplorerProps,
-  IGraphCausalExplorerState
+class GraphInference extends React.Component<
+  IGraphInferenceProps,
+  IGraphInferenceState
 > {
-  constructor(props: IGraphCausalExplorerProps) {
+  constructor(props: IGraphInferenceProps) {
     super(props);
 
     this.state = {
@@ -511,7 +511,7 @@ class GraphCausalExplorer extends React.Component<
   };
 }
 
-const ConnectedGraphCausalExplorer = () => {
+const ConnectedGraphInference = () => {
   const [availableNodes, setAvailableNodes] = useState(
     GraphSingleton.availableNodes
   );
@@ -529,7 +529,7 @@ const ConnectedGraphCausalExplorer = () => {
     });
     return () => sub.unsubscribe();
   }, []);
-  return <GraphCausalExplorer nodes={nodes} availableNodes={availableNodes} />;
+  return <GraphInference nodes={nodes} availableNodes={availableNodes} />;
 };
 
-export default ConnectedGraphCausalExplorer;
+export default ConnectedGraphInference;

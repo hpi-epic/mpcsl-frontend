@@ -11,9 +11,9 @@ import { getNodeDataDistribution } from '../../../restAPI/apiRequests';
 import GraphDataModal from '../GraphDataModal';
 import { GraphSingleton, GraphChanges } from '../../../graph/graph';
 import { filter } from 'rxjs/operators';
-import './GraphAnnotate.scss';
+import './GraphExplore.scss';
 
-const GraphAnnotate = () => {
+const GraphExplore = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedDistribution, setSelectedDistribution] = useState<
     IAPIDistribution | undefined
@@ -60,4 +60,4 @@ const GraphAnnotate = () => {
   );
 };
 
-export default GraphAnnotate;
+export default GraphExplore;

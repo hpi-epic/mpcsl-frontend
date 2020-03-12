@@ -478,7 +478,7 @@ export function getInterventionNodeDataDistribution(
 
 export function getConfounders(nodeID: string): Promise<IAPIConfounders> {
   return new Promise<IAPIConfounders>((resolve, reject) => {
-    const match = window.location.href.match(new RegExp('(\\d+)/exploration'));
+    const match = window.location.href.match(new RegExp('(\\d+)/inference'));
     if (!match || !match[1]) {
       throw Error();
     }
