@@ -82,22 +82,22 @@ export const AppHeader = () => {
           </Breadcrumb.Item>
         );
         break;
-      case 'annotation':
-        breadcrumbItems.pop();
-        breadcrumbItems.push(
-          <Breadcrumb.Item key={url}>
-            <Link style={{ color: 'white' }} to={url}>
-              Annotation of {shorten(experimentName, 25)}
-            </Link>
-          </Breadcrumb.Item>
-        );
-        break;
       case 'exploration':
         breadcrumbItems.pop();
         breadcrumbItems.push(
           <Breadcrumb.Item key={url}>
             <Link style={{ color: 'white' }} to={url}>
               Exploration of {shorten(experimentName, 25)}
+            </Link>
+          </Breadcrumb.Item>
+        );
+        break;
+      case 'inference':
+        breadcrumbItems.pop();
+        breadcrumbItems.push(
+          <Breadcrumb.Item key={url}>
+            <Link style={{ color: 'white' }} to={url}>
+              Inference of {shorten(experimentName, 25)}
             </Link>
           </Breadcrumb.Item>
         );

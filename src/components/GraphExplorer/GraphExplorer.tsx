@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import GraphSelection from './GraphSelection/GraphSelection';
-import GraphAnnotate from './GraphAnnotate/GraphAnnotate';
-import GraphCausalExplorer from './GraphCausalExplorer/GraphCausalExplorer';
+import GraphExplore from './GraphExplore/GraphExplore';
+import GraphInference from './GraphInference/GraphInference';
 import { GraphSingleton } from '../../graph/graph';
 
 const GraphExplorer = () => {
@@ -17,16 +17,16 @@ const GraphExplorer = () => {
         component={GraphSelection}
       />
       <Route
-        key="annotate"
-        path={'/:datasetId/experiments/:experimentId/jobs/:resultId/annotation'}
-        component={GraphAnnotate}
-      />
-      <Route
-        key="explorer"
+        key="exploration"
         path={
           '/:datasetId/experiments/:experimentId/jobs/:resultId/exploration'
         }
-        component={GraphCausalExplorer}
+        component={GraphExplore}
+      />
+      <Route
+        key="inference"
+        path={'/:datasetId/experiments/:experimentId/jobs/:resultId/inference'}
+        component={GraphInference}
       />
       <Redirect
         exact={true}
