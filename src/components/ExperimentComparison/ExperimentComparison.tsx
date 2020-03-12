@@ -84,7 +84,7 @@ export const ExperimentComparison = ({
     );
   }
   return (
-    <Row type="flex" justify="start" style={{ padding: 50 }}>
+    <Row type="flex" justify="start" style={{ height: '100%' }}>
       <Col span={4}>
         <ExperimentComparisonMenu
           experiments={experiments}
