@@ -72,7 +72,13 @@ export const ExperimentComparison = ({
   if (!experiments || !experiment) {
     return (
       <Spin
-        style={{ position: 'absolute', top: '50%', left: '50%' }}
+        style={{
+          display: 'block',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          width: '50%',
+          marginTop: '10%'
+        }}
         size="large"
       />
     );

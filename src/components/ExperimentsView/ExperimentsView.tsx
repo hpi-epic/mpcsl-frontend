@@ -5,7 +5,7 @@ import {
   subscribeToExperimentChanges
 } from '../../restAPI/apiRequests';
 import { IExperiment } from '../../types/types';
-import { Button, Spin } from 'antd';
+import { Button, Spin, Empty } from 'antd';
 import styles from './ExperimentsView.module.scss';
 import { NewExperimentModalForm } from './NewExperimentModal';
 import { ExperimentsListItem } from './ExperimentsListItem/ExperimentsListItem';
@@ -66,8 +66,27 @@ const ExperimentsView = ({
   if (!experiments) {
     return (
       <Spin
-        style={{ position: 'absolute', top: '50%', left: '50%' }}
+        style={{
+          display: 'block',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          width: '50%',
+          marginTop: '10%'
+        }}
         size="large"
+      />
+    );
+  }
+  if (experiments.length === 0) {
+    return (
+      <Empty
+        style={{
+          display: 'block',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          width: '50%',
+          marginTop: '10%'
+        }}
       />
     );
   }
