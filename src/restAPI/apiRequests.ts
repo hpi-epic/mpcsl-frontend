@@ -109,7 +109,7 @@ export const getObservationMatrixMetadata = async (
     );
     return response.data;
   } catch (e) {
-    message.error('Failed to create Observation Matrix Metadata');
+    message.error('Failed to fetch Observation Matrix Metadata');
     throw e;
   }
 };
