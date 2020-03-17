@@ -71,13 +71,14 @@ const GraphExplorerSelect = () => {
                   .filter(n => !!n)
                   .map(({ value, label }) => ({
                     value,
+                    key: label,
                     label: shorten(label, 25)
                   }))
               : []
           }
           onSelectResetsInput={true}
           onBlurResetsInput={false}
-          valueKey="value"
+          valueKey="key"
           labelKey="label"
           closeOnSelect={false}
           removeSelected={true}
