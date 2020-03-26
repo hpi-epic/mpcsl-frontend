@@ -58,7 +58,13 @@ class NewObservationMatrixModal extends React.Component<
       initialValue: this.props.observationMatrix
         ? this.props.observationMatrix.observationMatrixName
         : undefined,
-      rules: [{ required: true, message: 'Enter a Observation Matrix name' }]
+      rules: [
+        { required: true, message: 'Enter a Observation Matrix name' },
+        {
+          max: 16,
+          message: 'The name is too long'
+        }
+      ]
     })(<Input disabled={disabled} placeholder="Observation Matrix Name" />);
 
     const observationMatrixDescEl = getFieldDecorator(
