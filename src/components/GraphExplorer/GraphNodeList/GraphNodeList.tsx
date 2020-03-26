@@ -6,8 +6,34 @@ import { filter } from 'rxjs/operators';
 import { isArray } from 'util';
 import { GraphChanges, GraphSingleton } from '../../../graph/graph';
 import { ID3GraphNode } from '../../../types/graphTypes';
-import { shorten } from '../../../helper/helper';
+import styles from './GraphNodeList.module.scss';
+const SelectElem: any = (options: any) => {
+  const { focusOption, key, labelKey, option, selectValue, style } = options;
+  const className = [styles.NodeSelect];
 
+  if (option.disabled) {
+    className.push(styles.NodeSelectDisabled);
+  }
+
+  if (option.className) {
+    className.push(option.className);
+  }
+
+  return (
+    <Tooltip title={option[labelKey]}>
+      <div
+        key={key}
+        style={style}
+        className={className.join(' ')}
+        title={option.title}
+        onClick={option.disabled ? undefined : () => selectValue(option)}
+        onMouseEnter={option.disabled ? undefined : () => focusOption(option)}
+      >
+        {option[labelKey]}
+      </div>
+    </Tooltip>
+  );
+};
 const GraphExplorerSelect = () => {
   const { resultId } = useParams<{ resultId: string }>();
   const [graphSearch, setGraphSearch] = useState<
@@ -65,19 +91,10 @@ const GraphExplorerSelect = () => {
               ? GraphSingleton.addNode(option.value, parseInt(resultId))
               : null
           }
-          options={
-            graphSearch
-              ? graphSearch
-                  .filter(n => !!n)
-                  .map(({ value, label }) => ({
-                    value,
-                    key: label,
-                    label: shorten(label, 25)
-                  }))
-              : []
-          }
+          options={graphSearch ? graphSearch.filter(n => !!n) : []}
           onSelectResetsInput={true}
           onBlurResetsInput={false}
+          optionRenderer={SelectElem}
           valueKey="key"
           labelKey="label"
           closeOnSelect={false}

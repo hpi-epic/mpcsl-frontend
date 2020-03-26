@@ -1,0 +1,16 @@
+.NodeSelect {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 0.5rem;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1800;
+  &:hover {
+    background-color: rgba(0, 126, 255, 0.1);
+  }
+}
+
+.NodeSelectDisabled {
+  opacity: 0.5;
+}
