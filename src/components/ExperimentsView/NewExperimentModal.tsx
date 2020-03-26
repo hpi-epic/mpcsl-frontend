@@ -262,7 +262,13 @@ const NewExperimentModal: React.FunctionComponent<IPropsNewExperimentModal> = pr
 
   const ExperimentNameEl = props.form.getFieldDecorator('name', {
     initialValue: props.experiment ? props.experiment.name : undefined,
-    rules: [{ required: true, message: 'Enter a Experiment Name' }]
+    rules: [
+      { required: true, message: 'Enter a Experiment Name' },
+      {
+        max: 16,
+        message: 'The name is too long'
+      }
+    ]
   })(<Input disabled={props.editDisabled} placeholder="Experiment Name" />);
 
   const ExperimentDescEl = props.form.getFieldDecorator('description', {
