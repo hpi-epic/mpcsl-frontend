@@ -452,7 +452,6 @@ export function getConditionalNodeDataDistribution(
 export function getInterventionNodeDataDistribution(
   causeNodeID: number,
   effectNodeID: number,
-  resultID: number,
   factorNodeIDs: number[],
   causeCondition: any
 ): Promise<IAPIDistribution> {
