@@ -452,14 +452,21 @@ export function getConditionalNodeDataDistribution(
 export function getInterventionNodeDataDistribution(
   causeNodeID: number,
   effectNodeID: number,
+  resultID: number,
   factorNodeIDs: number[],
   causeCondition: any
 ): Promise<IAPIDistribution> {
   return new Promise<IAPIDistribution>((resolve, reject) => {
+    const match = window.location.href.match(new RegExp('(\\d+)/inference'));
+    if (!match || !match[1]) {
+      throw Error();
+    }
+    const resultID = match[1];
     axios
       .post(Endpoints.interventionalNodeDistribution(), {
         cause_node_id: causeNodeID,
         effect_node_id: effectNodeID,
+        result_id: resultID,
         factor_node_ids: factorNodeIDs,
         cause_condition: causeCondition
       })

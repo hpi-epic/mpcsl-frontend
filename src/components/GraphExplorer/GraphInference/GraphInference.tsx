@@ -421,6 +421,7 @@ class GraphInference extends React.Component<
           const confounders = await getConfounders(
             this.state.causalNode.nodeID
           );
+          // confonders are sent, end point expects external factors
           distribution = await getInterventionNodeDataDistribution(
             +this.state.causalNode.nodeID,
             +this.state.effectNode.nodeID,
