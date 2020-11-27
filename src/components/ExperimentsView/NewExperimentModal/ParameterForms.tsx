@@ -18,34 +18,39 @@ const ParameterForms: React.FC<Props> = ({
   <>
     {Object.keys(parameters).map(key => {
       const parameter = parameters[key];
-      const commonProps = {
-        key,
-        editDisabled
-      };
       switch (parameter.type) {
         case 'enum':
           return (
             <ParameterFormSelectElement
-              {...commonProps}
+              key={key}
+              paramName={key}
+              editDisabled={editDisabled}
               parameter={parameter}
               experimentParameters={experimentParameters}
             />
           );
         case 'str':
           return (
-            <ParameterFormInputElement {...commonProps} parameter={parameter} />
+            <ParameterFormInputElement
+              key={key}
+              paramName={key}
+              editDisabled={editDisabled}
+              parameter={parameter}
+            />
           );
         case 'int':
         case 'float':
           return (
             <ParameterFormNumberElement
-              {...commonProps}
+              key={key}
+              paramName={key}
+              editDisabled={editDisabled}
               parameter={parameter}
               experimentParameters={experimentParameters}
             />
           );
         default:
-          throw new Error('InvalidStateException');
+          return <div key={key} />;
       }
     })}
   </>

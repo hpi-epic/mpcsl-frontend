@@ -3,21 +3,27 @@ import React from 'react';
 import { IStrParameter } from '../../../types/types';
 
 interface Props {
-  key: string;
+  paramName: string;
   parameter: IStrParameter;
   editDisabled: boolean;
 }
 
 const ParameterFormInputElement: React.FC<Props> = ({
-  key,
+  paramName,
   parameter,
   editDisabled
 }) => (
   <Form.Item
-    key={key}
+    name={paramName}
+    label={paramName}
     rules={
       parameter.required
-        ? [{ required: parameter.required, message: `Enter ${key} value` }]
+        ? [
+            {
+              required: parameter.required,
+              message: `Enter ${paramName} value`
+            }
+          ]
         : []
     }
   >

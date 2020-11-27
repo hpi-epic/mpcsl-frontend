@@ -58,7 +58,7 @@ export const RunExperimentModalForm: React.FunctionComponent<IProps> = props => 
       }}
       onCancel={() => props.onClose()}
     >
-      <Form layout="vertical">
+      <Form form={form} layout="vertical">
         <Form.Item
           label="Select Machine to Start Job"
           name="node"

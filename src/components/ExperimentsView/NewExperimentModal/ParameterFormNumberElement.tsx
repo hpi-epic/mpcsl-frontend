@@ -3,25 +3,25 @@ import React from 'react';
 import { INumberParameter, IParameters } from '../../../types/types';
 
 interface Props {
-  key: string;
+  paramName: string;
   parameter: INumberParameter;
   editDisabled: boolean;
   experimentParameters?: IParameters;
 }
 
 const ParameterFormNumberElement: React.FC<Props> = ({
-  key,
+  paramName,
   parameter,
   editDisabled,
   experimentParameters
 }) => (
   <Form.Item
-    label={key}
-    key={key}
+    label={paramName}
+    name={paramName}
     hasFeedback={true}
     initialValue={
       experimentParameters
-        ? experimentParameters[key]
+        ? experimentParameters[paramName]
         : parameter.required
         ? null
         : parameter.default !== undefined
@@ -32,7 +32,12 @@ const ParameterFormNumberElement: React.FC<Props> = ({
     }
     rules={
       parameter.required
-        ? [{ required: parameter.required, message: `Enter ${key} value` }]
+        ? [
+            {
+              required: parameter.required,
+              message: `Enter ${paramName} value`
+            }
+          ]
         : []
     }
   >

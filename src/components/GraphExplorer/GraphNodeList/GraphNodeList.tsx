@@ -1,5 +1,5 @@
 import { CloseOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Col, Menu, Popconfirm, Tooltip } from 'antd';
+import { Col, Menu, Popconfirm, Row, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Select from 'react-virtualized-select';
@@ -157,26 +157,27 @@ const GraphNodeList = (props: IPropsGraphNodeList) => {
             .filter(node => !node.isContext)
             .map(node => (
               <Menu.Item key={node.id}>
-                <Col
-                  span={18}
+                <Row
                   style={{ overflow: 'hidden' }}
                   onClick={() =>
                     props.onNodeClick ? props.onNodeClick(node) : undefined
                   }
                 >
-                  <Tooltip title={node.label}>{node.label}</Tooltip>
-                </Col>
-                {props.isSelectionMode ? (
-                  <Col span={4} offset={2}>
-                    <CloseOutlined
-                      onClick={() =>
-                        props.onRemoveNode
-                          ? props.onRemoveNode(node)
-                          : undefined
-                      }
-                    />
+                  <Col span={18}>
+                    <Tooltip title={node.label}>{node.label}</Tooltip>
                   </Col>
-                ) : null}
+                  <Col span={4} offset={2}>
+                    {props.isSelectionMode ? (
+                      <CloseOutlined
+                        onClick={() =>
+                          props.onRemoveNode
+                            ? props.onRemoveNode(node)
+                            : undefined
+                        }
+                      />
+                    ) : null}
+                  </Col>
+                </Row>
               </Menu.Item>
             ))}
         </Menu.ItemGroup>

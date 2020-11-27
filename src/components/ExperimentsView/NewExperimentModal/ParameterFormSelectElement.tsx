@@ -3,26 +3,33 @@ import React from 'react';
 import { IEnumParameter, IParameters } from '../../../types/types';
 
 interface Props {
-  key: string;
+  paramName: string;
   parameter: IEnumParameter;
   editDisabled: boolean;
   experimentParameters?: IParameters;
 }
 
 const ParameterFormSelectElement: React.FC<Props> = ({
-  key,
+  paramName,
   parameter,
   editDisabled,
   experimentParameters
 }) => (
   <Form.Item
-    label={key}
-    key={key}
+    label={paramName}
+    name={paramName}
     hasFeedback={true}
-    initialValue={experimentParameters ? experimentParameters[key] : undefined}
+    initialValue={
+      experimentParameters ? experimentParameters[paramName] : undefined
+    }
     rules={
       parameter.required
-        ? [{ required: parameter.required, message: `Enter ${key} value` }]
+        ? [
+            {
+              required: parameter.required,
+              message: `Enter ${paramName} value`
+            }
+          ]
         : []
     }
   >

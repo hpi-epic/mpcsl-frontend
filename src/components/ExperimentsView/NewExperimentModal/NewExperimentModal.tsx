@@ -167,7 +167,7 @@ const NewExperimentModalForm: React.FunctionComponent<IPropsNewExperimentModal> 
           : 'Create new Experiment'
       }
     >
-      <Form>
+      <Form form={form} layout="vertical">
         <Form.Item
           name="name"
           label="Experiment Name"
