@@ -34,7 +34,7 @@ exports[`<GraphNodeList /> renders correctly 1`] = `
         className="ant-menu-item-group-list"
       >
         <li
-          className="ant-menu-item"
+          className="ant-menu-item ant-menu-item-only-child"
           onClick={[Function]}
           onMouseEnter={[Function]}
           onMouseLeave={[Function]}
@@ -59,7 +59,7 @@ exports[`<GraphNodeList /> renders correctly 1`] = `
           </div>
         </li>
         <li
-          className="ant-menu-item"
+          className="ant-menu-item ant-menu-item-only-child"
           onClick={[Function]}
           onMouseEnter={[Function]}
           onMouseLeave={[Function]}
@@ -84,7 +84,7 @@ exports[`<GraphNodeList /> renders correctly 1`] = `
           </div>
         </li>
         <li
-          className="ant-menu-item"
+          className="ant-menu-item ant-menu-item-only-child"
           onClick={[Function]}
           onMouseEnter={[Function]}
           onMouseLeave={[Function]}
