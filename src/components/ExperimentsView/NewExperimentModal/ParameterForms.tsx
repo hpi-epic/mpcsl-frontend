@@ -44,6 +44,8 @@ const ParameterForms: React.FC<Props> = ({
               experimentParameters={experimentParameters}
             />
           );
+        default:
+          throw new Error('InvalidStateException');
       }
     })}
   </>
