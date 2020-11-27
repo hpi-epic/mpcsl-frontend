@@ -42,7 +42,7 @@ exports[`<GraphNodeList /> renders correctly 1`] = `
           style={Object {}}
         >
           <div
-            className="ant-col ant-col-18"
+            className="ant-row"
             onClick={[Function]}
             style={
               Object {
@@ -50,12 +50,21 @@ exports[`<GraphNodeList /> renders correctly 1`] = `
               }
             }
           >
-            <span
-              onMouseEnter={[Function]}
-              onMouseLeave={[Function]}
+            <div
+              className="ant-col ant-col-18"
+              style={Object {}}
             >
-              node1
-            </span>
+              <span
+                onMouseEnter={[Function]}
+                onMouseLeave={[Function]}
+              >
+                node1
+              </span>
+            </div>
+            <div
+              className="ant-col ant-col-4 ant-col-offset-2"
+              style={Object {}}
+            />
           </div>
         </li>
         <li
@@ -67,7 +76,7 @@ exports[`<GraphNodeList /> renders correctly 1`] = `
           style={Object {}}
         >
           <div
-            className="ant-col ant-col-18"
+            className="ant-row"
             onClick={[Function]}
             style={
               Object {
@@ -75,12 +84,21 @@ exports[`<GraphNodeList /> renders correctly 1`] = `
               }
             }
           >
-            <span
-              onMouseEnter={[Function]}
-              onMouseLeave={[Function]}
+            <div
+              className="ant-col ant-col-18"
+              style={Object {}}
             >
-              node2
-            </span>
+              <span
+                onMouseEnter={[Function]}
+                onMouseLeave={[Function]}
+              >
+                node2
+              </span>
+            </div>
+            <div
+              className="ant-col ant-col-4 ant-col-offset-2"
+              style={Object {}}
+            />
           </div>
         </li>
         <li
@@ -92,7 +110,7 @@ exports[`<GraphNodeList /> renders correctly 1`] = `
           style={Object {}}
         >
           <div
-            className="ant-col ant-col-18"
+            className="ant-row"
             onClick={[Function]}
             style={
               Object {
@@ -100,12 +118,21 @@ exports[`<GraphNodeList /> renders correctly 1`] = `
               }
             }
           >
-            <span
-              onMouseEnter={[Function]}
-              onMouseLeave={[Function]}
+            <div
+              className="ant-col ant-col-18"
+              style={Object {}}
             >
-              node3
-            </span>
+              <span
+                onMouseEnter={[Function]}
+                onMouseLeave={[Function]}
+              >
+                node3
+              </span>
+            </div>
+            <div
+              className="ant-col ant-col-4 ant-col-offset-2"
+              style={Object {}}
+            />
           </div>
         </li>
       </ul>
