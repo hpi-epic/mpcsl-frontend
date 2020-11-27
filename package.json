@@ -5,7 +5,8 @@
   "dependencies": {
     "@blueprintjs/core": "^3.24.0",
     "@blueprintjs/icons": "^3.14.0",
-    "antd": "^3.26.12",
+    "antd": "^4.8.5",
+    "@ant-design/icons": "^4.3.0",
     "axios": "^0.19.2",
     "d3": "^5.15.0",
     "moment": "^2.24.0",
@@ -44,7 +45,7 @@
     "husky": "^4.2.3",
     "jest-junit": "^10.0.0",
     "lint-staged": "^10.0.8",
-    "node-sass": "^4.13.1",
+    "sass": "^1.29.0",
     "prettier": "^1.19.1",
     "typescript": "3.8.2"
   },

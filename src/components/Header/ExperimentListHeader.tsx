@@ -1,4 +1,5 @@
-import { Icon, Tooltip } from 'antd';
+import { CheckCircleTwoTone } from '@ant-design/icons';
+import { Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import 'react-select/dist/react-select.css';
@@ -25,9 +26,7 @@ export const ExperimentsListHeader = (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       {isGroundTruth ? (
         <Tooltip title="Observation Matrix has Ground Truth Graph">
-          <Icon
-            type="check-circle"
-            theme="twoTone"
+          <CheckCircleTwoTone
             style={{ marginRight: 10, fontSize: 20 }}
             twoToneColor="#52c41a"
           />

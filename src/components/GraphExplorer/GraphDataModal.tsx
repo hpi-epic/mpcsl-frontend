@@ -4,6 +4,11 @@ import { IAPIDistribution } from '../../types/types';
 
 import 'react-vis/dist/style.css';
 import DataDistributionPlot from '../DataDistributions/DataDistributionPlot';
+import {
+  CloseOutlined,
+  FullscreenExitOutlined,
+  FullscreenOutlined
+} from '@ant-design/icons';
 
 interface IGraphDataModalProps {
   visible: boolean;
@@ -79,10 +84,13 @@ class GraphDataModal extends React.Component<
                   this.state.expanded ? (
                     <Button
                       onClick={() => this.showLess()}
-                      icon="fullscreen-exit"
+                      icon={<FullscreenExitOutlined />}
                     />
                   ) : (
-                    <Button onClick={() => this.showMore()} icon="fullscreen" />
+                    <Button
+                      onClick={() => this.showMore()}
+                      icon={<FullscreenOutlined />}
+                    />
                   )
                 ) : null}
                 <Button
@@ -90,7 +98,7 @@ class GraphDataModal extends React.Component<
                     this.showLess();
                     this.props.onClose();
                   }}
-                  icon="close"
+                  icon={<CloseOutlined />}
                 />
               </div>
             }

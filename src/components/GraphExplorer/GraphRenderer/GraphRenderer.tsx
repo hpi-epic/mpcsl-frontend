@@ -130,11 +130,7 @@ const force = d3
 
 const GraphMenu = () => {
   return (
-    <Row
-      type="flex"
-      justify="start"
-      style={{ marginTop: '5px', marginLeft: '5px' }}
-    >
+    <Row justify="start" style={{ marginTop: '5px', marginLeft: '5px' }}>
       <Col span={3}>
         <Button onClick={GraphSingleton.resetLayout}>Re-Layout</Button>
       </Col>

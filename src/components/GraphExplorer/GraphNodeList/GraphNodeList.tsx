@@ -1,4 +1,5 @@
-import { Col, Icon, Menu, Popconfirm, Tooltip } from 'antd';
+import { CloseOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Col, Menu, Popconfirm, Row, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Select from 'react-virtualized-select';
@@ -7,6 +8,7 @@ import { isArray } from 'util';
 import { GraphChanges, GraphSingleton } from '../../../graph/graph';
 import { ID3GraphNode } from '../../../types/graphTypes';
 import styles from './GraphNodeList.module.scss';
+
 const SelectElem: any = (options: any) => {
   const { focusOption, key, labelKey, option, selectValue, style } = options;
   const className = [styles.NodeSelect];
@@ -113,9 +115,8 @@ const GraphExplorerSelect = () => {
             );
           }}
         >
-          <Icon
+          <PlusCircleOutlined
             style={{ color: 'rgba(255, 255, 255, 0.65)', fontSize: 20 }}
-            type="plus-circle"
           />
         </Popconfirm>
       </Tooltip>
@@ -156,27 +157,27 @@ const GraphNodeList = (props: IPropsGraphNodeList) => {
             .filter(node => !node.isContext)
             .map(node => (
               <Menu.Item key={node.id}>
-                <Col
-                  span={18}
+                <Row
                   style={{ overflow: 'hidden' }}
                   onClick={() =>
                     props.onNodeClick ? props.onNodeClick(node) : undefined
                   }
                 >
-                  <Tooltip title={node.label}>{node.label}</Tooltip>
-                </Col>
-                {props.isSelectionMode ? (
-                  <Col span={4} offset={2}>
-                    <Icon
-                      type="close"
-                      onClick={() =>
-                        props.onRemoveNode
-                          ? props.onRemoveNode(node)
-                          : undefined
-                      }
-                    />
+                  <Col span={18}>
+                    <Tooltip title={node.label}>{node.label}</Tooltip>
                   </Col>
-                ) : null}
+                  <Col span={4} offset={2}>
+                    {props.isSelectionMode ? (
+                      <CloseOutlined
+                        onClick={() =>
+                          props.onRemoveNode
+                            ? props.onRemoveNode(node)
+                            : undefined
+                        }
+                      />
+                    ) : null}
+                  </Col>
+                </Row>
               </Menu.Item>
             ))}
         </Menu.ItemGroup>

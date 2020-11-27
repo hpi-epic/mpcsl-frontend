@@ -1,4 +1,3 @@
-import { Form } from 'antd';
 import React, { useEffect, useState } from 'react';
 import {
   getObservationMatrices,
@@ -6,16 +5,13 @@ import {
 } from '../../restAPI/apiRequests';
 import { IObservationMatrix } from '../../types/types';
 import { ObservationMatrixListItem } from './ObservationMatrixListItem/ObservationMatrixListItem';
-import NewObservationMatrixModal, {
-  IFormObservationMatrix,
-  IPropsNewObservationMatrixModal
-} from './NewObservationMatrixModal';
 import styles from './ObservationMatrixView.module.scss';
+import ObservationMatrixModal, {
+  IFormObservationMatrix
+} from './ObservationMatrixModal/ObservationMatrixModal';
+import ObservationMatrixPlaceholder from './ObservationMatrixPlaceholder/ObservationMatrixPlaceholder';
 
 export const ObservationMatrixView = () => {
-  const ObservationMatrixModal = Form.create<IPropsNewObservationMatrixModal>()(
-    NewObservationMatrixModal
-  );
   const [matrices, setMatrices] = useState<undefined | IObservationMatrix[]>();
   const [
     observationMatrixModalVisible,
@@ -50,17 +46,16 @@ export const ObservationMatrixView = () => {
   }, []);
   return (
     <>
-      {matrices ? (
-        <div className={styles.ObservationMatrixList}>
-          {matrices.map(matrix => (
-            <ObservationMatrixListItem
-              onClick={() => OnViewObservationMatrix(matrix)}
-              key={matrix.id}
-              {...matrix}
-            />
-          ))}
-        </div>
-      ) : null}
+      <div className={styles.ObservationMatrixList}>
+        {matrices?.map(matrix => (
+          <ObservationMatrixListItem
+            onClick={() => OnViewObservationMatrix(matrix)}
+            key={matrix.id}
+            {...matrix}
+          />
+        ))}
+        <ObservationMatrixPlaceholder />
+      </div>
       <ObservationMatrixModal
         visible={observationMatrixModalVisible}
         onClose={onClose}

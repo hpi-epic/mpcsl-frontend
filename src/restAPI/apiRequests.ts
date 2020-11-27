@@ -32,6 +32,7 @@ class CachedApiCall<T extends IIDClass> {
   private cachedData: undefined | Promise<T[]>;
   private observable: Observable<IIDClass>;
   private changeObs: Observable<number>;
+
   constructor(private apiEndpoint: string, subIdentifier: string) {
     this.observable = fromEvent(socket(), subIdentifier);
     this.changeObs = new Observable(observer => {
@@ -183,20 +184,12 @@ export const updateExperiment = async (experiment: {
   }
 };
 
-export const deleteObservationMatrix = async (
-  observationMatrix: IObservationMatrix
-) => {
+export const deleteObservationMatrix = async (id: number, name: string) => {
   try {
-    await axios.delete(
-      `${Endpoints.observationMatrix}/${observationMatrix.id}`
-    );
-    message.success(
-      `Successfully deleted Observation Matrix ${observationMatrix.name}!`
-    );
+    await axios.delete(`${Endpoints.observationMatrix}/${id}`);
+    message.success(`Successfully deleted Observation Matrix ${name}!`);
   } catch (e) {
-    message.error(
-      `Failed to delete Observation Matrix ${observationMatrix.name}!`
-    );
+    message.error(`Failed to delete Observation Matrix ${name}!`);
     throw e;
   }
 };

@@ -2,7 +2,7 @@
 
 exports[`<ListElementExperiment /> renders correctly 1`] = `
 <div
-  className="ant-card ListItem ant-card-bordered ant-card-hoverable"
+  className="ant-card ant-card-bordered ant-card-hoverable ListItem"
   onClick={[Function]}
 >
   <div
@@ -36,7 +36,8 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
               test
             </p>
             <span
-              className="Card-Badge ant-badge ant-badge-status ant-badge-not-a-wrapper"
+              className="ant-badge ant-badge-status ant-badge-not-a-wrapper Card-Badge"
+              style={Object {}}
             >
               <span
                 className="ant-badge-status-dot ant-badge-status-default"
@@ -76,32 +77,62 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
               <tr
                 className="ant-descriptions-row"
               >
+                <th
+                  className="ant-descriptions-item Description"
+                  colSpan={1}
+                >
+                  <div
+                    className="ant-descriptions-item-container"
+                  >
+                    <span
+                      className="ant-descriptions-item-label"
+                    >
+                      Description
+                    </span>
+                  </div>
+                </th>
+              </tr>
+              <tr
+                className="ant-descriptions-row"
+              >
                 <td
                   className="ant-descriptions-item Description"
                   colSpan={1}
                 >
-                  <span
-                    className="ant-descriptions-item-label ant-descriptions-item-colon"
+                  <div
+                    className="ant-descriptions-item-container"
                   >
-                    Description
-                  </span>
-                  <span
-                    className="ant-descriptions-item-content"
-                  >
-                    <p
-                      style={
-                        Object {
-                          "height": 58,
-                          "overflow": "hidden",
-                          "overflowWrap": "break-word",
-                          "width": 250,
+                    <span
+                      className="ant-descriptions-item-content"
+                    >
+                      <p
+                        style={
+                          Object {
+                            "color": "rgba(0,0,0,.65)",
+                            "height": 58,
+                            "marginTop": -10,
+                            "overflow": "hidden",
+                            "overflowWrap": "break-word",
+                            "width": 250,
+                          }
                         }
-                      }
-                    />
-                  </span>
+                      />
+                    </span>
+                  </div>
                 </td>
               </tr>
             </tbody>
+          </table>
+        </div>
+      </div>
+      <div
+        className="ant-descriptions ant-descriptions-small"
+      >
+        <div
+          className="ant-descriptions-view"
+        >
+          <table>
+            <tbody />
           </table>
         </div>
       </div>
@@ -118,12 +149,13 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
       }
     >
       <span>
-        <i
-          aria-label="icon: play-circle"
+        <span
+          aria-label="play-circle"
           className="anticon anticon-play-circle"
           onClick={[Function]}
           onMouseEnter={[Function]}
           onMouseLeave={[Function]}
+          role="img"
           style={
             Object {
               "fontSize": 20,
@@ -133,7 +165,6 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
         >
           <svg
             aria-hidden="true"
-            className=""
             data-icon="play-circle"
             fill="currentColor"
             focusable="false"
@@ -145,10 +176,10 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
               d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
             />
             <path
-              d="M719.4 499.1l-296.1-215A15.9 15.9 0 0 0 398 297v430c0 13.1 14.8 20.5 25.3 12.9l296.1-215a15.9 15.9 0 0 0 0-25.8zm-257.6 134V390.9L628.5 512 461.8 633.1z"
+              d="M719.4 499.1l-296.1-215A15.9 15.9 0 00398 297v430c0 13.1 14.8 20.5 25.3 12.9l296.1-215a15.9 15.9 0 000-25.8zm-257.6 134V390.9L628.5 512 461.8 633.1z"
             />
           </svg>
-        </i>
+        </span>
       </span>
     </li>
     <li
@@ -159,12 +190,13 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
       }
     >
       <span>
-        <i
-          aria-label="icon: interaction"
+        <span
+          aria-label="interaction"
           className="anticon anticon-interaction"
           onClick={[Function]}
           onMouseEnter={[Function]}
           onMouseLeave={[Function]}
+          role="img"
           style={
             Object {
               "fontSize": 20,
@@ -174,7 +206,6 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
         >
           <svg
             aria-hidden="true"
-            className=""
             data-icon="interaction"
             fill="currentColor"
             focusable="false"
@@ -186,7 +217,7 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
               d="M880 112H144c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V144c0-17.7-14.3-32-32-32zm-40 728H184V184h656v656zM304.8 524h50.7c3.7 0 6.8-3 6.8-6.8v-78.9c0-19.7 15.9-35.6 35.5-35.6h205.7v53.4c0 5.7 6.5 8.8 10.9 5.3l109.1-85.7c3.5-2.7 3.5-8 0-10.7l-109.1-85.7c-4.4-3.5-10.9-.3-10.9 5.3V338H397.7c-55.1 0-99.7 44.8-99.7 100.1V517c0 4 3 7 6.8 7zm-4.2 134.9l109.1 85.7c4.4 3.5 10.9.3 10.9-5.3v-53.4h205.7c55.1 0 99.7-44.8 99.7-100.1v-78.9c0-3.7-3-6.8-6.8-6.8h-50.7c-3.7 0-6.8 3-6.8 6.8v78.9c0 19.7-15.9 35.6-35.5 35.6H420.6V568c0-5.7-6.5-8.8-10.9-5.3l-109.1 85.7c-3.5 2.5-3.5 7.8 0 10.5z"
             />
           </svg>
-        </i>
+        </span>
       </span>
     </li>
     <li
@@ -197,17 +228,18 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
       }
     >
       <span>
-        <i
-          aria-label="icon: ellipsis"
+        <span
+          aria-label="ellipsis"
           className="anticon anticon-ellipsis ant-dropdown-trigger"
           onClick={[Function]}
           onMouseEnter={[Function]}
           onMouseLeave={[Function]}
+          role="img"
           tabIndex={-1}
+          type="ellipsis"
         >
           <svg
             aria-hidden="true"
-            className=""
             data-icon="ellipsis"
             fill="currentColor"
             focusable="false"
@@ -216,10 +248,10 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
             width="1em"
           >
             <path
-              d="M176 511a56 56 0 1 0 112 0 56 56 0 1 0-112 0zm280 0a56 56 0 1 0 112 0 56 56 0 1 0-112 0zm280 0a56 56 0 1 0 112 0 56 56 0 1 0-112 0z"
+              d="M176 511a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0z"
             />
           </svg>
-        </i>
+        </span>
       </span>
     </li>
   </ul>

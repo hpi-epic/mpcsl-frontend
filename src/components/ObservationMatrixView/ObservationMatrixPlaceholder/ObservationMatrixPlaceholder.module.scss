@@ -1,0 +1,17 @@
+.CreateObservationMatrixPlaceholder {
+  max-width: 300px;
+  min-width: 300px;
+  max-height: 355px;
+  min-height: 355px;
+  margin: 6px 5px 5px;
+  flex-grow: 1;
+  border: 1px dashed #99cbe4;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  &:hover {
+    cursor: pointer;
+    background: #e6e6e6;
+  }
+}

@@ -10,6 +10,7 @@
   height: 200px;
   display: flex;
   flex-direction: column;
+
   p {
     flex-grow: 1;
   }
@@ -19,6 +20,7 @@
   border: none;
   background-color: transparent !important;
   box-shadow: none;
+
   &hover {
     border: none;
     background-color: transparent;
@@ -30,5 +32,6 @@
 }
 
 .Description {
+  color: rgba(0, 0, 0, 0.65);
   width: 100%;
 }

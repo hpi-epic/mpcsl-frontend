@@ -164,6 +164,7 @@ declare module 'react-vis' {
     stroke?: string | number;
     fill?: string | number;
   }
+
   export type HorizontalRectSeriesPoint = RectSeriesPoint;
   export type VerticalRectSeriesPoint = RectSeriesPoint;
 
@@ -224,6 +225,7 @@ declare module 'react-vis' {
   }
 
   export interface DecorativeAxisPoint extends AbstractSeriesPoint {}
+
   export interface RadarChartPoint extends AbstractSeriesPoint {}
 
   export interface AbstractSeriesProps<T extends AbstractSeriesPoint> {
@@ -330,6 +332,7 @@ declare module 'react-vis' {
     fill?: string | number;
     opacity?: number;
   }
+
   export class AbstractSeries<T> extends PureComponent<T> {}
 
   export interface LineSeriesProps
@@ -338,58 +341,68 @@ declare module 'react-vis' {
     curve?: string | Function; //default: null
     getNull?: RVGetNull<LineSeriesPoint>;
   }
+
   export class LineSeries extends AbstractSeries<LineSeriesProps> {}
 
   export interface LineSeriesCanvasProps
     extends AbstractSeriesProps<LineSeriesPoint> {
     strokeWidth?: number; //default: 1
   }
+
   export class LineSeriesCanvas extends AbstractSeries<LineSeriesCanvasProps> {}
 
   export interface HorizontalBarSeriesProps
     extends AbstractSeriesProps<HorizontalBarSeriesPoint> {}
+
   export class HorizontalBarSeries extends AbstractSeries<
     HorizontalBarSeriesProps
   > {}
 
   export interface HorizontalBarSeriesCanvasProps
     extends AbstractSeriesProps<HorizontalBarSeriesPoint> {}
+
   export class HorizontalBarSeriesCanvas extends AbstractSeries<
     HorizontalBarSeriesCanvasProps
   > {}
 
   export interface VerticalBarSeriesProps
     extends AbstractSeriesProps<VerticalBarSeriesPoint> {}
+
   export class VerticalBarSeries extends AbstractSeries<
     VerticalBarSeriesProps
   > {}
 
   export interface VerticalBarSeriesCanvasProps
     extends AbstractSeriesProps<VerticalBarSeriesPoint> {}
+
   export class VerticalBarSeriesCanvas extends AbstractSeries<
     VerticalBarSeriesCanvasProps
   > {}
 
   export interface VerticalRectSeriesProps
     extends AbstractSeriesProps<VerticalRectSeriesPoint> {}
+
   export class VerticalRectSeries extends AbstractSeries<
     VerticalRectSeriesProps
   > {}
 
   export interface VerticalRectSeriesCanvasProps
     extends AbstractSeriesProps<VerticalRectSeriesPoint> {}
+
   export class VerticalRectSeriesCanvas extends AbstractSeries<
     VerticalRectSeriesCanvasProps
   > {}
 
   export interface HorizontalRectSeriesProps
     extends AbstractSeriesProps<HorizontalRectSeriesPoint> {}
+
   export class HorizontalRectSeries extends AbstractSeries<
     HorizontalRectSeriesProps
   > {}
 
   export interface HorizontalRectSeriesCanvasProps
     extends AbstractSeriesProps<HorizontalRectSeriesPoint> {}
+
   export class HorizontalRectSeriesCanvas extends AbstractSeries<
     HorizontalRectSeriesCanvasProps
   > {}
@@ -403,10 +416,12 @@ declare module 'react-vis' {
     labelAnchorX?: string;
     labelAnchorY?: string;
   }
+
   export class LabelSeries extends AbstractSeries<LabelSeriesProps> {}
 
   export interface PolygonSeriesProps
     extends AbstractSeriesProps<PolygonSeriesPoint> {}
+
   export class PolygonSeries extends AbstractSeries<PolygonSeriesProps> {}
 
   export interface RectSeriesProps
@@ -416,10 +431,12 @@ declare module 'react-vis' {
     lineSizeAttr?: string;
     valueSizeAttr?: string;
   }
+
   export class RectSeries extends AbstractSeries<RectSeriesProps> {}
 
   export interface RectSeriesCanvasProps
     extends AbstractSeriesProps<RectSeriesPoint> {}
+
   export class RectSeriesCanvas extends AbstractSeries<RectSeriesCanvasProps> {}
 
   export interface MarkSeriesProps
@@ -427,20 +444,24 @@ declare module 'react-vis' {
     getNull?: RVGetNull<MarkSeriesPoint>;
     strokeWidth?: number;
   }
+
   export class MarkSeries extends AbstractSeries<MarkSeriesProps> {}
 
   export interface MarkSeriesCanvasProps
     extends AbstractSeriesProps<MarkSeriesPoint> {}
+
   export class MarkSeriesCanvas extends AbstractSeries<MarkSeriesCanvasProps> {}
 
   export interface WhiskerSeriesProps
     extends AbstractSeriesProps<WhiskerSeriesPoint> {
     strokeWidth?: number; //default: 1
   }
+
   export class WhiskerSeries extends AbstractSeries<WhiskerSeriesProps> {}
 
   export interface HeatmapSeriesProps
     extends AbstractSeriesProps<HeatmapSeriesPoint> {}
+
   export class HeatmapSeries extends AbstractSeries<HeatmapSeriesProps> {}
 
   export interface ContourSeriesProps
@@ -449,6 +470,7 @@ declare module 'react-vis' {
     marginLeft?: number;
     marginTop?: number;
   }
+
   export class ContourSeries extends AbstractSeries<ContourSeriesProps> {}
 
   export interface CustomSVGSeriesProps
@@ -457,12 +479,14 @@ declare module 'react-vis' {
     marginLeft?: number;
     marginTop?: number;
   }
+
   export class CustomSVGSeries extends AbstractSeries<CustomSVGSeriesProps> {}
 
   export interface AreaSeriesProps
     extends AbstractSeriesProps<AreaSeriesPoint> {
     getNull?: RVGetNull<AreaSeriesPoint>;
   }
+
   export class AreaSeries extends AbstractSeries<AreaSeriesProps> {}
 
   export interface ArcSeriesProps extends AbstractSeriesProps<ArcSeriesPoint> {
@@ -502,6 +526,7 @@ declare module 'react-vis' {
     }; //default: {'x':0,'y':0}
     arcClassName?: string; //default: ''
   }
+
   export class ArcSeries extends AbstractSeries<ArcSeriesProps> {}
 
   export interface LineMarkSeriesProps
@@ -512,10 +537,12 @@ declare module 'react-vis' {
     lineStyle?: CSSProperties; //default: {}
     markStyle?: CSSProperties; //default: {}
   }
+
   export class LineMarkSeries extends AbstractSeries<LineMarkSeriesProps> {}
 
   export interface LineMarkSeriesCanvasProps
     extends AbstractSeriesProps<LineMarkSeriesPoint> {}
+
   export class LineMarkSeriesCanvas extends AbstractSeries<
     LineMarkSeriesCanvasProps
   > {}
@@ -536,6 +563,7 @@ declare module 'react-vis' {
     getAlignStyle?: RVGetAlignStyle;
     orientation?: 'bottomleft' | 'bottomright' | 'topleft' | 'topright';
   }
+
   export class Hint<T = any> extends PureComponent<HintProps & T> {}
 
   export interface BordersProps {
@@ -552,6 +580,7 @@ declare module 'react-vis' {
     innerWidth?: number;
     innerHeight?: number;
   }
+
   export class Borders<T = any> extends PureComponent<BordersProps & T> {}
 
   export interface CrosshairProps {
@@ -571,6 +600,7 @@ declare module 'react-vis' {
       box?: CSSProperties;
     }; //default: {'line':{},'title':{},'box':{}}
   }
+
   export class Crosshair<T = any> extends PureComponent<CrosshairProps & T> {}
 
   export interface XYPlotProps {
@@ -618,6 +648,7 @@ declare module 'react-vis' {
     style?: CSSProperties;
     width: number;
   }
+
   export class XYPlot<T = any> extends Component<XYPlotProps & T> {}
 
   export interface DecorativeAxisProps
@@ -635,6 +666,7 @@ declare module 'react-vis' {
     tickValue?: Function;
     tickSize?: number; //default: 5
   }
+
   export class DecorativeAxis extends AbstractSeries<DecorativeAxisProps> {}
 
   export interface XAxisProps {
@@ -666,6 +698,7 @@ declare module 'react-vis' {
     innerWidth?: number;
     innerHeight?: number;
   }
+
   export const XAxis: SFC<XAxisProps>;
 
   export interface YAxisProps {
@@ -697,6 +730,7 @@ declare module 'react-vis' {
     innerWidth?: number;
     innerHeight?: number;
   }
+
   export const YAxis: SFC<YAxisProps>;
 
   export interface CircularGridLinesProps {
@@ -725,6 +759,7 @@ declare module 'react-vis' {
     innerWidth?: number;
     innerHeight?: number;
   }
+
   export class CircularGridLines<T = any> extends PureComponent<
     CircularGridLinesProps & T
   > {}
@@ -754,11 +789,13 @@ declare module 'react-vis' {
     innerWidth?: number;
     innerHeight?: number;
   }
+
   export class GridLines<T = any> extends PureComponent<GridLinesProps & T> {}
 
   export interface GradientDefsProps {
     className?: string; //default: ''
   }
+
   export class GradientDefs<T = any> extends PureComponent<
     GradientDefsProps & T
   > {}
@@ -788,6 +825,7 @@ declare module 'react-vis' {
     innerWidth?: number;
     innerHeight?: number;
   }
+
   export const VerticalGridLines: SFC<VerticalGridLinesProps>;
 
   export interface HorizontalGridLinesProps {
@@ -815,6 +853,7 @@ declare module 'react-vis' {
     innerWidth?: number;
     innerHeight?: number;
   }
+
   export const HorizontalGridLines: SFC<HorizontalGridLinesProps>;
 
   export interface VoronoiProps {
@@ -829,6 +868,7 @@ declare module 'react-vis' {
     x?: Function;
     y?: Function;
   }
+
   export const Voronoi: SFC<VoronoiProps>;
 
   export interface DiscreteColorLegendProps {
@@ -849,6 +889,7 @@ declare module 'react-vis' {
     width?: number;
     orientation?: 'vertical' | 'horizontal'; //default: 'vertical'
   }
+
   export const DiscreteColorLegend: SFC<DiscreteColorLegendProps>;
 
   export interface SearchableDiscreteColorLegendProps {
@@ -873,6 +914,7 @@ declare module 'react-vis' {
     searchPlaceholder?: string;
     searchFn?: Function;
   }
+
   export const SearchableDiscreteColorLegend: SFC<SearchableDiscreteColorLegendProps>;
 
   export interface ContinuousColorLegendProps {
@@ -886,6 +928,7 @@ declare module 'react-vis' {
     startTitle: number | string;
     width?: number;
   }
+
   export const ContinuousColorLegend: SFC<ContinuousColorLegendProps>;
 
   export interface ContinuousSizeLegendProps {
@@ -898,6 +941,7 @@ declare module 'react-vis' {
     startTitle: number | string;
     width?: number;
   }
+
   export const ContinuousSizeLegend: SFC<ContinuousSizeLegendProps>;
 
   export interface TreemapProps {
@@ -941,6 +985,7 @@ declare module 'react-vis' {
     getSize?: RVGet<TreemapPoint, 'size'>;
     getColor?: RVGet<TreemapPoint, 'color'>;
   }
+
   export class Treemap<T = any> extends Component<TreemapProps & T> {}
 
   export interface RadialChartProps {
@@ -985,6 +1030,7 @@ declare module 'react-vis' {
     subLabel?: Function;
     width: number;
   }
+
   export class RadialChart<T = any> extends Component<RadialChartProps & T> {}
 
   export interface RadarChartProps {
@@ -1024,6 +1070,7 @@ declare module 'react-vis' {
     tickFormat?: RVTickFormat;
     width: number;
   }
+
   export class RadarChart<T = any> extends Component<RadarChartProps & T> {}
 
   export interface ParallelCoordinatesProps {
@@ -1062,6 +1109,7 @@ declare module 'react-vis' {
     tickFormat?: RVTickFormat;
     width: number;
   }
+
   export class ParallelCoordinates<T = any> extends Component<
     ParallelCoordinatesProps & T
   > {}
@@ -1101,6 +1149,7 @@ declare module 'react-vis' {
     }; //default: {'links':{},'rects':{},'labels':{}}
     width: number;
   }
+
   export class Sankey<T = any> extends Component<SankeyProps & T> {}
 
   export interface SunburstProps {
@@ -1126,6 +1175,7 @@ declare module 'react-vis' {
     getSize?: RVGet<SunburstPoint, 'size'>;
     width: number;
   }
+
   export class Sunburst<T = any> extends Component<SunburstProps & T> {}
 
   export interface FlexibleXYPlotProps {
@@ -1171,6 +1221,7 @@ declare module 'react-vis' {
       | 'size';
     style?: CSSProperties;
   }
+
   export class FlexibleXYPlot<T = any> extends Component<
     FlexibleXYPlotProps & T
   > {}
@@ -1218,6 +1269,7 @@ declare module 'react-vis' {
       | 'size';
     style?: CSSProperties;
   }
+
   export class FlexibleWidthXYPlot<T = any> extends Component<
     FlexibleWidthXYPlotProps & T
   > {}
@@ -1265,6 +1317,7 @@ declare module 'react-vis' {
       | 'size';
     style?: CSSProperties;
   }
+
   export class FlexibleHeightXYPlot<T = any> extends Component<
     FlexibleHeightXYPlotProps & T
   > {}

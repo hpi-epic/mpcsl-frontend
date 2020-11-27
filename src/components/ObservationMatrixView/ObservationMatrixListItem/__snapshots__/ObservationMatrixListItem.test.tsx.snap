@@ -2,7 +2,7 @@
 
 exports[`<ListElementExperiment /> renders correctly 1`] = `
 <div
-  className="ant-card ObservationMatrixListItem ant-card-bordered ant-card-hoverable"
+  className="ant-card ant-card-bordered ant-card-hoverable ObservationMatrixListItem"
   onClick={[Function]}
 >
   <div
@@ -47,32 +47,62 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
               <tr
                 className="ant-descriptions-row"
               >
+                <th
+                  className="ant-descriptions-item Description"
+                  colSpan={1}
+                >
+                  <div
+                    className="ant-descriptions-item-container"
+                  >
+                    <span
+                      className="ant-descriptions-item-label"
+                    >
+                      Description
+                    </span>
+                  </div>
+                </th>
+              </tr>
+              <tr
+                className="ant-descriptions-row"
+              >
                 <td
                   className="ant-descriptions-item Description"
                   colSpan={1}
                 >
-                  <span
-                    className="ant-descriptions-item-label ant-descriptions-item-colon"
+                  <div
+                    className="ant-descriptions-item-container"
                   >
-                    Description
-                  </span>
-                  <span
-                    className="ant-descriptions-item-content"
-                  >
-                    <p
-                      style={
-                        Object {
-                          "height": 64,
-                          "overflow": "hidden",
-                          "overflowWrap": "break-word",
-                          "width": 250,
+                    <span
+                      className="ant-descriptions-item-content"
+                    >
+                      <p
+                        style={
+                          Object {
+                            "color": "rgba(0,0,0,.65)",
+                            "height": 64,
+                            "marginTop": -10,
+                            "overflow": "hidden",
+                            "overflowWrap": "break-word",
+                            "width": 250,
+                          }
                         }
-                      }
-                    />
-                  </span>
+                      />
+                    </span>
+                  </div>
                 </td>
               </tr>
             </tbody>
+          </table>
+        </div>
+      </div>
+      <div
+        className="ant-descriptions ant-descriptions-small"
+      >
+        <div
+          className="ant-descriptions-view"
+        >
+          <table>
+            <tbody />
           </table>
         </div>
       </div>
@@ -117,12 +147,13 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
       }
     >
       <span>
-        <i
-          aria-label="icon: upload"
+        <span
+          aria-label="upload"
           className="anticon anticon-upload"
           onClick={[Function]}
           onMouseEnter={[Function]}
           onMouseLeave={[Function]}
+          role="img"
           style={
             Object {
               "fontSize": 20,
@@ -132,7 +163,6 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
         >
           <svg
             aria-hidden="true"
-            className=""
             data-icon="upload"
             fill="currentColor"
             focusable="false"
@@ -141,10 +171,10 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
             width="1em"
           >
             <path
-              d="M400 317.7h73.9V656c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V317.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 163a8 8 0 0 0-12.6 0l-112 141.7c-4.1 5.3-.4 13 6.3 13zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"
+              d="M400 317.7h73.9V656c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V317.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 163a8 8 0 00-12.6 0l-112 141.7c-4.1 5.3-.4 13 6.3 13zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"
             />
           </svg>
-        </i>
+        </span>
       </span>
     </li>
     <li
@@ -155,12 +185,13 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
       }
     >
       <span>
-        <i
-          aria-label="icon: info-circle"
+        <span
+          aria-label="info-circle"
           className="anticon anticon-info-circle"
           onClick={[Function]}
           onMouseEnter={[Function]}
           onMouseLeave={[Function]}
+          role="img"
           style={
             Object {
               "fontSize": 20,
@@ -170,7 +201,6 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
         >
           <svg
             aria-hidden="true"
-            className=""
             data-icon="info-circle"
             fill="currentColor"
             focusable="false"
@@ -182,10 +212,10 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
               d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
             />
             <path
-              d="M464 336a48 48 0 1 0 96 0 48 48 0 1 0-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z"
+              d="M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z"
             />
           </svg>
-        </i>
+        </span>
       </span>
     </li>
     <li
@@ -196,12 +226,13 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
       }
     >
       <span>
-        <i
-          aria-label="icon: delete"
+        <span
+          aria-label="delete"
           className="anticon anticon-delete"
           onClick={[Function]}
           onMouseEnter={[Function]}
           onMouseLeave={[Function]}
+          role="img"
           style={
             Object {
               "fontSize": 20,
@@ -211,7 +242,6 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
         >
           <svg
             aria-hidden="true"
-            className=""
             data-icon="delete"
             fill="currentColor"
             focusable="false"
@@ -223,7 +253,7 @@ exports[`<ListElementExperiment /> renders correctly 1`] = `
               d="M360 184h-8c4.4 0 8-3.6 8-8v8h304v-8c0 4.4 3.6 8 8 8h-8v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z"
             />
           </svg>
-        </i>
+        </span>
       </span>
     </li>
   </ul>

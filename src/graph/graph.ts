@@ -33,6 +33,7 @@ class Graph implements ID3Graph {
   public nodes: ID3GraphNode[];
   public availableNodes: IAPIGraphNode[];
   public freeze: boolean;
+
   constructor() {
     this.subject = new Subject();
     this.links = [];
@@ -245,5 +246,6 @@ class Graph implements ID3Graph {
     this.subject.next(GraphChanges.LinksChanged);
   };
 }
+
 const GraphSingleton = new Graph();
 export { GraphSingleton };

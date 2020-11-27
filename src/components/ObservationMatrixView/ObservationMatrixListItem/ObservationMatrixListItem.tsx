@@ -1,14 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  Card,
-  Progress,
-  message,
-  Icon,
-  Modal,
-  Tooltip,
-  Descriptions
-} from 'antd';
+import { Card, Descriptions, message, Modal, Progress, Tooltip } from 'antd';
 import Axios, { AxiosRequestConfig } from 'axios';
 import styles from './ObservationMatrixListItem.module.scss';
 import {
@@ -16,6 +8,12 @@ import {
   getObservationMatrixMetadata
 } from '../../../restAPI/apiRequests';
 import { IObservationMatrixMetadata } from '../../../types/types';
+import {
+  CheckCircleTwoTone,
+  DeleteOutlined,
+  InfoCircleOutlined,
+  UploadOutlined
+} from '@ant-design/icons';
 
 const { confirm } = Modal;
 
@@ -29,16 +27,23 @@ interface IObservationMatrixListElement {
   onClick: () => void;
 }
 
-const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
-  const { name, description } = props;
+const ObservationMatrixListItem: React.FC<IObservationMatrixListElement> = ({
+  id,
+  load_query,
+  name,
+  description,
+  data_source,
+  time_created,
+  onClick
+}) => {
   const [inputRef, setInputRef] = useState<HTMLInputElement>();
   const [uploadProgress, setUploadProgress] = useState<number | undefined>();
   const [metadata, setMetadata] = useState<
     IObservationMatrixMetadata | undefined
   >();
   useEffect(() => {
-    getObservationMatrixMetadata(props?.id).then(setMetadata);
-  }, [props]);
+    getObservationMatrixMetadata(id).then(setMetadata);
+  }, [id, load_query, name, description, data_source, time_created, onClick]);
   const history = useHistory();
   return (
     <Card
@@ -53,10 +58,9 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
           {name}
           {metadata?.has_ground_truth ? (
             <Tooltip title="Observation Matrix has Ground Truth Graph">
-              <Icon
+              <CheckCircleTwoTone
                 style={{ fontSize: 20 }}
                 type="check-circle"
-                theme="twoTone"
                 twoToneColor="#52c41a"
               />
             </Tooltip>
@@ -65,12 +69,11 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
       }
       hoverable
       className={styles.ObservationMatrixListItem}
-      onClick={() => history.push(`/${props.id}/experiments`)}
+      onClick={() => history.push(`/${id}/experiments`)}
       actions={[
         <Tooltip key="upload" title="Upload Ground Truth Graph">
-          <Icon
+          <UploadOutlined
             style={{ fontSize: 20 }}
-            type="upload"
             onClick={e => {
               e.stopPropagation();
               if (inputRef) {
@@ -80,27 +83,25 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
           />
         </Tooltip>,
         <Tooltip key="details" title="Show Details">
-          <Icon
+          <InfoCircleOutlined
             style={{ fontSize: 20 }}
             onClick={e => {
               e.stopPropagation();
-              props.onClick();
+              onClick();
             }}
-            type="info-circle"
           />
         </Tooltip>,
         <Tooltip key="delete" title="Delete Observation Matrix">
-          <Icon
+          <DeleteOutlined
             style={{ fontSize: 20 }}
-            type="delete"
             onClick={e => {
               e?.stopPropagation();
               confirm({
                 title:
                   'Do you want to delete the following Observation Matrix?',
-                content: `${props.name} - ${props.description}`,
+                content: `${name} - ${description}`,
                 onOk() {
-                  deleteObservationMatrix(props).catch();
+                  deleteObservationMatrix(id, name).catch();
                 }
               });
             }}
@@ -109,19 +110,23 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
       ]}
     >
       <div className={styles.ObservationMatrixListItemContent}>
-        <Descriptions size="small" column={1}>
+        <Descriptions size="small" layout="vertical" column={1}>
           <Descriptions.Item className={styles.Description} label="Description">
             <p
               style={{
+                marginTop: -10,
                 height: 64,
                 overflow: 'hidden',
                 width: 250,
+                color: 'rgba(0,0,0,.65)',
                 overflowWrap: 'break-word'
               }}
             >
               {description}
             </p>
           </Descriptions.Item>
+        </Descriptions>
+        <Descriptions size="small" column={1}>
           {metadata ? (
             <>
               <Descriptions.Item label="Variables">
@@ -169,7 +174,7 @@ const ObservationMatrixListItem = (props: IObservationMatrixListElement) => {
                       )
                     )
                 };
-                Axios.post(`/api/dataset/${props.id}/upload`, data, config)
+                Axios.post(`/api/dataset/${id}/upload`, data, config)
                   .catch(err => {
                     message.error(err.response.data.message);
                   })

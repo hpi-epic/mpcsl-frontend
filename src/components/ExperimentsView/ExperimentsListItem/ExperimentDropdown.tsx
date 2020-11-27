@@ -1,9 +1,11 @@
-import { Button, Dropdown, Icon, Menu, Modal } from 'antd';
+import { Button, Dropdown, Menu, Modal } from 'antd';
+import { EllipsisOutlined } from '@ant-design/icons';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { deleteExperiment } from '../../../restAPI/apiRequests';
 import { IExperiment } from '../../../types/types';
 import styles from './ExperimentsListItem.module.scss';
+
 const { confirm } = Modal;
 
 export const ExperimentDropdown = (props: {
@@ -73,7 +75,7 @@ export const ExperimentDropdown = (props: {
                   }
                 });
               }}
-              type="danger"
+              danger={true}
               ghost={true}
               key="4"
             >
@@ -84,7 +86,7 @@ export const ExperimentDropdown = (props: {
       }
       placement="bottomLeft"
     >
-      <Icon type="ellipsis" onClick={e => e.stopPropagation()} />
+      <EllipsisOutlined type="ellipsis" onClick={e => e.stopPropagation()} />
     </Dropdown>
   );
 };
