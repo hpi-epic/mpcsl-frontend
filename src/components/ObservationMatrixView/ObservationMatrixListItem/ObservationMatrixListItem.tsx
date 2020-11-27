@@ -114,9 +114,11 @@ const ObservationMatrixListItem: React.FC<IObservationMatrixListElement> = ({
           <Descriptions.Item className={styles.Description} label="Description">
             <p
               style={{
+                marginTop: -10,
                 height: 64,
                 overflow: 'hidden',
                 width: 250,
+                color: 'rgba(0,0,0,.65)',
                 overflowWrap: 'break-word'
               }}
             >
