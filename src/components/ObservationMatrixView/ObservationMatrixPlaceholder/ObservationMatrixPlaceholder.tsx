@@ -1,14 +1,10 @@
-import { Form, Icon, Tooltip } from 'antd';
+import { AppstoreAddOutlined } from '@ant-design/icons';
+import { Tooltip } from 'antd';
 import React, { useState } from 'react';
-import NewObservationMatrixModal, {
-  IPropsNewObservationMatrixModal
-} from '../NewObservationMatrixModal';
-import style from './CreateObservationMatrixPlaceholder.module.scss';
+import style from './ObservationMatrixPlaceholder.module.scss';
+import ObservationMatrixModal from '../ObservationMatrixModal/ObservationMatrixModal';
 
-const CreateObservationMatrixPlaceholder = () => {
-  const ObservationMatrixModal = Form.create<IPropsNewObservationMatrixModal>()(
-    NewObservationMatrixModal
-  );
+const ObservationMatrixPlaceholder = () => {
   const [
     observationMatrixModalVisible,
     setObservationMatrixModalVisible
@@ -23,13 +19,12 @@ const CreateObservationMatrixPlaceholder = () => {
         onClick={onNewObservationMatrix}
       >
         <Tooltip title="Add Observation Matrix">
-          <Icon
+          <AppstoreAddOutlined
             style={{
               fontSize: 40,
               color: 'rgba(0, 0, 0, 0.45)',
               padding: 25
             }}
-            type="plus"
           />
         </Tooltip>
       </div>
@@ -42,4 +37,4 @@ const CreateObservationMatrixPlaceholder = () => {
   );
 };
 
-export default CreateObservationMatrixPlaceholder;
+export default ObservationMatrixPlaceholder;

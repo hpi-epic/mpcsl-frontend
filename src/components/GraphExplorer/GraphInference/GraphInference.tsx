@@ -101,6 +101,7 @@ class GraphInference extends React.Component<
       isIntervention: false
     };
   }
+
   public render() {
     const externalFactorsNodes = this.props.nodes.filter(
       (node: ID3GraphNode) =>

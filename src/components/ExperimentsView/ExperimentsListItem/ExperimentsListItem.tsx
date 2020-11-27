@@ -1,4 +1,5 @@
-import { Badge, Card, Descriptions, Icon, Tooltip } from 'antd';
+import { Badge, Card, Descriptions, Tooltip } from 'antd';
+import { InteractionOutlined, PlayCircleOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
@@ -64,9 +65,8 @@ export const ExperimentsListItem = (props: {
         }
         actions={[
           <Tooltip key="run" title="Run Experiment">
-            <Icon
+            <PlayCircleOutlined
               style={{ fontSize: 20 }}
-              type="play-circle"
               onClick={e => {
                 e.stopPropagation();
                 setNodeSelectModal(true);
@@ -74,9 +74,8 @@ export const ExperimentsListItem = (props: {
             />
           </Tooltip>,
           <Tooltip key="compare" title="Compare Experiment">
-            <Icon
+            <InteractionOutlined
               style={{ fontSize: 20 }}
-              type="interaction"
               onClick={e => {
                 e.stopPropagation();
                 if (last_job) {
@@ -104,22 +103,26 @@ export const ExperimentsListItem = (props: {
         }}
       >
         <div className={styles.ListItemContent}>
-          <Descriptions size="small" column={1}>
+          <Descriptions size="small" layout="vertical" column={1}>
             <Descriptions.Item
               className={styles.Description}
               label="Description"
             >
               <p
                 style={{
+                  marginTop: -10,
                   height: 58,
                   overflow: 'hidden',
                   width: 250,
+                  color: 'rgba(0,0,0,.65)',
                   overflowWrap: 'break-word'
                 }}
               >
                 {description}
               </p>
             </Descriptions.Item>
+          </Descriptions>
+          <Descriptions size="small" column={1}>
             {algorithm ? (
               <>
                 <Descriptions.Item label="Package">

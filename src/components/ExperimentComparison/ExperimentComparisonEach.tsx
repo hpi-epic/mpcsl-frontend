@@ -1,4 +1,5 @@
-import { Card, Collapse, Empty, Statistic, Tooltip, Icon } from 'antd';
+import { Card, Collapse, Empty, Statistic, Tooltip } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import {
   getComparisonStatistics,
@@ -6,7 +7,7 @@ import {
 } from '../../restAPI/apiRequests';
 import { IAPIGraphNode } from '../../types/graphTypes';
 import { IComparisonStatistics, IExperiment, IJob } from '../../types/types';
-import { NewExperimentModalForm } from '../ExperimentsView/NewExperimentModal';
+import { NewExperimentModalForm } from '../ExperimentsView/NewExperimentModal/NewExperimentModal';
 
 export const ExperimentComparisonEach = (props: {
   jobOne: IJob | undefined;
@@ -57,24 +58,22 @@ export const ExperimentComparisonEach = (props: {
           <div>
             {`Job ${jobOne.id} `}
             <Tooltip title="Show Experiment Details">
-              <Icon
+              <InfoCircleOutlined
                 onClick={e => {
                   e.stopPropagation();
                   setExperiment(experimentOne);
                   setModalVisible(true);
                 }}
-                type="info-circle"
               />
             </Tooltip>
             {` as Ground Truth compared to Job ${jobTwo.id} `}
             <Tooltip title="Show Experiment Details">
-              <Icon
+              <InfoCircleOutlined
                 onClick={e => {
                   e.stopPropagation();
                   setExperiment(experimentTwo);
                   setModalVisible(true);
                 }}
-                type="info-circle"
               />
             </Tooltip>
           </div>

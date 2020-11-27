@@ -7,7 +7,7 @@ import {
 import { IExperiment } from '../../types/types';
 import { Button, Spin, Empty } from 'antd';
 import styles from './ExperimentsView.module.scss';
-import { NewExperimentModalForm } from './NewExperimentModal';
+import { NewExperimentModalForm } from './NewExperimentModal/NewExperimentModal';
 import { ExperimentsListItem } from './ExperimentsListItem/ExperimentsListItem';
 
 const NewExperimentButton = ({

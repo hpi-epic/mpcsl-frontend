@@ -47,7 +47,7 @@ export const ExperimentComparisonMenu = (props: {
 }) => {
   return (
     <Menu
-      onSelect={event => props.selectItem(event.key)}
+      onSelect={event => props.selectItem(event.key.toString())}
       style={{ height: '100%' }}
       mode="inline"
       theme="dark"

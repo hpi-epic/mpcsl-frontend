@@ -1,13 +1,8 @@
-import { Button, Form } from 'antd';
+import { Button } from 'antd';
 import React, { useState } from 'react';
-import NewObservationMatrixModal, {
-  IPropsNewObservationMatrixModal
-} from './NewObservationMatrixModal';
+import ObservationMatrixModal from './ObservationMatrixModal/ObservationMatrixModal';
 
 export const NewObservationMatrixButton = () => {
-  const ObservationMatrixModal = Form.create<IPropsNewObservationMatrixModal>()(
-    NewObservationMatrixModal
-  );
   const [
     observationMatrixModalVisible,
     setObservationMatrixModalVisible

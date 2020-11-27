@@ -8,12 +8,7 @@ export const NodeSelection = (props: {
   placeholder: string;
 }) => {
   return (
-    <Row
-      type="flex"
-      align="middle"
-      justify="space-around"
-      style={{ height: '100%' }}
-    >
+    <Row align="middle" justify="space-around" style={{ height: '100%' }}>
       <Col span={12}>
         <Select
           showSearch={true}

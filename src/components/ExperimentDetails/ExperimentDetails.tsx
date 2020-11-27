@@ -200,6 +200,7 @@ export class ExperimentDetails extends React.Component<
       );
     }
   }
+
   private showModal = (jobId: number) => {
     this.setState({
       currentJobId: jobId,

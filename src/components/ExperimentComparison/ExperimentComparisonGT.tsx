@@ -1,9 +1,10 @@
-import { Card, Collapse, Icon, Statistic, Tooltip } from 'antd';
+import { Card, Collapse, Statistic, Tooltip } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { getGTComparisonStatistics } from '../../restAPI/apiRequests';
 import { IAPIGraphNode } from '../../types/graphTypes';
 import { IComparisonStatistics, IExperiment, IJob } from '../../types/types';
-import { NewExperimentModalForm } from '../ExperimentsView/NewExperimentModal';
+import { NewExperimentModalForm } from '../ExperimentsView/NewExperimentModal/NewExperimentModal';
 
 export const ExperimentComparisonGT = (props: {
   job?: IJob;
@@ -36,7 +37,7 @@ export const ExperimentComparisonGT = (props: {
             <div>
               {`${experiment?.name} compared to Ground Truth `}
               <Tooltip title="Show Experiment Details">
-                <Icon
+                <InfoCircleOutlined
                   onClick={e => {
                     e.stopPropagation();
                     setModalVisible(true);

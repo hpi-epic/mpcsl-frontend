@@ -1,8 +1,9 @@
 import React from 'react';
-import { List, Tooltip, Icon, Col, Row } from 'antd';
+import { List, Tooltip, Col, Row } from 'antd';
 import { ID3GraphNode } from '../../../types/graphTypes';
 
 import './ExternalFactorsList.scss';
+import { EditOutlined } from '@ant-design/icons';
 
 export interface IExternalFactorNode extends ID3GraphNode {
   edited: boolean;
@@ -42,10 +43,10 @@ export const ExternalFactorList = (props: {
             >
               <List.Item key={item.id} style={{ paddingLeft: '14px' }}>
                 <div style={{ width: '100%' }}>
-                  <Row type="flex" justify="space-around" gutter={12}>
+                  <Row justify="space-around" gutter={12}>
                     <Col span={10}>{item.label}</Col>
                     <Col span={2}>
-                      {item.edited ? <Icon type="edit" /> : null}
+                      {item.edited ? <EditOutlined type="edit" /> : null}
                     </Col>
                   </Row>
                 </div>

@@ -1,4 +1,5 @@
-import { Breadcrumb, Icon, Layout } from 'antd';
+import { Breadcrumb, Layout } from 'antd';
+import { HomeOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { Link, Route, Switch, useLocation } from 'react-router-dom';
 import 'react-select/dist/react-select.css';
@@ -38,7 +39,7 @@ export const AppHeader = () => {
   const breadcrumbItems = [
     <Breadcrumb.Item key="datasets">
       <Link style={{ color: 'white' }} to="/">
-        <Icon type="home" /> Home
+        <HomeOutlined /> Home
       </Link>
     </Breadcrumb.Item>
   ];
