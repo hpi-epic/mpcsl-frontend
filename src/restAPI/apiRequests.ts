@@ -14,7 +14,8 @@ import {
   IComparisonStatistics,
   JobErrorCode,
   IObservationMatrixMetadata,
-  IAPIAllNodesContext
+  IAPIAllNodesContext,
+  IDatasetGenerationJob
 } from '../types/types';
 import Endpoints from './apiEndpoints';
 import { fromEvent, Observable } from 'rxjs';
@@ -125,6 +126,18 @@ export const createObservationMatrix = async (
     );
   } catch (e) {
     message.error('Failed to create Observation Matrix');
+    throw e;
+  }
+};
+
+export const createDatasetGenerationJob = async (
+  generationJob: Omit<IDatasetGenerationJob, 'id'>
+) => {
+  try {
+    await axios.post(Endpoints.datasetGeneration, generationJob);
+    message.success(`Successfully created Dataset Generation Job`);
+  } catch (e) {
+    message.error('Failed to create Dataset Generation Job');
     throw e;
   }
 };

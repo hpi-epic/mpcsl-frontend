@@ -2,7 +2,7 @@ import { AppstoreAddOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
 import React, { useState } from 'react';
 import style from './ObservationMatrixPlaceholder.module.scss';
-import ObservationMatrixModal from '../ObservationMatrixModal/ObservationMatrixModal';
+import NewDatasetGenerationModal from '../NewDatasetGenerationModal/NewDatasetGenerationModal';
 
 const ObservationMatrixPlaceholder = () => {
   const [
@@ -28,7 +28,7 @@ const ObservationMatrixPlaceholder = () => {
           />
         </Tooltip>
       </div>
-      <ObservationMatrixModal
+      <NewDatasetGenerationModal
         visible={observationMatrixModalVisible}
         onClose={() => setObservationMatrixModalVisible(false)}
         observationMatrix={undefined}
