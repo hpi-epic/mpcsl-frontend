@@ -41,7 +41,7 @@ const ObservationMatrixModal: React.FC<Props> = ({
   const disabled = observationMatrix !== undefined;
   const title = observationMatrix
     ? `Observation Matrix “${observationMatrix.observationMatrixName}“`
-    : 'Create new Observation Matrix';
+    : 'Import existing Dataset';
 
   const submitObservationMatrix = (values: IFormObservationMatrix) => {
     createObservationMatrix({
