@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, message, Modal } from 'antd';
+import { Form, InputNumber, message, Modal } from 'antd';
 import {
   createDatasetGenerationJob,
   getAllAvailableDataSources
@@ -80,7 +80,7 @@ const NewDatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
           initialValue={5}
           rules={[{ required: true, message: 'Select number of nodes' }]}
         >
-          <Input placeholder="Nodes" />
+          <InputNumber placeholder="Nodes" min={2} step={1} />
         </Form.Item>
         <Form.Item
           name="samples"
@@ -88,7 +88,7 @@ const NewDatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
           initialValue={50}
           rules={[{ required: true, message: 'Select number of samples' }]}
         >
-          <Input placeholder="Samples" />
+          <InputNumber placeholder="Samples" min={1} step={20} />
         </Form.Item>
         <Form.Item
           name="edgeProbability"
@@ -96,7 +96,12 @@ const NewDatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
           initialValue={0.5}
           rules={[{ required: true, message: 'Select edgeProbability' }]}
         >
-          <Input placeholder="edgeProbability" />
+          <InputNumber
+            placeholder="edgeProbability"
+            min={0}
+            max={1}
+            step={0.05}
+          />
         </Form.Item>
         <Form.Item
           name="edgeValueLowerBound"
@@ -104,7 +109,7 @@ const NewDatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
           initialValue={-1}
           rules={[{ required: true, message: 'Select edgeValueLowerBound' }]}
         >
-          <Input placeholder="edgeValueLowerBound" />
+          <InputNumber placeholder="edgeValueLowerBound" step={0.5} />
         </Form.Item>
         <Form.Item
           name="edgeValueUpperBound"
@@ -112,7 +117,7 @@ const NewDatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
           initialValue={1}
           rules={[{ required: true, message: 'Select edgeValueUpperBound' }]}
         >
-          <Input placeholder="edgeValueUpperBound" />
+          <InputNumber placeholder="edgeValueUpperBound" step={0.5} />
         </Form.Item>
       </Form>
     </Modal>
