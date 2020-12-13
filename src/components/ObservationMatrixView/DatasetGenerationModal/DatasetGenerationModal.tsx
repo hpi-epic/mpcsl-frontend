@@ -19,7 +19,7 @@ interface Props {
   observationMatrix?: IFormGenerationJob;
 }
 
-const NewDatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
+const DatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
   const [form] = Form.useForm();
   const [dataSources, setDataSources] = useState<undefined | []>(undefined);
 
@@ -124,4 +124,4 @@ const NewDatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
   );
 };
 
-export default NewDatasetGenerationModal;
+export default DatasetGenerationModal;

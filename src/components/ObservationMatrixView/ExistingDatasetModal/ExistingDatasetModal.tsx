@@ -22,7 +22,7 @@ interface Props {
   observationMatrix?: IFormObservationMatrix;
 }
 
-const ObservationMatrixModal: React.FC<Props> = ({
+const ExistingDatasetModal: React.FC<Props> = ({
   visible,
   onClose,
   observationMatrix
@@ -167,4 +167,4 @@ const ObservationMatrixModal: React.FC<Props> = ({
   );
 };
 
-export default ObservationMatrixModal;
+export default ExistingDatasetModal;

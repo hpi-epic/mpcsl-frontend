@@ -2,8 +2,8 @@ import { AppstoreAddOutlined } from '@ant-design/icons';
 import { Dropdown, Menu, Tooltip } from 'antd';
 import React, { useState } from 'react';
 import style from './ObservationMatrixPlaceholder.module.scss';
-import NewDatasetGenerationModal from '../NewDatasetGenerationModal/NewDatasetGenerationModal';
-import ObservationMatrixModal from '../ObservationMatrixModal/ObservationMatrixModal';
+import DatasetGenerationModal from '../DatasetGenerationModal/DatasetGenerationModal';
+import ExistingDatasetModal from '../ExistingDatasetModal/ExistingDatasetModal';
 
 const ObservationMatrixPlaceholder = () => {
   const [
@@ -53,12 +53,12 @@ const ObservationMatrixPlaceholder = () => {
         </Tooltip>
       </div>
 
-      <ObservationMatrixModal
+      <ExistingDatasetModal
         visible={existingObservationMatrixModalVisible}
         onClose={() => setExistingObservationMatrixModalVisible(false)}
         observationMatrix={undefined}
       />
-      <NewDatasetGenerationModal
+      <DatasetGenerationModal
         visible={newObservationMatrixModalVisible}
         onClose={() => setNewObservationMatrixModalVisible(false)}
         observationMatrix={undefined}
