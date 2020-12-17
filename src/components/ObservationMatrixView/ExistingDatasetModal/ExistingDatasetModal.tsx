@@ -22,7 +22,7 @@ interface Props {
   observationMatrix?: IFormObservationMatrix;
 }
 
-const ObservationMatrixModal: React.FC<Props> = ({
+const ExistingDatasetModal: React.FC<Props> = ({
   visible,
   onClose,
   observationMatrix
@@ -41,7 +41,7 @@ const ObservationMatrixModal: React.FC<Props> = ({
   const disabled = observationMatrix !== undefined;
   const title = observationMatrix
     ? `Observation Matrix “${observationMatrix.observationMatrixName}“`
-    : 'Create new Observation Matrix';
+    : 'Import existing Dataset';
 
   const submitObservationMatrix = (values: IFormObservationMatrix) => {
     createObservationMatrix({
@@ -167,4 +167,4 @@ const ObservationMatrixModal: React.FC<Props> = ({
   );
 };
 
-export default ObservationMatrixModal;
+export default ExistingDatasetModal;

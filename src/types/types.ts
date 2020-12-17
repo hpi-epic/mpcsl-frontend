@@ -4,6 +4,14 @@ export interface IIDClass {
   id: number;
 }
 
+export interface IDatasetGenerationJob extends IIDClass {
+  nodes: number;
+  samples: number;
+  edgeProbability: number;
+  edgeValueLowerBound: number;
+  edgeValueUpperBound: number;
+}
+
 export interface IObservationMatrix extends IIDClass {
   load_query: string;
   name: string;

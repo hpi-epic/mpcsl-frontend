@@ -6,9 +6,9 @@ import {
 import { IObservationMatrix } from '../../types/types';
 import { ObservationMatrixListItem } from './ObservationMatrixListItem/ObservationMatrixListItem';
 import styles from './ObservationMatrixView.module.scss';
-import ObservationMatrixModal, {
+import ExistingDatasetModal, {
   IFormObservationMatrix
-} from './ObservationMatrixModal/ObservationMatrixModal';
+} from './ExistingDatasetModal/ExistingDatasetModal';
 import ObservationMatrixPlaceholder from './ObservationMatrixPlaceholder/ObservationMatrixPlaceholder';
 
 export const ObservationMatrixView = () => {
@@ -56,7 +56,7 @@ export const ObservationMatrixView = () => {
         ))}
         <ObservationMatrixPlaceholder />
       </div>
-      <ObservationMatrixModal
+      <ExistingDatasetModal
         visible={observationMatrixModalVisible}
         onClose={onClose}
         observationMatrix={currentObservationMatrix}

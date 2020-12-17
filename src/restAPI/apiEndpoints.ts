@@ -36,7 +36,8 @@ const Endpoints = {
     `${baseApiUrl}/result/${resultID}/export?format=${format}`,
   datasources: baseApiUrl + '/datasources',
   confounders: (nodeID: string, resultID: string) =>
-    `${baseApiUrl}/node/${nodeID}/result/${resultID}/confounders`
+    `${baseApiUrl}/node/${nodeID}/result/${resultID}/confounders`,
+  datasetGeneration: baseApiUrl + '/jobs/dataset_generation'
 };
 
 export default Endpoints;

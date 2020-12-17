@@ -1,6 +1,6 @@
 import { Button } from 'antd';
 import React, { useState } from 'react';
-import ObservationMatrixModal from './ObservationMatrixModal/ObservationMatrixModal';
+import ExistingDatasetModal from './ExistingDatasetModal/ExistingDatasetModal';
 
 export const NewObservationMatrixButton = () => {
   const [
@@ -15,7 +15,7 @@ export const NewObservationMatrixButton = () => {
       <Button type="primary" onClick={onNewObservationMatrix}>
         + New Observation Matrix
       </Button>
-      <ObservationMatrixModal
+      <ExistingDatasetModal
         visible={observationMatrixModalVisible}
         onClose={() => setObservationMatrixModalVisible(false)}
         observationMatrix={undefined}

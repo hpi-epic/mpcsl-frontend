@@ -1,36 +1,66 @@
 import { AppstoreAddOutlined } from '@ant-design/icons';
-import { Tooltip } from 'antd';
+import { Dropdown, Menu, Tooltip } from 'antd';
 import React, { useState } from 'react';
 import style from './ObservationMatrixPlaceholder.module.scss';
-import ObservationMatrixModal from '../ObservationMatrixModal/ObservationMatrixModal';
+import DatasetGenerationModal from '../DatasetGenerationModal/DatasetGenerationModal';
+import ExistingDatasetModal from '../ExistingDatasetModal/ExistingDatasetModal';
 
 const ObservationMatrixPlaceholder = () => {
   const [
-    observationMatrixModalVisible,
-    setObservationMatrixModalVisible
+    existingObservationMatrixModalVisible,
+    setExistingObservationMatrixModalVisible
+  ] = useState<boolean>(false);
+  const onExistingObservationMatrix = () => {
+    setExistingObservationMatrixModalVisible(true);
+  };
+  const [
+    newObservationMatrixModalVisible,
+    setNewObservationMatrixModalVisible
   ] = useState<boolean>(false);
   const onNewObservationMatrix = () => {
-    setObservationMatrixModalVisible(true);
+    setNewObservationMatrixModalVisible(true);
   };
+
+  const menu = (
+    <Menu>
+      <Menu.Item onClick={onNewObservationMatrix}>
+        New Observation Matrix
+      </Menu.Item>
+      <Menu.Item onClick={onExistingObservationMatrix}>
+        Existing Observation Matrix
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <>
-      <div
-        className={style.CreateObservationMatrixPlaceholder}
-        onClick={onNewObservationMatrix}
-      >
-        <Tooltip title="Add Observation Matrix">
-          <AppstoreAddOutlined
-            style={{
-              fontSize: 40,
-              color: 'rgba(0, 0, 0, 0.45)',
-              padding: 25
-            }}
-          />
+      <div className={style.CreateObservationMatrixPlaceholder}>
+        <Tooltip title="Register Observation Matrix">
+          <Dropdown
+            overlay={menu}
+            trigger={['click']}
+            placement="bottomCenter"
+            arrow
+          >
+            <AppstoreAddOutlined
+              style={{
+                fontSize: 40,
+                color: 'rgba(0, 0, 0, 0.45)',
+                padding: 25
+              }}
+            />
+          </Dropdown>
         </Tooltip>
       </div>
-      <ObservationMatrixModal
-        visible={observationMatrixModalVisible}
-        onClose={() => setObservationMatrixModalVisible(false)}
+
+      <ExistingDatasetModal
+        visible={existingObservationMatrixModalVisible}
+        onClose={() => setExistingObservationMatrixModalVisible(false)}
+        observationMatrix={undefined}
+      />
+      <DatasetGenerationModal
+        visible={newObservationMatrixModalVisible}
+        onClose={() => setNewObservationMatrixModalVisible(false)}
         observationMatrix={undefined}
       />
     </>
