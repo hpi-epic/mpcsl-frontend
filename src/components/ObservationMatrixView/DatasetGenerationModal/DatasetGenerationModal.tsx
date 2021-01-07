@@ -10,7 +10,7 @@ const { Option } = Select;
 
 export interface IFormGenerationJob {
   datasetName: string;
-  kubernetesNode: string;
+  kubernetesNode?: string;
   nodes: number;
   samples: number;
   edgeProbability: number;
