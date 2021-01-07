@@ -38,7 +38,7 @@ const DatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
     getK8SNodes()
       .then(setK8sNodes)
       .catch(() => setK8sNodes([]));
-  });
+  }, []);
 
   const title = 'Generate Dataset';
 
