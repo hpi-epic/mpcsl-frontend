@@ -63,6 +63,11 @@ const DatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
   const handleCreation = () => {
     form
       .validateFields()
+      .then(values => {
+        values.kubernetesNode =
+          values.kubernetesNode === '_none' ? undefined : values.kubernetesNode;
+        return values;
+      })
       .then(values => submitObservationMatrix(values as IFormGenerationJob))
       .catch(() =>
         message.error(
