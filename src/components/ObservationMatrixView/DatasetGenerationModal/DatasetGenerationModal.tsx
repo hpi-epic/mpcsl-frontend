@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Form, InputNumber, message, Modal } from 'antd';
+import { Form, Input, InputNumber, message, Modal, Select } from 'antd';
 import {
   createDatasetGenerationJob,
-  getAllAvailableDataSources
+  getAllAvailableDataSources,
+  getK8SNodes
 } from '../../../restAPI/apiRequests';
 
+const { Option } = Select;
+
 export interface IFormGenerationJob {
+  datasetName: string;
+  kubernetesNode: string;
   nodes: number;
   samples: number;
   edgeProbability: number;
@@ -22,6 +27,7 @@ interface Props {
 const DatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
   const [form] = Form.useForm();
   const [dataSources, setDataSources] = useState<undefined | []>(undefined);
+  const [k8sNodes, setK8sNodes] = useState<undefined | string[]>();
 
   useEffect(() => {
     if (!dataSources) {
@@ -29,12 +35,17 @@ const DatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
         .then(dataSources => setDataSources(dataSources))
         .catch(console.error);
     }
+    getK8SNodes()
+      .then(setK8sNodes)
+      .catch(() => setK8sNodes([]));
   });
 
   const title = 'Generate Dataset';
 
   const submitObservationMatrix = (values: IFormGenerationJob) => {
     createDatasetGenerationJob({
+      datasetName: values.datasetName,
+      kubernetesNode: values.kubernetesNode,
       nodes: values.nodes,
       samples: values.samples,
       edgeProbability: values.edgeProbability,
@@ -74,6 +85,34 @@ const DatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
       okText={'Create Dataset Generation Job'}
     >
       <Form form={form} layout="vertical" className="Modal-Form">
+        <Form.Item
+          label="Dataset Name"
+          name="datasetName"
+          rules={[{ required: true, message: 'Select an unique dataset name' }]}
+        >
+          <Input placeholder="Dataset name" />
+        </Form.Item>
+
+        <Form.Item
+          label="Select an enviroment"
+          name="kubernetesNode"
+          initialValue={'_none'}
+          rules={[{ required: true, message: 'Select an enviroment' }]}
+        >
+          <Select>
+            <Option value="_none" style={{ fontStyle: 'italic' }}>
+              Default
+            </Option>
+            {k8sNodes
+              ? k8sNodes.map(node => (
+                  <Option key={node} value={node}>
+                    {node}
+                  </Option>
+                ))
+              : null}
+          </Select>
+        </Form.Item>
+
         <Form.Item
           name="nodes"
           label="Nodes"
