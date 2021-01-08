@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Form, Input, InputNumber, message, Modal, Select } from 'antd';
 import {
   createDatasetGenerationJob,
-  getAllAvailableDataSources,
   getK8SNodes
 } from '../../../restAPI/apiRequests';
 
@@ -26,15 +25,9 @@ interface Props {
 
 const DatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
   const [form] = Form.useForm();
-  const [dataSources, setDataSources] = useState<undefined | []>(undefined);
   const [k8sNodes, setK8sNodes] = useState<undefined | string[]>();
 
   useEffect(() => {
-    if (!dataSources) {
-      getAllAvailableDataSources()
-        .then(dataSources => setDataSources(dataSources))
-        .catch(console.error);
-    }
     getK8SNodes()
       .then(setK8sNodes)
       .catch(() => setK8sNodes([]));
