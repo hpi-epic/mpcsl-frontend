@@ -3,10 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Card, Descriptions, message, Modal, Progress, Tooltip } from 'antd';
 import Axios, { AxiosRequestConfig } from 'axios';
 import styles from './ObservationMatrixListItem.module.scss';
-import {
-  deleteObservationMatrix,
-  getObservationMatrixMetadata
-} from '../../../restAPI/apiRequests';
+import { deleteObservationMatrix } from '../../../restAPI/apiRequests';
 import { IObservationMatrixMetadata } from '../../../types/types';
 import {
   CheckCircleTwoTone,
@@ -19,22 +16,18 @@ const { confirm } = Modal;
 
 interface IObservationMatrixListElement {
   id: number;
-  load_query: string;
   name: string;
   description?: string;
-  data_source?: string;
-  time_created?: string;
+  loadMetadata: Promise<IObservationMatrixMetadata>;
   onClick: () => void;
 }
 
 const ObservationMatrixListItem: React.FC<IObservationMatrixListElement> = ({
   id,
-  load_query,
   name,
   description,
-  data_source,
-  time_created,
-  onClick
+  onClick,
+  loadMetadata
 }) => {
   const [inputRef, setInputRef] = useState<HTMLInputElement>();
   const [uploadProgress, setUploadProgress] = useState<number | undefined>();
@@ -42,8 +35,8 @@ const ObservationMatrixListItem: React.FC<IObservationMatrixListElement> = ({
     IObservationMatrixMetadata | undefined
   >();
   useEffect(() => {
-    getObservationMatrixMetadata(id).then(setMetadata);
-  }, [id, load_query, name, description, data_source, time_created, onClick]);
+    loadMetadata.then(setMetadata);
+  }, []);
   const history = useHistory();
   return (
     <Card

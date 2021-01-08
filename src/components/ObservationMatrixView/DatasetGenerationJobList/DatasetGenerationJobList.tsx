@@ -1,4 +1,5 @@
-import { Badge, Button, List, Modal } from 'antd';
+import { Badge, Button, Descriptions, List, Modal } from 'antd';
+import DescriptionsItem from 'antd/lib/descriptions/Item';
 import moment from 'antd/node_modules/moment';
 import * as React from 'react';
 import { LazyLog } from 'react-lazylog';
@@ -76,7 +77,7 @@ export const DatasetGenerationJobList: React.FC<DatasetGenerationJobListProps> =
       />
       {/* Modals */}
       <Modal
-        title={`Job #  ${selectedJob}`}
+        title={`Job #  ${selectedJob?.id}`}
         centered={true}
         width={820}
         footer={null}
@@ -87,6 +88,28 @@ export const DatasetGenerationJobList: React.FC<DatasetGenerationJobListProps> =
         }}
         destroyOnClose={true}
       >
+        <Descriptions>
+          <DescriptionsItem>
+            <strong>Dataset name: </strong> {selectedJob?.datasetName}
+          </DescriptionsItem>
+          <DescriptionsItem>
+            <strong>Nodes: </strong> {selectedJob?.nodes}
+          </DescriptionsItem>
+          <DescriptionsItem>
+            <strong>Samples: </strong> {selectedJob?.samples}
+          </DescriptionsItem>
+          <DescriptionsItem>
+            <strong>Edge probability: </strong> {selectedJob?.edgeProbability}
+          </DescriptionsItem>
+          <DescriptionsItem>
+            <strong>Edge value lower bound: </strong>{' '}
+            {selectedJob?.edgeValueLowerBound}
+          </DescriptionsItem>
+          <DescriptionsItem>
+            <strong>Edge value upper bound: </strong>{' '}
+            {selectedJob?.edgeValueUpperBound}
+          </DescriptionsItem>
+        </Descriptions>
         <LazyLog
           url={selectedJob ? Endpoints.jobLogs(selectedJob.id) : undefined}
           stream={true}

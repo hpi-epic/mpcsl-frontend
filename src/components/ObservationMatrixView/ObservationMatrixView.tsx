@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   getAllDatasetGenerationJobs,
   getObservationMatrices,
+  getObservationMatrixMetadata,
   subscribeToDatasetChanges,
   subscribeToJobStatusChanges
 } from '../../restAPI/apiRequests';
@@ -79,20 +80,26 @@ export const ObservationMatrixView = () => {
             onClick={() => onViewObservationMatrix(matrix)}
             key={`matrix-${matrix.id}`}
             {...matrix}
+            loadMetadata={getObservationMatrixMetadata(matrix.id)}
           />
         ))}
         {datasetGenerationJobs?.map(job => (
           <Spin key={`job-${job.id}`}>
             <ObservationMatrixListItem
               onClick={() => {
-                console.log('Empty');
-              }} //TODO change this
-              id={0} //TODO change this
-              load_query={`SELECT * FROM ${job.datasetName}`} //TODO add name
+                console.log();
+              }} //TODO Change this
+              id={0} //TODO can we make this optional?
               name={job.datasetName}
-              description={`Generating ${job.datasetName}`}
-              data_source={'Placeholder datas'}
-              time_created={job.start_time}
+              description={'DUMMY: Generated'} //TODO can we make this optional?
+              loadMetadata={Promise.resolve({
+                variables: job.nodes,
+                time_created: new Date(job.start_time).getMilliseconds(), //TODO fix parsing
+                observations: job.samples,
+                data_source: 'DATA SOURCE', //TODO can we make this optional?
+                query: `GENERATING`, //TODO can we make this optional?
+                has_ground_truth: true
+              })}
             />
           </Spin>
         ))}
