@@ -5,6 +5,8 @@ export interface IIDClass {
 }
 
 export interface ICreateDatasetGenerationJob extends IIDClass {
+  datasetName: string;
+  kubernetesNode?: string;
   nodes: number;
   samples: number;
   edgeProbability: number;
