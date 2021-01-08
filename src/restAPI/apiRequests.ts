@@ -15,7 +15,8 @@ import {
   JobErrorCode,
   IObservationMatrixMetadata,
   IAPIAllNodesContext,
-  IDatasetGenerationJob
+  IDatasetGenerationJob,
+  ICreateDatasetGenerationJob
 } from '../types/types';
 import Endpoints from './apiEndpoints';
 import { fromEvent, Observable } from 'rxjs';
@@ -131,10 +132,10 @@ export const createObservationMatrix = async (
 };
 
 export const createDatasetGenerationJob = async (
-  generationJob: Omit<IDatasetGenerationJob, 'id'>
+  generationJob: Omit<ICreateDatasetGenerationJob, 'id'>
 ) => {
   try {
-    await axios.post(Endpoints.datasetGeneration, generationJob);
+    await axios.post(Endpoints.allDatasetGenerationJobs, generationJob);
     message.success(`Successfully created Dataset Generation Job`);
   } catch (e) {
     message.error('Failed to create Dataset Generation Job');
@@ -548,6 +549,25 @@ export function getAllAvailableDataSources(): Promise<[]> {
       })
       .catch(error => {
         message.error('Failed to fetch data sources');
+        reject({
+          status: error.response.status,
+          message: error.message
+        });
+      });
+  });
+}
+
+export function getAllDatasetGenerationJobs(): Promise<
+  IDatasetGenerationJob[]
+> {
+  return new Promise<[]>((resolve, reject) => {
+    axios
+      .get(Endpoints.allDatasetGenerationJobs)
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        message.error('Failed to fetch dataset generation jobs');
         reject({
           status: error.response.status,
           message: error.message

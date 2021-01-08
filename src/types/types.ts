@@ -4,7 +4,7 @@ export interface IIDClass {
   id: number;
 }
 
-export interface IDatasetGenerationJob extends IIDClass {
+export interface ICreateDatasetGenerationJob extends IIDClass {
   nodes: number;
   samples: number;
   edgeProbability: number;
@@ -207,4 +207,13 @@ export type IExperimentJobs = {
 
 export interface IAPIConfounders {
   confounders: string[][];
+}
+
+export interface IDatasetGenerationJob extends IJob {
+  dataset_id: number; //TODO why is this not camel case?
+  nodes: number;
+  samples: number;
+  edgeProbability: number;
+  edgeValueLowerBound: number;
+  edgeValueUpperBound: number;
 }
