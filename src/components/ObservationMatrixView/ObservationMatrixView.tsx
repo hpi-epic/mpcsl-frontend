@@ -54,7 +54,9 @@ export const ObservationMatrixView = () => {
       console.log('Called');
       getAllDatasetGenerationJobs()
         .then(jobs =>
-          jobs.filter(job => job.status == 'running' || job.status == 'waiting')
+          jobs.filter(
+            job => job.status === 'running' || job.status === 'waiting'
+          )
         ) //TODO move this to api?
         .then(setDatasetGenerationJobs)
         .catch();
