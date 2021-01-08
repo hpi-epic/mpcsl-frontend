@@ -87,11 +87,11 @@ export const ObservationMatrixView = () => {
               onClick={() => {
                 console.log('Empty');
               }} //TODO change this
-              id={1} //TODO change this
-              load_query={'SELECT * FROM {name}'} //TODO add name
-              name={'Filler'}
-              description={'Generated'}
-              data_source={'Data source'}
+              id={0} //TODO change this
+              load_query={`SELECT * FROM ${job.datasetName}`} //TODO add name
+              name={job.datasetName}
+              description={`Generating ${job.datasetName}`}
+              data_source={'Placeholder datas'}
               time_created={job.start_time}
             />
           </Spin>

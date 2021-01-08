@@ -41,7 +41,7 @@ export const DatasetGenerationJobList: React.FC<DatasetGenerationJobListProps> =
             <List.Item.Meta
               title={
                 <div>
-                  {<h3> Job #{job.id}</h3>}
+                  {<h3>{`Job #${job.id} ${job.datasetName}`}</h3>}
                   <Badge status={BadgeStatus[job.status]} text={job.status} />
                 </div>
               }

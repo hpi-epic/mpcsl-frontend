@@ -213,6 +213,7 @@ export interface IAPIConfounders {
 
 export interface IDatasetGenerationJob extends IJob {
   dataset_id: number; //TODO why is this not camel case?
+  datasetName: string;
   nodes: number;
   samples: number;
   edgeProbability: number;
