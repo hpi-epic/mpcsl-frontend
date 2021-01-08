@@ -36,7 +36,7 @@ const ObservationMatrixListItem: React.FC<IObservationMatrixListElement> = ({
   >();
   useEffect(() => {
     loadMetadata.then(setMetadata);
-  }, []);
+  }, [loadMetadata]);
   const history = useHistory();
   return (
     <Card
