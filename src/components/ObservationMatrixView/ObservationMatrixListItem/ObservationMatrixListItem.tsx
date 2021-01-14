@@ -13,12 +13,15 @@ import {
 } from '@ant-design/icons';
 
 const { confirm } = Modal;
-
+type VisableMetadata = Omit<
+  IObservationMatrixMetadata,
+  'data_source' | 'query'
+>;
 interface IObservationMatrixListElement {
   id: number;
   name: string;
   description?: string;
-  loadMetadata: Promise<IObservationMatrixMetadata>;
+  loadMetadata: Promise<VisableMetadata>;
   onClick?: () => void;
 }
 
@@ -31,9 +34,7 @@ const ObservationMatrixListItem: React.FC<IObservationMatrixListElement> = ({
 }) => {
   const [inputRef, setInputRef] = useState<HTMLInputElement>();
   const [uploadProgress, setUploadProgress] = useState<number | undefined>();
-  const [metadata, setMetadata] = useState<
-    IObservationMatrixMetadata | undefined
-  >();
+  const [metadata, setMetadata] = useState<VisableMetadata | undefined>();
   useEffect(() => {
     loadMetadata.then(setMetadata);
   }, [loadMetadata]);

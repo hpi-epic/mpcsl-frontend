@@ -48,6 +48,17 @@ export const ObservationMatrixView = () => {
   useEffect(() => {
     const fetchDatasets = () => {
       getObservationMatrices()
+        .then(array =>
+          array.sort(
+            (a, b) =>
+              moment(b.time_created)
+                .toDate()
+                .getTime() -
+              moment(a.time_created)
+                .toDate()
+                .getTime()
+          )
+        )
         .then(setDatasets)
         .catch();
     };
@@ -81,7 +92,7 @@ export const ObservationMatrixView = () => {
         {datasetGenerationJobs?.map(job => (
           <Spin key={`job-${job.id}`}>
             <ObservationMatrixListItem
-              id={-1} // dummy value; this element is not clickable
+              id={0} // dummy value because we do not have a dataset id yet
               name={job.datasetName}
               description={'Generating ...'}
               loadMetadata={Promise.resolve({
@@ -91,8 +102,6 @@ export const ObservationMatrixView = () => {
                     .toDate()
                     .getTime() / 1000, //TODO rework parsing in ObservationMatrixView
                 observations: job.samples,
-                data_source: '', // Dummy value
-                query: ``, //Dummy value
                 has_ground_truth: true
               })}
             />
