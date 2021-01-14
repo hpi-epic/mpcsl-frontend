@@ -37,7 +37,7 @@ const Endpoints = {
   datasources: baseApiUrl + '/datasources',
   confounders: (nodeID: string, resultID: string) =>
     `${baseApiUrl}/node/${nodeID}/result/${resultID}/confounders`,
-  datasetGeneration: baseApiUrl + '/jobs/dataset_generation'
+  allDatasetGenerationJobs: baseApiUrl + '/jobs/dataset_generation'
 };
 
 export default Endpoints;

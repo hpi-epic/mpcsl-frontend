@@ -4,7 +4,7 @@ export interface IIDClass {
   id: number;
 }
 
-export interface IDatasetGenerationJob extends IIDClass {
+export interface ICreateDatasetGenerationJob extends IIDClass {
   datasetName: string;
   kubernetesNode?: string;
   nodes: number;
@@ -111,6 +111,7 @@ export interface IErrorType {
 export interface IJob extends IIDClass {
   experiment_id: number;
   start_time: string;
+  end_time: string;
   status: JobStatus;
   pid?: number;
   result?: {
@@ -209,4 +210,14 @@ export type IExperimentJobs = {
 
 export interface IAPIConfounders {
   confounders: string[][];
+}
+
+export interface IDatasetGenerationJob extends IJob {
+  dataset_id: number;
+  datasetName: string;
+  nodes: number;
+  samples: number;
+  edgeProbability: number;
+  edgeValueLowerBound: number;
+  edgeValueUpperBound: number;
 }

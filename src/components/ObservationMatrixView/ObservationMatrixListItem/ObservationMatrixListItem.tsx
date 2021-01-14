@@ -3,10 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Card, Descriptions, message, Modal, Progress, Tooltip } from 'antd';
 import Axios, { AxiosRequestConfig } from 'axios';
 import styles from './ObservationMatrixListItem.module.scss';
-import {
-  deleteObservationMatrix,
-  getObservationMatrixMetadata
-} from '../../../restAPI/apiRequests';
+import { deleteObservationMatrix } from '../../../restAPI/apiRequests';
 import { IObservationMatrixMetadata } from '../../../types/types';
 import {
   CheckCircleTwoTone,
@@ -16,34 +13,31 @@ import {
 } from '@ant-design/icons';
 
 const { confirm } = Modal;
-
+type VisableMetadata = Omit<
+  IObservationMatrixMetadata,
+  'data_source' | 'query'
+>;
 interface IObservationMatrixListElement {
   id: number;
-  load_query: string;
   name: string;
   description?: string;
-  data_source?: string;
-  time_created?: string;
-  onClick: () => void;
+  loadMetadata: Promise<VisableMetadata>;
+  onClick?: () => void;
 }
 
 const ObservationMatrixListItem: React.FC<IObservationMatrixListElement> = ({
   id,
-  load_query,
   name,
   description,
-  data_source,
-  time_created,
-  onClick
+  onClick,
+  loadMetadata
 }) => {
   const [inputRef, setInputRef] = useState<HTMLInputElement>();
   const [uploadProgress, setUploadProgress] = useState<number | undefined>();
-  const [metadata, setMetadata] = useState<
-    IObservationMatrixMetadata | undefined
-  >();
+  const [metadata, setMetadata] = useState<VisableMetadata | undefined>();
   useEffect(() => {
-    getObservationMatrixMetadata(id).then(setMetadata);
-  }, [id, load_query, name, description, data_source, time_created, onClick]);
+    loadMetadata.then(setMetadata);
+  }, [loadMetadata]);
   const history = useHistory();
   return (
     <Card
@@ -87,7 +81,9 @@ const ObservationMatrixListItem: React.FC<IObservationMatrixListElement> = ({
             style={{ fontSize: 20 }}
             onClick={e => {
               e.stopPropagation();
-              onClick();
+              if (onClick) {
+                onClick();
+              }
             }}
           />
         </Tooltip>,

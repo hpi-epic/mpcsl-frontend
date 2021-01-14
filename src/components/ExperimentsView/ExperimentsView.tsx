@@ -5,40 +5,13 @@ import {
   subscribeToExperimentChanges
 } from '../../restAPI/apiRequests';
 import { IExperiment } from '../../types/types';
-import { Button, Spin, Empty } from 'antd';
+import { Spin } from 'antd';
 import styles from './ExperimentsView.module.scss';
 import { NewExperimentModalForm } from './NewExperimentModal/NewExperimentModal';
 import { ExperimentsListItem } from './ExperimentsListItem/ExperimentsListItem';
+import ExperimentPlaceholder from './ExperimentPlaceholder/ExperimentPlaceholder';
 
-const NewExperimentButton = ({
-  match
-}: RouteComponentProps<{ datasetId: string }>) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const datasetId = parseInt(match.params.datasetId, 10);
-  return (
-    <>
-      <Button
-        type="primary"
-        onClick={() => {
-          setModalVisible(true);
-        }}
-      >
-        + New Experiment
-      </Button>
-      <NewExperimentModalForm
-        visible={modalVisible}
-        datasetId={datasetId}
-        onClose={() => {
-          setModalVisible(false);
-        }}
-        experiment={undefined}
-        editDisabled={false}
-      />
-    </>
-  );
-};
-
-const ExperimentsView = ({
+export const ExperimentsView = ({
   match
 }: RouteComponentProps<{ datasetId: string }>) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -77,21 +50,13 @@ const ExperimentsView = ({
       />
     );
   }
-  if (experiments.length === 0) {
-    return (
-      <Empty
-        style={{
-          display: 'block',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          width: '50%',
-          marginTop: '10%'
-        }}
-      />
-    );
-  }
   return (
     <div className={styles.List}>
+      <ExperimentPlaceholder
+        onClick={() => {
+          setModalVisible(true);
+        }}
+      />
       {experiments.map(experiment => (
         <ExperimentsListItem
           key={experiment.id}
@@ -121,5 +86,3 @@ const ExperimentsView = ({
     </div>
   );
 };
-
-export { ExperimentsView, NewExperimentButton };
