@@ -6,7 +6,6 @@ import 'react-select/dist/react-select.css';
 import 'react-virtualized-select/styles.css';
 import 'react-virtualized/styles.css';
 import { getObservationMatrixMetadata } from '../../restAPI/apiRequests';
-import { NewExperimentButton } from '../ExperimentsView/ExperimentsView';
 
 export const ExperimentsListHeader = (
   props: RouteComponentProps<{ datasetId: string }>
@@ -32,7 +31,6 @@ export const ExperimentsListHeader = (
           />
         </Tooltip>
       ) : null}
-      <NewExperimentButton {...props} />
     </div>
   );
 };
