@@ -7,7 +7,7 @@ import {
 import { IDatasetGenerationJob } from '../../../types/types';
 import { DatasetGenerationJobList } from '../DatasetGenerationJobList/DatasetGenerationJobList';
 
-export const RunningJobsButton = () => {
+export const DatasetGenerationJobsButton = () => {
   const [jobListDrawerVisable, setjobListDrawerVisable] = useState<boolean>(
     false
   );
@@ -25,9 +25,7 @@ export const RunningJobsButton = () => {
 
   useEffect(() => {
     const fetchDatasetGenerationJobs = () => {
-      console.log('Called');
       getAllDatasetGenerationJobs()
-        //.then(jobs => jobs.filter(job => job.status == "running" || job.status == "waiting")) //TODO move this to api?
         .then(setDatasetGenerationJobs)
         .catch();
     };

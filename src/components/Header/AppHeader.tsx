@@ -7,7 +7,7 @@ import 'react-virtualized-select/styles.css';
 import 'react-virtualized/styles.css';
 import { getExperiment, getObservationMatrix } from '../../restAPI/apiRequests';
 import { IExperiment, IObservationMatrix } from '../../types/types';
-import { RunningJobsButton } from '../ObservationMatrixView/RunningJobsButton/RunningJobsButton';
+import { DatasetGenerationJobsButton } from '../ObservationMatrixView/RunningJobsButton/DatasetGenerationJobsButton';
 import { GraphExplorerHeader } from './GraphExplorerHeader';
 import { ExperimentsListHeader } from './ExperimentListHeader';
 import { shorten } from '../../helper/helper';
@@ -134,7 +134,7 @@ export const AppHeader = () => {
             path="/:datasetId/experiments"
             component={ExperimentsListHeader}
           />
-          <Route exact path="" component={RunningJobsButton} />
+          <Route exact path="" component={DatasetGenerationJobsButton} />
           <Route />
         </Switch>
       </div>
