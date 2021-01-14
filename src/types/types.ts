@@ -111,6 +111,7 @@ export interface IErrorType {
 export interface IJob extends IIDClass {
   experiment_id: number;
   start_time: string;
+  end_time: string;
   status: JobStatus;
   pid?: number;
   result?: {

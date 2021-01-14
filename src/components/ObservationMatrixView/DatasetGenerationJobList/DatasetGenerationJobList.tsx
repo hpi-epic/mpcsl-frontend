@@ -6,6 +6,7 @@ import { LazyLog } from 'react-lazylog';
 import Endpoints from '../../../restAPI/apiEndpoints';
 import { BadgeStatus, IDatasetGenerationJob } from '../../../types/types';
 
+const timeFormat = 'dddd, MMMM Do YYYY, h:mm:ss a';
 export interface DatasetGenerationJobListProps {
   jobs: IDatasetGenerationJob[] | undefined;
 }
@@ -27,53 +28,48 @@ export const DatasetGenerationJobList: React.FC<DatasetGenerationJobListProps> =
     <>
       <List
         dataSource={props.jobs}
-        renderItem={(job, index) => (
-          <List.Item
-            actions={[
-              <Button
-                key={1}
-                type="primary"
-                onClick={() => showLogModel(index)}
-              >
-                view logs
-              </Button>
-            ]}
-          >
-            <List.Item.Meta
-              title={
-                <div>
-                  {<h3>{`Job #${job.id} ${job.datasetName}`}</h3>}
-                  <Badge status={BadgeStatus[job.status]} text={job.status} />
-                </div>
-              }
-              description={
-                <div>
-                  <i>
-                    {` Starting Time: ${moment(job.start_time).format(
-                      'dddd, MMMM Do YYYY, h:mm:ss a'
-                    )}`}
-                  </i>
-                  <br />
-                  {job.result ? (
-                    <>
-                      <i>
-                        {'Execution Time: ' +
-                          job.result.execution_time.toFixed(3) +
-                          's'}
-                      </i>
-                      <br />
-                      <i>
-                        {'Dataset Loading Time: ' +
-                          job.result.dataset_loading_time.toFixed(3) +
-                          's'}
-                      </i>
-                    </>
-                  ) : null}
-                </div>
-              }
-            />
-          </List.Item>
-        )}
+        renderItem={(job, index) => {
+          const startTime = moment(job.start_time);
+          const endTime = moment(job.end_time);
+          const executionTime = endTime.diff(startTime) / 1000; // convert ms to s
+          return (
+            <List.Item
+              actions={[
+                <Button
+                  key={1}
+                  type="primary"
+                  onClick={() => showLogModel(index)}
+                >
+                  view logs
+                </Button>
+              ]}
+            >
+              <List.Item.Meta
+                title={
+                  <div>
+                    {<h3>{`Job #${job.id} ${job.datasetName}`}</h3>}
+                    <Badge status={BadgeStatus[job.status]} text={job.status} />
+                  </div>
+                }
+                description={
+                  <div>
+                    <i>
+                      {` Starting Time: ${moment(job.start_time).format(
+                        timeFormat
+                      )}`}
+                    </i>
+                    <br />
+                    {job.status === 'done' ? (
+                      <>
+                        <i>{`Execution Time: ${executionTime.toFixed(3)} s`}</i>
+                      </>
+                    ) : null}
+                  </div>
+                }
+              />
+            </List.Item>
+          );
+        }}
       />
       {/* Modals */}
       <Modal
