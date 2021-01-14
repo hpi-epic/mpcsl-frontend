@@ -77,14 +77,7 @@ export const ObservationMatrixView = () => {
   return (
     <>
       <div className={styles.ObservationMatrixList}>
-        {datasets?.map(matrix => (
-          <ObservationMatrixListItem
-            onClick={() => onViewObservationMatrix(matrix)}
-            key={`matrix-${matrix.id}`}
-            {...matrix}
-            loadMetadata={getObservationMatrixMetadata(matrix.id)}
-          />
-        ))}
+        <ObservationMatrixPlaceholder key="placeholder" />
         {datasetGenerationJobs?.map(job => (
           <Spin key={`job-${job.id}`}>
             <ObservationMatrixListItem
@@ -105,7 +98,14 @@ export const ObservationMatrixView = () => {
             />
           </Spin>
         ))}
-        <ObservationMatrixPlaceholder key="placeholder" />
+        {datasets?.map(matrix => (
+          <ObservationMatrixListItem
+            onClick={() => onViewObservationMatrix(matrix)}
+            key={`matrix-${matrix.id}`}
+            {...matrix}
+            loadMetadata={getObservationMatrixMetadata(matrix.id)}
+          />
+        ))}
       </div>
       <ExistingDatasetModal
         visible={observationMatrixModalVisible}
