@@ -86,7 +86,13 @@ const DatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
         <Form.Item
           label="Dataset Name"
           name="datasetName"
-          rules={[{ required: true, message: 'Select an unique dataset name' }]}
+          rules={[
+            { required: true, message: 'Select an unique dataset name' },
+            {
+              pattern: /^[a-z][0-9a-z]*$/,
+              message: 'Only lowercase and numbers, must start with a letter'
+            }
+          ]}
         >
           <Input placeholder="Dataset name" />
         </Form.Item>
