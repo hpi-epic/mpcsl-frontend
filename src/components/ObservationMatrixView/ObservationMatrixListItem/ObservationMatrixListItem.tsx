@@ -19,7 +19,7 @@ interface IObservationMatrixListElement {
   name: string;
   description?: string;
   loadMetadata: Promise<IObservationMatrixMetadata>;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const ObservationMatrixListItem: React.FC<IObservationMatrixListElement> = ({
@@ -80,7 +80,9 @@ const ObservationMatrixListItem: React.FC<IObservationMatrixListElement> = ({
             style={{ fontSize: 20 }}
             onClick={e => {
               e.stopPropagation();
-              onClick();
+              if (onClick) {
+                onClick();
+              }
             }}
           />
         </Tooltip>,

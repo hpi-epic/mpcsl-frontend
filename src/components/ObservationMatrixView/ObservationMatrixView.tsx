@@ -14,6 +14,7 @@ import ExistingDatasetModal, {
 } from './ExistingDatasetModal/ExistingDatasetModal';
 import ObservationMatrixPlaceholder from './ObservationMatrixPlaceholder/ObservationMatrixPlaceholder';
 import { Spin } from 'antd';
+import moment from 'antd/node_modules/moment';
 
 export const ObservationMatrixView = () => {
   const [datasets, setDatasets] = useState<undefined | IObservationMatrix[]>();
@@ -51,7 +52,6 @@ export const ObservationMatrixView = () => {
         .catch();
     };
     const fetchDatasetGenerationJobs = () => {
-      console.log('Called');
       getAllDatasetGenerationJobs()
         .then(jobs =>
           jobs.filter(
@@ -81,18 +81,18 @@ export const ObservationMatrixView = () => {
         {datasetGenerationJobs?.map(job => (
           <Spin key={`job-${job.id}`}>
             <ObservationMatrixListItem
-              onClick={() => {
-                console.log();
-              }} //TODO Change this
-              id={0} //TODO can we make this optional?
+              id={-1} // dummy value; this element is not clickable
               name={job.datasetName}
-              description={'DUMMY: Generated'} //TODO can we make this optional?
+              description={'Generating ...'}
               loadMetadata={Promise.resolve({
                 variables: job.nodes,
-                time_created: new Date(job.start_time).getMilliseconds(), //TODO fix parsing
+                time_created:
+                  moment(job.start_time)
+                    .toDate()
+                    .getTime() / 1000, //TODO rework parsing in ObservationMatrixView
                 observations: job.samples,
-                data_source: 'DATA SOURCE', //TODO can we make this optional?
-                query: `GENERATING`, //TODO can we make this optional?
+                data_source: '', // Dummy value
+                query: ``, //Dummy value
                 has_ground_truth: true
               })}
             />
