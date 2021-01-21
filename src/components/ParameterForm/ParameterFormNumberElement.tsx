@@ -1,6 +1,6 @@
 import { Form, InputNumber } from 'antd';
 import React from 'react';
-import { INumberParameter, IParameters } from '../../../types/types';
+import { INumberParameter, IParameters } from '../../types/types';
 
 interface Props {
   paramName: string;

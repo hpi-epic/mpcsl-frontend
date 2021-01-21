@@ -1,6 +1,6 @@
 import { Form, Select } from 'antd';
 import React from 'react';
-import { IEnumParameter, IParameters } from '../../../types/types';
+import { IEnumParameter, IParameters } from '../../types/types';
 
 interface Props {
   paramName: string;

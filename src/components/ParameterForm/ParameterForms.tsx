@@ -1,5 +1,5 @@
 import React from 'react';
-import { IParameters } from '../../../types/types';
+import { IParameters } from '../../types/types';
 import ParameterFormInputElement from './ParameterFormInputElement';
 import ParameterFormNumberElement from './ParameterFormNumberElement';
 import ParameterFormSelectElement from './ParameterFormSelectElement';
