@@ -6,7 +6,7 @@ import ParameterFormSelectElement from './ParameterFormSelectElement';
 
 interface Props {
   parameters: IParameters;
-  editDisabled: boolean;
+  editDisabled?: boolean;
   initialValues?: IParameters;
 }
 
@@ -55,5 +55,7 @@ const ParameterForms: React.FC<Props> = ({
     })}
   </>
 );
-
+ParameterForms.defaultProps = {
+  editDisabled: false
+};
 export default ParameterForms;

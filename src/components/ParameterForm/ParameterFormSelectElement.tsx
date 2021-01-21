@@ -5,7 +5,7 @@ import { IEnumParameter, IParameters } from '../../types/types';
 interface Props {
   paramName: string;
   parameter: IEnumParameter;
-  editDisabled: boolean;
+  editDisabled?: boolean;
   initialValues?: IParameters;
 }
 

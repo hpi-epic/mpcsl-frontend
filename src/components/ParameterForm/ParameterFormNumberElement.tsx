@@ -5,7 +5,7 @@ import { INumberParameter, IParameters } from '../../types/types';
 interface Props {
   paramName: string;
   parameter: INumberParameter;
-  editDisabled: boolean;
+  editDisabled?: boolean;
   initialValues?: IParameters;
 }
 
