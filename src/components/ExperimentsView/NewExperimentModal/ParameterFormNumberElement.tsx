@@ -6,22 +6,22 @@ interface Props {
   paramName: string;
   parameter: INumberParameter;
   editDisabled: boolean;
-  experimentParameters?: IParameters;
+  initialValues?: IParameters;
 }
 
 const ParameterFormNumberElement: React.FC<Props> = ({
   paramName,
   parameter,
   editDisabled,
-  experimentParameters
+  initialValues: initalValues
 }) => (
   <Form.Item
     label={paramName}
     name={paramName}
     hasFeedback={true}
     initialValue={
-      experimentParameters
-        ? experimentParameters[paramName]
+      initalValues
+        ? initalValues[paramName]
         : parameter.required
         ? null
         : parameter.default !== undefined

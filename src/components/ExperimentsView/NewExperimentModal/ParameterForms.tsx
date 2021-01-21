@@ -7,13 +7,13 @@ import ParameterFormSelectElement from './ParameterFormSelectElement';
 interface Props {
   parameters: IParameters;
   editDisabled: boolean;
-  experimentParameters?: IParameters;
+  initialValues?: IParameters;
 }
 
 const ParameterForms: React.FC<Props> = ({
   parameters,
   editDisabled,
-  experimentParameters
+  initialValues: initialValues
 }) => (
   <>
     {Object.keys(parameters).map(key => {
@@ -26,7 +26,7 @@ const ParameterForms: React.FC<Props> = ({
               paramName={key}
               editDisabled={editDisabled}
               parameter={parameter}
-              experimentParameters={experimentParameters}
+              initialValues={initialValues}
             />
           );
         case 'str':
@@ -46,7 +46,7 @@ const ParameterForms: React.FC<Props> = ({
               paramName={key}
               editDisabled={editDisabled}
               parameter={parameter}
-              experimentParameters={experimentParameters}
+              initialValues={initialValues}
             />
           );
         default:

@@ -266,7 +266,6 @@ const NewExperimentModalForm: React.FunctionComponent<IPropsNewExperimentModal> 
         <ParameterForms
           parameters={algParams}
           editDisabled={props.editDisabled}
-          experimentParameters={props.experiment?.parameters}
         />
       </Form>
     </Modal>
