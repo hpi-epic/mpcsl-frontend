@@ -1,27 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import { Badge, Button, Space, Table } from 'antd';
+import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import {
-  getExperimentsForDataset,
-  subscribeToExperimentChanges
-} from '../../restAPI/apiRequests';
-import { IExperiment } from '../../types/types';
-import { Spin } from 'antd';
-import styles from './ExperimentsView.module.scss';
-import { NewExperimentModalForm } from './NewExperimentModal/NewExperimentModal';
-import { ExperimentsListItem } from './ExperimentsListItem/ExperimentsListItem';
-import ExperimentPlaceholder from './ExperimentPlaceholder/ExperimentPlaceholder';
+import { getExperimentsForDataset, getJobsForExperiment, subscribeToExperimentChanges } from '../../restAPI/apiRequests';
+import { IExperiment, IJob } from '../../types/types';
+import { Content } from 'antd/lib/layout/layout';
+
 
 export const ExperimentsView = ({
   match
 }: RouteComponentProps<{ datasetId: string }>) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [editDisabled, setEditDisabled] = useState(false);
-  const [lastExperiment, setLastExperiment] = useState<
-    undefined | IExperiment
-  >();
+
   const datasetId = parseInt(match.params.datasetId, 10);
-  const [experiments, setExperiments] = useState<undefined | IExperiment[]>();
-  useEffect(() => {
+  const [experiments, setExperiments] = React.useState<undefined | IExperiment[]>();
+
+  const [experimentJobs, setExperimentJobs] = React.useState<{[experimentId: number]: IJob[]}>({}); 
+  const [isLoadingExperimentJobs, setIsLoadingExperimentJobs] = React.useState<{[experimentId: number]: boolean}>({});
+
+  React.useEffect(() => {
     if (datasetId) {
       const fetchExperiments = () => {
         getExperimentsForDataset(datasetId)
@@ -33,56 +28,104 @@ export const ExperimentsView = ({
       return () => sub.unsubscribe();
     }
   }, [datasetId]);
+
+  // If dataset not found return 404 Error
   if (!datasetId) {
     return <h1>404</h1>;
   }
-  if (!experiments) {
+
+  const columns = [
+    { title: 'Name', dataIndex: 'name', key: 'name' },
+    { title: 'Description', dataIndex: 'description', key: 'description' }
+  ];
+
+  const expandedRowRender = (
+    record: IExperiment,
+  ) => {
+    const columns = [
+      { title: "Date", dataIndex: "date", key: "date" },
+      { title: "Start", dataIndex: "start_time", key: "start_time" },
+      {
+        title: "Status",
+        key: "state",
+        render: () => (
+          <span>
+            <Badge status="success" />
+            Finished
+          </span>
+        )
+      },
+      { title: "Upgrade Status", dataIndex: "upgradeNum", key: "upgradeNum" },
+      {
+        title: 'Action',
+        dataIndex: 'operation',
+        key: 'operation',
+        render: () => (
+          <Space size="middle">
+            
+          </Space>
+        ),
+      },
+    ];
+
+    const data = experimentJobs[record.id];
+
     return (
-      <Spin
-        style={{
-          display: 'block',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          width: '50%',
-          marginTop: '10%'
-        }}
-        size="large"
+      <Table
+        loading={isLoadingExperimentJobs[record.id] && !data}
+        columns={columns}
+        dataSource={experimentJobs[record.id]}
+        pagination={false}
       />
     );
-  }
-  return (
-    <div className={styles.List}>
-      <ExperimentPlaceholder
-        onClick={() => {
-          setModalVisible(true);
-        }}
-      />
-      {experiments.map(experiment => (
-        <ExperimentsListItem
-          key={experiment.id}
-          experiment={experiment}
-          onView={id => {
-            setEditDisabled(true);
-            setLastExperiment(experiments.find(exp => exp.id === id));
-            setModalVisible(true);
-          }}
-          onDuplicate={id => {
-            setLastExperiment(experiments.find(exp => exp.id === id));
-            setEditDisabled(false);
-            setModalVisible(true);
-          }}
-        />
-      ))}
-      <NewExperimentModalForm
-        visible={modalVisible}
-        datasetId={datasetId}
-        onClose={() => {
-          setModalVisible(false);
-          setLastExperiment(undefined);
-        }}
-        experiment={lastExperiment}
-        editDisabled={editDisabled}
-      />
-    </div>
-  );
+  };
+
+ return <Content
+  className="site-layout-background"
+  style={{
+    padding: 24,
+    margin: 0,
+    minHeight: 280,
+  }}
+  >
+  <Button type="primary">
+    Add Experiment
+  </Button>
+  
+ <Table
+  rowKey="as"
+  className="components-table-demo-nested"
+  columns={columns}
+  expandable={{   
+    expandRowByClick: true,
+    expandedRowRender: expandedRowRender,
+  }}
+  onExpand={(expanded: boolean, record: IExperiment) => {
+    
+    setIsLoadingExperimentJobs(state => ({
+      ...state,
+      [record.id]: true
+    }))
+
+    getJobsForExperiment(record.id).then((jobs) => {
+      setExperimentJobs(state => ({
+        ...state,
+        [record.id]: jobs
+      })
+    );
+
+    setIsLoadingExperimentJobs(state => ({
+      ...state,
+      [record.id]: false
+    }))
+    
+  
+    setIsLoadingExperimentJobs({
+      [record.id]: true
+    });
+    })
+  }}
+  dataSource={experiments}
+/>
+</Content>
 };
