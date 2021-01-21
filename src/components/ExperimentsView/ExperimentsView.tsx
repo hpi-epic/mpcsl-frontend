@@ -1,9 +1,14 @@
-import { Badge, Button, Space, Table } from 'antd';
+import { Badge, Button, Space, Table, Tooltip } from 'antd';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { getExperimentsForDataset, getJobsForExperiment, subscribeToExperimentChanges } from '../../restAPI/apiRequests';
-import { IExperiment, IJob } from '../../types/types';
+import { BadgeStatus, IExperiment, IJob } from '../../types/types';
 import { Content } from 'antd/lib/layout/layout';
+import { InteractionOutlined, PlayCircleOutlined, PlayCircleTwoTone } from '@ant-design/icons';
+import { ExperimentDropdown } from './ExperimentsListItem/ExperimentDropdown';
+import { ColumnsType } from 'antd/lib/table';
+import { ALIGNMENT_RIGHT } from '@blueprintjs/icons/lib/esm/generated/iconContents';
+import { NewExperimentModalForm } from './NewExperimentModal/NewExperimentModal';
 
 
 export const ExperimentsView = ({
@@ -15,6 +20,8 @@ export const ExperimentsView = ({
 
   const [experimentJobs, setExperimentJobs] = React.useState<{[experimentId: number]: IJob[]}>({}); 
   const [isLoadingExperimentJobs, setIsLoadingExperimentJobs] = React.useState<{[experimentId: number]: boolean}>({});
+
+  const [addModalVisible, setAddModalVisible] = React.useState(false);
 
   React.useEffect(() => {
     if (datasetId) {
@@ -35,37 +42,61 @@ export const ExperimentsView = ({
   }
 
   const columns = [
+    {
+      title: "",
+      key: "state",
+      render: (experiment: IExperiment) => (
+        <Badge
+          className="Card-Badge"
+          text={experiment.last_job ? experiment.last_job.status : 'not started'}
+          status={
+            experiment.last_job?.status ? BadgeStatus[experiment.last_job.status] : 'default'
+          }
+        />
+      )
+    },
     { title: 'Name', dataIndex: 'name', key: 'name' },
-    { title: 'Description', dataIndex: 'description', key: 'description' }
+    { title: 'Description', dataIndex: 'description', key: 'description' },
+    {
+      title: '',
+      align: "right" as "right",
+      key: 'operation',
+      render: () => (
+        <Space size="middle">
+          <Tooltip key="compare" title="Compare Experiment">
+            <InteractionOutlined style={{ fontSize: 20 }}/>
+          </Tooltip>
+          <Tooltip key="run" title="Run Experiment">
+            <PlayCircleTwoTone
+              style={{ fontSize: 20 }}
+              onClick={e => {}}
+            />
+          </Tooltip>
+        </Space>
+      ),
+    },
   ];
 
   const expandedRowRender = (
     record: IExperiment,
   ) => {
     const columns = [
-      { title: "Date", dataIndex: "date", key: "date" },
-      { title: "Start", dataIndex: "start_time", key: "start_time" },
       {
-        title: "Status",
+        title: "",
         key: "state",
-        render: () => (
-          <span>
-            <Badge status="success" />
-            Finished
-          </span>
+        render: (job: IJob) => (
+          <Badge
+            className="Card-Badge"
+            text={job.status}
+            status={
+              BadgeStatus[job.status]
+            }
+          />
         )
       },
-      { title: "Upgrade Status", dataIndex: "upgradeNum", key: "upgradeNum" },
-      {
-        title: 'Action',
-        dataIndex: 'operation',
-        key: 'operation',
-        render: () => (
-          <Space size="middle">
-            
-          </Space>
-        ),
-      },
+      { title: "Job ID", dataIndex: "id", key: "id" },
+      { title: "Start Time", dataIndex: "start_time", key: "start_time" },
+      { title: "End Time", dataIndex: "end_time", key: "end_time" },
     ];
 
     const data = experimentJobs[record.id];
@@ -81,51 +112,59 @@ export const ExperimentsView = ({
   };
 
  return <Content
-  className="site-layout-background"
-  style={{
-    padding: 24,
-    margin: 0,
-    minHeight: 280,
-  }}
-  >
-  <Button type="primary">
-    Add Experiment
-  </Button>
-  
- <Table
-  rowKey="as"
-  className="components-table-demo-nested"
-  columns={columns}
-  expandable={{   
-    expandRowByClick: true,
-    expandedRowRender: expandedRowRender,
-  }}
-  onExpand={(expanded: boolean, record: IExperiment) => {
+    className="site-layout-background"
+    style={{
+      padding: 24,
+      margin: 0,
+      minHeight: 280,
+    }}
+    >
+    <Button type="primary" style={{ margin: '16px 0', float: "right"}} onClick={() => setAddModalVisible(true)}>
+      Add Experiment
+    </Button>
     
-    setIsLoadingExperimentJobs(state => ({
-      ...state,
-      [record.id]: true
-    }))
-
-    getJobsForExperiment(record.id).then((jobs) => {
-      setExperimentJobs(state => ({
+  <Table
+    className="components-table-demo-nested"
+    columns={columns}
+    expandable={{   
+      expandedRowRender: expandedRowRender
+    }}
+    onExpand={(expanded: boolean, record: IExperiment) => {
+      
+      setIsLoadingExperimentJobs(state => ({
         ...state,
-        [record.id]: jobs
-      })
-    );
+        [record.id]: true
+      }))
 
-    setIsLoadingExperimentJobs(state => ({
-      ...state,
-      [record.id]: false
-    }))
+      getJobsForExperiment(record.id).then((jobs) => {
+        setExperimentJobs(state => ({
+          ...state,
+          [record.id]: jobs
+        })
+      );
+
+      setIsLoadingExperimentJobs(state => ({
+        ...state,
+        [record.id]: false
+      }))
+      
     
-  
-    setIsLoadingExperimentJobs({
-      [record.id]: true
-    });
-    })
-  }}
-  dataSource={experiments}
-/>
-</Content>
+      setIsLoadingExperimentJobs({
+        [record.id]: true
+      });
+      })
+    }}
+    dataSource={experiments}
+    />
+
+    <NewExperimentModalForm
+        visible={addModalVisible}
+        datasetId={datasetId}
+        onClose={() => {
+          setAddModalVisible(false);
+        }}
+        //experiment={lastExperiment}
+        editDisabled={false}
+      />
+  </Content>
 };
