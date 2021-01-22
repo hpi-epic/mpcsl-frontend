@@ -13,7 +13,7 @@ interface Props {
 const ParameterForms: React.FC<Props> = ({
   parameters,
   editDisabled,
-  initialValues: initialValues
+  initialValues
 }) => (
   <>
     {Object.keys(parameters).map(key => {
