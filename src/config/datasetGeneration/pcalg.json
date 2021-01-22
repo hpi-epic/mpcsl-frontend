@@ -1,17 +1,17 @@
 {
-  "nodes": {
+  "nNodes": {
     "type": "int",
     "required": true,
     "minimum": 1,
     "default": 10
   },
-  "samples": {
+  "nSamples": {
     "type": "int",
     "required": true,
     "minimum": 1,
     "default": 10000
   },
-  "edge_probability": {
+  "edgeProbability": {
     "type": "float",
     "required": true,
     "minimum": 0,
