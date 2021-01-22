@@ -2,52 +2,62 @@
   "num_nodes": {
     "type": "int",
     "required": true,
-    "minimum": 1
+    "minimum": 1,
+    "default": 10
   },
   "num_samples": {
     "type": "int",
     "required": true,
-    "minimum": 1
+    "minimum": 1,
+    "default": 10000
   },
   "edge_density": {
     "type": "float",
     "required": true,
     "minimum": 0,
-    "maximum": 1
+    "maximum": 1,
+    "default": 0.4
   },
   "discrete_node_ratio": {
     "type": "float",
     "required": true,
     "minimum": 0,
-    "maximum": 1
+    "maximum": 1,
+    "default": 0.5
   },
   "discrete_signal_to_noise_ratio": {
     "type": "float",
     "required": true,
     "minimum": 1,
-    "maximum": 1
+    "maximum": 1,
+    "default": 0.4
   },
   "min_discrete_value_classes": {
     "type": "int",
     "required": true,
-    "minimum": 1
+    "minimum": 1,
+    "default": 5
   },
   "max_discrete_value_classes": {
     "type": "int",
     "required": true,
-    "minimum": 1
+    "minimum": 1,
+    "default": 10
   },
   "continous_noise_std": {
     "type": "float",
     "required": true,
-    "minimum": 0
+    "minimum": 0,
+    "default": 5
   },
   "continuous_beta_mean": {
     "type": "float",
-    "required": true
+    "required": true,
+    "default": 3
   },
   "continuous_beta_std": {
     "type": "float",
-    "required": true
+    "required": true,
+    "default": 1
   }
 }

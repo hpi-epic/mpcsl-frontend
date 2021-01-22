@@ -22,10 +22,10 @@ const ParameterFormNumberElement: React.FC<Props> = ({
     initialValue={
       initalValues
         ? initalValues[paramName]
-        : parameter.required
-        ? null
         : parameter.default !== undefined
         ? parameter.default
+        : parameter.required
+        ? null
         : parameter.minimum !== undefined
         ? parameter.minimum
         : 0

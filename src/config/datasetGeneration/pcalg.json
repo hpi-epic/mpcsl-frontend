@@ -2,29 +2,34 @@
   "nodes": {
     "type": "int",
     "required": true,
-    "minimum": 1
+    "minimum": 1,
+    "default": 10
   },
   "samples": {
     "type": "int",
     "required": true,
-    "minimum": 1
+    "minimum": 1,
+    "default": 10000
   },
   "edge_probability": {
     "type": "float",
     "required": true,
     "minimum": 0,
-    "maximum": 1
+    "maximum": 1,
+    "default": 0.4
   },
   "edgeValueLowerBound": {
     "type": "float",
     "required": true,
     "minimum": -1,
-    "maximum": 1
+    "maximum": 1,
+    "default": 0
   },
   "edgeValueUpperBound": {
     "type": "float",
     "required": true,
     "minimum": -1,
-    "maximum": 1
+    "maximum": 1,
+    "default": 0.5
   }
 }
