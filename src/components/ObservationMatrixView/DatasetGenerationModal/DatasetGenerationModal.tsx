@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, InputNumber, message, Modal, Select } from 'antd';
+import { Form, Input, message, Modal, Select } from 'antd';
 import {
   createDatasetGenerationJob,
   getK8SNodes
@@ -144,6 +144,7 @@ const DatasetGenerationModal: React.FC<Props> = ({
           </Select>
         </Form.Item>
 
+        {/** 
         <Form.Item
           name="nodes"
           label="Nodes"
@@ -159,7 +160,7 @@ const DatasetGenerationModal: React.FC<Props> = ({
           rules={[{ required: true, message: 'Select number of samples' }]}
         >
           <InputNumber placeholder="Samples" min={1} step={20} />
-        </Form.Item>
+        </Form.Item>*/}
 
         <Form.Item
           name="generator_id"

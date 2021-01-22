@@ -1,4 +1,14 @@
 {
+  "nodes": {
+    "type": "int",
+    "required": true,
+    "minimum": 1
+  },
+  "samples": {
+    "type": "int",
+    "required": true,
+    "minimum": 1
+  },
   "edge_density": {
     "type": "float",
     "required": true,
