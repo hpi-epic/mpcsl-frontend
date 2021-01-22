@@ -1,19 +1,19 @@
 import React from 'react';
-import { IParameters } from '../../../types/types';
+import { IParameters } from '../../types/types';
 import ParameterFormInputElement from './ParameterFormInputElement';
 import ParameterFormNumberElement from './ParameterFormNumberElement';
 import ParameterFormSelectElement from './ParameterFormSelectElement';
 
 interface Props {
   parameters: IParameters;
-  editDisabled: boolean;
-  experimentParameters?: IParameters;
+  editDisabled?: boolean;
+  initialValues?: IParameters;
 }
 
 const ParameterForms: React.FC<Props> = ({
   parameters,
   editDisabled,
-  experimentParameters
+  initialValues
 }) => (
   <>
     {Object.keys(parameters).map(key => {
@@ -26,7 +26,7 @@ const ParameterForms: React.FC<Props> = ({
               paramName={key}
               editDisabled={editDisabled}
               parameter={parameter}
-              experimentParameters={experimentParameters}
+              initialValues={initialValues}
             />
           );
         case 'str':
@@ -46,7 +46,7 @@ const ParameterForms: React.FC<Props> = ({
               paramName={key}
               editDisabled={editDisabled}
               parameter={parameter}
-              experimentParameters={experimentParameters}
+              initialValues={initialValues}
             />
           );
         default:
@@ -55,5 +55,7 @@ const ParameterForms: React.FC<Props> = ({
     })}
   </>
 );
-
+ParameterForms.defaultProps = {
+  editDisabled: false
+};
 export default ParameterForms;

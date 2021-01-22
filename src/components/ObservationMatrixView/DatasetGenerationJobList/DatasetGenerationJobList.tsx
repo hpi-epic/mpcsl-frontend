@@ -85,25 +85,15 @@ export const DatasetGenerationJobList: React.FC<DatasetGenerationJobListProps> =
         destroyOnClose={true}
       >
         <Descriptions>
+          {selectedJob
+            ? Object.keys(selectedJob.parameters).map(key => (
+                <DescriptionsItem key={key}>
+                  <strong>{key}: </strong> {selectedJob?.parameters[key]}
+                </DescriptionsItem>
+              ))
+            : undefined}
           <DescriptionsItem>
             <strong>Dataset name: </strong> {selectedJob?.datasetName}
-          </DescriptionsItem>
-          <DescriptionsItem>
-            <strong>Nodes: </strong> {selectedJob?.nodes}
-          </DescriptionsItem>
-          <DescriptionsItem>
-            <strong>Samples: </strong> {selectedJob?.samples}
-          </DescriptionsItem>
-          <DescriptionsItem>
-            <strong>Edge probability: </strong> {selectedJob?.edgeProbability}
-          </DescriptionsItem>
-          <DescriptionsItem>
-            <strong>Edge value lower bound: </strong>{' '}
-            {selectedJob?.edgeValueLowerBound}
-          </DescriptionsItem>
-          <DescriptionsItem>
-            <strong>Edge value upper bound: </strong>{' '}
-            {selectedJob?.edgeValueUpperBound}
           </DescriptionsItem>
         </Descriptions>
         <LazyLog

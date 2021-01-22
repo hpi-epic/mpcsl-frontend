@@ -7,7 +7,7 @@ import {
   getAllAlgorithms,
   updateExperiment
 } from '../../../restAPI/apiRequests';
-import ParameterForms from './ParameterForms';
+import ParameterForms from '../../ParameterForm/ParameterForms';
 import { FormInstance } from 'antd/lib/form';
 
 export interface IPropsNewExperimentModal {
@@ -266,7 +266,7 @@ const NewExperimentModalForm: React.FunctionComponent<IPropsNewExperimentModal> 
         <ParameterForms
           parameters={algParams}
           editDisabled={props.editDisabled}
-          experimentParameters={props.experiment?.parameters}
+          initialValues={props.experiment?.parameters}
         />
       </Form>
     </Modal>

@@ -1,31 +1,55 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, InputNumber, message, Modal, Select } from 'antd';
+import { Form, Input, message, Modal, Select } from 'antd';
 import {
   createDatasetGenerationJob,
   getK8SNodes
 } from '../../../restAPI/apiRequests';
+import ParameterForms from '../../ParameterForm/ParameterForms';
+
+import MPCIGenerator from '../../../config/datasetGeneration/mpci_dag.json';
+import PCAlg from '../../../config/datasetGeneration/pcalg.json';
+import {
+  ICreateDatasetGenerationJob,
+  IParameters,
+  GeneratorType
+} from '../../../types/types';
 
 const { Option } = Select;
 
 export interface IFormGenerationJob {
   datasetName: string;
   kubernetesNode?: string;
-  nodes: number;
-  samples: number;
-  edgeProbability: number;
-  edgeValueLowerBound: number;
-  edgeValueUpperBound: number;
+  generator_type: string;
 }
 
 interface Props {
   visible: boolean;
+  editDisabled?: boolean;
   onClose: () => void;
   observationMatrix?: IFormGenerationJob;
 }
 
-const DatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
+const DatasetGenerationModal: React.FC<Props> = ({
+  visible,
+  onClose,
+  editDisabled
+}) => {
   const [form] = Form.useForm();
   const [k8sNodes, setK8sNodes] = useState<undefined | string[]>();
+  const [generatorParameters, setGeneratorParameter] = useState<IParameters>(
+    {}
+  );
+
+  const handleGeneratorSelection = (type: GeneratorType) => {
+    switch (type) {
+      case GeneratorType.MPCI:
+        setGeneratorParameter(MPCIGenerator as IParameters);
+        break;
+      case GeneratorType.PCALG:
+        setGeneratorParameter(PCAlg as IParameters);
+        break;
+    }
+  };
 
   useEffect(() => {
     getK8SNodes()
@@ -33,35 +57,46 @@ const DatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
       .catch(() => setK8sNodes([]));
   }, []);
 
-  const title = 'Generate Dataset';
+  const handleSubmit = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.preventDefault();
+    const submitObservationMatrix = (values: ICreateDatasetGenerationJob) => {
+      createDatasetGenerationJob({
+        datasetName: values.datasetName,
+        kubernetesNode: values.kubernetesNode,
+        parameters: values.parameters,
+        generator_type: values.generator_type
+      })
+        .then(onClose)
+        .catch(error => {
+          if (error.status !== 400) {
+            onClose();
+          }
+        });
+    };
 
-  const submitObservationMatrix = (values: IFormGenerationJob) => {
-    createDatasetGenerationJob({
-      datasetName: values.datasetName,
-      kubernetesNode: values.kubernetesNode,
-      nodes: values.nodes,
-      samples: values.samples,
-      edgeProbability: values.edgeProbability,
-      edgeValueLowerBound: values.edgeValueLowerBound,
-      edgeValueUpperBound: values.edgeValueUpperBound
-    })
-      .then(onClose)
-      .catch(error => {
-        if (error.status !== 400) {
-          onClose();
-        }
-      });
-  };
-
-  const handleCreation = () => {
     form
       .validateFields()
       .then(values => {
-        values.kubernetesNode =
-          values.kubernetesNode === '_none' ? undefined : values.kubernetesNode;
-        return values;
+        const dto: ICreateDatasetGenerationJob = {
+          datasetName: values.datasetName,
+          kubernetesNode:
+            values.kubernetesNode === '_none'
+              ? undefined
+              : values.kubernetesNode,
+          generator_type: values.generator_type,
+          parameters: {}
+        };
+        const objectKeys = Object.keys(dto);
+
+        // Add remaining parameters to key "parameters"
+        for (const [key, value] of Object.entries(values)) {
+          if (!objectKeys.includes(key)) {
+            dto.parameters[key] = value;
+          }
+        }
+        return dto;
       })
-      .then(values => submitObservationMatrix(values as IFormGenerationJob))
+      .then(jobDto => submitObservationMatrix(jobDto))
       .catch(() =>
         message.error(
           'Set a Observation Matrix Name and Query and select a Data Source from the list.'
@@ -69,14 +104,9 @@ const DatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
       );
   };
 
-  const handleSubmit = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    e.preventDefault();
-    handleCreation();
-  };
-
   return (
     <Modal
-      title={title}
+      title={'Generate dataset'}
       onCancel={onClose}
       onOk={handleSubmit}
       visible={visible}
@@ -118,50 +148,32 @@ const DatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
         </Form.Item>
 
         <Form.Item
-          name="nodes"
-          label="Nodes"
-          initialValue={5}
-          rules={[{ required: true, message: 'Select number of nodes' }]}
+          name="generator_type"
+          label="Generator selection"
+          hasFeedback={true}
+          rules={[
+            { required: true, message: 'Select a generator' },
+            {
+              validator: (rule: any, value: any, callback: () => void) => {
+                handleGeneratorSelection(value);
+                callback();
+              }
+            }
+          ]}
         >
-          <InputNumber placeholder="Nodes" min={2} step={1} />
+          <Select disabled={editDisabled}>
+            {Object.keys(GeneratorType).map(name => (
+              <Select.Option value={name} key={name}>
+                {name}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
-        <Form.Item
-          name="samples"
-          label="Samples"
-          initialValue={50}
-          rules={[{ required: true, message: 'Select number of samples' }]}
-        >
-          <InputNumber placeholder="Samples" min={1} step={20} />
-        </Form.Item>
-        <Form.Item
-          name="edgeProbability"
-          label="edgeProbability"
-          initialValue={0.5}
-          rules={[{ required: true, message: 'Select edgeProbability' }]}
-        >
-          <InputNumber
-            placeholder="edgeProbability"
-            min={0}
-            max={1}
-            step={0.05}
-          />
-        </Form.Item>
-        <Form.Item
-          name="edgeValueLowerBound"
-          label="edgeValueLowerBound"
-          initialValue={-1}
-          rules={[{ required: true, message: 'Select edgeValueLowerBound' }]}
-        >
-          <InputNumber placeholder="edgeValueLowerBound" step={0.5} />
-        </Form.Item>
-        <Form.Item
-          name="edgeValueUpperBound"
-          label="edgeValueUpperBound"
-          initialValue={1}
-          rules={[{ required: true, message: 'Select edgeValueUpperBound' }]}
-        >
-          <InputNumber placeholder="edgeValueUpperBound" step={0.5} />
-        </Form.Item>
+
+        <ParameterForms
+          parameters={generatorParameters}
+          editDisabled={editDisabled}
+        />
       </Form>
     </Modal>
   );

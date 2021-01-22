@@ -1,31 +1,31 @@
 import { Form, InputNumber } from 'antd';
 import React from 'react';
-import { INumberParameter, IParameters } from '../../../types/types';
+import { INumberParameter, IParameters } from '../../types/types';
 
 interface Props {
   paramName: string;
   parameter: INumberParameter;
-  editDisabled: boolean;
-  experimentParameters?: IParameters;
+  editDisabled?: boolean;
+  initialValues?: IParameters;
 }
 
 const ParameterFormNumberElement: React.FC<Props> = ({
   paramName,
   parameter,
   editDisabled,
-  experimentParameters
+  initialValues: initalValues
 }) => (
   <Form.Item
     label={paramName}
     name={paramName}
     hasFeedback={true}
     initialValue={
-      experimentParameters
-        ? experimentParameters[paramName]
-        : parameter.required
-        ? null
+      initalValues
+        ? initalValues[paramName]
         : parameter.default !== undefined
         ? parameter.default
+        : parameter.required
+        ? null
         : parameter.minimum !== undefined
         ? parameter.minimum
         : 0

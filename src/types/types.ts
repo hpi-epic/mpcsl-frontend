@@ -4,14 +4,11 @@ export interface IIDClass {
   id: number;
 }
 
-export interface ICreateDatasetGenerationJob extends IIDClass {
+export interface ICreateDatasetGenerationJob {
   datasetName: string;
   kubernetesNode?: string;
-  nodes: number;
-  samples: number;
-  edgeProbability: number;
-  edgeValueLowerBound: number;
-  edgeValueUpperBound: number;
+  parameters: IParameters;
+  generator_type: GeneratorType;
 }
 
 export interface IObservationMatrix extends IIDClass {
@@ -212,12 +209,14 @@ export interface IAPIConfounders {
   confounders: string[][];
 }
 
+export enum GeneratorType {
+  MPCI = 'MPCI',
+  PCALG = 'PCALG'
+}
+
 export interface IDatasetGenerationJob extends IJob {
   dataset_id: number;
   datasetName: string;
-  nodes: number;
-  samples: number;
-  edgeProbability: number;
-  edgeValueLowerBound: number;
-  edgeValueUpperBound: number;
+  parameters: IParameters;
+  generator_type: GeneratorType;
 }

@@ -96,12 +96,12 @@ export const ObservationMatrixView = () => {
               name={job.datasetName}
               description={'Generating ...'}
               loadMetadata={Promise.resolve({
-                variables: job.nodes,
+                variables: 0,
                 time_created:
                   moment(job.start_time)
                     .toDate()
                     .getTime() / 1000, //TODO rework parsing in ObservationMatrixView
-                observations: job.samples,
+                observations: 0,
                 has_ground_truth: true
               })}
             />

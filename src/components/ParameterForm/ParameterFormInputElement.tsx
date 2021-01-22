@@ -1,11 +1,11 @@
 import { Form, Input } from 'antd';
 import React from 'react';
-import { IStrParameter } from '../../../types/types';
+import { IStrParameter } from '../../types/types';
 
 interface Props {
   paramName: string;
   parameter: IStrParameter;
-  editDisabled: boolean;
+  editDisabled?: boolean;
 }
 
 const ParameterFormInputElement: React.FC<Props> = ({

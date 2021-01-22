@@ -1,27 +1,25 @@
 import { Form, Select } from 'antd';
 import React from 'react';
-import { IEnumParameter, IParameters } from '../../../types/types';
+import { IEnumParameter, IParameters } from '../../types/types';
 
 interface Props {
   paramName: string;
   parameter: IEnumParameter;
-  editDisabled: boolean;
-  experimentParameters?: IParameters;
+  editDisabled?: boolean;
+  initialValues?: IParameters;
 }
 
 const ParameterFormSelectElement: React.FC<Props> = ({
   paramName,
   parameter,
   editDisabled,
-  experimentParameters
+  initialValues
 }) => (
   <Form.Item
     label={paramName}
     name={paramName}
     hasFeedback={true}
-    initialValue={
-      experimentParameters ? experimentParameters[paramName] : undefined
-    }
+    initialValue={initialValues ? initialValues[paramName] : undefined}
     rules={
       parameter.required
         ? [
