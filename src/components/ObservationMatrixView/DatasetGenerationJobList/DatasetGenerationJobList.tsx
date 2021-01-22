@@ -1,4 +1,5 @@
-import { Badge, Button, List, Modal } from 'antd';
+import { Badge, Button, Descriptions, List, Modal } from 'antd';
+import DescriptionsItem from 'antd/lib/descriptions/Item';
 import moment from 'antd/node_modules/moment';
 import * as React from 'react';
 import { LazyLog } from 'react-lazylog';
@@ -83,6 +84,18 @@ export const DatasetGenerationJobList: React.FC<DatasetGenerationJobListProps> =
         }}
         destroyOnClose={true}
       >
+        <Descriptions>
+          {selectedJob
+            ? Object.keys(selectedJob.parameters).map(key => (
+                <DescriptionsItem key={key}>
+                  <strong>{key}: </strong> {selectedJob?.parameters[key]}
+                </DescriptionsItem>
+              ))
+            : undefined}
+          <DescriptionsItem>
+            <strong>Dataset name: </strong> {selectedJob?.datasetName}
+          </DescriptionsItem>
+        </Descriptions>
         <LazyLog
           url={selectedJob ? Endpoints.jobLogs(selectedJob.id) : undefined}
           stream={true}

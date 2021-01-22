@@ -8,7 +8,7 @@ export interface ICreateDatasetGenerationJob {
   datasetName: string;
   kubernetesNode?: string;
   parameters: IParameters;
-  generator_type: string;
+  generator_type: GeneratorType;
 }
 
 export interface IObservationMatrix extends IIDClass {
