@@ -4,6 +4,11 @@ import {
   createDatasetGenerationJob,
   getK8SNodes
 } from '../../../restAPI/apiRequests';
+import ParameterForms from '../../ParameterForm/ParameterForms';
+
+import MPCIGenerator from '../../../config/datasetGeneration/mpci_dag.json';
+import CompareCausalNetworksGenerator from '../../../config/datasetGeneration/compare_causal_networks.json';
+import { IParameters } from '../../../types/types';
 
 const { Option } = Select;
 
@@ -19,13 +24,35 @@ export interface IFormGenerationJob {
 
 interface Props {
   visible: boolean;
+  editDisabled?: boolean;
   onClose: () => void;
   observationMatrix?: IFormGenerationJob;
 }
 
-const DatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
+const DatasetGenerationModal: React.FC<Props> = ({
+  visible,
+  onClose,
+  editDisabled
+}) => {
   const [form] = Form.useForm();
   const [k8sNodes, setK8sNodes] = useState<undefined | string[]>();
+  const [generatorParameters, setGeneratorParameter] = useState<IParameters>(
+    {}
+  );
+
+  const generators = ['MPCI', 'Compare Causual Networks'];
+
+  const handleGeneratorSelection = (value: string) => {
+    console.log('FIRED');
+    switch (value) {
+      case 'MPCI':
+        setGeneratorParameter(MPCIGenerator as IParameters);
+        break;
+      case 'Compare Causual Networks':
+        setGeneratorParameter(CompareCausalNetworksGenerator as IParameters);
+        break;
+    }
+  };
 
   useEffect(() => {
     getK8SNodes()
@@ -133,35 +160,34 @@ const DatasetGenerationModal: React.FC<Props> = ({ visible, onClose }) => {
         >
           <InputNumber placeholder="Samples" min={1} step={20} />
         </Form.Item>
+
         <Form.Item
-          name="edgeProbability"
-          label="edgeProbability"
-          initialValue={0.5}
-          rules={[{ required: true, message: 'Select edgeProbability' }]}
+          name="generator_id"
+          label="Generator selection"
+          hasFeedback={true}
+          rules={[
+            { required: true, message: 'Select a generator' },
+            {
+              validator: (rule: any, value: any, callback: () => void) => {
+                handleGeneratorSelection(value);
+                callback();
+              }
+            }
+          ]}
         >
-          <InputNumber
-            placeholder="edgeProbability"
-            min={0}
-            max={1}
-            step={0.05}
-          />
+          <Select disabled={editDisabled}>
+            {generators.map(value => (
+              <Select.Option value={value} key={value}>
+                {value}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
-        <Form.Item
-          name="edgeValueLowerBound"
-          label="edgeValueLowerBound"
-          initialValue={-1}
-          rules={[{ required: true, message: 'Select edgeValueLowerBound' }]}
-        >
-          <InputNumber placeholder="edgeValueLowerBound" step={0.5} />
-        </Form.Item>
-        <Form.Item
-          name="edgeValueUpperBound"
-          label="edgeValueUpperBound"
-          initialValue={1}
-          rules={[{ required: true, message: 'Select edgeValueUpperBound' }]}
-        >
-          <InputNumber placeholder="edgeValueUpperBound" step={0.5} />
-        </Form.Item>
+
+        <ParameterForms
+          parameters={generatorParameters}
+          editDisabled={editDisabled}
+        />
       </Form>
     </Modal>
   );
