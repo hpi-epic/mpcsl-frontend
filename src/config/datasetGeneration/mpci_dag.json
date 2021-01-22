@@ -1,10 +1,10 @@
 {
-  "nodes": {
+  "num_nodes": {
     "type": "int",
     "required": true,
     "minimum": 1
   },
-  "samples": {
+  "num_samples": {
     "type": "int",
     "required": true,
     "minimum": 1
@@ -37,9 +37,17 @@
     "required": true,
     "minimum": 1
   },
-  "continous_noise_standard_deviation": {
+  "continous_noise_std": {
     "type": "float",
     "required": true,
     "minimum": 0
+  },
+  "continuous_beta_mean": {
+    "type": "float",
+    "required": true
+  },
+  "continuous_beta_std": {
+    "type": "float",
+    "required": true
   }
 }

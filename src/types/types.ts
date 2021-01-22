@@ -209,12 +209,14 @@ export interface IAPIConfounders {
   confounders: string[][];
 }
 
+export enum GeneratorType {
+  MPCI = 'MPCI',
+  PCALG = 'PCALG'
+}
+
 export interface IDatasetGenerationJob extends IJob {
   dataset_id: number;
   datasetName: string;
-  nodes: number;
-  samples: number;
-  edgeProbability: number;
-  edgeValueLowerBound: number;
-  edgeValueUpperBound: number;
+  parameters: IParameters;
+  generator_type: GeneratorType;
 }

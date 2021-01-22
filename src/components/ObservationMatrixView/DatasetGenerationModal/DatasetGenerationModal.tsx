@@ -7,8 +7,12 @@ import {
 import ParameterForms from '../../ParameterForm/ParameterForms';
 
 import MPCIGenerator from '../../../config/datasetGeneration/mpci_dag.json';
-import CompareCausalNetworksGenerator from '../../../config/datasetGeneration/compare_causal_networks.json';
-import { ICreateDatasetGenerationJob, IParameters } from '../../../types/types';
+import PCAlg from '../../../config/datasetGeneration/pcalg.json';
+import {
+  ICreateDatasetGenerationJob,
+  IParameters,
+  GeneratorType
+} from '../../../types/types';
 
 const { Option } = Select;
 
@@ -17,6 +21,7 @@ export interface IFormGenerationJob {
   kubernetesNode?: string;
   generator_type: string;
 }
+
 interface Props {
   visible: boolean;
   editDisabled?: boolean;
@@ -35,16 +40,13 @@ const DatasetGenerationModal: React.FC<Props> = ({
     {}
   );
 
-  const generators = ['MPCI', 'Compare Causual Networks'];
-
-  const handleGeneratorSelection = (value: string) => {
-    console.log('FIRED');
-    switch (value) {
-      case 'MPCI':
+  const handleGeneratorSelection = (type: GeneratorType) => {
+    switch (type) {
+      case GeneratorType.MPCI:
         setGeneratorParameter(MPCIGenerator as IParameters);
         break;
-      case 'Compare Causual Networks':
-        setGeneratorParameter(CompareCausalNetworksGenerator as IParameters);
+      case GeneratorType.PCALG:
+        setGeneratorParameter(PCAlg as IParameters);
         break;
     }
   };
@@ -90,12 +92,11 @@ const DatasetGenerationModal: React.FC<Props> = ({
         for (const [key, value] of Object.entries(values)) {
           if (!objectKeys.includes(key)) {
             dto.parameters[key] = value;
-            console.log(key);
           }
         }
         return dto;
       })
-      .then(values => submitObservationMatrix(values))
+      .then(jobDto => submitObservationMatrix(jobDto))
       .catch(() =>
         message.error(
           'Set a Observation Matrix Name and Query and select a Data Source from the list.'
@@ -161,9 +162,9 @@ const DatasetGenerationModal: React.FC<Props> = ({
           ]}
         >
           <Select disabled={editDisabled}>
-            {generators.map(value => (
-              <Select.Option value={value} key={value}>
-                {value}
+            {Object.keys(GeneratorType).map(name => (
+              <Select.Option value={name} key={name}>
+                {name}
               </Select.Option>
             ))}
           </Select>
