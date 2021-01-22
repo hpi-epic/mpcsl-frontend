@@ -15,13 +15,15 @@ const { Option } = Select;
 export interface IFormGenerationJob {
   datasetName: string;
   kubernetesNode?: string;
-  nodes: number;
-  samples: number;
-  edgeProbability: number;
-  edgeValueLowerBound: number;
-  edgeValueUpperBound: number;
+  parameters: IParameters;
+  generator_type: string;
 }
-
+const IFormGenerationJobKeys = [
+  'datasetName',
+  'kubernetesNode',
+  'parameters',
+  'generator_type'
+];
 interface Props {
   visible: boolean;
   editDisabled?: boolean;
@@ -66,11 +68,8 @@ const DatasetGenerationModal: React.FC<Props> = ({
     createDatasetGenerationJob({
       datasetName: values.datasetName,
       kubernetesNode: values.kubernetesNode,
-      nodes: values.nodes,
-      samples: values.samples,
-      edgeProbability: values.edgeProbability,
-      edgeValueLowerBound: values.edgeValueLowerBound,
-      edgeValueUpperBound: values.edgeValueUpperBound
+      parameters: values.parameters,
+      generator_type: values.generator_type
     })
       .then(onClose)
       .catch(error => {
@@ -88,7 +87,21 @@ const DatasetGenerationModal: React.FC<Props> = ({
           values.kubernetesNode === '_none' ? undefined : values.kubernetesNode;
         return values;
       })
-      .then(values => submitObservationMatrix(values as IFormGenerationJob))
+      .then(values => {
+        const parameters = Object.fromEntries(
+          Object.entries(values).filter(
+            ([key]) => !(key in IFormGenerationJobKeys)
+          )
+        );
+
+        return {
+          datasetName: values.datasetName,
+          kubernetesNode: values.kubernetesNode,
+          generator_type: values.generator_type,
+          parameters: parameters
+        };
+      })
+      .then(values => submitObservationMatrix(values))
       .catch(() =>
         message.error(
           'Set a Observation Matrix Name and Query and select a Data Source from the list.'
@@ -144,26 +157,8 @@ const DatasetGenerationModal: React.FC<Props> = ({
           </Select>
         </Form.Item>
 
-        {/** 
         <Form.Item
-          name="nodes"
-          label="Nodes"
-          initialValue={5}
-          rules={[{ required: true, message: 'Select number of nodes' }]}
-        >
-          <InputNumber placeholder="Nodes" min={2} step={1} />
-        </Form.Item>
-        <Form.Item
-          name="samples"
-          label="Samples"
-          initialValue={50}
-          rules={[{ required: true, message: 'Select number of samples' }]}
-        >
-          <InputNumber placeholder="Samples" min={1} step={20} />
-        </Form.Item>*/}
-
-        <Form.Item
-          name="generator_id"
+          name="generator_type"
           label="Generator selection"
           hasFeedback={true}
           rules={[

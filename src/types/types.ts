@@ -7,11 +7,8 @@ export interface IIDClass {
 export interface ICreateDatasetGenerationJob extends IIDClass {
   datasetName: string;
   kubernetesNode?: string;
-  nodes: number;
-  samples: number;
-  edgeProbability: number;
-  edgeValueLowerBound: number;
-  edgeValueUpperBound: number;
+  parameters: IParameters;
+  generator_type: string;
 }
 
 export interface IObservationMatrix extends IIDClass {
