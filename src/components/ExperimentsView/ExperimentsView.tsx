@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { getExperimentsForDataset, getJobsForExperiment, subscribeToExperimentChanges } from '../../restAPI/apiRequests';
 import { BadgeStatus, IExperiment, IJob } from '../../types/types';
 import { Content } from 'antd/lib/layout/layout';
-import { InteractionOutlined, PlayCircleOutlined, PlayCircleTwoTone } from '@ant-design/icons';
+import { DownloadOutlined, FileSearchOutlined, InteractionOutlined, PlayCircleOutlined, PlayCircleTwoTone } from '@ant-design/icons';
 import { ExperimentDropdown } from './ExperimentsListItem/ExperimentDropdown';
 import { ColumnsType } from 'antd/lib/table';
 import { ALIGNMENT_RIGHT } from '@blueprintjs/icons/lib/esm/generated/iconContents';
@@ -69,6 +69,7 @@ export const ExperimentsView = ({
           <Tooltip key="run" title="Run Experiment">
             <PlayCircleTwoTone
               style={{ fontSize: 20 }}
+              twoToneColor="#87d068"
               onClick={e => {}}
             />
           </Tooltip>
@@ -97,6 +98,26 @@ export const ExperimentsView = ({
       { title: "Job ID", dataIndex: "id", key: "id" },
       { title: "Start Time", dataIndex: "start_time", key: "start_time" },
       { title: "End Time", dataIndex: "end_time", key: "end_time" },
+      {
+        title: '',
+        align: "right" as "right",
+        key: 'operation',
+        render: () => (
+          <Space size="middle">
+            <Tooltip key="Log" title="View Logs">
+              <FileSearchOutlined
+              style={{ fontSize: 20 }}/>
+            </Tooltip>
+            <Tooltip key="run" title="Download graph">
+              <DownloadOutlined
+                style={{ fontSize: 20 }}
+                onClick={e => {}}
+              />
+            </Tooltip>
+            <Button>Explore</Button>
+          </Space>
+        ),
+      },
     ];
 
     const data = experimentJobs[record.id];
