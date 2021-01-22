@@ -132,7 +132,7 @@ export const createObservationMatrix = async (
 };
 
 export const createDatasetGenerationJob = async (
-  generationJob: Omit<ICreateDatasetGenerationJob, 'id'>
+  generationJob: ICreateDatasetGenerationJob
 ) => {
   try {
     await axios.post(Endpoints.allDatasetGenerationJobs, generationJob);

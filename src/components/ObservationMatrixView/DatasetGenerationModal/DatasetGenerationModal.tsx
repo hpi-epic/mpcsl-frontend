@@ -8,22 +8,15 @@ import ParameterForms from '../../ParameterForm/ParameterForms';
 
 import MPCIGenerator from '../../../config/datasetGeneration/mpci_dag.json';
 import CompareCausalNetworksGenerator from '../../../config/datasetGeneration/compare_causal_networks.json';
-import { IParameters } from '../../../types/types';
+import { ICreateDatasetGenerationJob, IParameters } from '../../../types/types';
 
 const { Option } = Select;
 
 export interface IFormGenerationJob {
   datasetName: string;
   kubernetesNode?: string;
-  parameters: IParameters;
   generator_type: string;
 }
-const IFormGenerationJobKeys = [
-  'datasetName',
-  'kubernetesNode',
-  'parameters',
-  'generator_type'
-];
 interface Props {
   visible: boolean;
   editDisabled?: boolean;
@@ -62,44 +55,45 @@ const DatasetGenerationModal: React.FC<Props> = ({
       .catch(() => setK8sNodes([]));
   }, []);
 
-  const title = 'Generate Dataset';
+  const handleSubmit = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.preventDefault();
+    const submitObservationMatrix = (values: ICreateDatasetGenerationJob) => {
+      createDatasetGenerationJob({
+        datasetName: values.datasetName,
+        kubernetesNode: values.kubernetesNode,
+        parameters: values.parameters,
+        generator_type: values.generator_type
+      })
+        .then(onClose)
+        .catch(error => {
+          if (error.status !== 400) {
+            onClose();
+          }
+        });
+    };
 
-  const submitObservationMatrix = (values: IFormGenerationJob) => {
-    createDatasetGenerationJob({
-      datasetName: values.datasetName,
-      kubernetesNode: values.kubernetesNode,
-      parameters: values.parameters,
-      generator_type: values.generator_type
-    })
-      .then(onClose)
-      .catch(error => {
-        if (error.status !== 400) {
-          onClose();
-        }
-      });
-  };
-
-  const handleCreation = () => {
     form
       .validateFields()
       .then(values => {
-        values.kubernetesNode =
-          values.kubernetesNode === '_none' ? undefined : values.kubernetesNode;
-        return values;
-      })
-      .then(values => {
-        const parameters = Object.fromEntries(
-          Object.entries(values).filter(
-            ([key]) => !(key in IFormGenerationJobKeys)
-          )
-        );
-
-        return {
+        const dto: ICreateDatasetGenerationJob = {
           datasetName: values.datasetName,
-          kubernetesNode: values.kubernetesNode,
+          kubernetesNode:
+            values.kubernetesNode === '_none'
+              ? undefined
+              : values.kubernetesNode,
           generator_type: values.generator_type,
-          parameters: parameters
+          parameters: {}
         };
+        const objectKeys = Object.keys(dto);
+
+        // Add remaining parameters to key "parameters"
+        for (const [key, value] of Object.entries(values)) {
+          if (!objectKeys.includes(key)) {
+            dto.parameters[key] = value;
+            console.log(key);
+          }
+        }
+        return dto;
       })
       .then(values => submitObservationMatrix(values))
       .catch(() =>
@@ -109,14 +103,9 @@ const DatasetGenerationModal: React.FC<Props> = ({
       );
   };
 
-  const handleSubmit = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    e.preventDefault();
-    handleCreation();
-  };
-
   return (
     <Modal
-      title={title}
+      title={'Generate dataset'}
       onCancel={onClose}
       onOk={handleSubmit}
       visible={visible}
