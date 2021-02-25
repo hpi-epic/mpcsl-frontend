@@ -170,7 +170,7 @@ const ObservationMatrixListItem: React.FC<IObservationMatrixListElement> = ({
                       )
                     )
                 };
-                Axios.post(`/api/dataset/${id}/upload`, data, config)
+                Axios.post(`/api/dataset/${id}/ground-truth`, data, config)
                   .catch(err => {
                     message.error(err.response.data.message);
                   })
