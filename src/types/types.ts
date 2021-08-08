@@ -210,7 +210,7 @@ export interface IAPIConfounders {
 }
 
 export enum GeneratorType {
-  MPCI = 'MPCI',
+  MPCSL = 'MPCSL',
   PCALG = 'PCALG'
 }
 
