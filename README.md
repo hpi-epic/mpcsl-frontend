@@ -1,6 +1,6 @@
 # MPCSL UI
 
-[![CircleCI](https://circleci.com/gh/hpi-epic/mpci-frontend/tree/master.svg?style=svg&circle-token=29ae717f575398c83c5ad5b652124e2c41ea31fe)](https://circleci.com/gh/hpi-epic/mpci-frontend/tree/master)
+[![CircleCI](https://circleci.com/gh/hpi-epic/mpcsl-frontend/tree/master.svg?style=svg&circle-token=29ae717f575398c83c5ad5b652124e2c41ea31fe)](https://circleci.com/gh/hpi-epic/mpci-frontend/tree/master)
 
 ### Getting started
 

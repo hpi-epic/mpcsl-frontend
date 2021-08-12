@@ -6,7 +6,7 @@ import {
 } from '../../../restAPI/apiRequests';
 import ParameterForms from '../../ParameterForm/ParameterForms';
 
-import MPCIGenerator from '../../../config/datasetGeneration/mpci_dag.json';
+import MPCSLGenerator from '../../../config/datasetGeneration/mpcsl_dag.json';
 import PCAlg from '../../../config/datasetGeneration/pcalg.json';
 import {
   ICreateDatasetGenerationJob,
@@ -42,8 +42,8 @@ const DatasetGenerationModal: React.FC<Props> = ({
 
   const handleGeneratorSelection = (type: GeneratorType) => {
     switch (type) {
-      case GeneratorType.MPCI:
-        setGeneratorParameter(MPCIGenerator as IParameters);
+      case GeneratorType.MPCSL:
+        setGeneratorParameter(MPCSLGenerator as IParameters);
         break;
       case GeneratorType.PCALG:
         setGeneratorParameter(PCAlg as IParameters);
