@@ -62,11 +62,9 @@
     "minimum": 0.0,
     "default": 1.0
   },
-  "something": {
-    "type": "enum",
-    "required": true,
-    "values": ["linear", "quadratic", "cubic", "tanh", "sin", "cos"],
-    "default": "linear"
+  "functions": {
+    "type": "funcStr",
+    "required": false
   },
   "conditional_gaussian": {
     "type": "int",

@@ -86,7 +86,17 @@ export interface IStrParameter extends IRequiredParameter {
   default?: string;
 }
 
-export type IParameter = INumberParameter | IEnumParameter | IStrParameter;
+export interface IFunctionStrParameter extends IRequiredParameter {
+  type: 'funcStr';
+  value: string;
+  default?: string;
+}
+
+export type IParameter =
+  | INumberParameter
+  | IEnumParameter
+  | IStrParameter
+  | IFunctionStrParameter;
 
 export type IParameters = { [name: string]: IParameter };
 

@@ -3,6 +3,7 @@ import { IParameters } from '../../types/types';
 import ParameterFormInputElement from './ParameterFormInputElement';
 import ParameterFormNumberElement from './ParameterFormNumberElement';
 import ParameterFormSelectElement from './ParameterFormSelectElement';
+import ParameterFormFunctionInputElement from './ParameterFormFunctionInputElement';
 
 interface Props {
   parameters: IParameters;
@@ -32,6 +33,15 @@ const ParameterForms: React.FC<Props> = ({
         case 'str':
           return (
             <ParameterFormInputElement
+              key={key}
+              paramName={key}
+              editDisabled={editDisabled}
+              parameter={parameter}
+            />
+          );
+        case 'funcStr':
+          return (
+            <ParameterFormFunctionInputElement
               key={key}
               paramName={key}
               editDisabled={editDisabled}
