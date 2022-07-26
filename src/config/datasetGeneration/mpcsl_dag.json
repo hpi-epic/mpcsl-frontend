@@ -72,5 +72,12 @@
     "minimum": 0,
     "maximum": 1,
     "default": 0
+  },
+  "normalize": {
+    "type": "int",
+    "required": true,
+    "minimum": 0,
+    "maximum": 1,
+    "default": 0
   }
 }
