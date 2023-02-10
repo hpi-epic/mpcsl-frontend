@@ -73,7 +73,12 @@
     "maximum": 1,
     "default": 0
   },
-  "normalize": {
+  "variables_scaling": {
+    "type": "enum",
+    "required": false,
+    "values": ["normal", "standard", "rank", "rank", "uniform"]
+  },
+  "scale_parents": {
     "type": "int",
     "required": true,
     "minimum": 0,
